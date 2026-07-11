@@ -33,15 +33,24 @@ var Guest = {
       .catch(function() { return false; });
   },
 
-  // Resolve true se a pessoa esta navegando sem conta OU sem premium
+  // Resolve true se a pessoa nao tem conta (visitante)
+  // Para bloquear conteudo de usuario free, as paginas devem
+  // combinar: Guest.check() (login) + Guest.isPremium() (plano)
   check: function () {
     if (window.Auth && Auth._ready) {
       return Auth._ready().then(function () {
         var user = Auth.currentUser();
-        if (!user) return true;
-        return Guest.isPremium().then(function(premium) {
-          return !premium;
+        if (user) return false;
+        // Retry after a short delay — Supabase session may need time
+        return new Promise(function(r) {
+          setTimeout(function() {
+            r(!Auth.currentUser());
+          }, 600);
         });
+      });
+    }
+    return Promise.resolve(true);
+  },
       });
     }
     return Promise.resolve(true);
