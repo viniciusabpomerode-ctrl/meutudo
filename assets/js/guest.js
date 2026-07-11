@@ -51,10 +51,6 @@ var Guest = {
     }
     return Promise.resolve(true);
   },
-      });
-    }
-    return Promise.resolve(true);
-  },
 
   // Progress seguro: visitante nao tem progresso salvo
   safeProgress: function () {
