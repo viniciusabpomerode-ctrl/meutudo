@@ -54,11 +54,18 @@
       if(!name||!email||!pw){err.textContent="Preencha todos os campos.";err.classList.add("show");return}
       if(pw.length<6){err.textContent="Senha precisa ter pelo menos 6 caracteres.";err.classList.add("show");return}
       if(pw!==pw2){err.textContent="Senhas nao conferem.";err.classList.add("show");return}
+      const plano = new URLSearchParams(location.search).get("plano");
       Auth.signup({name:name,email:email,password:pw}).then(function(r){
         if(!r.ok){err.textContent=r.error;err.classList.add("show");return}
         if(r.session){
           const next = new URLSearchParams(location.search).get("next");
-          window.location.href = next && !next.includes(":") && !next.startsWith("//") ? next : "dashboard.html";
+          if (next && !next.includes(":") && !next.startsWith("//")) {
+            window.location.href = next;
+          } else if (plano) {
+            window.location.href = "planos.html?auto=" + plano;
+          } else {
+            window.location.href = "dashboard.html";
+          }
         } else {
           err.textContent="Conta criada! Verifique seu email para ativar.";
           err.style.background="var(--color-success, #4CAF50)";

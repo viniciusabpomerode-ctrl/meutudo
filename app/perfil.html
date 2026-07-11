@@ -159,16 +159,33 @@
 
     // ── Assinatura ──
     const PLAN_LABEL = { mensal: "Premium Mensal", anual: "Premium Anual", fundador: "Premium Vitalício (Fundador)" };
+    const checkoutStatus = new URLSearchParams(location.search).get("checkout");
+    if (checkoutStatus === "sucesso") {
+      history.replaceState(null, "", location.pathname);
+    }
     (async () => {
       const statusEl = document.getElementById("premium-status");
       const noteEl = document.getElementById("premium-note");
       const actionsEl = document.getElementById("premium-actions");
+
+      async function fetchWithRetry(maxTries) {
+        for (let i = 0; i < maxTries; i++) {
+          if (i > 0) await new Promise(r => setTimeout(r, 2000));
+          const res = await fetch(`/.netlify/functions/check-premium?email=${encodeURIComponent(user.email)}`);
+          const data = await res.json();
+          if (data.premium) return data;
+        }
+        return { premium: false, plan: null };
+      }
+
       try {
-        const res = await fetch(`/.netlify/functions/check-premium?email=${encodeURIComponent(user.email)}`);
-        const data = await res.json();
+        const data = checkoutStatus === "sucesso" ? await fetchWithRetry(5) : await fetch(`/.netlify/functions/check-premium?email=${encodeURIComponent(user.email)}`).then(r => r.json());
         if (data.premium) {
           statusEl.textContent = `✨ ${PLAN_LABEL[data.plan] || "Premium"} ativo`;
           noteEl.textContent = "Biblioteca completa liberada.";
+          if (checkoutStatus === "sucesso") {
+            alert("🎉 Pagamento confirmado! Seu plano Premium está ativo.");
+          }
           if (data.plan !== "fundador") {
             actionsEl.innerHTML = `<button class="btn btn-outline btn-sm" id="manage-sub-btn">Gerenciar assinatura</button>`;
             document.getElementById("manage-sub-btn").addEventListener("click", async (e) => {
@@ -189,12 +206,17 @@
             });
           }
         } else {
-          statusEl.textContent = "Plano grátis";
-          noteEl.textContent = "20 itens liberados por categoria.";
+          if (checkoutStatus === "sucesso") {
+            statusEl.textContent = "⏳ Processando pagamento...";
+            noteEl.textContent = "Seu pagamento está sendo confirmado. Atualize a página em alguns instantes.";
+          } else {
+            statusEl.textContent = "Plano grátis";
+            noteEl.textContent = "20 itens liberados por categoria.";
+          }
           actionsEl.innerHTML = `<a class="btn btn-primary btn-sm" href="planos.html">Ver planos</a>`;
         }
       } catch {
-        statusEl.textContent = "Plano grátis";
+        statusEl.textContent = checkoutStatus === "sucesso" ? "⏳ Verificando..." : "Plano grátis";
         actionsEl.innerHTML = `<a class="btn btn-primary btn-sm" href="planos.html">Ver planos</a>`;
       }
     })();

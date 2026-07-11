@@ -105,6 +105,14 @@
   <script>
     if (user) renderNav("planos");
 
+    // Auto-checkout: veio do cadastro com ?auto=mensal|anual|fundador
+    const autoPlan = new URLSearchParams(location.search).get("auto");
+    if (autoPlan && user) {
+      history.replaceState(null, "", location.pathname);
+      const btn = document.querySelector(`.subscribe-btn[data-plan="${autoPlan}"]`);
+      if (btn) setTimeout(() => btn.click(), 500);
+    }
+
     // Checkout real via Stripe — chama a Netlify Function, que cria a
     // sessao e devolve a URL de pagamento pra onde a gente redireciona.
     document.querySelectorAll(".subscribe-btn").forEach((btn) => {

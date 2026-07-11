@@ -13,18 +13,34 @@ var AFB_FREE_PROF_PHRASES = 10; // frases liberadas em cada profissão
 var AFB_FREE_PRONUNCIATION = 10;// gravações de pronúncia para visitante
 
 var Guest = {
-  // Resolve true se a pessoa esta navegando sem conta
+  _premiumCache: null,
+  _premiumEmail: null,
+
+  // Resolve true se for premium (cache por email)
+  isPremium: function () {
+    var user = Auth.currentUser();
+    if (!user) return Promise.resolve(false);
+    if (Guest._premiumEmail === user.email && Guest._premiumCache !== null) {
+      return Promise.resolve(Guest._premiumCache);
+    }
+    return fetch("/.netlify/functions/check-premium?email=" + encodeURIComponent(user.email))
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        Guest._premiumEmail = user.email;
+        Guest._premiumCache = !!d.premium;
+        return Guest._premiumCache;
+      })
+      .catch(function() { return false; });
+  },
+
+  // Resolve true se a pessoa esta navegando sem conta OU sem premium
   check: function () {
     if (window.Auth && Auth._ready) {
       return Auth._ready().then(function () {
         var user = Auth.currentUser();
-        if (user) return false;
-        // Retry after a short delay — Supabase session may need time
-        // to be read from localStorage/cookie after page load
-        return new Promise(function(r) {
-          setTimeout(function() {
-            r(!Auth.currentUser());
-          }, 600);
+        if (!user) return true;
+        return Guest.isPremium().then(function(premium) {
+          return !premium;
         });
       });
     }
