@@ -17,7 +17,15 @@ var Guest = {
   check: function () {
     if (window.Auth && Auth._ready) {
       return Auth._ready().then(function () {
-        return !Auth.currentUser();
+        var user = Auth.currentUser();
+        if (user) return false;
+        // Retry after a short delay — Supabase session may need time
+        // to be read from localStorage/cookie after page load
+        return new Promise(function(r) {
+          setTimeout(function() {
+            r(!Auth.currentUser());
+          }, 600);
+        });
       });
     }
     return Promise.resolve(true);
