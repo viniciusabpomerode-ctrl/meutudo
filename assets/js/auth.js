@@ -132,7 +132,10 @@ const Auth = {
 
   redirectIfLoggedIn: function(){
     Auth._ready().then(function(){
-      if(Auth.currentUser())window.location.href=AFB_BASE+"/app/dashboard.html";
+      if(Auth.currentUser()){window.location.replace(AFB_BASE+"/index.html");return}
+      setTimeout(function(){
+        if(Auth.currentUser())window.location.replace(AFB_BASE+"/index.html");
+      }, 600);
     });
   }
 };
