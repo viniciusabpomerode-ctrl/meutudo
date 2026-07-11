@@ -65,7 +65,7 @@ const Auth = {
       if(r.error)return {ok:false,error:r.error.message};
       localStorage.setItem("afb_fallback_uid",r.data.user.id);
       _afbSessionCache=r.data.session||_afbSessionCache;
-      return {ok:true};
+      return {ok:true, session:!!r.data.session};
     }catch(e){return {ok:false,error:e.message}}
   },
 

@@ -2,11 +2,23 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=../index.html">
-  <title>Redirecionando...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-  <script>location.replace("../index.html");</script>
-  <p>Redirecionando para <a href="../index.html">o Início</a>...</p>
+  <div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:12px;">
+    <div style="font-size:2rem;">🇩🇪</div>
+    <p style="color:var(--text-secondary);">Carregando seu progresso...</p>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
+  <script>
+    (async function(){
+      await Auth._ready();
+      await new Promise(function(r){ setTimeout(r, 600); });
+      window.location.replace("../index.html");
+    })();
+  </script>
 </body>
 </html>

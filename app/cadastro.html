@@ -56,8 +56,14 @@
       if(pw!==pw2){err.textContent="Senhas nao conferem.";err.classList.add("show");return}
       Auth.signup({name:name,email:email,password:pw}).then(function(r){
         if(!r.ok){err.textContent=r.error;err.classList.add("show");return}
-        const next = new URLSearchParams(location.search).get("next");
-        window.location.href = next && !next.includes(":") && !next.startsWith("//") ? next : "dashboard.html";
+        if(r.session){
+          const next = new URLSearchParams(location.search).get("next");
+          window.location.href = next && !next.includes(":") && !next.startsWith("//") ? next : "dashboard.html";
+        } else {
+          err.textContent="Conta criada! Verifique seu email para ativar.";
+          err.style.background="var(--color-success, #4CAF50)";
+          err.classList.add("show");
+        }
       });
     });
   </script>
