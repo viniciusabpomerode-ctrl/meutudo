@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Pratique respostas em alemão do A1 ao C2, grave sua voz e receba orientação de gramática, estrutura e vocabulário.">
+  <title>Teste de Criatividade em Alemão | DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .creative-shell{max-width:1080px;margin:auto;padding:32px 0 80px}.creative-hero{display:grid;grid-template-columns:1.4fr .6fr;gap:24px;align-items:end;margin-bottom:25px}.creative-hero h1{font-size:clamp(2.2rem,5vw,4rem);line-height:1;margin:8px 0 12px}.daily-box{padding:18px;text-align:center}.daily-box strong{display:block;font-size:2rem;color:var(--color-primary-dark)}
+    .level-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:18px 0 24px}.level-btn{border:1px solid var(--border-light);border-radius:14px;background:var(--card-bg);color:var(--text-primary);padding:14px 8px;font-weight:800;cursor:pointer}.level-btn.active,.level-btn:hover{color:#fff;background:var(--color-primary);transform:translateY(-2px)}
+    .practice{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(270px,.7fr);gap:18px}.question-card{padding:28px}.question-top{display:flex;justify-content:space-between;gap:12px;align-items:center}.pill{display:inline-flex;padding:6px 10px;border-radius:999px;background:color-mix(in srgb,var(--color-primary) 14%,transparent);color:var(--color-primary-dark);font-size:.76rem;font-weight:800}.question-card h2{font-size:clamp(1.5rem,3.2vw,2.35rem);line-height:1.25;margin:18px 0 8px}.prompt-pt{color:var(--text-secondary);font-size:1rem}.answer-box{width:100%;min-height:180px;resize:vertical;border:1px solid var(--border-light);border-radius:15px;background:var(--card-bg);color:var(--text-primary);padding:16px;font:inherit;line-height:1.6;margin-top:18px}.answer-box:focus{outline:2px solid color-mix(in srgb,var(--color-primary) 42%,transparent);border-color:var(--color-primary)}.answer-meta,.action-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}.action-row{margin-top:18px;flex-wrap:wrap}.recording{color:var(--error);font-weight:700}.side-stack{display:grid;gap:14px;align-content:start}.helper-card{padding:19px}.helper-card h3{margin:0 0 10px;font-size:1rem}.helper-card ul{margin:0;padding-left:19px;color:var(--text-secondary);line-height:1.7}.word-list{display:flex;gap:7px;flex-wrap:wrap}.word-chip{padding:6px 9px;border:1px solid var(--border-light);border-radius:9px;font-size:.78rem;background:var(--bg-secondary)}
+    .record-panel{display:none;margin-top:14px;padding:14px;border-radius:13px;background:var(--bg-secondary);border:1px solid var(--border-light)}.record-panel.show{display:block}.record-panel audio{width:100%;height:42px}.record-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}.record-dot{width:9px;height:9px;border-radius:50%;background:var(--error);display:inline-block;animation:pulse 1s infinite}.result{margin-top:18px;padding:25px;display:none}.result.show{display:block;animation:fadeIn .3s ease}.score-ring{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--color-primary) calc(var(--score)*1%),var(--border-light) 0);position:relative;font-weight:900;font-size:1.3rem}.score-ring:before{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--card-bg)}.score-ring span{position:relative}.result-head{display:flex;align-items:center;gap:16px}.feedback-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.feedback-block{padding:16px;border:1px solid var(--border-light);border-radius:13px}.feedback-block h3{font-size:.9rem;margin:0 0 7px}.feedback-block p{margin:0;color:var(--text-secondary);line-height:1.55}.model-answer{grid-column:1/-1}.notice{padding:12px 14px;border-radius:11px;background:color-mix(in srgb,var(--color-primary) 9%,var(--card-bg));font-size:.83rem;color:var(--text-secondary);margin-top:14px}
+    @media(max-width:800px){.creative-hero,.practice{grid-template-columns:1fr}.creative-hero{align-items:start}.daily-box{text-align:left}.level-grid{grid-template-columns:repeat(3,1fr)}.side-stack{grid-template-columns:1fr 1fr}.feedback-grid{grid-template-columns:1fr}.model-answer{grid-column:auto}}
+    @media(max-width:520px){.creative-shell{padding-top:20px}.question-card{padding:19px}.side-stack{grid-template-columns:1fr}.action-row .btn{width:100%}.answer-meta{font-size:.78rem}}
+  </style>
+</head>
+<body>
+  <div id="app-nav"></div>
+  <main class="container creative-shell">
+    <header class="creative-hero">
+      <div><span class="eyebrow">Fale, pense e construa em alemão</span><h1>Teste de Criatividade</h1><p class="muted">Responda situações reais, pratique sua espontaneidade e descubra como deixar seu alemão mais claro e natural.</p></div>
+      <div class="card daily-box"><small>Análises disponíveis hoje</small><strong id="attempts">3 de 3</strong><small id="attempt-note">Entrando, seu limite fica protegido.</small></div>
+    </header>
+    <section aria-labelledby="level-title"><h2 id="level-title" style="font-size:1rem">Escolha seu nível</h2><div class="level-grid" id="levels"></div></section>
+    <section class="practice" id="practice" hidden>
+      <article class="card question-card">
+        <div class="question-top"><span class="pill" id="category"></span><span class="muted" id="position"></span></div>
+        <h2 id="prompt"></h2><p class="prompt-pt" id="prompt-pt"></p>
+        <label class="sr-only" for="answer">Sua resposta em alemão</label>
+        <textarea class="answer-box" id="answer" placeholder="Schreibe deine Antwort hier oder nimm deine Stimme auf ..." maxlength="1500"></textarea>
+        <div class="answer-meta"><span id="record-status" class="muted">Você também pode responder falando.</span><span><b id="words">0</b> palavras · mínimo sugerido: <b id="minimum">0</b></span></div>
+        <div class="record-panel" id="record-panel"><div class="record-head"><b>🎧 Sua gravação</b><button class="btn btn-ghost btn-sm" id="discard-record">Descartar e regravar</button></div><audio id="record-playback" controls preload="metadata"></audio><p class="muted" style="margin:7px 0 0;font-size:.78rem">O áudio fica somente neste aparelho e não é enviado para a análise.</p></div>
+        <div class="action-row"><div><button class="btn btn-outline" id="record">🎙️ Gravar resposta</button> <button class="btn btn-ghost" id="stop" hidden>■ Parar</button></div><div><button class="btn btn-ghost" id="next">Outra pergunta</button> <button class="btn btn-primary" id="analyze">Analisar resposta</button></div></div>
+        <div class="notice" id="speech-note">A transcrição usa o recurso de voz do navegador. Confira o texto antes de enviar para análise.</div>
+      </article>
+      <aside class="side-stack">
+        <div class="card helper-card"><h3>Estrutura sugerida</h3><ul id="guide"></ul></div>
+        <div class="card helper-card"><h3>Vocabulário útil</h3><div class="word-list" id="vocabulary"></div></div>
+        <div class="card helper-card"><h3>Conectores</h3><div class="word-list" id="connectors"></div></div>
+      </aside>
+    </section>
+    <section class="card result" id="result" aria-live="polite"></section>
+  </main>
+  <script src="../assets/js/theme.js"></script><script src="../assets/js/sfx.js"></script><script src="../assets/js/auth.js"></script><script src="../assets/js/xp.js"></script><script src="../assets/js/nav.js"></script><script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/data.js"></script><script src="../assets/js/creativity.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+(function(){
+  "use strict";
+  renderNav("criatividade");
+  const LEVELS=["A1","A2","B1","B2","C1","C2"], FREE_DAILY=3, GUEST_DAILY=1, COOLDOWN=30000;
+  const $=id=>document.getElementById(id);let questions=[],level=null,current=null,recognition=null,mediaRecorder=null,mediaStream=null,recordedBlob=null,recordUrl=null,recordStarted=0,recordTimer=null,cooldown=false;
+  const usageKey=()=>`afb_creativity_${new Date().toISOString().slice(0,10)}`;
+  function usage(){try{return JSON.parse(localStorage.getItem(usageKey()))||{count:0,last:0}}catch(e){return {count:0,last:0}}}
+  function isLogged(){return !!Auth.currentUser()}
+  function maxAttempts(){return isLogged()?FREE_DAILY:GUEST_DAILY}
+  function updateAttempts(){const u=usage(),left=Math.max(0,maxAttempts()-u.count);$("attempts").textContent=`${left} de ${maxAttempts()}`;$("attempt-note").textContent=isLogged()?"Seu limite diário está protegido.":"Visitantes recebem uma análise demonstrativa."}
+  async function init(){
+    $("levels").innerHTML=LEVELS.map(l=>`<button class="level-btn" data-level="${l}">${l}</button>`).join("");
+    $("levels").onclick=e=>{const b=e.target.closest("button");if(b)selectLevel(b.dataset.level)};
+    $("answer").oninput=countWords;$("next").onclick=pickQuestion;$("analyze").onclick=analyze;$("record").onclick=startRecording;$("stop").onclick=()=>stopRecording();$("discard-record").onclick=discardRecording;
+    try{
+      let r=await fetch(`${AFB_R2_PUBLIC_URL}/data/criatividade.json`);
+      if(!r.ok)r=await fetch("../data/criatividade.json");
+      if(!r.ok)throw new Error("questions_unavailable");
+      questions=(await r.json()).questions||[];
+    }catch(e){$("practice").hidden=false;$("practice").innerHTML='<div class="card" style="padding:25px">Não foi possível carregar as perguntas.</div>'}
+    await Auth._ready();updateAttempts();
+  }
+  function selectLevel(l){level=l;document.querySelectorAll(".level-btn").forEach(b=>b.classList.toggle("active",b.dataset.level===l));$("practice").hidden=false;pickQuestion();$("practice").scrollIntoView({behavior:"smooth",block:"start"})}
+  function pickQuestion(){const list=questions.filter(q=>q.level===level),pool=list.filter(q=>!current||q.id!==current.id);current=pool[Math.floor(Math.random()*pool.length)]||list[0];if(!current)return;
+    if(mediaRecorder&&mediaRecorder.state==="recording")stopRecording();discardRecording();$("category").textContent=`${current.level} · ${current.category}`;$("position").textContent=`${list.indexOf(current)+1} de ${list.length}`;$("prompt").textContent=current.prompt;$("prompt-pt").textContent=current.promptPt;$("minimum").textContent=current.minWords;$("guide").innerHTML=current.guide.map(x=>`<li>${x}</li>`).join("");$("vocabulary").innerHTML=current.vocabulary.map(x=>`<span class="word-chip">${x}</span>`).join("");$("connectors").innerHTML=current.connectors.map(x=>`<span class="word-chip">${x}</span>`).join("");$("answer").value="";$("result").classList.remove("show");countWords();
+  }
+  function countWords(){const n=$("answer").value.trim().split(/\s+/).filter(Boolean).length;$("words").textContent=n}
+  async function startRecording(){
+    if(!navigator.mediaDevices||!window.MediaRecorder){$("record-status").textContent="Seu navegador não oferece gravação. Você pode digitar normalmente.";return}
+    try{
+      mediaStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});const chunks=[];const mime=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":"audio/webm";
+      mediaRecorder=new MediaRecorder(mediaStream,{mimeType:mime});mediaRecorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};mediaRecorder.onstop=()=>{recordedBlob=new Blob(chunks,{type:mime});if(recordUrl)URL.revokeObjectURL(recordUrl);recordUrl=URL.createObjectURL(recordedBlob);$("record-playback").src=recordUrl;$("record-panel").classList.add("show");cleanupCapture();$("record-status").textContent="Gravação pronta. Ouça, confira a transcrição ou regrave."};mediaRecorder.start();
+      const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(SR){recognition=new SR();recognition.lang="de-DE";recognition.continuous=true;recognition.interimResults=true;let base=$("answer").value.trim();recognition.onresult=e=>{let final="",partial="";for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)final+=t+" ";else partial+=t}if(final)base=(base+" "+final).trim();$("answer").value=(base+" "+partial).trim();countWords()};recognition.onerror=()=>{};try{recognition.start()}catch(e){}}
+      recordStarted=Date.now();recordTimer=setInterval(()=>{const sec=Math.floor((Date.now()-recordStarted)/1000);$("record-status").innerHTML=`<span class="record-dot"></span> Gravando ${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`;if(sec>=180)stopRecording()},500);$("record").hidden=true;$("stop").hidden=false;$("record-status").className="recording";
+    }catch(e){$("record-status").className="muted";$("record-status").textContent="Permita o acesso ao microfone para gravar sua resposta."}
+  }
+  function cleanupCapture(){if(recordTimer)clearInterval(recordTimer);recordTimer=null;if(mediaStream)mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null;if(recognition)try{recognition.stop()}catch(e){}recognition=null;$("record").hidden=false;$("stop").hidden=true;$("record-status").className="muted"}
+  function stopRecording(){if(mediaRecorder&&mediaRecorder.state==="recording")mediaRecorder.stop();else cleanupCapture()}
+  function discardRecording(){if(recordUrl)URL.revokeObjectURL(recordUrl);recordUrl=null;recordedBlob=null;$("record-playback").removeAttribute("src");$("record-panel").classList.remove("show");$("record-status").className="muted";$("record-status").textContent="Você também pode responder falando."}
+  async function analyze(){
+    const answer=$("answer").value.trim(),words=answer.split(/\s+/).filter(Boolean).length,u=usage(),wait=COOLDOWN-(Date.now()-u.last);
+    if(!answer||words<5){showMessage("Escreva ou grave uma resposta um pouco maior antes de analisar.");return}
+    if(u.count>=maxAttempts()){showMessage(isLogged()?"Você concluiu as análises de hoje. Continue treinando e volte amanhã.":"Sua demonstração foi usada. Entre para receber três análises por dia.",!isLogged());return}
+    if(wait>0){showMessage(`Aguarde ${Math.ceil(wait/1000)} segundos antes de uma nova análise.`);return}
+    if(cooldown)return;cooldown=true;const btn=$("analyze");btn.disabled=true;btn.textContent="Analisando...";
+    try{
+      let feedback=null,token=await Auth.accessToken();
+      if(window.AFB_CREATIVITY_API){const r=await fetch(window.AFB_CREATIVITY_API+"/analyze",{method:"POST",headers:{"Content-Type":"application/json",...(token?{Authorization:`Bearer ${token}`}:{})},body:JSON.stringify({questionId:current.id,level:current.level,prompt:current.prompt,answer,modelAnswer:current.modelAnswer,vocabulary:current.vocabulary})});if(r.ok)feedback=await r.json();else if(r.status===429)throw new Error("Limite diário alcançado")}
+      if(!feedback)feedback=localFeedback(answer,words);
+      localStorage.setItem(usageKey(),JSON.stringify({count:u.count+1,last:Date.now()}));renderResult(feedback);updateAttempts();if(window.SFX)SFX.correct();
+    }catch(e){showMessage(e.message||"Não foi possível analisar agora. Tente novamente.")}finally{cooldown=false;btn.disabled=false;btn.textContent="Analisar resposta"}
+  }
+  function localFeedback(answer,words){const used=current.connectors.filter(x=>answer.toLowerCase().includes(x.toLowerCase())),score=Math.min(88,48+Math.round(Math.min(words/current.minWords,1)*25)+used.length*5);return {score,summary:words>=current.minWords?"Boa extensão e resposta relacionada ao tema.":"A ideia está clara, mas você pode desenvolvê-la um pouco mais.",corrected:answer,grammar:["A correção detalhada por IA será ativada quando o Worker for publicado."],vocabulary:current.vocabulary.slice(0,3),structure:used.length?`Você utilizou ${used.join(", ")}. Tente conectar também a conclusão.`:`Use conectores como ${current.connectors.join(", ")} para organizar as ideias.`,modelAnswer:current.modelAnswer,mode:"local"}}
+  function esc(s){return String(s||"").replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+  function renderResult(f){$("result").innerHTML=`<div class="result-head"><div class="score-ring" style="--score:${Number(f.score)||0}"><span>${Number(f.score)||0}</span></div><div><span class="eyebrow">Orientação da sua resposta</span><h2 style="margin:4px 0">${esc(f.summary)}</h2></div></div><div class="feedback-grid"><div class="feedback-block"><h3>Versão corrigida</h3><p lang="de">${esc(f.corrected)}</p></div><div class="feedback-block"><h3>Gramática</h3><p>${(f.grammar||[]).map(esc).join(" · ")}</p></div><div class="feedback-block"><h3>Vocabulário recomendado</h3><p>${(f.vocabulary||[]).map(esc).join(" · ")}</p></div><div class="feedback-block"><h3>Estrutura</h3><p>${esc(f.structure)}</p></div><div class="feedback-block model-answer"><h3>Uma resposta-modelo</h3><p lang="de">${esc(f.modelAnswer||current.modelAnswer)}</p></div></div>${f.mode==="local"?'<div class="notice">Pré-análise local: não consumiu serviços externos. A correção gramatical completa será habilitada no deploy do Workers AI.</div>':""}`;$("result").classList.add("show");$("result").scrollIntoView({behavior:"smooth",block:"start"})}
+  function showMessage(text,login){$("result").innerHTML=`<div style="text-align:center;padding:10px"><h2>${esc(text)}</h2>${login?'<a class="btn btn-primary" href="login.html?next=criatividade.html">Entrar para continuar</a>':""}</div>`;$("result").classList.add("show")}
+  init();
+})();

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caçando Vocabulário — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    #game-wrap { display:flex; flex-direction:column; align-items:center; gap:14px; }
+    #canvas { background:#fff; border-radius:16px; box-shadow:var(--shadow); touch-action:none; }
+    .dpad { display:grid; grid-template-columns:repeat(3, 56px); grid-template-rows:repeat(3, 56px); gap:6px; }
+    .dpad button { border:none; border-radius:12px; background:var(--bg-secondary); font-size:1.3rem; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <div id="app-nav"></div>
+  <div class="container" style="padding-top:28px;">
+    <h2 class="mt-0 center">🐍 Caçando Vocabulário</h2>
+    <p class="muted center">Use as setas do teclado (ou os botões) para levar a cobra até a palavra em alemão certa.</p>
+
+    <div class="card center" style="max-width:480px; margin:0 auto 20px;">
+      <div>Encontre em alemão:</div>
+      <h2 id="target-word" style="margin:6px 0; color:var(--color-primary-dark);">...</h2>
+      <div class="flex-between" style="max-width:260px; margin:0 auto;">
+        <span>Pontos: <b id="score">0</b></span>
+        <span>XP ganho: <b id="xp-earned">0</b></span>
+      </div>
+    </div>
+
+    <div id="game-wrap">
+      <canvas id="canvas" width="400" height="400"></canvas>
+      <div class="flex gap-12">
+        <button class="btn btn-primary" id="start-btn">Começar</button>
+        <button class="btn btn-outline" id="finish-btn" disabled>Encerrar e salvar XP</button>
+      </div>
+      <div class="dpad">
+        <div></div><button data-dir="up">⬆️</button><div></div>
+        <button data-dir="left">⬅️</button><div></div><button data-dir="right">➡️</button>
+        <div></div><button data-dir="down">⬇️</button><div></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/xp.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script>
+    renderNav("jogo");
+
+    const GRID = 20, CELL = 20;
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    let words = [];
+    let snake, dir, nextDir, foods, targetWord, score, xpEarned, timer, running;
+
+    function randCell() {
+      return { x: Math.floor(Math.random() * GRID), y: Math.floor(Math.random() * GRID) };
+    }
+
+    function cellFree(cell, occupied) {
+      return !occupied.some((o) => o.x === cell.x && o.y === cell.y);
+    }
+
+    function pickWords(n) {
+      const shuffled = [...words].sort(() => Math.random() - 0.5);
+      return shuffled.slice(0, n);
+    }
+
+    function newFoods() {
+      const chosen = pickWords(4);
+      const occupied = [...snake];
+      foods = chosen.map((w) => {
+        let cell;
+        do { cell = randCell(); } while (!cellFree(cell, occupied));
+        occupied.push(cell);
+        return { ...cell, word: w };
+      });
+      targetWord = foods[Math.floor(Math.random() * foods.length)];
+      document.getElementById("target-word").textContent = I18n.field(targetWord.word, 'portuguese_translation');
+    }
+
+    function resetGame() {
+      snake = [{ x: 10, y: 10 }];
+      dir = { x: 1, y: 0 };
+      nextDir = dir;
+      score = 0;
+      xpEarned = 0;
+      document.getElementById("score").textContent = "0";
+      document.getElementById("xp-earned").textContent = "0";
+      newFoods();
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--bg-secondary");
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--color-accent");
+      snake.forEach((s) => ctx.fillRect(s.x * CELL, s.y * CELL, CELL - 2, CELL - 2));
+
+      foods.forEach((f) => {
+        ctx.fillStyle = f === targetWord ? "#FFD700" : "#FF7043";
+        ctx.beginPath();
+        ctx.arc(f.x * CELL + CELL / 2, f.y * CELL + CELL / 2, CELL / 2 - 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#222";
+        ctx.font = "9px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(f.word.german_word, f.x * CELL + CELL / 2, f.y * CELL - 3);
+      });
+    }
+
+    function step() {
+      dir = nextDir;
+      const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+      head.x = (head.x + GRID) % GRID;
+      head.y = (head.y + GRID) % GRID;
+
+      if (snake.some((s) => s.x === head.x && s.y === head.y)) {
+        endGame("A cobra bateu nela mesma!");
+        return;
+      }
+
+      snake.unshift(head);
+
+      const eaten = foods.find((f) => f.x === head.x && f.y === head.y);
+      if (eaten) {
+        if (eaten === targetWord) {
+          score += 10;
+          xpEarned += 5;
+        } else {
+          score = Math.max(0, score - 5);
+        }
+        document.getElementById("score").textContent = score;
+        document.getElementById("xp-earned").textContent = xpEarned;
+        newFoods();
+      } else {
+        snake.pop();
+      }
+      draw();
+    }
+
+    function endGame(msg) {
+      running = false;
+      clearInterval(timer);
+      document.getElementById("start-btn").disabled = false;
+      document.getElementById("finish-btn").disabled = xpEarned === 0;
+      if (msg) alert(msg + ` Pontuação final: ${score}`);
+    }
+
+    document.getElementById("start-btn").addEventListener("click", () => {
+      if (running) return;
+      resetGame();
+      draw();
+      running = true;
+      document.getElementById("start-btn").disabled = true;
+      document.getElementById("finish-btn").disabled = true;
+      timer = setInterval(step, 160);
+    });
+
+    document.getElementById("finish-btn").addEventListener("click", () => {
+      if (xpEarned > 0) {
+        const result = XPSystem_addXPWrapper(xpEarned);
+        if (result.leveledUp) alert(`🎉 Você subiu para o nível ${result.newLevel}!`);
+      }
+      document.getElementById("finish-btn").disabled = true;
+      xpEarned = 0;
+      document.getElementById("xp-earned").textContent = "0";
+    });
+
+    function XPSystem_addXPWrapper(amount) {
+      return Progress.addXP(amount);
+    }
+
+    function setDir(name) {
+      const map = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } };
+      const d = map[name];
+      if (dir.x === -d.x && dir.y === -d.y) return; // nao deixa virar 180 graus
+      nextDir = d;
+    }
+
+    document.querySelectorAll(".dpad button").forEach((b) => b.addEventListener("click", () => setDir(b.dataset.dir)));
+
+    window.addEventListener("keydown", (e) => {
+      const map = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right" };
+      if (map[e.key]) { e.preventDefault(); setDir(map[e.key]); }
+    });
+
+    (async () => {
+      const data = await AFBData.jogoVocabulario();
+      words = data.words;
+      resetGame();
+      draw();
+    })();
+  </script>
+</body>
+</html>

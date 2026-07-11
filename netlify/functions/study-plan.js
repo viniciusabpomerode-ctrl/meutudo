@@ -1,0 +1,12 @@
+// Supabase autentica; R2 persiste o Plano de Jornada de cada usuário.
+const AWS=require("aws-sdk");
+const SUPABASE_URL="https://zqrdpmrwnprtelgloawb.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_CVFm1nLMf9GCPr-RKKU6Rw_AFixWd5z";
+const s3=new AWS.S3({endpoint:`https://${process.env.R2_ID}.r2.cloudflarestorage.com`,accessKeyId:process.env.R2_KEY,secretAccessKey:process.env.R2_SECRET,region:"auto",signatureVersion:"v4"});
+const headers={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"GET, PUT, OPTIONS","Access-Control-Allow-Headers":"Content-Type, Authorization","Content-Type":"application/json","Cache-Control":"no-store"};
+async function user(event){const a=event.headers.authorization||event.headers.Authorization||"";if(!a.startsWith("Bearer "))return null;const r=await fetch(`${SUPABASE_URL}/auth/v1/user`,{headers:{apikey:SUPABASE_ANON_KEY,Authorization:a}});if(!r.ok)return null;const u=await r.json();return u&&u.id?u:null}
+exports.handler=async event=>{if(event.httpMethod==="OPTIONS")return{statusCode:204,headers};const u=await user(event);if(!u)return{statusCode:401,headers,body:'{"error":"unauthorized"}'};const key=`study_plans/${u.id}.json`;
+  if(event.httpMethod==="GET"){try{const o=await s3.getObject({Bucket:"edicao",Key:key}).promise();return{statusCode:200,headers,body:o.Body.toString()}}catch(e){if(e.code==="NoSuchKey"||e.statusCode===404)return{statusCode:200,headers,body:"{}"};return{statusCode:500,headers,body:'{"error":"read_failed"}'}}}
+  if(event.httpMethod==="PUT"){try{const p=JSON.parse(event.body||"{}");const clean={version:1,goal:String(p.goal||"general").slice(0,30),level:/^(A1|A2|B1|B2|C1|C2)$/.test(p.level)?p.level:"A1",minutesPerDay:Math.max(5,Math.min(180,Number(p.minutesPerDay)||15)),daysPerWeek:Math.max(1,Math.min(7,Number(p.daysPerWeek)||4)),horizon:String(p.horizon||"3_months").slice(0,20),createdAt:p.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString(),days:p.days&&typeof p.days==="object"?p.days:{},missions:p.missions&&typeof p.missions==="object"?p.missions:{},achievements:Array.isArray(p.achievements)?p.achievements.slice(0,100):[]};await s3.putObject({Bucket:"edicao",Key:key,Body:JSON.stringify(clean),ContentType:"application/json"}).promise();return{statusCode:200,headers,body:'{"ok":true}'}}catch(e){return{statusCode:400,headers,body:'{"error":"invalid_plan"}'}}}
+  return{statusCode:405,headers,body:'{"error":"method_not_allowed"}'};
+};

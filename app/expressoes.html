@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expressões — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .search-bar {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 999px;
+      border: 2px solid var(--border-light);
+      font-size: 1rem;
+      margin-bottom: 16px;
+      background: var(--card-bg);
+    }
+    .search-bar:focus { outline: none; border-color: var(--color-primary); }
+    .cat-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .cat-chip {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 2px solid var(--border-light);
+      background: var(--card-bg);
+      cursor: pointer;
+      font-size: .85rem;
+      font-weight: 600;
+      transition: .2s;
+      white-space: nowrap;
+    }
+    .cat-chip:hover { border-color: var(--color-primary); }
+    .cat-chip.active {
+      background: var(--color-primary);
+      color: #fff;
+      border-color: var(--color-primary);
+    }
+    .expr-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--color-primary);
+      transition: .2s;
+      cursor: pointer;
+      position: relative;
+    }
+    .expr-card:hover { transform: translateX(4px); box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+    .expr-card .german { font-size: 1.2rem; font-weight: 700; }
+    .expr-card .portuguese { font-size: 1rem; color: var(--text-secondary); margin-top: 2px; }
+    .expr-card .literal { font-size: .82rem; color: var(--color-primary-dark); font-style: italic; margin-top: 4px; }
+    .expr-card .examples { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-light); display: none; }
+    .expr-card.expanded .examples { display: block; }
+    .expr-card .example-de { font-size: .9rem; font-weight: 600; margin-top: 6px; }
+    .expr-card .example-pt { font-size: .85rem; color: var(--text-secondary); }
+    .expr-card .meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .expr-card .level-badge {
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .expr-card .tag {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: .72rem;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+    }
+    .btn-audio {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: var(--color-primary);
+      color: #fff;
+      cursor: pointer;
+      font-size: .9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .btn-audio:hover { opacity: .85; }
+    .btn-audio-sm {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: var(--color-primary);
+      color: #fff;
+      cursor: pointer;
+      font-size: .7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .btn-audio-sm:hover { opacity: .85; }
+    .btn-speed {
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1.5px solid var(--color-primary);
+      background: transparent;
+      cursor: pointer;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--color-primary-dark);
+    }
+    .btn-speed.active { background: var(--color-primary); color: #fff; }
+    .counter { font-size: .85rem; color: var(--text-secondary); margin-bottom: 10px; }
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+    .back-link { cursor:pointer; color: var(--color-primary-dark); font-weight:600; font-size:.9rem; margin-bottom:12px; display:inline-block; }
+    .back-link:hover { text-decoration: underline; }
+
+    /* Cards de categoria (pastinhas) */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .cat-folder {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px 16px;
+      cursor: pointer;
+      text-align: center;
+      transition: .2s;
+      border: 2px solid transparent;
+    }
+    .cat-folder:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.1); border-color: var(--color-primary); }
+    .cat-folder .folder-icon { font-size: 2rem; margin-bottom: 8px; }
+    .cat-folder .folder-name { font-weight: 700; font-size: .9rem; text-transform:capitalize; }
+    .cat-folder .folder-count { font-size: .78rem; color: var(--text-secondary); margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div id="app-nav"></div>
+
+  <div class="container" style="padding-top:28px; max-width:900px;">
+    <div id="main-view">
+      <h2 class="mt-0">🗣️ Expressões & Gírias</h2>
+      <p class="muted">+1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas.</p>
+
+      <input type="text" class="search-bar" id="search-main" placeholder="🔍 Buscar em todas as categorias...">
+
+      <div class="counter" id="counter-main" style="margin-bottom:16px;"></div>
+      <div class="cat-grid" id="cat-grid"></div>
+      <div id="list-main"></div>
+    </div>
+
+    <div id="cat-view" style="display:none;">
+      <span class="back-link" onclick="voltar()">← Voltar para categorias</span>
+      <h2 class="mt-0" id="cat-title"></h2>
+      <input type="text" class="search-bar" id="search-cat" placeholder="🔍 Buscar nesta categoria...">
+      <div class="cat-filters" id="level-filters" style="margin-bottom:16px;"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div class="counter" id="counter-cat" style="margin-bottom:0;"></div>
+        <select id="sort-select" style="padding:6px 12px; border-radius:10px; border:1px solid var(--border-light); background:var(--card-bg); font-size:.82rem;">
+          <option value="level">Nível (A1→C2)</option>
+          <option value="az">A → Z</option>
+        </select>
+      </div>
+      <div id="list-cat"></div>
+    </div>
+  </div>
+
+  <div id="audio-player" style="display:none;">
+    <audio id="expr-audio"></audio>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/saved_r2.js"></script>
+  <script src="../assets/js/guest.js"></script>
+  <script>
+    renderNav("expressoes");
+
+    // Modo visitante: primeiras AFB_FREE_LIMIT expressoes liberadas, resto com cadeado
+    let isGuest = true;
+    const guestFreeIds = new Set();
+
+    const audioEl = document.getElementById("expr-audio");
+    let allData = [];
+    let activeCat = null;
+    let activeLevel = "todos";
+    let searchMain = "";
+    let searchCat = "";
+    let currentSpeed = 1.0;
+    let sortMode = "level";
+    let audioBaseUrl = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
+    
+    // Icons por categoria
+    const catIcons = {"saudacoes":"💬","cotidiano":"🏠","internet_jovem":"📱","maneiro":"😎","frustracao":"😤","despedida":"👋","festa_role":"🎉","preguica":"😴","dinheiro":"💰","bebida":"🍺","amor":"❤️","insultos":"😡","trabalho":"💼","regionais":"🗺️","comida":"🍽️","exclamacoes":"😲","esportes":"⚽","musica_cultura":"🎵","tecnologia":"💻","idiomaticas":"🧠"};
+    const levelOrder = {A1:0, A2:1, B1:2, B2:3, C1:4, C2:5};
+
+    // ── Carregar ──
+    async function load() {
+      try {
+        let data;
+        try { const r = await fetch("../data/girias.json"); data = await r.json(); }
+        catch { const r = await fetch(audioBaseUrl + "data/girias.json"); data = await r.json(); }
+        allData = data.expressions || [];
+        const perCategory = {};
+        allData.forEach((e,i) => { e._guestKey=e.id||`${e.category}_${i}`;const c=e.category||"outras";perCategory[c]=perCategory[c]||0;if(perCategory[c]++<AFB_FREE_LIMIT_STRICT)guestFreeIds.add(e._guestKey); });
+        renderMain();
+      } catch (e) {
+        document.getElementById("cat-grid").innerHTML = '<div class="empty-state"><div class="icon">📭</div><h3>Em breve!</h3></div>';
+      }
+    }
+
+    function voltar() {
+      activeCat = null;
+      activeLevel = "todos";
+      searchCat = "";
+      document.getElementById("main-view").style.display = "";
+      document.getElementById("cat-view").style.display = "none";
+      document.getElementById("search-cat").value = "";
+      renderMain();
+    }
+
+    // ── MAIN VIEW ──
+    function renderMain() {
+      const cats = new Set(allData.map(e => e.category));
+      const counts = {};
+      for (const c of cats) counts[c] = allData.filter(e => e.category === c).length;
+
+      document.getElementById("cat-grid").innerHTML = [...cats].sort().map(c => `
+        <div class="cat-folder" onclick="abrirCat('${c}')">
+          <div class="folder-icon">${catIcons[c] || "📁"}</div>
+          <div class="folder-name">${categoryLabel(c)}</div>
+          <div class="folder-count">${counts[c]} expressões</div>
+        </div>
+      `).join("");
+
+      // Busca global
+      let filtradas = allData;
+      if (searchMain) {
+        filtradas = filtrar(filtradas, searchMain);
+      }
+      document.getElementById("counter-main").innerHTML = searchMain 
+        ? `${filtradas.length} resultado(s)` 
+        : `<span style="background:var(--brand-light);color:var(--brand);padding:4px 12px;border-radius:20px;font-weight:700;">📚 ${allData.length} expressões · ${cats.size} categorias</span>`;
+      document.getElementById("list-main").innerHTML = searchMain ? renderCards(filtradas) : "";
+    }
+
+    document.getElementById("search-main").addEventListener("input", (e) => {
+      searchMain = e.target.value.toLowerCase().trim();
+      renderMain();
+    });
+
+    // ── ABRIR CATEGORIA ──
+    function abrirCat(cat) {
+      activeCat = cat;
+      activeLevel = "todos";
+      sortMode = "az";
+      document.getElementById("main-view").style.display = "none";
+      document.getElementById("cat-view").style.display = "";
+      document.getElementById("cat-title").textContent = (catIcons[cat] || "📁") + " " + categoryLabel(cat);
+      document.getElementById("sort-select").value = "level";
+      renderCat();
+    }
+
+    function renderCat() {
+      // Níveis
+      const levels = ["A1","A2","B1","B2","C1","C2"];
+      const dados = allData.filter(e => e.category === activeCat);
+      const wrap = document.getElementById("level-filters");
+      let html = `<span class="cat-chip ${activeLevel==='todos'?'active':''}" onclick="setLevel('todos')">📊 Todos (${dados.length})</span>`;
+      for (const lv of levels) {
+        const n = dados.filter(e => e.level === lv).length;
+        html += `<span class="cat-chip ${activeLevel===lv?'active':''}" 
+                 onclick="setLevel('${lv}')" style="border-color:${levelColor(lv)}">${lv} (${n})</span>`;
+      }
+      wrap.innerHTML = html;
+
+      // Filtrar + ordenar
+      let filtradas = dados;
+      if (activeLevel !== "todos") filtradas = filtradas.filter(e => e.level === activeLevel);
+      if (searchCat) filtradas = filtrar(filtradas, searchCat);
+
+      if (sortMode === "az") filtradas.sort((a,b) => (a.german||"").localeCompare(b.german||"","de"));
+      else if (sortMode === "level") filtradas.sort((a,b) => (levelOrder[a.level]??9)-(levelOrder[b.level]??9) || (a.german||"").localeCompare(b.german||""));
+
+      document.getElementById("counter-cat").textContent = `${filtradas.length} ${filtradas.length!==1?'expressões':'expressão'}`;
+      const lockedHere = isGuest ? filtradas.filter(e => !guestFreeIds.has(e._guestKey)).length : 0;
+      document.getElementById("list-cat").innerHTML = (filtradas.length ? renderCards(filtradas) : '<div class="empty-state"><p>Nenhuma encontrada.</p></div>')
+        + (lockedHere > 0 ? Guest.banner(1509 - AFB_FREE_LIMIT_STRICT, "gírias e expressões") : "");
+    }
+
+    function setLevel(lv) { activeLevel = lv; searchCat = ""; document.getElementById("search-cat").value = ""; renderCat(); }
+
+    document.getElementById("search-cat").addEventListener("input", (e) => {
+      searchCat = e.target.value.toLowerCase().trim();
+      renderCat();
+    });
+
+    document.getElementById("sort-select").addEventListener("change", (e) => {
+      sortMode = e.target.value;
+      renderCat();
+    });
+
+    function filtrar(lista, q) {
+      return lista.filter(e => (e.german||"").toLowerCase().includes(q) || (e.portuguese||"").toLowerCase().includes(q) || (e.literal||"").toLowerCase().includes(q) || (e.tags||[]).some(t => t.toLowerCase().includes(q)));
+    }
+    function categoryLabel(value) { return String(value||"Outras").split("_").map(v => v ? v.charAt(0).toLocaleUpperCase("pt-BR") + v.slice(1) : "").join(" "); }
+
+    // ── RENDER CARDS ──
+    function renderCards(lista) {
+      return lista.map((e,i) => {
+        if (isGuest && !guestFreeIds.has(e._guestKey)) {
+          return Guest.lockedRowHidden((catIcons[e.category] || "📁") + " " + categoryLabel(e.category) + (e.level ? " · " + e.level : ""));
+        }
+        return `
+        <div class="expr-card" id="expr-${i}" onclick="toggleExpand(${i})">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+            <div>
+              <div class="german">${e.german||""}</div>
+              <div class="portuguese">${e.portuguese||""}</div>
+              ${e.literal?`<div class="literal">Lit: ${e.literal}</div>`:""}
+              <div class="meta">
+                <span class="level-badge" style="background:${levelColor(e.level)}">${e.level||"?"}</span>
+                ${(e.tags||[]).slice(0,3).map(t=>`<span class="tag">${t}</span>`).join("")}
+              </div>
+            </div>
+            ${e.audio_url?`<button class="btn-audio" onclick="event.stopPropagation(); playAudio('${e.audio_url}')">▶</button>`:""}
+            <span class="expr-save-btn" data-idx="${i}"></span>
+          </div>
+          <div class="examples">
+            ${e.example_de_1?`<div class="example-de" style="display:flex;align-items:center;gap:8px;"><span style="flex:1">💬 ${e.example_de_1}</span>${e.audio_ex1_url?`<button class="btn-audio btn-audio-sm" onclick="event.stopPropagation(); playAudio('${e.audio_ex1_url}')">▶</button>`:""}</div>`:""}
+            ${e.example_pt_1?`<div class="example-pt">   ${e.example_pt_1}</div>`:""}
+            ${e.example_de_2?`<div class="example-de" style="display:flex;align-items:center;gap:8px;margin-top:8px;"><span style="flex:1">💬 ${e.example_de_2}</span>${e.audio_ex2_url?`<button class="btn-audio btn-audio-sm" onclick="event.stopPropagation(); playAudio('${e.audio_ex2_url}')">▶</button>`:""}</div>`:""}
+            ${e.example_pt_2?`<div class="example-pt">   ${e.example_pt_2}</div>`:""}
+            <div style="margin-top:8px;">
+              <button class="btn-speed ${currentSpeed===0.75?'active':''}" onclick="event.stopPropagation(); setSpeed(0.75)">0.75x</button>
+              <button class="btn-speed ${currentSpeed===1.0?'active':''}" onclick="event.stopPropagation(); setSpeed(1.0)">1x</button>
+            </div>
+          </div>
+        </div>`;
+      }).join("");
+    }
+
+    function toggleExpand(idx) {
+      document.querySelectorAll(".expr-card").forEach(c=>c.classList.remove("expanded"));
+      const card = document.getElementById(`expr-${idx}`);
+      if(card) card.classList.toggle("expanded");
+    }
+
+    function levelColor(lv) {
+      const c={A1:"#4CAF50",A2:"#2196F3",B1:"#FF9800",B2:"#9C27B0",C1:"#E91E63",C2:"#607D8B"};
+      return c[lv]||"#888";
+    }
+
+    async function playAudio(filename) {
+      if(!filename) return;
+      const url = audioBaseUrl + filename;
+      if(audioEl.src===url && !audioEl.paused){audioEl.pause();return;}
+      audioEl.src=url; audioEl.playbackRate=currentSpeed; audioEl.play().catch(()=>{});
+    }
+
+    function setSpeed(s) {
+      currentSpeed=s; audioEl.playbackRate=s;
+      document.querySelectorAll(".btn-speed").forEach(b=>b.classList.toggle("active",parseFloat(b.textContent)===s));
+    }
+
+    // Init save buttons after render
+    function initSaveButtons(lista) {
+      lista.forEach((e, i) => {
+        const span = document.querySelector(`.expr-save-btn[data-idx="${i}"]`);
+        if (!span) return;
+        const btn = SavedItems.createSaveButton({
+          type: "expression", id: e.id || `${e.category}_${i}`,
+          nivel: e.level || "", title: (e.german || "").substring(0, 60),
+          refUrl: window.location.href
+        });
+        span.appendChild(btn);
+      });
+    }
+
+    // Override renderCards to also init save buttons
+    const _renderCards = renderCards;
+    renderCards = function(lista) {
+      const html = _renderCards(lista);
+      if (!isGuest) setTimeout(() => initSaveButtons(lista), 0);
+      return html;
+    };
+
+    Guest.check().then((g) => { isGuest = g; load(); });
+  </script>
+</body>
+</html>

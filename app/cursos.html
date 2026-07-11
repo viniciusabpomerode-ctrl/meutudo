@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursos — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <div id="app-nav"></div>
+
+  <div class="container" style="padding-top:28px;">
+    <h2 class="mt-0">Cursos</h2>
+    <p class="muted">Escolha um nível para ver diálogos e verbos.</p>
+
+    <div class="grid grid-4" id="level-tabs" style="gap:12px;"></div>
+
+    <div class="tabs" style="margin-top:28px;">
+      <button class="tab-btn active" data-tab="dialogos">💬 Diálogos</button>
+      <button class="tab-btn" data-tab="verbos">📖 Verbos</button>
+    </div>
+
+    <div id="tab-content"><p class="muted center" style="padding:40px 0;">Carregando...</p></div>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/xp.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/guest.js"></script>
+  <script>
+    renderNav("cursos");
+
+    const params = new URLSearchParams(location.search);
+    let currentLevel = params.get("nivel") || "A1";
+    let currentTab = ["dialogos", "verbos"].includes(params.get("tab")) ? params.get("tab") : "dialogos";
+    document.querySelectorAll(".tab-btn").forEach((b) => b.classList.toggle("active", b.dataset.tab === currentTab));
+    let levelData = null;   // { dialog_themes, podcasts } do nivel atual
+    let verbsData = null;   // verbos do nivel atual (carregado so quando precisa)
+    let isGuest = true;     // visitante: 20 de cada liberados, resto com cadeado
+    const progress = Guest.safeProgress();
+
+    function renderLevelTabs() {
+      const wrap = document.getElementById("level-tabs");
+      wrap.innerHTML = LEVEL_ORDER.map((code) => {
+        const info = XP_LEVELS[code];
+        // Visitante: A1 + uma amostra de 5 lições do A2;
+        // logado: destrava por XP como antes
+        const unlocked = isGuest ? (code === "A1" || code === "A2") : XPSystem.canAccessLevel(progress.xp, code);
+        const lockLabel = isGuest ? "🔒 Premium" : "🔒 " + info.minXP + " XP";
+        return `
+          <div class="level-tab ${code === currentLevel ? "active-level" : ""} ${unlocked ? "" : "locked"}"
+               style="background:var(${info.color})"
+               onclick="${isGuest && !unlocked ? `location.href='planos.html'` : `selectLevel('${code}')`}">
+            ${info.icon} ${code}
+            ${unlocked ? "" : '<div style="font-size:.7rem;">' + lockLabel + '</div>'}
+          </div>`;
+      }).join("");
+    }
+
+    async function selectLevel(code) {
+      currentLevel = code;
+      history.replaceState(null, "", `?nivel=${code}`);
+      renderLevelTabs();
+      levelData = null;
+      verbsData = null;
+      await loadAndRender();
+    }
+
+    function selectTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll(".tab-btn").forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
+      loadAndRender();
+    }
+
+    document.querySelectorAll(".tab-btn").forEach((b) => b.addEventListener("click", () => selectTab(b.dataset.tab)));
+
+    function emptyMsg() {
+      return `<p class="muted center" style="padding:40px 0;">Conteúdo deste nível chegando em breve 🚧</p>`;
+    }
+
+    async function loadAndRender() {
+      const el = document.getElementById("tab-content");
+      el.innerHTML = `<p class="muted center" style="padding:40px 0;">Carregando...</p>`;
+
+      if (currentTab === "verbos") {
+        if (!verbsData) verbsData = await AFBData.verbos(currentLevel);
+        if (!verbsData.length) { el.innerHTML = emptyMsg(); return; }
+        let vIdx = 0;
+        el.innerHTML = `<div class="grid grid-4">${verbsData.map((v) => {
+          const verbLimit = currentLevel === "A2" ? AFB_FREE_A2_LESSONS : AFB_FREE_LIMIT_STRICT;
+          if (isGuest && vIdx++ >= verbLimit) {
+            return Guest.lockedWord(v.verb_type || "verbo");
+          }
+          return `
+          <a class="card card-sm center" href="verbo.html?id=${v.id}&nivel=${currentLevel}">
+            <b style="font-size:1.1rem;">${v.base_verb}</b>
+            <p class="muted" style="margin:4px 0; font-size:.85rem;">${I18n.field(v, 'portuguese_translation')}</p>
+            ${progress.completed.includes("verb-" + v.id) ? '<span class="badge">✅</span>' : `<span class="xp-pill">+${v.xp_reward} XP</span>`}
+          </a>`;
+        }).join("")}</div>${isGuest && verbsData.length > (currentLevel === "A2" ? AFB_FREE_A2_LESSONS : AFB_FREE_LIMIT_STRICT) ? Guest.banner(verbsData.length - (currentLevel === "A2" ? AFB_FREE_A2_LESSONS : AFB_FREE_LIMIT_STRICT), "verbos deste nível") : ""}`;
+        return;
+      }
+
+      if (!levelData) levelData = await AFBData.nivel(currentLevel);
+
+      if (currentTab === "dialogos") {
+        const themes = levelData.dialog_themes || [];
+        if (!themes.length) { el.innerHTML = emptyMsg(); return; }
+        let dIdx = 0;
+        el.innerHTML = themes.map((th) => `
+          <h4 style="margin:20px 0 8px;">${I18n.field(th, 'title')}</h4>
+          <p class="muted" style="margin:0 0 10px; font-size:.88rem;">${I18n.field(th, 'description') || ""}</p>
+          <div class="grid grid-3">
+            ${th.dialogs.map((d) => {
+              const dialogLimit = currentLevel === "A2" ? AFB_FREE_A2_LESSONS : AFB_FREE_LIMIT;
+              if (isGuest && dIdx++ >= dialogLimit) {
+                return Guest.lockedCard(I18n.field(d, 'title'), I18n.field(d, 'description') || "");
+              }
+              return `
+              <a class="card card-sm" href="dialogo.html?id=${d.id}&nivel=${currentLevel}">
+                <div class="flex-between">
+                  <b>${I18n.field(d, 'title')}</b>
+                  ${progress.completed.includes("dialog-" + d.id) ? '<span class="badge">✅</span>' : `<span class="xp-pill">+${d.xp_reward} XP</span>`}
+                </div>
+                <p class="muted" style="font-size:.85rem; margin:6px 0 0;">${I18n.field(d, 'description') || ""}</p>
+              </a>`;
+            }).join("")}
+          </div>
+        `).join("") + (isGuest && dIdx > (currentLevel === "A2" ? AFB_FREE_A2_LESSONS : AFB_FREE_LIMIT) ? Guest.banner(dIdx - (currentLevel === "A2" ? AFB_FREE_A2_LESSONS : AFB_FREE_LIMIT), "diálogos deste nível") : "");
+      }
+    }
+
+    Guest.check().then((g) => {
+      isGuest = g;
+      if (isGuest && !["A1","A2"].includes(currentLevel)) currentLevel = "A1";
+      renderLevelTabs();
+      loadAndRender();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Música — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <div id="app-nav"></div>
+  <div class="container" style="padding-top:28px;">
+    <h2 class="mt-0">Música</h2>
+    <p class="muted">Aprenda alemão com letras traduzidas, linha por linha.</p>
+    <div id="levels"></div>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/xp.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/saved_r2.js"></script>
+  <script src="../assets/js/guest.js"></script>
+  <script>
+    renderNav("musica");
+
+    (async () => {
+      const isGuest = await Guest.check();
+      const data = await AFBData.musica();
+      const progress = Guest.safeProgress();
+      const isVikings = Theme.get() === "vikings";
+      const el = document.getElementById("levels");
+
+      let idx = 0;
+      let totalTracks = 0;
+      let lockedTotal = 0;
+      el.innerHTML = data.levels.map((lvl) => {
+        const tracks = data.tracks_by_level[lvl.id] || [];
+        totalTracks += tracks.length;
+        lockedTotal += Math.max(0, tracks.length - 10);
+        const name = isVikings ? lvl.vikings_name : lvl.guardians_name;
+        return `
+          <h4 class="section-title">Nível ${lvl.level_number} — ${name}</h4>
+          <div class="grid grid-4">
+            ${tracks.map((t, trackIndex) => {
+              idx++;
+              if (isGuest && trackIndex >= 10) {
+                return Guest.lockedCard(t.title_german, `${t.genre.icon} ${t.genre.name} · ${t.artist}`);
+              }
+              return `
+              <a class="card card-sm" href="musica-player.html?id=${t.id}" style="position:relative;">
+                <div class="flex-between">
+                  <span class="badge" style="background:${t.genre.color}22; color:${t.genre.color};">${t.genre.icon} ${t.genre.name}</span>
+                  ${progress.completed.includes("music-" + t.id) ? '<span class="badge">✅</span>' : `<span class="xp-pill">+${t.xp_reward}</span>`}
+                </div>
+                <b style="display:block; margin-top:8px;">${t.title_german}</b>
+                <span class="muted" style="font-size:.82rem;">${I18n.field(t, 'title_portuguese')} · ${t.artist}</span>
+                <span class="music-save-btn" data-id="${t.id}" style="position:absolute;top:8px;right:8px;" onclick="event.preventDefault();event.stopPropagation();"></span>
+              </a>`;
+            }).join("")}
+          </div>
+        `;
+      }).join("") + (isGuest && lockedTotal > 0 ? Guest.banner(lockedTotal, "músicas com letra traduzida") : "");
+
+      // Init save buttons (so nos cards liberados; logado ve todos)
+      if (!isGuest) {
+        Object.entries(data.tracks_by_level).forEach(([lvlId, tracks]) => {
+          tracks.forEach(t => {
+            const span = document.querySelector(`.music-save-btn[data-id="${t.id}"]`);
+            if (!span) return;
+            const btn = SavedItems.createSaveButton({
+              type: "music", id: String(t.id),
+              nivel: lvlId, title: t.title_german,
+              refUrl: `musica-player.html?id=${t.id}`
+            });
+            span.appendChild(btn);
+          });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

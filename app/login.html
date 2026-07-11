@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html">🇩🇪 DeutschBloom</a>
+    <nav></nav>
+    <div class="nav-right"><a class="btn btn-outline btn-sm" href="cadastro.html">Criar conta</a></div>
+  </header>
+
+  <div class="card form-card">
+    <h2 class="center">Entrar</h2>
+    <div class="form-error" id="err"></div>
+    <form id="login-form">
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" id="email" required>
+      </div>
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" id="password" required>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+    </form>
+    <div style="text-align:center;margin:12px 0;color:var(--text-secondary)">ou</div>
+    <button class="btn btn-outline btn-block" id="google-btn" style="display:flex;align-items:center;justify-content:center;gap:8px">
+      <span style="font-size:1.2rem">G</span> Entrar com Google
+    </button>
+    <p class="form-footer">Ainda não tem conta? <a href="cadastro.html"><b>Criar conta grátis</b></a></p>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script>
+    Auth.redirectIfLoggedIn();
+
+    document.getElementById("login-form").addEventListener("submit", function(e){
+      e.preventDefault();
+      var err=document.getElementById("err");
+      err.classList.remove("show");
+      Auth.login({email:document.getElementById("email").value,password:document.getElementById("password").value}).then(function(r){
+        if(!r.ok){err.textContent=r.error;err.classList.add("show");return}
+        const next = new URLSearchParams(location.search).get("next");
+        window.location.href = next && !next.includes(":") && !next.startsWith("//") ? next : "dashboard.html";
+      });
+    });
+
+    document.getElementById("google-btn").addEventListener("click", function(){
+      Auth.loginWithGoogle().then(function(r){
+        if(!r.ok){document.getElementById("err").textContent=r.error;document.getElementById("err").classList.add("show")}
+      });
+    });
+  </script>
+</body>
+</html>

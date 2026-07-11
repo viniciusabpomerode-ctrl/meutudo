@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suporte — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <div id="nav-slot"></div>
+
+  <div class="container" style="padding-top:36px; padding-bottom:50px; max-width:720px;">
+    <span class="eyebrow">Estamos aqui</span>
+    <h1 style="margin:10px 0 8px; letter-spacing:-.045em; font-weight:500;">Suporte</h1>
+    <p class="muted" style="max-width:520px;">Dúvida, sugestão, problema técnico ou quer conversar sobre parceria? Fala com a gente.</p>
+
+    <div class="grid grid-2" style="margin-top:28px;">
+      <a class="card" href="mailto:contato@alemaofacilbrasil.com.br">
+        <div style="font-size:1.6rem;">✉️</div>
+        <h3 style="margin:10px 0 4px; font-weight:500;">E-mail</h3>
+        <p class="muted" style="font-size:.85rem; margin:0;">contato@alemaofacilbrasil.com.br</p>
+      </a>
+      <a class="card" href="https://wa.me/5500000000000" target="_blank" rel="noopener">
+        <div style="font-size:1.6rem;">💬</div>
+        <h3 style="margin:10px 0 4px; font-weight:500;">WhatsApp</h3>
+        <p class="muted" style="font-size:.85rem; margin:0;">Resposta rápida em horário comercial</p>
+      </a>
+    </div>
+
+    <h2 class="section-title">Perguntas frequentes</h2>
+    <div class="card" style="padding:8px 24px;">
+      <details class="sample-item">
+        <summary><div><strong>Preciso pagar pra usar o DeutschBloom?</strong></div></summary>
+        <div class="sample-body"><p class="muted" style="font-size:.88rem;">Não! Você pode explorar diálogos, verbos, gírias, quiz e muito mais sem cadastro nenhum. O Premium libera a biblioteca inteira (mais de 63.000 itens) quando você quiser ir além.</p></div>
+      </details>
+      <details class="sample-item">
+        <summary><div><strong>Como cancelo minha assinatura?</strong></div></summary>
+        <div class="sample-body"><p class="muted" style="font-size:.88rem;">Direto na página de <a href="perfil.html" style="color:var(--color-primary-dark)">Perfil</a>, sem burocracia — cancele quando quiser.</p></div>
+      </details>
+      <details class="sample-item">
+        <summary><div><strong>Meu progresso fica salvo?</strong></div></summary>
+        <div class="sample-body"><p class="muted" style="font-size:.88rem;">Sim, para contas com login o progresso é sincronizado na nuvem. Sem login, fica salvo só neste navegador.</p></div>
+      </details>
+    </div>
+  </div>
+
+  <footer class="footer"><p>DeutschBloom © 2026 — um espaço tranquilo para aprender de verdade.</p></footer>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script>
+    const user = Auth.currentUser();
+    document.getElementById("nav-slot").innerHTML = user
+      ? '<div id="app-nav"></div>'
+      : `<header class="navbar">
+          <a class="brand" href="../index.html"><span aria-hidden="true">D</span> DeutschBloom</a>
+          <nav><a href="cursos.html">Conteúdo</a><a href="planos.html">Planos</a><a href="suporte.html" class="active">Suporte</a><a href="login.html">Entrar</a></nav>
+          <div class="nav-right"><a class="btn btn-primary btn-sm" href="cadastro.html">Criar conta grátis</a></div>
+        </header>`;
+  </script>
+  <script src="../assets/js/xp.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script>
+    if (user) renderNav("suporte");
+  </script>
+</body>
+</html>

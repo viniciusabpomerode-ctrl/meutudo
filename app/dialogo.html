@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diálogo — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .dialog-player {
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-light);
+    }
+    .dialog-player .player-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .dialog-player .player-top .info {
+      flex: 1;
+      min-width: 120px;
+    }
+    .dialog-player .player-top .info h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+    .dialog-player .player-top .info small {
+      color: var(--text-secondary);
+    }
+    .btn-play {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: none;
+      background: var(--color-primary);
+      color: #fff;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: .2s;
+      flex-shrink: 0;
+    }
+    .btn-play:hover { transform: scale(1.05); opacity: .9; }
+    .btn-play.playing { background: var(--color-warm); }
+    .progress-wrap {
+      margin-top: 12px;
+    }
+    .progress-wrap input[type="range"] {
+      width: 100%;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--border-light);
+      border-radius: 2px;
+      outline: none;
+    }
+    .progress-wrap input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      cursor: pointer;
+    }
+    .progress-time {
+      display: flex;
+      justify-content: space-between;
+      font-size: .78rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .speed-controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .speed-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: 2px solid var(--border-light);
+      border-radius: 12px;
+      background: transparent;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: .2s;
+      text-align: center;
+    }
+    .speed-btn:hover { border-color: var(--color-primary); }
+    .speed-btn.active {
+      background: var(--color-primary);
+      color: #fff;
+      border-color: var(--color-primary);
+    }
+    .sentence-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+      transition: .3s;
+      border-left: 3px solid transparent;
+    }
+    .sentence-row.highlight {
+      background: var(--color-primary-light, rgba(255,215,0,.15));
+      border-left-color: var(--color-primary, #FFD700);
+      transform: translateX(4px);
+    }
+    .sentence-row .sentence-de {
+      font-weight: 600;
+      font-size: .95rem;
+    }
+    .sentence-row .sentence-pt {
+      color: var(--text-secondary);
+      font-size: .85rem;
+      margin-top: 2px;
+    }
+    .sentence-row .sentence-pron {
+      color: var(--text-tertiary, #888);
+      font-size: .8rem;
+      font-style: italic;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app-nav"></div>
+  <div class="container" style="padding-top:28px; max-width:760px;">
+    <a href="cursos.html" class="muted">← Voltar para Cursos</a>
+    <div class="card" id="content" style="margin-top:14px;">Carregando...</div>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/xp.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/saved_r2.js"></script>
+  <script>
+    // Visitante pode ver (bloqueio acontece nas listagens)
+    renderNav("cursos");
+
+    // ── Player de áudio para frases individuais (respeita a velocidade) ──
+    const phraseAudio = new Audio();
+    let phraseBtn = null;
+
+    async function playSentenceAudio(audioPath, btn) {
+      if (!audioPath) return;
+      const originalText = btn.textContent;
+
+      // Se já está tocando esta frase, pausa
+      if (phraseAudio.src && phraseAudio.src.includes(audioPath) && !phraseAudio.paused) {
+        phraseAudio.pause();
+        phraseAudio.currentTime = 0;
+        btn.textContent = "▶";
+        phraseBtn = null;
+        return;
+      }
+
+      btn.textContent = "⏳";
+      const url = await resolveAudioUrl(audioPath);
+      if (!url) { btn.textContent = "⚠️"; setTimeout(() => { btn.textContent = originalText; }, 1500); return; }
+
+      phraseAudio.src = url;
+      phraseAudio.playbackRate = audioCtx.speed;
+      phraseBtn = btn;
+
+      phraseAudio.oncanplay = () => {
+        btn.textContent = "⏸";
+      };
+
+      phraseAudio.onplay = () => {
+        btn.textContent = "⏸";
+      };
+
+      phraseAudio.onpause = () => {
+        btn.textContent = "▶";
+      };
+
+      phraseAudio.onended = () => {
+        btn.textContent = "▶";
+        phraseBtn = null;
+      };
+
+      phraseAudio.onerror = () => {
+        btn.textContent = "⚠️";
+        setTimeout(() => { btn.textContent = originalText; }, 1500);
+        phraseBtn = null;
+      };
+
+      try {
+        await phraseAudio.play();
+      } catch (e) {
+        btn.textContent = "⚠️";
+        setTimeout(() => { btn.textContent = originalText; }, 1500);
+      }
+    }
+
+    // Atualiza a velocidade do player de frases quando a velocidade principal mudar
+    function updateAllSpeeds(speed) {
+      audioCtx.player.playbackRate = speed;
+      phraseAudio.playbackRate = speed;
+    }
+    const audioCtx = {
+      player: new Audio(),
+      sentences: [],
+      speed: 0.75,
+      isPlaying: false,
+      currentSentenceIdx: -1,
+      animFrame: null,
+      nivel: null,
+    };
+
+    function fmtTime(sec) {
+      if (!sec || sec < 0) return "0:00";
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m}:${s.toString().padStart(2, "0")}`;
+    }
+
+    function buildDialogPlayer(dialog) {
+      const p = audioCtx.player;
+      // Velocidade padrão: 0.75 para A1/A2, 1.0 para outros
+      audioCtx.speed = (audioCtx.nivel === "A1" || audioCtx.nivel === "A2") ? 0.75 : 1.0;
+      updateAllSpeeds(audioCtx.speed);
+
+      const wrap = document.createElement("div");
+      wrap.className = "dialog-player";
+      wrap.id = "dialog-player-ui";
+      wrap.innerHTML = `
+        <div class="player-top">
+          <button class="btn-play" id="main-play-btn">▶</button>
+          <div class="info">
+            <h3>${I18n.field(dialog, 'title')}</h3>
+            <small>${dialog.german_title ? dialog.german_title + " · " : ""}${dialog.duration_seconds ? fmtTime(dialog.duration_seconds) : ""}</small>
+          </div>
+        </div>
+        <div class="progress-wrap">
+          <input type="range" id="progress-slider" value="0" max="100" step="0.1">
+          <div class="progress-time">
+            <span id="time-current">0:00</span>
+            <span id="time-total">${fmtTime(dialog.duration_seconds)}</span>
+          </div>
+        </div>
+        <div class="speed-controls">
+          <button class="speed-btn" data-speed="0.5">0.5x</button>
+          <button class="speed-btn active" data-speed="0.75">0.75x</button>
+          <button class="speed-btn" data-speed="1.0">1.0x</button>
+        </div>
+      `;
+      return wrap;
+    }
+
+    // Resolve URL de áudio (R2 público) sem usar afbPlayAudio
+    async function resolveAudioUrl(path) {
+      if (!path) return null;
+      if (path.startsWith("http")) return path;
+      // Tenta Supabase (URL assinada) primeiro, fallback pro R2
+      const supabaseUrl = await AFBData.signedAudioUrl(path);
+      if (supabaseUrl) return supabaseUrl;
+      return `https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/${path}`;
+    }
+
+    function initPlayerEvents(dialog) {
+      const p = audioCtx.player;
+      const playBtn = document.getElementById("main-play-btn");
+      const slider = document.getElementById("progress-slider");
+      const timeCur = document.getElementById("time-current");
+      audioCtx.sentences = dialog.sentences || [];
+      let resolvedUrl = null;
+
+      // Speed buttons — afeta player principal E frases individuais
+      document.querySelectorAll(".speed-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          audioCtx.speed = parseFloat(btn.dataset.speed);
+          updateAllSpeeds(audioCtx.speed);
+        });
+      });
+
+      // Play/Pause — resolve a URL na primeira vez
+      playBtn.addEventListener("click", async () => {
+        if (!dialog.main_audio_url) return;
+        if (p.src && audioCtx.isPlaying) {
+          p.pause();
+          return;
+        }
+        if (p.src && !audioCtx.isPlaying) {
+          p.play().catch(() => {});
+          return;
+        }
+        // Primeira vez: resolve URL
+        playBtn.textContent = "⏳";
+        resolvedUrl = await resolveAudioUrl(dialog.main_audio_url);
+        if (!resolvedUrl) {
+          playBtn.textContent = "⚠️";
+          return;
+        }
+        p.src = resolvedUrl;
+        updateAllSpeeds(audioCtx.speed);
+        p.play().catch(() => {
+          // Se Supabase falhou, tenta R2 direto
+          const r2Fallback = `https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/${dialog.main_audio_url}`;
+          if (p.src !== r2Fallback) {
+            p.src = r2Fallback;
+            updateAllSpeeds(audioCtx.speed);
+            p.play().catch(() => { playBtn.textContent = "⚠️"; });
+          } else {
+            playBtn.textContent = "⚠️";
+          }
+        });
+      });
+
+      // Time update — destaque das frases
+      p.addEventListener("timeupdate", () => {
+        if (!p.duration) return;
+        const pct = (p.currentTime / p.duration) * 100;
+        slider.value = pct;
+        timeCur.textContent = fmtTime(p.currentTime);
+        highlightCurrentSentence(p.currentTime);
+      });
+
+      p.addEventListener("play", () => {
+        audioCtx.isPlaying = true;
+        playBtn.textContent = "⏸";
+        playBtn.classList.add("playing");
+      });
+
+      p.addEventListener("pause", () => {
+        audioCtx.isPlaying = false;
+        playBtn.textContent = "▶";
+        playBtn.classList.remove("playing");
+      });
+
+      p.addEventListener("ended", () => {
+        audioCtx.isPlaying = false;
+        playBtn.textContent = "▶";
+        playBtn.classList.remove("playing");
+        slider.value = 0;
+        timeCur.textContent = "0:00";
+        clearHighlight();
+      });
+
+      // Slider seek
+      slider.addEventListener("input", () => {
+        if (!p.duration) return;
+        const time = (parseFloat(slider.value) / 100) * p.duration;
+        p.currentTime = time;
+        timeCur.textContent = fmtTime(time);
+      });
+    }
+
+    function highlightCurrentSentence(time) {
+      const sentences = audioCtx.sentences;
+      if (!sentences.length) return;
+
+      let idx = -1;
+      for (let i = 0; i < sentences.length; i++) {
+        const s = sentences[i];
+        const start = s.start_time_seconds || 0;
+        const end = s.end_time_seconds || (s.start_time_seconds || 0) + 3;
+        if (time >= start && time < end) {
+          idx = i;
+          break;
+        }
+      }
+
+      if (idx === -1 && time > 0 && sentences.length > 0) {
+        // Se passou do último end_time, pega a última
+        const last = sentences[sentences.length - 1];
+        if (last.end_time_seconds && time >= last.end_time_seconds) {
+          idx = sentences.length - 1;
+        }
+      }
+
+      if (idx !== audioCtx.currentSentenceIdx) {
+        // Remove highlight anterior
+        document.querySelectorAll(".sentence-row").forEach(r => r.classList.remove("highlight"));
+        audioCtx.currentSentenceIdx = idx;
+        if (idx >= 0) {
+          const rows = document.querySelectorAll(".sentence-row");
+          if (rows[idx]) {
+            rows[idx].classList.add("highlight");
+            rows[idx].scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }
+      }
+    }
+
+    function clearHighlight() {
+      document.querySelectorAll(".sentence-row").forEach(r => r.classList.remove("highlight"));
+      audioCtx.currentSentenceIdx = -1;
+    }
+
+    // ── Carregamento do diálogo ──
+    const params = new URLSearchParams(location.search);
+    const id = Number(params.get("id"));
+    const nivelParam = params.get("nivel");
+    const itemKey = `dialog-${id}`;
+    audioCtx.nivel = nivelParam;
+
+    (async () => {
+      let dialog = null;
+      if (nivelParam) {
+        const data = await AFBData.nivel(nivelParam);
+        for (const th of data.dialog_themes) {
+          const found = th.dialogs.find((d) => d.id === id);
+          if (found) dialog = found;
+        }
+      }
+      if (!dialog) {
+        const found = await AFBData.findAcrossLevels("dialog", id);
+        dialog = found ? found.item : null;
+      }
+      const el = document.getElementById("content");
+      if (!dialog) { el.innerHTML = "<p>Diálogo não encontrado.</p>"; return; }
+
+      const done = Progress.isCompleted(itemKey);
+
+      // Encontra prev/next (reusa data ja carregado)
+      let allDialogs = [];
+      let currentIdx = -1;
+      let nivelData = null;
+      if (nivelParam) {
+        nivelData = await AFBData.nivel(nivelParam);
+        for (const th of nivelData.dialog_themes) {
+          for (const d of th.dialogs) {
+            allDialogs.push(d);
+          }
+        }
+        currentIdx = allDialogs.findIndex(d => d.id === id);
+      }
+      const prevDialog = currentIdx > 0 ? allDialogs[currentIdx - 1] : null;
+      const nextDialog = currentIdx < allDialogs.length - 1 ? allDialogs[currentIdx + 1] : null;
+
+      // Monta o HTML: player + frases + vocabulário + gramática + botão
+      const playerHtml = dialog.main_audio_url
+        ? buildDialogPlayer(dialog).outerHTML
+        : "";
+
+      el.innerHTML = `
+        <div class="flex-between">
+          <h2 style="margin:0;">${I18n.field(dialog, 'title')}</h2>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span id="save-btn-place"></span>
+            ${done ? '<span class="badge">✅ Concluído</span>' : `<span class="xp-pill">+${dialog.xp_reward} XP</span>`}
+          </div>
+        </div>
+        ${dialog.german_title ? `<p class="muted" style="font-style:italic;">${dialog.german_title}</p>` : ""}
+        <p class="muted">${I18n.field(dialog, 'description') || ""}</p>
+
+        ${playerHtml}
+
+        <h4 class="section-title" style="margin-top:24px;">Frases</h4>
+        <div id="sentences-wrap">
+          ${dialog.sentences.map((s) => `
+            <div class="sentence-row" data-idx="${s.sentence_order || s.id}">
+              <div>
+                <div class="sentence-de">${s.german_text}</div>
+                <div class="sentence-pt">${I18n.field(s, 'portuguese_translation')}</div>
+                ${s.pronunciation ? `<div class="sentence-pron">🗣️ ${s.pronunciation}</div>` : ""}
+              </div>
+              <div class="flex gap-8" style="align-items:center;">
+                ${s.audio_url ? `<button class="btn btn-ghost btn-sm" onclick="playSentenceAudio('${s.audio_url}', this)">▶</button>` : ""}
+                <span class="save-slot" data-type="phrase" data-id="${s.id}" data-parent-id="${dialog.id}" data-title="${s.german_text.replace(/"/g,'&quot;')}" data-sub="${I18n.field(s,'portuguese_translation').replace(/"/g,'&quot;')}"></span>
+                <span class="xp-pill">+${s.xp_reward}</span>
+              </div>
+            </div>`).join("")}
+        </div>
+
+        ${dialog.vocabulary && dialog.vocabulary.length ? `
+          <h4 class="section-title">Vocabulário</h4>
+          <div>${dialog.vocabulary.map((v) => `
+            <span class="vocab-chip"><b>${v.german_word}</b><span>${I18n.field(v, 'portuguese_translation')}</span>${v.audio_url ? `<button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:.7rem" onclick="event.stopPropagation();playSentenceAudio('${v.audio_url}', this)">▶</button>` : ""}<span class="save-slot" data-type="word" data-id="${v.id}" data-parent-id="${dialog.id}" data-title="${v.german_word}" data-sub="${I18n.field(v,'portuguese_translation')}"></span></span>`).join("")}</div>
+        ` : ""}
+
+        ${dialog.grammar_tips && dialog.grammar_tips.length ? `
+          <h4 class="section-title">Dicas de gramática</h4>
+          ${dialog.grammar_tips.map((t) => `
+            <div class="tip-card">
+              <div style="display:flex;justify-content:space-between;align-items:start">
+                <h4>${I18n.field(t, 'title')}</h4>
+                <span class="save-slot" data-type="grammar" data-id="${t.id}" data-title="${I18n.field(t,'title').replace(/"/g,'&quot;')}" data-sub="${(t.german_example||'').replace(/"/g,'&quot;')}" data-preview="${(t.german_example||'').replace(/"/g,'&quot;')}"></span>
+              </div>
+              <p>${t.content}</p>
+              <p><b>${t.german_example}</b> — ${I18n.field(t, 'portuguese_example')}</p>
+            </div>`).join("")}
+        ` : ""}
+
+        <div style="display:flex;gap:10px;margin-top:24px">
+          ${prevDialog ? `<a href="dialogo.html?id=${prevDialog.id}&nivel=${nivelParam}" class="btn btn-outline" style="flex:1;text-align:center;text-decoration:none">⏮️ ${prevDialog.title?.substring(0,25)||'Anterior'}</a>` : '<span style="flex:1"></span>'}
+          ${nextDialog ? `<a href="dialogo.html?id=${nextDialog.id}&nivel=${nivelParam}" class="btn btn-outline" style="flex:1;text-align:center;text-decoration:none">⏭️ ${nextDialog.title?.substring(0,25)||'Próximo'}</a>` : '<span style="flex:1"></span>'}
+        </div>
+        <button class="btn btn-primary btn-block" id="complete-btn" style="margin-top:12px;" ${done ? "disabled" : ""}>
+          ${done ? "Já concluído" : `Marcar como concluído (+${dialog.xp_reward} XP)`}
+        </button>
+      `;
+
+      // Botao de salvar (fora do template)
+      const savePlace = document.getElementById("save-btn-place");
+      if (savePlace && typeof SavedItems !== "undefined") {
+        savePlace.appendChild(SavedItems.createSaveButton({
+          type: "dialog", id: dialog.id, nivel: nivelParam,
+          title: I18n.field(dialog, 'title'),
+          subtitle: dialog.german_title || "",
+          preview: (dialog.sentences||[])[0]?.german_text || "",
+          link: window.location.href
+        }));
+      }
+
+      // Botoes de salvar em cada frase/palavra/dica (apenas referencias)
+      document.querySelectorAll(".save-slot").forEach(slot => {
+        const type = slot.dataset.type;
+        const id = parseInt(slot.dataset.id);
+        const title = slot.dataset.title || "";
+        const sub = slot.dataset.sub || "";
+        const parentId = parseInt(slot.dataset.parentId) || dialog.id;
+        if (id && typeof SavedItems !== "undefined") {
+          slot.appendChild(SavedItems.createSaveButton({
+            type, id, parentId, nivel: nivelParam, title,
+            refUrl: window.location.href
+          }));
+        }
+      });
+
+      // Inicializa eventos do player se houver áudio
+      if (dialog.main_audio_url) {
+        initPlayerEvents(dialog);
+      }
+
+      // Botão concluir
+      const btn = document.getElementById("complete-btn");
+      if (!done) {
+        btn.addEventListener("click", () => {
+          const result = Progress.complete(itemKey, dialog.xp_reward);
+          if (result.leveledUp) {
+            alert(`🎉 Parabéns! Você subiu para o nível ${result.newLevel}!`);
+          }
+          window.location.reload();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

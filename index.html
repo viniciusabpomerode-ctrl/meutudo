@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="description" content="Aprenda alemão do A1 ao C2 em um ambiente completo: mais de 63 mil conteúdos, diálogos, verbos, áudios, quiz e simulados Goethe. Comece grátis.">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <link rel="canonical" href="https://deutschbloom.com/">
+  <meta name="author" content="DeutschBloom">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://deutschbloom.com/">
+  <meta property="og:site_name" content="DeutschBloom">
+  <meta property="og:title" content="Aprenda Alemão do A1 ao C2 | DeutschBloom">
+  <meta property="og:description" content="Seu ambiente de estudos de alemão com mais de 63 mil conteúdos, áudio de alta qualidade, progresso e simulados Goethe.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Aprenda Alemão do A1 ao C2 | DeutschBloom">
+  <meta name="twitter:description" content="Estude alemão no seu ritmo com diálogos, verbos, músicas, quiz, áudio e simulados Goethe.">
+  <title>Aprenda Alemão do A1 ao C2 | DeutschBloom</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "DeutschBloom",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web",
+    "inLanguage": "pt-BR",
+    "description": "Plataforma de estudos de alemão do A1 ao C2 com diálogos, verbos, áudios, músicas, quiz e simulados Goethe.",
+    "audience": { "@type": "EducationalAudience", "educationalRole": "student" },
+    "offers": [
+      { "@type": "Offer", "name": "Plano Grátis", "price": "0", "priceCurrency": "BRL" },
+      { "@type": "Offer", "name": "Premium Mensal", "price": "14.99", "priceCurrency": "BRL" },
+      { "@type": "Offer", "name": "Premium Anual", "price": "149.00", "priceCurrency": "BRL" }
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* ============================================================
+       Dashboard — responsivo, todos os temas (moderno/vikings/aurora)
+       ============================================================ */
+    :root {
+      --sidebar-w: 210px;
+      --content-max: 1440px;
+    }
+
+    /* ── Shell grid ── */
+    .shell { display:grid; grid-template-columns:var(--sidebar-w) minmax(0,1fr); min-height:100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      background:rgba(var(--overlay-tint),.5);
+      border-right:1px solid var(--border-light);
+      padding:20px 14px;
+      position:sticky; top:0;
+      height:100vh; overflow-y:auto;
+      z-index:40;
+      transition: transform .3s ease, background .4s ease;
+      backdrop-filter:blur(22px);
+    }
+    .sb-toggle { display:none; position:fixed; top:14px; left:14px; z-index:60;
+      width:38px; height:38px; border-radius:10px; border:1px solid var(--border-light);
+      background:var(--bg-secondary); color:var(--text-primary); font-size:18px;
+      cursor:pointer; align-items:center; justify-content:center; }
+    .sb-overlay { display:none; position:fixed; inset:0; z-index:39; background:rgba(0,0,0,.45);
+      backdrop-filter:blur(2px); }
+    .sidebar .brand2 { display:flex; align-items:center; gap:8px; font-weight:700; font-size:1.05rem; padding:0 8px 20px; letter-spacing:-.02em; }
+    .sidebar h4 { font-size:.7rem; text-transform:uppercase; letter-spacing:.1em; color:var(--text-secondary); margin:18px 8px 6px; font-weight:600; opacity:.7; }
+    .sidebar a { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:9px 10px; border-radius:9px; color:var(--text-secondary); font-size:.9rem; line-height:1.35; text-decoration:none; margin-bottom:1px; transition:background .2s,color .2s,transform .2s; }
+    .sidebar a:hover { background:var(--card-hover); color:var(--text-primary); transform:translateX(2px); }
+    .sidebar a small { color:var(--text-secondary); font-size:.72rem; opacity:.7; }
+
+    /* ── Main content area ── */
+    .main { padding:20px 24px 70px; min-width:0; overflow:hidden; }
+    .main-inner { max-width:var(--content-max); margin:0 auto; }
+
+    /* ── Top bar ── */
+    .topbar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+    .topbar-spacer { flex:1; min-width:0; }
+    .search-box { flex:1; min-width:180px; max-width:400px; position:relative; }
+    .search-box input { width:100%; background:var(--card-bg); border:1px solid var(--border-light); color:var(--text-primary); padding:10px 14px; border-radius:10px; font-size:.82rem; transition:box-shadow .2s,transform .2s; }
+    .search-box input:focus { outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--color-primary) 25%, transparent); transform:scale(1.01); }
+    .search-box input::placeholder { color:var(--text-secondary); opacity:.55; }
+    .env-switch { display:flex; gap:3px; background:rgba(255,255,255,.05); padding:3px; border-radius:999px; flex-shrink:0; }
+    .env-switch button { border:none; background:transparent; color:var(--text-secondary); padding:6px 11px; border-radius:999px; font-size:.7rem; font-weight:500; cursor:pointer; transition:background .2s,color .2s; white-space:nowrap; }
+    .env-switch button.active { background:var(--color-primary); color:var(--bg-primary); font-weight:600; }
+    #user-actions { display:flex; gap:6px; flex-shrink:0; }
+
+    /* ── Hero gradient ── */
+    .hero-fx { height:50px; margin:-24px -24px 8px; pointer-events:none; }
+
+    /* ── Greeting ── */
+    .greeting h1 { font-size:clamp(1.3rem,2vw,1.7rem); font-weight:600; margin:0 0 4px; letter-spacing:-.03em; }
+    .greeting p { color:var(--text-secondary); font-size:.96rem; margin:0 0 18px; }
+
+    /* ── Quick actions ── */
+    .quick-row { display:flex; gap:10px; margin:0 0 20px; flex-wrap:wrap; }
+    .quick-row .btn { font-size:.92rem; padding:13px 26px; }
+
+    /* ── Focus row: LoFi + Pomodoro side by side ── */
+    .foco-row { display:grid; grid-template-columns:1.65fr .85fr; gap:12px; margin-bottom:24px; }
+    .foco-card-lofi, .foco-card-pomo { padding:18px; border-radius:var(--radius); }
+    .foco-card-lofi .player-top { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .foco-card-lofi .player-info { display:flex; align-items:center; gap:10px; }
+    .foco-card-lofi .play-btn { width:40px; height:40px; border-radius:50%; background:var(--color-primary); color:var(--bg-primary); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; flex-shrink:0; transition:transform .2s; }
+    .foco-card-lofi .play-btn:hover { transform:scale(1.07); }
+    .foco-card-lofi .track-name { font-size:.85rem; font-weight:600; }
+    .foco-card-lofi .track-sub { font-size:.72rem; color:var(--text-secondary); }
+    .wave-bars { display:flex; align-items:end; gap:3px; height:18px; margin-top:14px; opacity:.4; transition:opacity .3s; }
+    .wave-bars i { width:3px; border-radius:2px; background:var(--color-primary); }
+    .foco-card-pomo { text-align:center; }
+    .foco-card-pomo .pomo-label { font-size:.72rem; color:var(--text-secondary); margin-bottom:10px; letter-spacing:.04em; }
+    .pomo-ring { position:relative; width:90px; height:90px; margin:0 auto 12px; border-radius:50%;
+      background:conic-gradient(var(--color-primary) 0 0%, rgba(255,255,255,.08) 0%); }
+    .pomo-ring .hole { position:absolute; inset:6px; border-radius:50%; background:var(--bg-primary);
+      display:flex; align-items:center; justify-content:center; }
+    .pomo-ring input { width:70px; background:transparent; border:none; color:var(--text-primary);
+      font-size:1.05rem; font-weight:600; text-align:center; font-family:inherit; letter-spacing:.02em; }
+    .pomo-controls { display:flex; justify-content:center; align-items:center; gap:6px; }
+    .pomo-presets { display:flex; justify-content:center; gap:5px; margin-top:10px; }
+
+    /* ── Study tiles grid ── */
+    .study-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    .stat-tile { padding:18px 14px; text-align:center; border-radius:14px; transition:transform .2s,box-shadow .2s; }
+    .stat-tile:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.2); }
+    .stat-tile .ico { font-size:1.5rem; margin-bottom:6px; }
+    .stat-tile b { display:block; font-size:1.6rem; font-weight:700; letter-spacing:-.02em; line-height:1.2; }
+    .stat-tile span { display:block; font-size:.86rem; color:var(--text-primary); font-weight:600; margin-top:3px; }
+    .stat-tile small { display:block; font-size:.76rem!important; color:var(--text-secondary)!important; margin-top:3px!important; font-weight:500; }
+
+    /* ── Progress bar ── */
+    .progress-strip { margin-top:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; padding:18px 22px; border-radius:14px; }
+    .progress-strip .stats { display:flex; gap:32px; flex-wrap:wrap; }
+    .progress-strip .stat-item b { font-size:1.2rem; font-weight:700; }
+    .progress-strip .stat-item span { display:block; font-size:.7rem; color:var(--text-secondary); }
+
+    /* ── Plans teaser ── */
+    .plans-teaser { margin-top:16px; padding:16px 22px; border:1px dashed var(--border-light); border-radius:14px;
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    .plans-teaser b { font-size:.9rem; }
+    .plans-teaser .muted { font-size:.75rem; margin:2px 0 0; }
+
+    .premium-showcase { margin-top:22px; padding:clamp(22px,3vw,34px); display:grid; grid-template-columns:1.15fr .85fr; gap:28px; align-items:center; overflow:hidden; position:relative; }
+    .premium-showcase::after { content:""; position:absolute; width:340px; height:340px; right:-120px; top:-170px; border-radius:50%; background:var(--color-primary); opacity:.09; filter:blur(20px); pointer-events:none; }
+    .premium-showcase h2 { margin:7px 0 9px; font-size:clamp(1.55rem,2.5vw,2.45rem); line-height:1.12; letter-spacing:-.045em; }
+    .premium-showcase p { margin:0; color:var(--text-secondary); font-size:.96rem; }
+    .premium-benefits { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .premium-benefit { padding:13px 14px; border-radius:12px; background:rgba(var(--overlay-tint),.3); border:1px solid var(--border-light); }
+    .premium-benefit b { display:block; font-size:.9rem; }
+    .premium-benefit span { display:block; color:var(--text-secondary); font-size:.78rem; margin-top:2px; }
+    .premium-actions { display:flex; align-items:center; gap:12px; margin-top:18px; flex-wrap:wrap; }
+    .premium-price { color:var(--text-secondary); font-size:.84rem; }
+    .premium-price strong { color:var(--text-primary); font-size:1rem; }
+    .journey-card{margin:18px 0 22px;padding:clamp(20px,3vw,30px);position:relative;overflow:hidden}.journey-card::after{content:"";position:absolute;width:300px;height:300px;right:-170px;top:-190px;border-radius:50%;background:var(--color-primary);opacity:.1;pointer-events:none}.journey-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.journey-head h2{font-size:clamp(1.35rem,2.2vw,2rem);margin:5px 0}.journey-summary{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin:18px 0}.journey-progress{padding:15px;border:1px solid var(--border-light);border-radius:13px;background:rgba(var(--overlay-tint),.24)}.journey-progress .line{height:8px;background:var(--border-light);border-radius:99px;overflow:hidden;margin:9px 0}.journey-progress .line i{display:block;height:100%;background:linear-gradient(90deg,var(--color-primary),var(--color-accent));border-radius:inherit}.journey-numbers{display:flex;gap:24px;align-items:center}.journey-numbers b{font-size:1.35rem}.journey-numbers span{display:block;font-size:.72rem;color:var(--text-secondary)}.mission-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.mission-card{padding:13px;border:1px solid var(--border-light);border-radius:12px;background:var(--card-bg);display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}.mission-card.done{opacity:.68}.mission-card.done .mission-copy{text-decoration:line-through}.mission-icon{font-size:1.25rem}.mission-copy b,.mission-copy span{display:block}.mission-copy b{font-size:.86rem}.mission-copy span{font-size:.72rem;color:var(--text-secondary)}.mission-check{width:30px;height:30px;border-radius:50%;border:1px solid var(--border-light);background:transparent;color:var(--text-primary);cursor:pointer}.mission-card.done .mission-check{background:var(--success);color:#fff}.journey-dialog{border:1px solid var(--border-light);border-radius:18px;background:var(--bg-secondary);color:var(--text-primary);padding:0;width:min(620px,calc(100% - 28px));box-shadow:var(--shadow)}.journey-dialog::backdrop{background:rgba(0,0,0,.7);backdrop-filter:blur(5px)}.journey-form{padding:26px}.journey-form h2{margin:0 0 5px}.journey-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}.journey-fields label{font-size:.78rem;color:var(--text-secondary)}.journey-fields select,.journey-fields input{display:block;width:100%;padding:11px;margin-top:5px;border-radius:10px}.achievement-toast{position:fixed;z-index:10000;right:22px;bottom:22px;width:min(360px,calc(100% - 28px));padding:18px;border:1px solid var(--border-light);border-radius:16px;background:var(--bg-secondary);box-shadow:var(--shadow)}
+    .home-proof { margin-top:20px; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .proof-item { padding:16px 18px; border-top:1px solid var(--border-light); }
+    .proof-item b { display:block; font-size:.92rem; margin-bottom:3px; }
+    .proof-item span { color:var(--text-secondary); font-size:.8rem; line-height:1.5; }
+    .home-faq { margin-top:24px; }
+    .home-faq h2 { font-size:clamp(1.35rem,2vw,1.9rem); margin:0 0 13px; }
+    .home-faq details { border-bottom:1px solid var(--border-light); }
+    .home-faq summary { cursor:pointer; list-style:none; padding:15px 2px; font-size:.94rem; font-weight:600; display:flex; justify-content:space-between; gap:18px; }
+    .home-faq summary::after { content:"+"; color:var(--color-primary-dark); font-size:1.25rem; }
+    .home-faq details[open] summary::after { content:"−"; }
+    .home-faq details p { margin:0 0 16px; color:var(--text-secondary); font-size:.9rem; max-width:850px; }
+
+    /* Acabamento específico dos três modelos da referência */
+    [data-theme="moderno"] .sidebar { background:rgba(5,7,9,.88); }
+    [data-theme="moderno"] .sidebar .brand2 { color:#f3e3c4; }
+    [data-theme="vikings"] .shell {
+      background:linear-gradient(rgba(9,7,4,.78),rgba(9,7,4,.93)),url('assets/images/black-forest.png') center top/cover fixed;
+    }
+    [data-theme="vikings"] .sidebar { background:rgba(18,13,8,.86); box-shadow:inset -8px 0 28px rgba(0,0,0,.35); }
+    [data-theme="vikings"] .sidebar a { border-bottom:1px solid rgba(184,135,74,.07); border-radius:4px; }
+    [data-theme="vikings"] .btn { border-radius:5px; }
+    [data-theme="vikings"] .stat-tile { border-radius:6px; }
+    [data-theme="aurora"] .shell { background:linear-gradient(180deg,rgba(111,126,230,.17),rgba(214,174,240,.08) 30%,transparent 62%); }
+    [data-theme="aurora"] .sidebar { background:rgba(var(--overlay-tint),.7); }
+    [data-theme="aurora"] .stat-tile { background:rgba(255,255,255,.48); }
+    [data-theme="aurora"][data-mode="night"] .stat-tile { background:rgba(34,39,68,.56); }
+    [data-theme="aurora"] .hero-fx { height:120px; margin:-20px -24px -62px; filter:blur(8px) saturate(140%); opacity:.92; animation:heroAurora 10s ease-in-out infinite alternate; }
+    @keyframes heroAurora { from{transform:translateX(-2%) scaleX(1.03)} to{transform:translateX(2%) scaleX(1.08)} }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE BREAKPOINTS
+       ═══════════════════════════════════════════ */
+
+    /* Tablet: 768-1023px — narrower sidebar, compact */
+    @media (max-width:1023px) {
+      :root { --sidebar-w: 190px; }
+      .sidebar { padding:16px 10px; }
+      .sidebar a { font-size:.76rem; padding:7px 8px; }
+      .sidebar .brand2 { font-size:.88rem; }
+      .study-grid { grid-template-columns:repeat(2,1fr); }
+    }
+
+    /* Mobile: <768px — sidebar slides out, single column */
+    @media (max-width:767px) {
+      .shell { grid-template-columns:1fr; }
+      .sb-toggle { display:flex; }
+      .sidebar {
+        position:fixed; left:0; top:0; width:260px; height:100vh; z-index:50;
+        transform:translateX(-100%);
+        border-right:1px solid var(--border-light);
+        box-shadow:4px 0 30px rgba(0,0,0,.5);
+      }
+      .sidebar.open { transform:translateX(0); }
+      .sb-overlay.open { display:block; }
+
+      .main { padding:16px 14px 60px; }
+      .main-inner { max-width:100%; }
+      .hero-fx { margin:-16px -14px 6px; height:40px; }
+
+      .topbar { gap:8px; }
+      .topbar { padding-left:44px; align-items:center; }
+      .topbar-spacer { display:none; }
+      .search-box { max-width:100%; order:3; width:100%; }
+      .env-switch { order:4; width:100%; justify-content:center; }
+      .env-switch button { flex:1; max-width:96px; font-size:.74rem; }
+      #daynight-btn, #sfx-toggle { order:1; }
+      #user-actions { order:1; }
+
+      .foco-row { grid-template-columns:1fr; }
+      .study-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
+      .stat-tile { padding:14px 8px; }
+      .stat-tile b { font-size:1.1rem; }
+
+      .pomo-ring { width:80px; height:80px; }
+      .pomo-ring input { width:60px; font-size:.95rem; }
+
+      .progress-strip { flex-direction:column; align-items:flex-start; }
+      .progress-strip .stats { gap:20px; }
+
+      .plans-teaser { flex-direction:column; align-items:flex-start; }
+      .premium-showcase { grid-template-columns:1fr; }
+      .home-proof { grid-template-columns:1fr; }
+      .journey-summary{grid-template-columns:1fr}.mission-grid{grid-template-columns:1fr 1fr}
+    }
+
+    /* Small phone: <400px */
+    @media (max-width:399px) {
+      .main { padding:12px 10px 50px; }
+      .hero-fx { margin:-12px -10px 4px; height:30px; }
+      .greeting h1 { font-size:1.05rem; }
+      .study-grid { grid-template-columns:1fr 1fr; gap:6px; }
+      .stat-tile { padding:12px 6px; }
+      .stat-tile .ico { font-size:1rem; }
+      .stat-tile b { font-size:1rem; }
+      .foco-card-lofi, .foco-card-pomo { padding:14px; }
+      .env-switch button { padding:5px 8px; font-size:.66rem; }
+      .quick-row .btn { width:100%; justify-content:center; }
+      .premium-benefits { grid-template-columns:1fr; }
+      .mission-grid,.journey-fields{grid-template-columns:1fr}.journey-head{flex-direction:column}.journey-head .btn{width:100%}
+      .topbar { padding-left:42px; }
+    }
+
+    @media (max-width:480px) {
+      [data-theme="aurora"] .hero-fx { height:72px; margin:-12px -10px -28px; }
+      #user-actions .btn { padding:6px 9px; font-size:.72rem; }
+      .topbar { justify-content:flex-end; }
+      .search-box { flex-basis:100%; }
+    }
+    .journey-fields select,.journey-fields input{background:var(--bg-primary)!important;color:var(--text-primary)!important;border:1px solid var(--border-light)!important;font:inherit}.journey-fields option{background:var(--bg-primary);color:var(--text-primary)}
+  </style>
+</head>
+<body>
+  <!-- Mobile sidebar toggle -->
+  <button class="sb-toggle" id="sb-toggle" aria-label="Menu">☰</button>
+  <div class="sb-overlay" id="sb-overlay"></div>
+
+  <div class="shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand2"><span id="brand-icon">◆</span> DeutschBloom</div>
+
+      <h4>Estudar</h4>
+      <a href="app/cursos.html">💬 Diálogos <small>1.225</small></a>
+      <a href="app/cursos.html?tab=verbos"><span>📖 Verbos</span><small>1.312 verbos<br>(38.802) frases</small></a>
+      <a href="app/musica.html">🎵 Música <small>89</small></a>
+      <a href="app/expressoes.html">🗣️ Gírias <small>1.509</small></a>
+      <a href="app/profissoes.html">💼 Profissões <small>1.200</small></a>
+
+      <h4>Treinar</h4>
+      <a href="app/quiz.html">⚡ Quiz <small>3.000</small></a>
+      <a href="app/jogo.html">🎮 Caçando Vocabulário</a>
+      <a href="app/escrita.html">✍️ Escrita <small>609</small></a>
+      <a href="app/pronuncia.html">🎤 Pronúncia</a>
+      <a href="app/criatividade.html">💡 Teste de Criatividade</a>
+      <a href="app/simulado.html">📝 Simulado Goethe <small>598</small></a>
+
+      <h4>Acompanhar</h4>
+      <a href="app/perfil.html">📊 Progresso</a>
+      <a href="app/caderno.html">📓 Caderno</a>
+
+      <h4>Outros</h4>
+      <a href="app/planos.html">💎 Planos</a>
+      <a href="app/suporte.html">🛟 Suporte</a>
+    </aside>
+
+    <main class="main">
+      <div class="main-inner">
+
+      <div class="topbar mi-stagger">
+        <div class="topbar-spacer"></div>
+        <div class="search-box">
+          <input type="text" id="search-input" placeholder="Pesquisar qualquer palavra, verbo, diálogo...">
+        </div>
+        <div class="env-switch" id="env-switch">
+          <button data-env="moderno">◆</button>
+          <button data-env="vikings">🛡️</button>
+          <button data-env="aurora">🌌</button>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="daynight-btn" title="Alternar dia/noite" style="padding:5px 8px;font-size:.85rem;min-height:auto;">🌙</button>
+        <button class="btn btn-ghost btn-sm" id="sfx-toggle" title="Som" style="padding:5px 8px;font-size:.85rem;min-height:auto;">🔊</button>
+        <div id="user-actions"></div>
+      </div>
+
+      <div class="hero-fx mi-stagger" id="hero-fx"></div>
+
+      <div class="greeting mi-stagger">
+        <h1 id="greeting">Bom dia! 👋</h1>
+        <p>Bem-vindo ao DeutschBloom. Aprenda do seu jeito.</p>
+      </div>
+
+      <div class="quick-row mi-stagger">
+        <button class="btn btn-primary mi-breathe" id="start-session-btn" style="padding:12px 24px;">▶ Iniciar sessão de estudo</button>
+        <a class="btn btn-outline" href="app/sessao-rapida.html" style="padding:12px 20px;">⚡ Sessão rápida</a>
+        <a class="btn btn-ghost" href="app/teste-rapido.html" style="padding:12px 18px;">🧭 Descobrir por onde começar</a>
+      </div>
+
+      <section class="card journey-card mi-stagger" id="journey-card" aria-labelledby="journey-title">
+        <div class="journey-head"><div><span class="eyebrow">Seu plano de jornada</span><h2 id="journey-title">Preparando sua missão de hoje...</h2><p class="muted" id="journey-sub" style="margin:0"></p></div><button class="btn btn-outline btn-sm" id="journey-config">Ajustar plano</button></div>
+        <div class="journey-summary" id="journey-summary"></div>
+        <div class="mission-grid" id="journey-missions"></div>
+      </section>
+
+      <dialog class="journey-dialog" id="journey-dialog"><form class="journey-form" id="journey-form" method="dialog"><h2>Monte sua jornada</h2><p class="muted">Você pode mudar quando quiser. Se não escolher, usamos 15 minutos em quatro dias por semana.</p><div class="journey-fields"><label>Meu objetivo<select name="goal"><option value="general">Aprender com constância</option><option value="zero">Começar do zero</option><option value="conversation">Conversar no dia a dia</option><option value="work">Trabalhar na Alemanha</option><option value="goethe">Preparar para o Goethe</option><option value="pronunciation">Melhorar a pronúncia</option><option value="vocabulary">Expandir o vocabulário</option></select></label><label>Nível atual<select name="level"><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option></select></label><label>Minutos por dia<input name="minutesPerDay" type="number" min="5" max="180" step="5" value="15"></label><label>Dias por semana<input name="daysPerWeek" type="number" min="1" max="7" value="4"></label><label>Horizonte<select name="horizon"><option value="30_days">30 dias</option><option value="3_months" selected>3 meses</option><option value="6_months">6 meses</option><option value="1_year">1 ano</option></select></label></div><div style="display:flex;justify-content:flex-end;gap:9px"><button class="btn btn-ghost" type="button" id="journey-cancel">Cancelar</button><button class="btn btn-primary" type="submit">Salvar minha jornada</button></div></form></dialog>
+
+      <div class="foco-row">
+        <div class="card foco-card-lofi mi-card mi-stagger">
+          <div class="player-top">
+            <div class="player-info">
+              <span id="play-btn" class="play-btn mi-ripple">▶</span>
+              <div>
+                <div class="track-name" id="track-title">Späte Stunden</div>
+                <div class="track-sub" id="track-status">LoFi Cafe · pausado</div>
+              </div>
+            </div>
+            <span id="expand-toggle" style="cursor:pointer;color:var(--text-secondary);font-size:14px;">▾</span>
+          </div>
+          <div class="wave-bars" id="wave">
+            <i style="height:35%;animation-delay:0s"></i>
+            <i style="height:65%;animation-delay:.1s"></i>
+            <i style="height:25%;animation-delay:.2s"></i>
+            <i style="height:80%;animation-delay:.3s"></i>
+            <i style="height:50%;animation-delay:.15s"></i>
+            <i style="height:70%;animation-delay:.05s"></i>
+            <i style="height:40%;animation-delay:.25s"></i>
+            <i style="height:60%;animation-delay:.12s"></i>
+          </div>
+          <div id="expand-panel" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border-light);">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <span class="badge" data-station="chilling">🧊 Chill</span>
+              <span class="badge" data-station="studying">📚 Study</span>
+              <span class="badge" data-station="working" style="background:var(--color-primary);color:var(--bg-primary);">💼 Working</span>
+              <span class="badge" data-station="sleeping">😴 Sleep</span>
+            </div>
+            <iframe id="lofi-frame" src="" width="100%" height="80" frameborder="0" allow="autoplay" loading="lazy" style="border-radius:10px;margin-top:10px;display:none;"></iframe>
+          </div>
+        </div>
+
+        <div class="card foco-card-pomo mi-card mi-stagger">
+          <div class="pomo-label">🍅 POMODORO</div>
+          <div class="pomo-ring" id="pomo-ring">
+            <div class="hole"><input id="pomo-input" value="25:00"></div>
+          </div>
+          <div class="pomo-controls">
+            <button class="btn btn-ghost btn-sm" id="pomo-minus">−</button>
+            <button class="btn btn-primary btn-sm" id="pomo-start" style="padding:5px 14px;">Iniciar</button>
+            <button class="btn btn-ghost btn-sm" id="pomo-plus">+</button>
+          </div>
+          <div class="pomo-presets">
+            <span class="badge pomo-preset" data-min="5">5m</span>
+            <span class="badge pomo-preset" data-min="15">15m</span>
+            <span class="badge pomo-preset active" data-min="25" style="background:var(--color-primary);color:var(--bg-primary);">25m</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-title mi-stagger" id="conteudos" style="margin:0 0 14px;font-size:clamp(1rem,1.5vw,1.15rem);">O que você quer estudar hoje?</h3>
+      <div class="study-grid">
+        <a href="app/cursos.html?tab=verbos" class="card mi-card mi-stagger stat-tile"><div class="ico">📖</div><b class="mi-num" data-target="1312">0</b><span>1.312 verbos</span><small style="display:block;font-size:.6rem;color:var(--text-secondary);margin-top:1px;">38.802 frases conjugadas</small></a>
+        <a href="app/cursos.html" class="card mi-card mi-stagger stat-tile"><div class="ico">💬</div><b class="mi-num" data-target="1225">0</b><span>Diálogos</span><small style="display:block;font-size:.6rem;color:var(--text-secondary);margin-top:1px;">do A1 ao C2</small></a>
+        <a href="app/musica.html" class="card mi-card mi-stagger stat-tile"><div class="ico">🎵</div><b class="mi-num" data-target="89">0</b><span>Músicas</span><small style="display:block;font-size:.6rem;color:var(--text-secondary);margin-top:1px;">com letras traduzidas</small></a>
+        <a href="app/expressoes.html" class="card mi-card mi-stagger stat-tile"><div class="ico">🗣️</div><b class="mi-num" data-target="1509">0</b><span>Gírias</span><small style="display:block;font-size:.6rem;color:var(--text-secondary);margin-top:1px;">alemão do dia a dia</small></a>
+        <a href="app/profissoes.html" class="card mi-card mi-stagger stat-tile"><div class="ico">💼</div><b class="mi-num" data-target="1200">0</b><span>Profissões</span><small style="display:block;font-size:.6rem;color:var(--text-secondary);margin-top:1px;">24 carreiras</small></a>
+        <a href="app/quiz.html" class="card mi-card mi-stagger stat-tile"><div class="ico">⚡</div><b class="mi-num" data-target="3000">0</b><span>Quiz</span><small style="display:block;font-size:.6rem;color:var(--text-secondary);margin-top:1px;">teste seus reflexos</small></a>
+        <a href="app/simulado.html" class="card mi-card mi-stagger stat-tile"><div class="ico">📝</div><b class="mi-num" data-target="598">0</b><span>Simulado Goethe</span><small style="display:block;font-size:.6rem;color:var(--text-secondary);margin-top:1px;">prova oficial</small></a>
+        <a href="app/escrita.html" class="card mi-card mi-stagger stat-tile"><div class="ico">✍️</div><b class="mi-num" data-target="609">0</b><span>Escrita</span><small style="display:block;font-size:.6rem;color:var(--text-secondary);margin-top:1px;">treine redação</small></a>
+      </div>
+
+      <section class="card premium-showcase mi-stagger" aria-labelledby="premium-title">
+        <div>
+          <span class="eyebrow">Experiência completa</span>
+          <h2 id="premium-title">Todo o alemão, sem interromper seu ritmo.</h2>
+          <p>Libere a biblioteca completa, simulados Goethe, áudio de alta qualidade e sincronização do seu progresso.</p>
+          <div class="premium-actions">
+            <a class="btn btn-primary" href="app/planos.html">Conhecer os planos</a>
+            <span class="premium-price">a partir de <strong>R$ 14,99/mês</strong></span>
+          </div>
+        </div>
+        <div class="premium-benefits" aria-label="Benefícios Premium">
+          <div class="premium-benefit"><b>63.000+ conteúdos</b><span>Do nível A1 ao C2</span></div>
+          <div class="premium-benefit"><b>Áudio de alta qualidade</b><span>Escuta e pronúncia claras</span></div>
+          <div class="premium-benefit"><b>Simulados Goethe</b><span>Preparação completa</span></div>
+          <div class="premium-benefit"><b>Progresso na nuvem</b><span>Continue em qualquer dispositivo</span></div>
+        </div>
+      </section>
+
+      <div class="home-proof mi-stagger" aria-label="Por que estudar no DeutschBloom">
+        <div class="proof-item"><b>Comece sem pressão</b><span>Explore conteúdos gratuitos antes de escolher um plano.</span></div>
+        <div class="proof-item"><b>Estude no seu ritmo</b><span>Do básico A1 ao avançado C2, com uma trilha que acompanha você.</span></div>
+        <div class="proof-item"><b>Pratique alemão de verdade</b><span>Ouça, leia, escreva e teste seu conhecimento em um só lugar.</span></div>
+      </div>
+
+      <section class="home-faq mi-stagger" aria-labelledby="faq-title">
+        <span class="eyebrow">Antes de começar</span>
+        <h2 id="faq-title">Um espaço completo para aprender alemão</h2>
+        <details><summary>Consigo estudar mesmo começando do zero?</summary><p>Sim. O conteúdo está organizado do A1 ao C2, permitindo começar pelo básico e avançar gradualmente com diálogos, vocabulário, áudio e exercícios.</p></details>
+        <details><summary>O que está incluído no plano Premium?</summary><p>O Premium libera a biblioteca completa, os simulados Goethe, o áudio de alta qualidade e a sincronização do progresso entre dispositivos.</p></details>
+        <details><summary>Posso experimentar antes de assinar?</summary><p>Sim. O plano gratuito permite conhecer o ambiente e estudar uma seleção de conteúdos sem informar cartão.</p></details>
+      </section>
+
+      <div class="card progress-strip mi-stagger" id="progress-card">
+        <div class="stats">
+          <div class="stat-item"><b id="stat-xp">0</b><span>XP total</span></div>
+          <div class="stat-item"><b id="stat-streak">0</b><span>dias seguidos</span></div>
+          <div class="stat-item"><b id="stat-completed">0</b><span>concluídos</span></div>
+        </div>
+        <div id="progress-cta"></div>
+      </div>
+
+      <div class="plans-teaser mi-stagger" id="planos-teaser">
+        <div><b>A partir de R$ 14,99/mês</b><p class="muted">Libera os 63.000 itens quando quiser.</p></div>
+        <a class="btn btn-outline btn-sm" href="app/planos.html">Ver planos</a>
+      </div>
+
+      </div><!-- /main-inner -->
+    </main>
+  </div>
+
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/sfx.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/xp.js"></script>
+  <script src="assets/js/study-plan.js"></script>
+  <script src="assets/js/guest.js"></script>
+  <script src="assets/js/microinteracoes.js"></script>
+  <script>
+    // ── Mobile sidebar toggle ──
+    (function() {
+      const sb = document.getElementById('sidebar');
+      const btn = document.getElementById('sb-toggle');
+      const overlay = document.getElementById('sb-overlay');
+      function open() { sb.classList.add('open'); overlay.classList.add('open'); btn.textContent = '✕'; }
+      function close() { sb.classList.remove('open'); overlay.classList.remove('open'); btn.textContent = '☰'; }
+      btn.addEventListener('click', () => { sb.classList.contains('open') ? close() : open(); });
+      overlay.addEventListener('click', close);
+      // Close sidebar when clicking a link on mobile
+      sb.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+        if (window.innerWidth < 768) setTimeout(close, 150);
+      }));
+    })();
+
+    // ── Day/Night toggle ──
+    (function() {
+      var btn = document.getElementById('daynight-btn');
+      function update() {
+        var isDay = Theme.getMode() === 'day';
+        btn.textContent = isDay ? '☀️' : '🌙';
+        btn.title = isDay ? 'Modo dia · clique para noturno' : 'Modo noturno · clique para dia';
+      }
+      btn.addEventListener('click', function() {
+        Theme.toggleMode();
+        update();
+        if (typeof SFX !== 'undefined') SFX.click();
+        paintEnv();
+      });
+      update();
+    })();
+
+    // ── Sound toggle ──
+    (function() {
+      var btn = document.getElementById('sfx-toggle');
+      function update() { btn.textContent = SFX.isMuted() ? '🔇' : '🔊'; }
+      btn.addEventListener('click', function() { SFX.toggle(); update(); });
+      update();
+    })();
+
+    // ── Ambiente (tema) ──
+    function paintEnv() {
+      const meta = Theme.meta();
+      const isDay = Theme.getMode() === 'day';
+      document.getElementById("brand-icon").textContent = meta.icon;
+      document.querySelectorAll("#env-switch button").forEach((b) => {
+        b.classList.toggle("active", b.dataset.env === Theme.get());
+      });
+      const fx = document.getElementById("hero-fx");
+      if (Theme.get() === "vikings") {
+        fx.style.background = isDay
+          ? "radial-gradient(ellipse at 50% -20%, rgba(154,110,53,.18), transparent 65%)"
+          : "radial-gradient(ellipse at 50% -20%, rgba(184,135,74,.14), transparent 65%)";
+      } else if (Theme.get() === "aurora") {
+        fx.style.background = isDay
+          ? "linear-gradient(180deg, rgba(180,210,255,.35), rgba(220,190,240,.15) 55%, transparent 85%)"
+          : "linear-gradient(180deg, rgba(120,180,210,.25), rgba(150,120,210,.15) 55%, transparent 85%)";
+      } else {
+        fx.style.background = isDay
+          ? "radial-gradient(ellipse at 80% -20%, rgba(74,122,181,.15), transparent 60%)"
+          : "radial-gradient(ellipse at 80% -20%, rgba(111,155,209,.12), transparent 60%)";
+      }
+    }
+    document.querySelectorAll("#env-switch button").forEach((b) => {
+      b.addEventListener("click", () => { Theme.set(b.dataset.env); paintEnv(); });
+    });
+    paintEnv();
+
+    // Progresso sempre visível perto das ações principais.
+    document.querySelector(".quick-row").after(document.getElementById("progress-card"));
+
+    function renderJourney(){
+      const p=StudyPlan.load(),s=StudyPlan.summary(),done=StudyPlan.completedToday(),missions=StudyPlan.missions();
+      const pct=Math.min(100,Math.round((s.minutes/Math.max(1,s.minutesGoal))*100));
+      document.getElementById("journey-title").textContent=StudyPlan.GOALS[p.goal]||StudyPlan.GOALS.general;
+      document.getElementById("journey-sub").textContent=`${p.minutesPerDay} min por dia · ${p.daysPerWeek} dias por semana · nível ${p.level}`;
+      document.getElementById("journey-summary").innerHTML=`<div class="journey-progress"><div class="flex-between"><b>Meta desta semana</b><span>${s.minutes} de ${s.minutesGoal} min</span></div><div class="line"><i style="width:${pct}%"></i></div><small>${pct}% da sua meta pessoal — sem comparar com toda a biblioteca.</small></div><div class="journey-numbers"><div><b>${s.activeDays}/${s.daysGoal}</b><span>dias ativos</span></div><div><b>${s.missionCount}</b><span>missões</span></div></div>`;
+      document.getElementById("journey-missions").innerHTML=missions.map(m=>`<div class="mission-card ${done.includes(m.id)?"done":""}"><a class="mission-icon" href="app/${m.href}">${m.icon}</a><a class="mission-copy" href="app/${m.href}"><b>${m.label}</b><span>${m.detail}</span></a><button class="mission-check" data-mission="${m.id}" title="Marcar como concluída">${done.includes(m.id)?"✓":""}</button></div>`).join("");
+      document.querySelectorAll("[data-mission]").forEach(b=>b.onclick=()=>{StudyPlan.toggleMission(b.dataset.mission);renderJourney();showAchievement()});
+    }
+    function showAchievement(){const a=StudyPlan.unseenAchievement();if(!a)return;const t=document.createElement("div");t.className="achievement-toast";t.innerHTML=`<span class="eyebrow">Nova conquista</span><h3 style="margin:5px 0">🎉 ${a.label}</h3><p class="muted" style="margin:0 0 10px">Seu progresso vem das pequenas práticas que você mantém.</p><button class="btn btn-primary btn-sm">Continuar</button>`;document.body.appendChild(t);t.querySelector("button").onclick=()=>{StudyPlan.markSeen(a.id);t.remove()}}
+    StudyPlan.init().then(()=>{renderJourney();showAchievement()});
+    window.addEventListener("afb:study-plan",renderJourney);
+    const journeyDialog=document.getElementById("journey-dialog"),journeyForm=document.getElementById("journey-form");
+    document.getElementById("journey-config").onclick=()=>{const p=StudyPlan.load();journeyForm.goal.value=p.goal;journeyForm.level.value=p.level;journeyForm.minutesPerDay.value=p.minutesPerDay;journeyForm.daysPerWeek.value=p.daysPerWeek;journeyForm.horizon.value=p.horizon;journeyDialog.showModal()};
+    document.getElementById("journey-cancel").onclick=()=>journeyDialog.close();
+    journeyForm.onsubmit=e=>{e.preventDefault();StudyPlan.configure(Object.fromEntries(new FormData(journeyForm)));journeyDialog.close();renderJourney()};
+
+    // ── Usuário / visitante ──
+    (async () => {
+      const isGuest = await Guest.check();
+      const user = !isGuest ? Auth.currentUser() : null;
+      const actions = document.getElementById("user-actions");
+      actions.innerHTML = user
+        ? `<a class="btn btn-ghost btn-sm" href="app/perfil.html">Perfil</a> <button class="btn btn-ghost btn-sm" onclick="Auth.logout()">Sair</button>`
+        : `<a class="btn btn-ghost btn-sm" href="app/login.html">Entrar</a> <a class="btn btn-primary btn-sm" href="app/cadastro.html">Criar conta</a>`;
+
+      document.getElementById("greeting").textContent = user
+        ? `Bom dia, ${user.name.split(" ")[0]}! 👋`
+        : "Bom dia! 👋";
+      document.querySelector(".greeting p").textContent = user
+        ? "Continue de onde parou. Seu progresso está salvo."
+        : "Bem-vindo ao DeutschBloom. Aprenda do seu jeito.";
+
+      const progress = user && Progress.hydrate ? await Progress.hydrate() : Guest.safeProgress();
+      document.getElementById("stat-streak").textContent = progress.streak || 0;
+      document.getElementById("stat-completed").textContent = (progress.completed || []).length;
+      miAnimateNumber(document.getElementById("stat-xp"), progress.xp || 0, 900);
+
+      document.getElementById("progress-cta").innerHTML = user
+        ? `<a class="btn btn-outline btn-sm" href="app/perfil.html">Ver progresso completo</a>`
+        : `<a class="btn btn-outline btn-sm" href="app/cadastro.html">Criar conta pra não perder seu progresso</a>`;
+
+      if (!user) {
+        document.getElementById("planos-teaser").style.display = "flex";
+      }
+
+      document.getElementById("start-session-btn").addEventListener("click", (e) => {
+        miRipple(e.currentTarget);
+        setTimeout(() => { window.location.href = "app/cursos.html"; }, 160);
+      });
+    })();
+
+    // ── Microinteracoes: stagger + contadores ──
+    miStagger(".mi-stagger", document, 60);
+    document.querySelectorAll(".mi-num").forEach((el) => {
+      miAnimateNumber(el, Number(el.dataset.target), 1300);
+    });
+
+    // ── Player lo-fi ──
+    let playing = false;
+    const lofiFrame = document.getElementById("lofi-frame");
+    let currentStation = "working";
+    function loadStation(st) {
+      currentStation = st;
+      lofiFrame.src = `https://loficafe.net/embed/${st}?utm_source=alemaofacilbrasil&utm_medium=embed`;
+    }
+    document.getElementById("play-btn").addEventListener("click", (e) => {
+      miRipple(e.currentTarget);
+      playing = !playing;
+      e.currentTarget.textContent = playing ? "❚❚" : "▶";
+      document.getElementById("track-status").textContent = playing ? "LoFi Cafe · tocando agora" : "LoFi Cafe · pausado";
+      document.getElementById("wave").style.opacity = playing ? "1" : ".5";
+      if (playing && !lofiFrame.src) loadStation(currentStation);
+      lofiFrame.style.display = playing ? "block" : "none";
+      SFX.ambientChime();
+    });
+    document.getElementById("expand-toggle").addEventListener("click", (e) => {
+      const panel = document.getElementById("expand-panel");
+      const open = panel.style.display === "block";
+      panel.style.display = open ? "none" : "block";
+      e.target.textContent = open ? "▾" : "▴";
+    });
+    document.querySelectorAll("[data-station]").forEach((b) => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("[data-station]").forEach((x) => { x.style.background = ""; x.style.color = ""; });
+        b.style.background = "var(--color-primary)"; b.style.color = "var(--bg-primary)";
+        loadStation(b.dataset.station);
+        if (playing) lofiFrame.style.display = "block";
+      });
+    });
+
+    // ── Pomodoro editável (presets 5/15/25 + setas + edição direta) ──
+    let pomoMin = 25, pomoRunning = false, pomoTimer = null, pomoSecsLeft = 25 * 60;
+    const pomoInput = document.getElementById("pomo-input");
+    const pomoRing = document.getElementById("pomo-ring");
+    function drawPomoIdle() {
+      pomoInput.value = String(pomoMin).padStart(2, "0") + ":00";
+      pomoRing.style.background = `conic-gradient(var(--color-primary) 0 0%, rgba(255,255,255,.1) 0%)`;
+      pomoRing.classList.remove("mi-pulse");
+    }
+    function setPomo(min) {
+      pomoMin = min; pomoSecsLeft = min * 60;
+      drawPomoIdle();
+      document.querySelectorAll(".pomo-preset").forEach((p) => {
+        const active = Number(p.dataset.min) === min;
+        p.style.background = active ? "var(--color-primary)" : "";
+        p.style.color = active ? "var(--bg-primary)" : "";
+      });
+    }
+    document.querySelectorAll(".pomo-preset").forEach((p) => p.addEventListener("click", () => setPomo(Number(p.dataset.min))));
+    document.getElementById("pomo-minus").addEventListener("click", () => setPomo(Math.max(1, pomoMin - 1)));
+    document.getElementById("pomo-plus").addEventListener("click", () => setPomo(Math.min(99, pomoMin + 1)));
+    pomoInput.addEventListener("change", () => {
+      const v = parseInt(pomoInput.value) || 25;
+      setPomo(Math.max(1, Math.min(99, v)));
+    });
+    document.getElementById("pomo-start").addEventListener("click", (e) => {
+      miRipple(e.currentTarget);
+      if (pomoRunning) {
+        pomoRunning = false; clearInterval(pomoTimer);
+        e.currentTarget.textContent = "Continuar";
+        SFX.click();
+        return;
+      }
+      pomoRunning = true;
+      e.currentTarget.textContent = "Pausar";
+      SFX.correct();
+      const total = pomoMin * 60;
+      pomoTimer = setInterval(() => {
+        pomoSecsLeft--;
+        const pct = ((total - pomoSecsLeft) / total) * 100;
+        pomoRing.style.background = `conic-gradient(var(--color-primary) 0 ${pct}%, rgba(255,255,255,.1) ${pct}%)`;
+        const m = Math.floor(pomoSecsLeft / 60), s = pomoSecsLeft % 60;
+        pomoInput.value = String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+        if (pomoSecsLeft <= 60) pomoRing.classList.add("mi-pulse");
+        if (pomoSecsLeft <= 0) {
+          clearInterval(pomoTimer); pomoRunning = false;
+          document.getElementById("pomo-start").textContent = "Iniciar";
+          pomoInput.value = "Foco! 🎉";
+        }
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

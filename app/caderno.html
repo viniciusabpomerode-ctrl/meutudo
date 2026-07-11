@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caderno — DeutschBloom</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+.caderno-wrap{max-width:800px;margin:0 auto}
+.search-bar{width:100%;padding:14px 18px;border-radius:14px;border:1px solid var(--border-light);background:var(--bg-secondary);color:var(--text-primary);font-size:.95rem;font-family:inherit;margin-bottom:16px}
+.search-bar:focus{outline:none;border-color:var(--color-primary)}
+.filter-bar{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;margin-bottom:14px;padding-bottom:4px;scrollbar-width:thin}
+.filter-chip{padding:6px 11px;border-radius:18px;border:1px solid var(--border-light);background:transparent;color:var(--text-secondary);cursor:pointer;font-size:.76rem;font-weight:600;font-family:inherit;transition:.2s;white-space:nowrap;flex:0 0 auto}
+.filter-chip:hover,.filter-chip.active{background:var(--color-primary);color:#222;border-color:var(--color-primary)}
+.day-group{margin-bottom:24px}
+.day-header{color:var(--text-secondary);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border-light)}
+.saved-card{background:var(--bg-secondary);border-radius:12px;padding:14px;margin-bottom:8px;border:1px solid var(--border-light);transition:.2s}
+.saved-card:hover{border-color:var(--color-primary)}
+.saved-card .top{display:flex;align-items:flex-start;gap:10px;cursor:pointer}
+.saved-card .icon{font-size:1.3rem;flex-shrink:0}
+.saved-card .body{flex:1;min-width:0}
+.saved-card .body .title{font-weight:700;color:var(--text-primary);font-size:.9rem}
+.saved-card .body .sub{color:var(--text-secondary);font-size:.78rem;margin-top:2px}
+.saved-card .notes{background:rgba(255,215,0,.08);border-radius:8px;padding:8px 12px;margin-top:8px;font-size:.8rem;color:#b8a99a;font-style:italic}
+.saved-card .actions{display:flex;gap:6px;margin-top:8px}
+.btn-sm{padding:5px 12px;border-radius:8px;border:1px solid var(--border-light);background:transparent;color:var(--text-secondary);cursor:pointer;font-size:.75rem;font-family:inherit;transition:.2s}
+.btn-sm:hover{border-color:var(--color-primary);color:var(--text-primary)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-secondary)}
+.empty-state .big{font-size:3rem;margin-bottom:12px}
+.review-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.7rem;background:rgba(126,207,126,.15);color:#7ecf7e;margin-left:6px}
+@media(max-width:600px){#time-filters{display:grid!important;grid-template-columns:repeat(3,auto);overflow:visible}#date-pick{grid-column:1/-1;margin-left:0!important;width:100%}}
+</style>
+</head>
+<body>
+<div id="app-nav"></div>
+<div class="container caderno-wrap" style="padding-top:28px">
+<h2>📝 Caderno de Estudos</h2>
+<p class="muted">Seus atalhos, anotações e revisões.</p>
+<input type="text" class="search-bar" id="search" placeholder="🔍 Buscar...">
+<div class="filter-bar" id="filters">
+<button class="filter-chip active" data-f="all">📚 Todos</button>
+<button class="filter-chip" data-f="verb">🔤 Verbos</button>
+<button class="filter-chip" data-f="phrase">💬 Frases</button>
+<button class="filter-chip" data-f="word">🔤 Palavras</button>
+<button class="filter-chip" data-f="grammar">📖 Gramática</button>
+<button class="filter-chip" data-f="dialog">💬 Diálogos</button>
+<button class="filter-chip" data-f="music">🎵 Músicas</button>
+<button class="filter-chip" data-f="expression">🗣️ Gírias</button>
+<button class="filter-chip" data-f="profession">💼 Profissões</button>
+<button class="filter-chip" data-f="lyric">🎤 Letras</button>
+</div>
+<div class="filter-bar" id="time-filters" style="margin-bottom:20px;align-items:center;">
+<button class="filter-chip active" data-t="all">📅 Tudo</button>
+<button class="filter-chip" data-t="today">☀️ Hoje</button>
+<button class="filter-chip" data-t="week">📆 7 dias</button>
+<button class="filter-chip" data-t="month">🗓️ 30 dias</button>
+<button class="filter-chip" data-t="year">📅 1 ano</button>
+<input type="date" id="date-pick" style="padding:6px 10px;border-radius:20px;border:1px solid var(--border-light);background:var(--bg-secondary);color:var(--text-primary);font-size:.8rem;font-family:inherit;margin-left:8px;" title="Filtrar por data específica">
+</div>
+<div id="content"><p class="empty-state"><span class="big">📝</span><br>Carregando...</p></div>
+</div>
+<script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/nav.js"></script>
+<script src="../assets/js/i18n.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/saved_r2.js"></script>
+<script>
+renderNav("caderno");
+const R2="https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
+const ICONS={dialog:"💬",phrase:"💬",word:"🔤",grammar:"📖",music:"🎵",giria:"🗣️",verbo:"🔤"};
+let all=[],filter="all",timeFilter="all",query="",cache={};
+const ad=new Audio();
+function playAudio(audioPath, btn){
+  if(!audioPath)return;
+  if(ad.src&&ad.src.includes(audioPath)&&!ad.paused){ad.pause();btn.textContent="▶";return}
+  btn.textContent="⏳";
+  // Tenta Supabase + R2 em paralelo (quem cair primeiro toca)
+  const r2url=audioPath.startsWith("http")?audioPath:(R2+audioPath);
+  AFBData.signedAudioUrl(audioPath).then(url=>{
+    if(url&&(!ad.src||ad.paused)){ad.src=url;ad.play().catch(()=>{});btn.textContent="⏸"}
+  }).catch(()=>{});
+  // Fallback R2
+  setTimeout(()=>{
+    if(!ad.src||ad.paused){ad.src=r2url;ad.play().catch(()=>{})}
+  },800);
+  ad.oncanplay=()=>btn.textContent="⏸";
+  ad.onended=()=>btn.textContent="▶";
+  ad.onpause=()=>btn.textContent="▶";
+}
+async function resolve(item){
+  const ck=item.type+"_"+item.id;
+  if(cache[ck])return cache[ck];
+  if(["phrase","word","grammar","dialog"].includes(item.type)&&item.nivel){
+    try{
+      const data=await AFBData.nivel(item.nivel);
+      for(const th of data.dialog_themes){for(const d of th.dialogs){
+        if(item.type==="dialog"&&d.id===item.parentId){cache[ck]={title:d.title,sub:d.german_title,audio:d.main_audio_url,link:`dialogo.html?id=${d.id}&nivel=${item.nivel}`};return cache[ck]}
+        if(item.type==="phrase"){const s=d.sentences?.find(x=>x.id===item.id);if(s){cache[ck]={title:s.german_text,sub:s.portuguese_translation,audio:s.audio_url,link:`dialogo.html?id=${d.id}&nivel=${item.nivel}`};return cache[ck]}}
+        if(item.type==="word"){const v=d.vocabulary?.find(x=>x.id===item.id);if(v){cache[ck]={title:v.german_word,sub:v.portuguese_translation,audio:v.audio_url,link:`dialogo.html?id=${d.id}&nivel=${item.nivel}`};return cache[ck]}}
+        if(item.type==="grammar"){const g=d.grammar_tips?.find(x=>x.id===item.id);if(g){cache[ck]={title:g.title,sub:g.german_example,audio:"",link:`dialogo.html?id=${d.id}&nivel=${item.nivel}`};return cache[ck]}}
+      }}
+    }catch(e){}
+  }
+  cache[ck]={title:"Item #"+item.id,sub:"",audio:"",link:item.refUrl||"#"};return cache[ck];
+}
+function group(items){
+  const g={},now=new Date(),t=new Date(now.getFullYear(),now.getMonth(),now.getDate()),y=new Date(t.getTime()-86400000);
+  for(const i of items){const d=new Date(i.created_at),dk=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();let l;if(dk===t.getTime())l="Hoje";else if(dk===y.getTime())l="Ontem";else l=d.toLocaleDateString("pt-BR");if(!g[l])g[l]=[];g[l].push(i)}return g;
+}
+async function render(){
+  const el=document.getElementById("content");
+  let items=all;
+  if(filter!=="all")items=items.filter(i=>i.type===filter);
+  // Time filter
+  if(timeFilter!=="all"){
+    const now=new Date();
+    const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+    items=items.filter(i=>{
+      const d=new Date(i.created_at);
+      if(timeFilter==="today") return d>=today;
+      if(timeFilter==="week") return d>=new Date(today.getTime()-7*86400000);
+      if(timeFilter==="month") return d>=new Date(today.getTime()-30*86400000);
+      if(timeFilter==="year") return d>=new Date(today.getFullYear()-1,today.getMonth(),today.getDate());
+      return true;
+    });
+  }
+  // Date picker filter
+  const dp=document.getElementById("date-pick");
+  if(dp&&dp.value){
+    const pickDate=new Date(dp.value+"T00:00:00");
+    items=items.filter(i=>{
+      const d=new Date(i.created_at);
+      return d.getFullYear()===pickDate.getFullYear()&&d.getMonth()===pickDate.getMonth()&&d.getDate()===pickDate.getDate();
+    });
+  }
+  if(query){const q=query.toLowerCase();items=items.filter(i=>(i.notes||"").toLowerCase().includes(q)||(i.title||"").toLowerCase().includes(q))}
+  if(!items.length){el.innerHTML='<div class="empty-state"><div class="big">📝</div><p>Nenhum item.</p><p class="muted">Salve frases clicando 💛!</p></div>';return}
+  const resolved=await Promise.all(items.map(async i=>{const r=await resolve(i);return{...i,...r}}));
+  const groups=group(resolved);let h="";
+  for(const[lbl,gi]of Object.entries(groups)){h+=`<div class="day-group"><div class="day-header">${lbl}</div>`;
+    for(const i of gi){h+=`<div class="saved-card"><div class="top" onclick="window.location='${i.link||"#"}'"><span class="icon">${ICONS[i.type]||"📌"}</span><div class="body"><div class="title">${i.title||"Sem título"}${i.reviewed_at?'<span class="review-tag">✅</span>':''}</div>${i.sub?`<div class="sub">${i.sub}</div>`:""}</div>${i.audio?`<button class="btn-sm" style="flex-shrink:0" onclick="event.stopPropagation();playAudio('${i.audio}',this)">▶</button>`:""}</div>${i.notes?`<div class="notes">📝 ${i.notes}</div>`:""}<div class="actions"><button class="btn-sm" onclick="editNotes('${i.type}',${i.id},'${(i.notes||"").replace(/'/g,"\\'")}')">✏️ ${i.notes?'Editar':'Anotar'}</button><button class="btn-sm" onclick="review('${i.type}',${i.id})">✅</button><button class="btn-sm" style="color:#f44;border-color:transparent" onclick="del('${i.type}',${i.id})">🗑️</button></div></div>`}h+="</div>"}
+  el.innerHTML=h;
+}
+async function load(){all=await SavedItems.getAll();render()}
+async function editNotes(t,id,cur){const n=prompt("Anotações:",cur==="undefined"?"":cur);if(n!==null){await SavedItems.updateNotes(t,id,n);load()}}
+async function review(t,id){await SavedItems.markReviewed(t,id);load()}
+async function del(t,id){if(confirm("Remover?")){await SavedItems.remove(t,id);load()}}
+document.getElementById("filters").addEventListener("click",e=>{if(e.target.classList.contains("filter-chip")){document.querySelectorAll("#filters .filter-chip").forEach(b=>b.classList.remove("active"));e.target.classList.add("active");filter=e.target.dataset.f;render()}});
+document.getElementById("time-filters").addEventListener("click",e=>{if(e.target.classList.contains("filter-chip")){document.querySelectorAll("#time-filters .filter-chip").forEach(b=>b.classList.remove("active"));e.target.classList.add("active");timeFilter=e.target.dataset.t;document.getElementById("date-pick").value="";render()}});
+document.getElementById("date-pick").addEventListener("change",()=>{document.querySelectorAll("#time-filters .filter-chip").forEach(b=>b.classList.remove("active"));timeFilter="all";render()});
+document.getElementById("search").addEventListener("input",e=>{query=e.target.value;render()});
+load();
+</script>
+</body>
+</html>

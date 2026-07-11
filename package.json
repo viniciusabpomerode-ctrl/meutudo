@@ -1,0 +1,15 @@
+{
+  "name": "alemao-facil-brasil",
+  "version": "1.0.0",
+  "description": "Plataforma de aprendizado de alemão - diálogos, verbos, músicas e quizzes do A1 ao C2",
+  "private": true,
+  "scripts": {
+    "start": "npx netlify dev --port 8080",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1692.0"
+  },
+  "keywords": ["alemão", "aprendizado", "idiomas", "goethe"],
+  "license": "UNLICENSED"
+}

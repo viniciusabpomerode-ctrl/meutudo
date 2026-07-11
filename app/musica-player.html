@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Música — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .music-player { background: var(--bg-secondary); border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-light); }
+    .music-player .player-top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .music-player .player-top .info { flex: 1; min-width: 120px; }
+    .music-player .player-top .info h3 { margin: 0; font-size: 1rem; }
+    .btn-play { width: 52px; height: 52px; border-radius: 50%; border: none; background: var(--color-primary); color: #fff; font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: .2s; flex-shrink: 0; }
+    .btn-play:hover { transform: scale(1.05); opacity: .9; }
+    .btn-play.playing { background: var(--color-warm); }
+    .progress-wrap { margin-top: 12px; }
+    .progress-wrap input[type="range"] { width: 100%; height: 4px; -webkit-appearance: none; appearance: none; background: var(--border-light); border-radius: 2px; outline: none; }
+    .progress-wrap input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--color-primary); cursor: pointer; }
+    .progress-time { display: flex; justify-content: space-between; font-size: .78rem; color: var(--text-secondary); margin-top: 4px; }
+    .speed-controls { display: flex; gap: 8px; margin-top: 12px; }
+    .speed-btn { flex: 1; padding: 8px 12px; border: 2px solid var(--border-light); border-radius: 12px; background: transparent; font-size: .82rem; font-weight: 600; cursor: pointer; color: var(--text-primary); transition: .2s; text-align: center; }
+    .speed-btn:hover { border-color: var(--color-primary); }
+    .speed-btn.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+    .sentence-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-radius: 12px; margin-bottom: 6px; transition: .3s; border-left: 3px solid transparent; cursor: pointer; }
+    .sentence-row.highlight { background: var(--color-primary-light, rgba(255,215,0,.15)); border-left-color: var(--color-primary, #FFD700); transform: translateX(4px); }
+    .sentence-row .sentence-de { font-weight: 600; font-size: .95rem; }
+    .sentence-row .sentence-pt { color: var(--text-secondary); font-size: .85rem; margin-top: 2px; }
+    .btn-phrase { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border-light); background: transparent; cursor: pointer; font-size: .9rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: .2s; color: var(--text-primary); }
+    .btn-phrase:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    .btn-phrase.playing { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+  </style>
+</head>
+<body>
+  <div id="app-nav"></div>
+  <div class="container" style="padding-top:28px; max-width:760px;">
+    <a href="musica.html" class="muted">← Voltar para Música</a>
+    <div class="card" id="content" style="margin-top:14px;">Carregando...</div>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/xp.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/saved.js"></script>
+  <script src="../assets/js/saved_r2.js"></script>
+  <script>
+    // Visitante pode ver (bloqueio acontece nas listagens)
+    renderNav("musica");
+
+    const R2_BASE = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
+
+    const ctx = { audio: new Audio(), lyrics: [], speed: 1.0, playing: false, currentIdx: -1, phraseIdx: -1, phraseTimeout: null };
+
+    function fmtTime(sec) { if (!sec || sec < 0) return "0:00"; const m = Math.floor(sec / 60); const s = Math.floor(sec % 60); return `${m}:${s.toString().padStart(2, "0")}`; }
+    function resolveUrl(path) { if (!path) return null; return path.startsWith("http") ? path : R2_BASE + path; }
+
+    function buildPlayer(track) {
+      const d = document.createElement("div");
+      d.className = "music-player";
+      d.innerHTML = `<div class="player-top"><button class="btn-play" id="main-play-btn">▶</button><div class="info"><h3>${track.title_german}</h3><small style="color:var(--text-secondary)">${I18n.field(track,'title_portuguese')} · ${track.genre.icon} ${track.genre.name}</small></div></div><div class="progress-wrap"><input type="range" id="progress-slider" value="0" max="100" step="0.1"><div class="progress-time"><span id="time-current">0:00</span><span id="time-total">0:00</span></div></div><div class="speed-controls"><button class="speed-btn" data-speed="0.5">0.5x</button><button class="speed-btn" data-speed="0.75">0.75x</button><button class="speed-btn active" data-speed="1.0">1.0x</button><button class="speed-btn" data-speed="1.25">1.25x</button></div>`;
+      return d;
+    }
+
+    async function initPlayer(track) {
+      const a = ctx.audio, playBtn = document.getElementById("main-play-btn"), slider = document.getElementById("progress-slider"), timeCur = document.getElementById("time-current"), timeTotal = document.getElementById("time-total");
+      ctx.lyrics = track.lyrics || [];
+      const r2Url = resolveUrl(track.audio_url);
+      if (!r2Url) { playBtn.textContent = "⚠️"; return; }
+      let signedUrl = null;
+      try { signedUrl = await AFBData.signedAudioUrl(track.audio_url); } catch(e) {}
+      let triedR2 = !signedUrl;
+      a.src = signedUrl || r2Url; a.preload = "auto";
+      a.onerror = () => { if (!triedR2) { triedR2 = true; a.src = r2Url; a.play().catch(()=>{}); } else { playBtn.textContent = "⚠️"; playBtn.title = "Áudio indisponível"; } };
+      window.AFBMusicPlayer={toggle:()=>ctx.playing?a.pause():a.play().catch(()=>{}),audio:a,title:track.title_german};
+      document.dispatchEvent(new CustomEvent("afb:music-state",{detail:{title:track.title_german,playing:false}}));
+      a.addEventListener("loadedmetadata", () => { timeTotal.textContent = fmtTime(a.duration); });
+      document.querySelectorAll(".speed-btn").forEach(b => b.addEventListener("click", () => { document.querySelectorAll(".speed-btn").forEach(x => x.classList.remove("active")); b.classList.add("active"); ctx.speed = parseFloat(b.dataset.speed); a.playbackRate = ctx.speed; }));
+      playBtn.addEventListener("click", () => { ctx.playing ? a.pause() : a.play().catch(() => {}); });
+      a.addEventListener("timeupdate", () => { if (!a.duration) return; slider.value = (a.currentTime / a.duration) * 100; timeCur.textContent = fmtTime(a.currentTime); highlightLyric(a.currentTime); });
+      a.addEventListener("play", () => { ctx.playing = true; playBtn.textContent = "⏸"; playBtn.classList.add("playing"); document.dispatchEvent(new CustomEvent("afb:music-state",{detail:{title:track.title_german,playing:true}})); });
+      a.addEventListener("pause", () => { ctx.playing = false; playBtn.textContent = "▶"; playBtn.classList.remove("playing"); document.dispatchEvent(new CustomEvent("afb:music-state",{detail:{title:track.title_german,playing:false}})); });
+      a.addEventListener("ended", () => { ctx.playing = false; playBtn.textContent = "▶"; playBtn.classList.remove("playing"); slider.value = 0; timeCur.textContent = "0:00"; clearHighlight(); });
+      slider.addEventListener("input", () => { if (!a.duration) return; a.currentTime = (parseFloat(slider.value) / 100) * a.duration; timeCur.textContent = fmtTime(a.currentTime); });
+    }
+
+    function highlightLyric(time) {
+      const lyrics = ctx.lyrics; if (!lyrics.length) return;
+      let idx = -1;
+      for (let i = 0; i < lyrics.length; i++) { const l = lyrics[i]; if (time >= (l.start_time || 0) && time < (l.end_time || l.start_time + 3)) { idx = i; break; } }
+      if (idx !== ctx.currentIdx) { document.querySelectorAll(".sentence-row").forEach(r => r.classList.remove("highlight")); ctx.currentIdx = idx; if (idx >= 0) { const rows = document.querySelectorAll(".sentence-row"); if (rows[idx]) { rows[idx].classList.add("highlight"); rows[idx].scrollIntoView({ behavior: "smooth", block: "center" }); } } }
+    }
+
+    function clearHighlight() { document.querySelectorAll(".sentence-row").forEach(r => r.classList.remove("highlight")); ctx.currentIdx = -1; }
+
+    function playPhrase(idx, btn) {
+      const a = ctx.audio, lyric = ctx.lyrics[idx];
+      if (!lyric || !a.src) return;
+      if (ctx.phraseIdx === idx && ctx.playing) { a.pause(); ctx.phraseIdx = -1; if (ctx.phraseTimeout) clearTimeout(ctx.phraseTimeout); btn.classList.remove("playing"); return; }
+      if (ctx.phraseTimeout) clearTimeout(ctx.phraseTimeout);
+      document.querySelectorAll(".btn-phrase.playing").forEach(b => b.classList.remove("playing"));
+      btn.classList.add("playing"); ctx.phraseIdx = idx;
+      a.currentTime = lyric.start_time || 0; a.playbackRate = ctx.speed;
+      const dur = ((lyric.end_time || lyric.start_time + 3) - (lyric.start_time || 0)) * 1000 / ctx.speed;
+      ctx.phraseTimeout = setTimeout(() => { a.pause(); btn.classList.remove("playing"); ctx.phraseIdx = -1; }, dur);
+      a.play().catch(() => {});
+    }
+
+    function clickLyric(idx, btn) { playPhrase(idx, btn); }
+
+    const id = Number(new URLSearchParams(location.search).get("id"));
+    const itemKey = `music-${id}`;
+
+    (async () => {
+      const data = await AFBData.musica();
+      let track = null;
+      for (const list of Object.values(data.tracks_by_level)) { const found = list.find((t) => t.id === id); if (found) track = found; }
+      const el = document.getElementById("content");
+      if (!track) { el.innerHTML = "<p>Música não encontrada.</p>"; return; }
+      const done = Progress.isCompleted(itemKey);
+      const playerHtml = track.audio_url ? buildPlayer(track).outerHTML : "";
+
+      el.innerHTML = `<div class="flex-between"><div style="display:flex;align-items:center;gap:10px;"><div><h2 style="margin:0;">${track.title_german}</h2><p class="muted" style="margin:2px 0 0;">${I18n.field(track,'title_portuguese')} · ${track.artist} · ${track.genre.icon} ${track.genre.name}</p></div></div><div style="display:flex;align-items:center;gap:8px;">${done ? '<span class="badge">✅ Concluído</span>' : `<span class="xp-pill">+${track.xp_reward} XP</span>`}<span id="track-save-btn"></span></div></div>${playerHtml}<h4 class="section-title">Letra</h4>${(track.lyrics || []).map((l, i) => `<div class="sentence-row" onclick="clickLyric(${i}, this.querySelector('.btn-phrase'))"><div><div class="sentence-de">${l.german_text}</div><div class="sentence-pt">${I18n.field(l,'portuguese_text')}</div></div><div style="display:flex;align-items:center;gap:6px;"><span class="lyric-save-btn-${i}"></span><button class="btn-phrase" onclick="event.stopPropagation(); playPhrase(${i}, this)" title="Ouvir frase">▶</button></div></div>`).join("")}${(track.vocabulary || []).length ? `<h4 class="section-title">Vocabulário</h4><div>${track.vocabulary.map(v => `<span class="vocab-chip"><b>${v.german_word}</b><span>${I18n.field(v,'portuguese_word')}</span></span>`).join("")}</div>` : ""}<button class="btn btn-primary btn-block" id="complete-btn" style="margin-top:24px;" ${done ? "disabled" : ""}>${done ? "Já concluído" : `Marcar como concluído (+${track.xp_reward} XP)`}</button>`;
+
+      if (track.audio_url && track.lyrics && track.lyrics.length) initPlayer(track);
+
+      // Save button for the track
+      const trackSaveBtn = SavedItems.createSaveButton({
+        type: "music", id: String(track.id), nivel: track.level || "",
+        title: track.title_german, refUrl: window.location.href
+      });
+      document.getElementById("track-save-btn").appendChild(trackSaveBtn);
+
+      // Save buttons for each lyric
+      (track.lyrics || []).forEach((l, i) => {
+        const lyricBtn = SavedItems.createSaveButton({
+          type: "lyric", id: `${track.id}_${i}`, parentId: String(track.id),
+          nivel: track.level || "", title: l.german_text?.substring(0, 60) || "",
+          refUrl: window.location.href
+        });
+        const span = document.querySelector(`.lyric-save-btn-${i}`);
+        if (span) span.appendChild(lyricBtn);
+      });
+
+      const btn = document.getElementById("complete-btn");
+      if (!done) btn.addEventListener("click", () => { const result = Progress.complete(itemKey, track.xp_reward); if (result.leveledUp) alert(`🎉 Parabéns! Você subiu para o nível ${result.newLevel}!`); window.location.reload(); });
+    })();
+  </script>
+</body>
+</html>

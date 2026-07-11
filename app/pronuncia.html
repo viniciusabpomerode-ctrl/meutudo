@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pronúncia — DeutschBloom</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+.lvl-btn{padding:6px 14px;border-radius:20px;border:2px solid var(--border-light);background:transparent;font-weight:600;font-size:.82rem;cursor:pointer;color:var(--text-primary);font-family:inherit;margin:2px}
+.lvl-btn.active{background:var(--color-primary);color:#fff;border-color:var(--color-primary)}
+.card{padding:20px;text-align:center}
+.german{font-size:1.4rem;font-weight:700;margin:16px 0}
+.hint{color:var(--text-secondary);font-size:.9rem;margin:8px 0}
+.tag{font-size:.7rem;background:var(--brand-light);color:var(--brand);padding:2px 8px;border-radius:10px}
+.btn-rec{background:#f44336;color:#fff;border:none;padding:14px 28px;border-radius:14px;font-weight:700;cursor:pointer;font-size:1rem;width:100%;margin:8px 0;font-family:inherit}
+.btn-rec.recording{animation:pulse .8s infinite alternate}
+@keyframes pulse{from{box-shadow:0 0 8px #f44336}to{box-shadow:0 0 20px #f44336}}
+.rec-panel{padding:16px;border-radius:12px;background:var(--bg-secondary);border:1px solid var(--border-light);display:none;margin-top:8px}
+.rec-panel.show{display:block}
+.rec-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin:6px 0;background:var(--bg-secondary);border-radius:10px;border:1px solid var(--border-light);gap:8px}
+.rec-item .info{flex:1}.rec-item .text{font-weight:600;font-size:.85rem}.rec-item .date{font-size:.72rem;color:var(--text-secondary)}
+</style></head>
+<body>
+<div id="app-nav"></div>
+<div class="container" style="padding-top:28px;max-width:700px">
+<h2>🎤 Pronuncia</h2>
+<p><strong id="count">...</strong> frases com audio</p>
+<p id="guest-attempts" class="muted" style="display:none;font-size:.86rem"></p>
+<div id="filters" style="margin:10px 0">
+<button class="lvl-btn active" data-l="all">Todos</button>
+<button class="lvl-btn" data-l="A1">A1</button><button class="lvl-btn" data-l="A2">A2</button>
+<button class="lvl-btn" data-l="B1">B1</button><button class="lvl-btn" data-l="B2">B2</button>
+<button class="lvl-btn" data-l="C1">C1</button><button class="lvl-btn" data-l="C2">C2</button>
+</div>
+<div class="card" id="card" style="display:none">
+<div class="german" id="german"></div>
+<div class="tag" id="tag"></div>
+<div class="hint" id="hint"></div>
+<button class="btn btn-outline" id="play" style="margin:8px;width:100%">🔊 Ouvir original</button>
+<button class="btn-rec" id="rec">🎤 Gravar minha pronuncia</button>
+<div class="rec-panel" id="recpanel">
+<p style="font-weight:600;margin:0 0 8px">🎧 Sua gravacao:</p>
+<audio id="recplay" controls style="width:100%;margin-bottom:8px"></audio>
+<div style="display:flex;gap:8px">
+<button class="btn btn-primary btn-sm" id="save">💾 Salvar</button>
+<button class="btn btn-sm" id="discard" style="color:#f44">🗑️ Descartar</button>
+</div>
+</div>
+<button class="btn btn-primary" id="next" style="width:100%;margin-top:8px">▶ Proxima</button>
+</div>
+<div style="margin-top:30px">
+<h3>🎙️ Minhas Gravacoes</h3>
+<div id="recfilters" style="margin-bottom:12px">
+<button class="lvl-btn active" data-rt="all">📅 Tudo</button>
+<button class="lvl-btn" data-rt="today">☀️ Hoje</button>
+<button class="lvl-btn" data-rt="week">📆 7 dias</button>
+<button class="lvl-btn" data-rt="month">🗓️ 30 dias</button>
+</div>
+<div id="reclist"><div style="text-align:center;padding:20px;color:var(--text-secondary)">Nenhuma gravacao ainda</div></div>
+</div>
+</div>
+<script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/nav.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/guest.js"></script>
+<script>
+renderNav("pronuncia");
+var R2="https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
+var pool=[],level="all",current=null,audio=new Audio();
+var mediaRecorder=null,recordedBlob=null,recFilter="all";
+var isGuest=true,attempts=parseInt(localStorage.getItem("afb_pron_attempts")||"0",10);
+function updateAttemptLabel(){var el=document.getElementById("guest-attempts");if(!isGuest){el.style.display="none";return}el.style.display="block";el.textContent=(AFB_FREE_PRONUNCIATION-attempts)+" de "+AFB_FREE_PRONUNCIATION+" tentativas gratuitas restantes";document.getElementById("rec").disabled=attempts>=AFB_FREE_PRONUNCIATION;}
+
+// IndexedDB
+function openDB(){
+  return new Promise(function(r,rej){
+    var req=indexedDB.open("afb_pron",1);
+    req.onupgradeneeded=function(e){e.target.result.createObjectStore("recs",{keyPath:"id"})};
+    req.onsuccess=function(){r(req.result)};
+    req.onerror=rej;
+  });
+}
+function putRec(rec){
+  return openDB().then(function(db){
+    return new Promise(function(r,rej){
+      var tx=db.transaction("recs","readwrite");
+      tx.objectStore("recs").put(rec);
+      tx.oncomplete=function(){r()};
+      tx.onerror=rej;
+    });
+  });
+}
+function getAllRecs(){
+  return openDB().then(function(db){
+    return new Promise(function(r,rej){
+      var tx=db.transaction("recs","readonly");
+      var req=tx.objectStore("recs").getAll();
+      req.onsuccess=function(){r(req.result)};
+      req.onerror=rej;
+    });
+  });
+}
+function delRec(id){
+  return openDB().then(function(db){
+    return new Promise(function(r,rej){
+      var tx=db.transaction("recs","readwrite");
+      tx.objectStore("recs").delete(id);
+      tx.oncomplete=function(){r()};
+      tx.onerror=rej;
+    });
+  });
+}
+
+function loadData(){
+  pool=[];
+  var lvs=level==="all"?["A1","A2","B1","B2","C1","C2"]:[level];
+  var fetcher=function(path){return fetch("../"+path).then(function(r){if(!r.ok)return fetch(R2+path);return r}).then(function(r){return r.json()})};
+  
+  fetcher("data/girias.json").then(function(g){
+    var exps=g.expressions||[];
+    for(var i=0;i<exps.length;i++){var e=exps[i];if(lvs.indexOf(e.level)>=0)pool.push({german:e.german,portuguese:e.portuguese,type:"giria",audio:e.audio_url})}
+    return fetcher("data/profissoes.json");
+  }).then(function(p){
+    var exps=p.expressions||[];
+    for(var i=0;i<exps.length;i++){var e=exps[i];var phs=e.phrases||[];for(var j=0;j<phs.length;j++){var ph=phs[j];if(lvs.indexOf(ph.level)>=0)pool.push({german:ph.de,portuguese:ph.pt,type:"profissao",audio:ph.audio_url})}}
+    var dp=[];
+    for(var k=0;k<lvs.length;k++){(function(lv){dp.push(fetcher("data/cursos/"+lv+".json").then(function(d){var themes=d.dialog_themes||[];for(var a=0;a<themes.length;a++){var dialogs=themes[a].dialogs||[];for(var b=0;b<dialogs.length;b++){var ss=dialogs[b].sentences||[];for(var c=0;c<ss.length;c++){var s=ss[c];if(s.audio_url&&s.german_text)pool.push({german:s.german_text,portuguese:s.portuguese_translation,type:"dialogo",audio:s.audio_url})}}}}).catch(function(){}))})(lvs[k])}
+    return Promise.all(dp);
+  }).then(function(){
+    for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=pool[i];pool[i]=pool[j];pool[j]=tmp}
+    document.getElementById("count").textContent=pool.length;
+    if(pool.length>0){document.getElementById("card").style.display="";nextSentence();}
+  }).catch(function(e){document.getElementById("count").textContent="0"});
+}
+
+function nextSentence(){
+  if(pool.length===0)return;
+  current=pool[Math.floor(Math.random()*pool.length)];
+  document.getElementById("german").textContent=current.german;
+  document.getElementById("tag").textContent=current.type;
+  document.getElementById("hint").textContent=current.portuguese||"";
+  document.getElementById("recpanel").classList.remove("show");
+  recordedBlob=null;
+}
+
+document.getElementById("play").onclick=function(){
+  if(!current||!current.audio)return;
+  var played=false;
+  var r2url=current.audio;
+  if(r2url.indexOf("http")!==0)r2url=R2+r2url;
+  // Supabase signed URL (dialogos/girias)
+  if(typeof AFBData!=="undefined"&&AFBData.signedAudioUrl){
+    AFBData.signedAudioUrl(current.audio).then(function(url){
+      if(url&&!played){audio.src=url;audio.play();played=true}
+    }).catch(function(){});
+  }
+  // R2 fallback em paralelo
+  setTimeout(function(){
+    if(!played){audio.src=r2url;audio.play()}
+  },600);
+};
+
+document.getElementById("rec").onclick=function(){
+  if(mediaRecorder&&mediaRecorder.state==="recording"){mediaRecorder.stop();return}
+  if(isGuest&&attempts>=AFB_FREE_PRONUNCIATION){location.href="cadastro.html?next=pronuncia.html";return}
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    if(isGuest){attempts++;localStorage.setItem("afb_pron_attempts",String(attempts));updateAttemptLabel()}
+    var chunks=[];
+    mediaRecorder=new MediaRecorder(stream,{mimeType:"audio/webm"});
+    mediaRecorder.ondataavailable=function(e){if(e.data.size>0)chunks.push(e.data)};
+    mediaRecorder.onstop=function(){
+      stream.getTracks().forEach(function(t){t.stop()});
+      recordedBlob=new Blob(chunks,{type:"audio/webm"});
+      document.getElementById("recplay").src=URL.createObjectURL(recordedBlob);
+      document.getElementById("recpanel").classList.add("show");
+    };
+    mediaRecorder.start();
+    document.getElementById("rec").textContent="⏹ Parar gravacao";
+    document.getElementById("rec").classList.add("recording");
+  }).catch(function(){alert("Permita o microfone!")});
+};
+
+document.getElementById("save").onclick=function(){
+  if(!recordedBlob||!current)return;
+  if(isGuest){location.href="login.html?next=pronuncia.html";return}
+  var reader=new FileReader();
+  reader.onload=function(){
+    putRec({id:"pron_"+Date.now(),text:current.german,ts:Date.now(),saved:true,base64:reader.result.split(",")[1]}).then(function(){
+      document.getElementById("recpanel").classList.remove("show");
+      renderRecs();
+    });
+  };
+  reader.readAsDataURL(recordedBlob);
+};
+
+document.getElementById("discard").onclick=function(){
+  recordedBlob=null;document.getElementById("recpanel").classList.remove("show");
+};
+
+document.getElementById("next").onclick=nextSentence;
+
+document.getElementById("filters").onclick=function(e){
+  if(e.target.classList.contains("lvl-btn")){
+    var btns=document.querySelectorAll("#filters .lvl-btn");
+    for(var i=0;i<btns.length;i++)btns[i].classList.remove("active");
+    e.target.classList.add("active");level=e.target.dataset.l;loadData();
+  }
+};
+
+document.getElementById("recfilters").onclick=function(e){
+  if(e.target.classList.contains("lvl-btn")){
+    var btns=document.querySelectorAll("#recfilters .lvl-btn");
+    for(var i=0;i<btns.length;i++)btns[i].classList.remove("active");
+    e.target.classList.add("active");recFilter=e.target.dataset.rt;renderRecs();
+  }
+};
+
+function renderRecs(){
+  getAllRecs().then(function(all){
+    var now=Date.now();
+    // Clean old unsaved >24h
+    for(var i=0;i<all.length;i++){if(now-all[i].ts>86400000&&!all[i].saved)delRec(all[i].id)}
+    var recs=all.filter(function(r){return now-r.ts<=86400000||r.saved});
+    recs.sort(function(a,b){return b.ts-a.ts});
+    if(recFilter!=="all"){
+      recs=recs.filter(function(r){
+        if(recFilter==="today")return now-r.ts<86400000;
+        if(recFilter==="week")return now-r.ts<7*86400000;
+        if(recFilter==="month")return now-r.ts<30*86400000;
+        return true;
+      });
+    }
+    var el=document.getElementById("reclist");
+    if(!recs.length){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-secondary)">Nenhuma gravacao</div>';return}
+    var h="";
+    for(var i=0;i<recs.length;i++){
+      var r=recs[i];
+      h+='<div class="rec-item"><div class="info"><div class="text">'+(r.text||"").substring(0,70)+'</div><div class="date">'+new Date(r.ts).toLocaleString("pt-BR")+' '+(r.saved?"💾":"⏳24h")+'</div></div><div style="display:flex;gap:6px"><button class="btn btn-sm" onclick="playRec(\''+r.id+'\')">▶</button><button class="btn btn-sm" style="color:#f44" onclick="delRec(\''+r.id+'\');renderRecs()">🗑️</button></div></div>';
+    }
+    el.innerHTML=h;
+  });
+}
+
+Guest.check().then(function(g){isGuest=g;updateAttemptLabel();});
+
+function playRec(id){
+  getAllRecs().then(function(recs){
+    var r=recs.find(function(x){return x.id===id});
+    if(!r||!r.base64)return;
+    fetch("data:audio/webm;base64,"+r.base64).then(function(x){return x.blob()}).then(function(b){
+      document.getElementById("recplay").src=URL.createObjectURL(b);
+      document.getElementById("recpanel").classList.add("show");
+    });
+  });
+}
+
+// Auto-save on leave
+window.onbeforeunload=function(){
+  if(recordedBlob&&current){
+    var reader=new FileReader();
+    reader.onload=function(){putRec({id:"pron_"+Date.now(),text:current.german,ts:Date.now(),saved:false,base64:reader.result.split(",")[1]})};
+    reader.readAsDataURL(recordedBlob);
+  }
+};
+
+loadData();renderRecs();
+</script>
+</body></html>

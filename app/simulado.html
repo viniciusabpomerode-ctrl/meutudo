@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulados Goethe — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .simulado-container { max-width: 800px; margin: 0 auto; }
+    .level-select { display: flex; gap: 16px; margin-bottom: 24px; }
+    .level-btn {
+      flex: 1; padding: 20px; border-radius: 16px; border: 3px solid var(--border-light);
+      background: var(--card-bg); cursor: pointer; text-align: center; font-size: 1.2rem; font-weight: 700; transition: .2s;
+    }
+    .level-btn:hover { border-color: var(--color-primary); transform: translateY(-2px); }
+    .level-btn.active { border-color: var(--color-primary); background: var(--brand-light); }
+    .level-btn .desc { font-size: .8rem; font-weight: 400; color: var(--text-secondary); margin-top: 4px; }
+    .question-card {
+      background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      border-left: 4px solid var(--color-primary);
+    }
+    .question-card.answered { border-left-color: #4CAF50; }
+    .question-card.wrong { border-left-color: #f44336; }
+    .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .q-badge { padding: 4px 12px; border-radius: 20px; font-size: .72rem; font-weight: 700; }
+    .q-badge.lesen { background: #E3F2FD; color: #1565C0; }
+    .q-badge.grammatik { background: #FCE4EC; color: #C62828; }
+    .q-badge.wortschatz { background: #E8F5E9; color: #2E7D32; }
+    .q-badge.schreiben { background: #FFF3E0; color: #E65100; }
+    .q-context { background: #f8f9fa; padding: 12px 16px; border-radius: 8px; margin: 12px 0; font-size: 1.1rem; font-style: italic; }
+    .q-options { display: flex; flex-direction: column; gap: 8px; }
+    .q-option {
+      padding: 12px 16px; border-radius: 8px; border: 2px solid var(--border-light);
+      cursor: pointer; transition: .15s; font-size: .95rem;
+    }
+    .q-option:hover { border-color: var(--color-primary); background: var(--brand-light); }
+    .q-option.selected { border-color: var(--color-primary); background: var(--brand-light); font-weight: 600; }
+    .q-option.correct { border-color: #4CAF50; background: #E8F5E9; color:#1B5E20; }
+    .q-option.incorrect { border-color: #f44336; background: #FFEBEE; color:#B71C1C; }
+    .q-explanation { display: none; margin-top: 12px; padding: 12px; border-radius: 8px; background: #FFF8E1; font-size: .85rem; }
+    .q-explanation.show { display: block; }
+    .progress-bar { height: 8px; border-radius: 4px; background: var(--border-light); margin-bottom: 24px; }
+    .progress-fill { height: 100%; border-radius: 4px; background: var(--color-primary); transition: .3s; }
+    .score-card {
+      text-align: center; padding: 40px 20px; background: var(--card-bg); border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.1);
+    }
+    .score-number { font-size: 4rem; font-weight: 800; }
+    .score-pass { color: #4CAF50; }
+    .score-fail { color: #f44336; }
+    .btn-start { padding: 16px 40px; border-radius: 12px; border: none; background: var(--color-primary); color: #fff; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+    .btn-start:hover { opacity: .9; }
+    .stats { display: flex; gap: 16px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
+    .stat { padding: 12px 20px; background: var(--bg-secondary); border-radius: 8px; text-align: center; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; }
+    .stat-label { font-size: .75rem; color: var(--text-secondary); }
+    .q-audio-btn { padding: 8px 16px; border-radius: 20px; border: 1.5px solid var(--color-primary); background: transparent; color: var(--color-primary); cursor: pointer; font-weight: 600; }
+    .q-speech-btn { padding: 12px 24px; border-radius: 20px; border: none; background: #2E7D32; color: #fff; cursor: pointer; font-weight: 700; }
+    .q-speech-btn.recording { background: #f44336; animation: pulse .8s infinite; }
+    .q-speech-result { padding: 12px; border-radius: 8px; margin-top: 8px; font-size: 1.1rem; }
+    .q-input { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--border-light); font-size: 1rem; box-sizing: border-box; }
+    .q-input:focus { border-color: var(--color-primary); outline: none; }
+    .sections-nav { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .section-tab { padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border-light); cursor: pointer; font-weight: 700; font-size: .85rem; background: var(--card-bg); }
+    .section-tab.active { border-color: var(--color-primary); background: var(--brand-light); }
+    .section-tab.done { border-color: #4CAF50; background: #E8F5E9; color:#1B5E20; }
+    .q-badge.horen { background: #F3E5F5; color: #7B1FA2; }
+    .q-badge.sprechen { background: #E8F5E9; color: #2E7D32; }
+  </style>
+</head>
+<body>
+  <div id="app-nav"></div>
+
+  <div class="container simulado-container" style="padding-top:28px;">
+    <h2>📝 Simulados Goethe-Zertifikat</h2>
+    <p class="muted">Pratique com questões no estilo do exame oficial — baseado no conteúdo dos cursos.</p>
+
+    <div class="level-select" id="level-select">
+      <div class="level-btn" onclick="startSimulado('a1')">🟢 A1<br><span class="desc">Iniciante</span></div>
+      <div class="level-btn" onclick="startSimulado('a2')">🔵 A2<br><span class="desc">Básico</span></div>
+      <div class="level-btn" onclick="startSimulado('b1')">🟠 B1<br><span class="desc">Intermediário</span></div>
+      <div class="level-btn" onclick="startSimulado('b2')">🟣 B2<br><span class="desc">Avançado</span></div>
+      <div class="level-btn" onclick="startSimulado('c1')">🔴 C1<br><span class="desc">Proficiente</span></div>
+      <div class="level-btn" onclick="startSimulado('c2')">⚫ C2<br><span class="desc">Mestre</span></div>
+    </div>
+
+    <div id="simulado-area"></div>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/guest.js"></script>
+  <script>
+    renderNav("simulado");
+
+    // Modo visitante: simulados sao conteudo Premium — mostra a vitrine bloqueada
+    let isGuest = true;
+    Guest.check().then((g) => {
+      isGuest = g;
+      if (!isGuest) return;
+      document.querySelectorAll(".level-btn").forEach((b) => {
+        b.classList.add("locked-item");
+        b.setAttribute("onclick", "location.href='planos.html'");
+        b.innerHTML = "🔒 " + b.innerHTML.replace(/🟢|🔵|🟠|🟣|🔴|⚫/, "").trim();
+      });
+      document.getElementById("simulado-area").innerHTML = Guest.banner(598, "questões de simulado Goethe (Lesen · Hören · Schreiben · Sprechen)");
+    });
+
+    let questoes = [], respostas = {}, reveladas = {};
+    let nivelAtual = "", secaoAtual = "todas";
+    let finalizado = false;
+    let audioEl = new Audio();
+    const R2 = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
+
+    function playAudioUrl(path) {
+      if (!path) return;
+      if (audioEl.src && audioEl.src.includes(path) && !audioEl.paused) { audioEl.pause(); return; }
+      audioEl.src = path.startsWith("http") ? path : R2 + path;
+      audioEl.play().catch(() => {});
+    }
+
+    async function startSimulado(nivel) {
+      nivelAtual = nivel;
+      document.getElementById("level-select").style.display = "none";
+      try {
+        let r = await fetch(`${R2}data/simulado_${nivel}.json`).catch(() => null);
+        if (!r || !r.ok) r = await fetch(`../data/simulado_${nivel}.json`);
+        const data = await r.json();
+        const all = data.questoes || [];
+        const pick = (cat, n) => all.filter(q => (q.categoria||"").toLowerCase() === cat).sort(()=>Math.random()-.5).slice(0, n);
+        questoes = [...pick("lesen",15), ...pick("hören",15), ...pick("schreiben",5), ...pick("sprechen",5)]
+          .sort(()=>Math.random()-.5);
+        questoes.forEach((q,i) => q.id = i+1);
+      } catch(e) {
+        document.getElementById("simulado-area").innerHTML = '<p style="text-align:center;padding:40px;">📭 Gere primeiro:<br><code>python Cursoweb\\scripts\\gerar_testes.py --workers 6</code></p>';
+        return;
+      }
+      respostas = {}; reveladas = {}; finalizado = false; secaoAtual = "todas";
+      render();
+    }
+
+    function getCat(c) { return (c||"lesen").toLowerCase().replace("ä","a").replace("ö","o"); }
+
+    function render() {
+      const answered = Object.keys(respostas).length;
+      const pct = Math.round(answered * 100 / questoes.length);
+      const secoes = [...new Set(questoes.map(q => getCat(q.categoria)))];
+
+      let html = `<div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>`;
+      
+      // Section tabs
+      html += `<div class="sections-nav">
+        <span class="section-tab ${secaoAtual==='todas'?'active':''}" onclick="secaoAtual='todas';render()">📋 Todas</span>`;
+      for (const s of secoes) {
+        const total = questoes.filter(q => getCat(q.categoria) === s).length;
+        const done = questoes.filter(q => getCat(q.categoria) === s && respostas[q.id] !== undefined).length;
+        html += `<span class="section-tab ${secaoAtual===s?'active':''} ${done===total?'done':''}" onclick="secaoAtual='${s}';render()">${s.toUpperCase()} ${done}/${total}</span>`;
+      }
+      html += `</div>`;
+
+      // Questions
+      let filtered = questoes;
+      if (secaoAtual !== "todas") filtered = questoes.filter(q => getCat(q.categoria) === secaoAtual);
+
+      filtered.forEach(q => {
+        const r = respostas[q.id];
+        const answered = r !== undefined;
+        const revealed = reveladas[q.id] || finalizado;
+        const correct = answered && revealed && String(r) === String(q.resposta);
+        const cat = getCat(q.categoria);
+
+        html += `<div class="question-card ${revealed && answered ? (correct?'answered':'wrong') : ''}" id="q-${q.id}">`;
+        html += `<div class="q-header"><strong>${q.id}.</strong> <span class="q-badge ${cat==='hören'?'horen':cat}">${q.categoria||'Lesen'}</span>`;
+        if (answered && !revealed) html += ` <span style="font-size:.75rem;color:#4CAF50;">✓ Respondida</span>`;
+        html += `</div>`;
+        html += `<p>${q.pergunta_pt||''}</p>`;
+
+        // Audio (sempre visivel)
+        if (q.audio_url) {
+          html += `<button class="q-audio-btn" onclick="event.stopPropagation();playAudioUrl('${q.audio_url}')">🎧 Ouvir áudio</button>`;
+        }
+        // Contexto (alemão) - escondido para Horen ate revelar
+        if (q.contexto_de) {
+          if (cat === "hören" && !revealed) {
+            html += `<div class="q-context" style="filter:blur(6px);cursor:pointer;user-select:none" onclick="if(!reveladas[${q.id}]){reveladas[${q.id}]=true;render();}" title="Clique para revelar">${q.contexto_de}</div>`;
+          } else {
+            html += `<div class="q-context">${q.contexto_de}</div>`;
+          }
+        }
+
+        // Schreiben - text input
+        if (cat === "schreiben") {
+          if (!answered) {
+            html += `<input class="q-input" id="inp-${q.id}" placeholder="Escreva em alemão..."><br>`;
+            html += `<button class="q-audio-btn" style="margin-top:6px" onclick="salvarTexto(${q.id})">✅ Enviar</button>`;
+          } else {
+            html += `<div style="padding:8px;border-radius:6px;background:var(--bg-secondary);"><strong>Sua resposta:</strong> ${r}</div>`;
+            if (revealed) {
+              const ok = String(r).toLowerCase().trim() === String(q.resposta).toLowerCase().trim();
+              html += `<div style="padding:8px;border-radius:6px;margin-top:4px;background:${ok?'#E8F5E9':'#FFEBEE'};color:${ok?'#1B5E20':'#B71C1C'}"><strong>Gabarito:</strong> ${q.resposta}</div>`;
+            }
+          }
+        }
+        // Multiple choice
+        else if (q.opcoes && q.opcoes.length) {
+          html += `<div class="q-options">`;
+          q.opcoes.forEach((opt, oi) => {
+            const l = String.fromCharCode(65+oi);
+            let cls = "";
+            if (revealed) {
+              if (l === q.resposta) cls = "correct";
+              else if (l === r) cls = "incorrect";
+            } else if (l === r) cls = "selected";
+            const audioKey = `opt${l}_audio_url`;
+            const au = q[audioKey] || "";
+            html += `<div class="q-option ${cls}" onclick="${answered&&!revealed?'':`responder(${q.id},'${l}')`}">${opt}${au ? ` <button class="q-audio-btn" style="padding:2px 8px;font-size:.7rem;margin-left:8px" onclick="event.stopPropagation();playAudioUrl('${au}')">▶</button>` : ""}</div>`;
+          });
+          html += `</div>`;
+        }
+        // Sprechen
+        if (cat === "sprechen") {
+          if (!answered) {
+            html += `<button class="q-speech-btn" id="btn-sp-${q.id}" onclick="startSpeech(${q.id})">🎤 Falar em alemão</button>`;
+            html += `<div id="res-sp-${q.id}" style="display:none;margin-top:8px;"></div>`;
+          } else {
+            html += `<div style="padding:8px;border-radius:6px;background:var(--bg-secondary);">🗣️ Você disse: "${r}"</div>`;
+            if (revealed && q.resposta) {
+              html += `<div style="padding:8px;border-radius:6px;background:#E8F5E9;color:#1B5E20;margin-top:4px;"><strong>📝 Modelo:</strong> ${q.resposta}</div>`;
+            }
+          }
+        }
+
+        // Reveal button (only when answered and not yet revealed)
+        if (answered && !revealed) {
+          html += `<button class="q-audio-btn" style="margin-top:8px;border-color:#FF9800;color:#FF9800;" onclick="revelar(${q.id})">👁️ Revelar gabarito</button>`;
+        }
+        if (revealed && q.explicacao_pt) {
+          html += `<div class="q-explanation show">💡 ${q.explicacao_pt}</div>`;
+        }
+        html += `</div>`;
+      });
+
+      // Bottom bar
+      html += `<div style="text-align:center;margin:20px 0;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">`;
+      if (!finalizado) {
+        html += `<button class="btn-start" style="background:#4CAF50;" onclick="finalizar()">📋 Finalizar Prova (${answered}/${questoes.length})</button>`;
+      }
+      if (finalizado) {
+        html += `<button class="btn-start" onclick="reiniciar()">🔄 Nova Prova</button>`;
+        html += `<button class="btn-start" style="background:var(--bg-secondary);color:var(--text-primary);" onclick="document.getElementById('level-select').style.display='';document.getElementById('simulado-area').innerHTML='';">⬅ Voltar</button>`;
+      }
+      html += `</div>`;
+
+      if (finalizado) html += renderResultado();
+      document.getElementById("simulado-area").innerHTML = html;
+    }
+
+    function playAudio(url) {
+      audioEl.src = R2 + url; audioEl.play().catch(()=>{});
+    }
+
+    function responder(qid, ans) {
+      if (respostas[qid] !== undefined && !reveladas[qid]) return;
+      respostas[qid] = ans; render();
+      if (typeof SFX !== 'undefined') SFX.click();
+    }
+    function salvarTexto(qid) {
+      const v = document.getElementById("inp-"+qid)?.value?.trim();
+      if (v) { respostas[qid] = v; render(); }
+    }
+    function revelar(qid) { reveladas[qid] = true; render(); }
+    function finalizar() {
+      if (Object.keys(respostas).length < questoes.length) {
+        if (!confirm(`Faltam ${questoes.length - Object.keys(respostas).length} questões. Finalizar mesmo assim?`)) return;
+      }
+      finalizado = true; render();
+      window.scrollTo(0, 0);
+    }
+    function reiniciar() { startSimulado(nivelAtual); }
+
+    function startSpeech(qid) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) { alert("Use Chrome para reconhecimento de voz."); return; }
+      const rec = new SpeechRecognition(); rec.lang = "de-DE"; rec.interimResults = false;
+      const btn = document.getElementById("btn-sp-"+qid);
+      btn.textContent = "🎤 Ouvindo..."; btn.classList.add("recording");
+      rec.start();
+      rec.onresult = (e) => {
+        const t = e.results[0][0].transcript;
+        document.getElementById("res-sp-"+qid).style.display = "";
+        document.getElementById("res-sp-"+qid).textContent = '🗣️ "'+t+'" ✅';
+        respostas[qid] = t; btn.style.display = "none";
+        setTimeout(()=>render(), 600);
+      };
+      rec.onerror = () => { btn.textContent = "🎤 Tentar de novo"; btn.classList.remove("recording"); };
+    }
+
+    function renderResultado() {
+      let corretas = 0;
+      const cats = {};
+      questoes.forEach(q => {
+        const c = q.categoria||"Geral";
+        if (!cats[c]) cats[c] = {total:0, ok:0};
+        cats[c].total++;
+        const r = respostas[q.id];
+        if (r !== undefined && String(r).toLowerCase().trim() === String(q.resposta).toLowerCase().trim()) {
+          corretas++; cats[c].ok++;
+        }
+      });
+      const pct = Math.round(corretas * 100 / questoes.length);
+      const passou = pct >= 60;
+      let catHtml = "";
+      for (const [c,d] of Object.entries(cats)) catHtml += `<div class="stat"><div class="stat-val">${d.ok}/${d.total}</div><div class="stat-label">${c}</div></div>`;
+      return `<div class="score-card" style="margin-top:16px;">
+        <div class="score-number ${passou?'score-pass':'score-fail'}">${pct}%</div>
+        <h3>${passou?'🎉 Você passaria!':'📚 Continue estudando!'}</h3>
+        <p>${corretas}/${questoes.length} corretas · Nota de corte: 60%</p>
+        <div class="stats">${catHtml}</div></div>`;
+    }
+  </script>
+</body>
+</html>

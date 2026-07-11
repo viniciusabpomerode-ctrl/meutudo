@@ -1,0 +1,41 @@
+# Dados (tudo na nuvem: R2 + Supabase)
+data/
+
+# Build tools (app antigo)
+Cursoweb/
+
+# Audios e temporarios
+audios_gerados/
+audios_girias/
+audios_verbos_corrigidos/
+temp_letras/
+imagens_alemao/
+
+# MP3 (testes e gerados)
+*.mp3
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Scripts locais de build e manutencao
+scripts/*.py
+
+# SQL e CSVs (build artifacts)
+*.sql
+*.csv
+update_verbos.json
+relatorio_verbos.csv
+evitar_essas.csv
+
+# Root scripts soltos
+_check_*.py
+fix_*.py
+gerar_*.py
+merge_*.py
+upload_*.py
+_regravar_*.py
+
+# Claude
+.claude/

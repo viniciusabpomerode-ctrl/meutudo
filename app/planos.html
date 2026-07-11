@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Escolha seu plano no DeutschBloom e libere mais de 63 mil conteúdos, áudios, quiz e simulados Goethe para estudar do A1 ao C2.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Planos para aprender alemão | DeutschBloom">
+  <meta property="og:description" content="Biblioteca completa de alemão do A1 ao C2, com áudio de alta qualidade, exercícios e progresso sincronizado.">
+  <title>Planos para Aprender Alemão | DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <div id="nav-slot"></div>
+
+  <div class="container plans-page" style="padding-top:36px; padding-bottom:40px;">
+    <div class="center plans-hero">
+      <span class="eyebrow">Investimento</span>
+      <h1>Escolha seu plano</h1>
+      <p class="muted" style="max-width:560px; margin:0 auto;">Mais de <b style="color:var(--color-primary-dark)">63.000 itens de estudo</b> do A1 ao C2 — por menos que um lanche por mês.</p>
+    </div>
+
+    <div class="price-grid" style="max-width:1020px; margin:36px auto 0;">
+      <article class="card price-card">
+        <span class="eyebrow">Grátis</span>
+        <div class="price-tag">R$ 0</div>
+        <p class="price-note">para sempre · sem cartão</p>
+        <ul>
+          <li>20 conteúdos de cada categoria</li>
+          <li>Quiz de nivelamento</li>
+          <li>Rádio lo-fi e Pomodoro</li>
+          <li>Sistema de XP e níveis</li>
+          <li class="off">Biblioteca completa (63.000 itens)</li>
+          <li class="off">Simulados Goethe completos</li>
+        </ul>
+        <a class="btn btn-outline btn-block" href="cursos.html">Usar grátis</a>
+      </article>
+
+      <article class="card price-card featured">
+        <span class="price-flag">Mais popular · economize 17%</span>
+        <span class="eyebrow">Premium Anual</span>
+        <div class="price-tag">R$ 149<small>/ano</small></div>
+        <p class="price-note">equivale a R$ 12,42/mês · pagamento único anual</p>
+        <ul>
+          <li>Todos os 63.000 itens liberados</li>
+          <li>1.225 diálogos + 1.315 verbos conjugados</li>
+          <li>3.000 questões de quiz + simulados Goethe</li>
+          <li>1.509 gírias e 1.200 frases de profissões</li>
+          <li>Áudio de alta qualidade em todo o conteúdo</li>
+          <li>Progresso sincronizado na nuvem</li>
+        </ul>
+        <button class="btn btn-primary btn-block subscribe-btn" data-plan="anual" data-price-brl="149.00">Assinar anual — R$ 149</button>
+      </article>
+
+      <article class="card price-card">
+        <span class="eyebrow">Premium Mensal</span>
+        <div class="price-tag">R$ 14,99<small>/mês</small></div>
+        <p class="price-note">cancele quando quiser</p>
+        <ul>
+          <li>Todos os 63.000 itens liberados</li>
+          <li>1.225 diálogos + 1.315 verbos conjugados</li>
+          <li>3.000 questões de quiz + simulados Goethe</li>
+          <li>1.509 gírias e 1.200 frases de profissões</li>
+          <li>Áudio de alta qualidade em todo o conteúdo</li>
+          <li>Progresso sincronizado na nuvem</li>
+        </ul>
+        <button class="btn btn-outline btn-block subscribe-btn" data-plan="mensal" data-price-brl="14.99">Assinar mensal — R$ 14,99</button>
+      </article>
+    </div>
+
+    <div class="card" style="max-width:1020px; margin:16px auto 0; border-color:rgba(214,168,95,.35); background:linear-gradient(110deg,rgba(214,168,95,.1),var(--card-bg) 55%);">
+      <div class="flex-between" style="flex-wrap:wrap; gap:14px;">
+        <div>
+          <span class="badge" style="background:rgba(214,168,95,.18); color:var(--color-primary-dark);">🏅 Oferta de fundador · vagas limitadas</span>
+          <h3 style="margin:10px 0 4px; font-weight:500;">Acesso vitalício por R$ 297</h3>
+          <p class="muted" style="margin:0; font-size:.86rem;">Só para os primeiros 100 assinantes: pague uma vez, use para sempre — incluindo tudo que ainda vamos lançar.</p>
+        </div>
+        <button class="btn btn-primary subscribe-btn" data-plan="fundador" data-price-brl="297.00" style="flex-shrink:0;">Garantir vaga — R$ 297</button>
+      </div>
+    </div>
+
+    <p class="muted center" style="font-size:.78rem; margin-top:26px;">Pagamento processado com segurança via Stripe · Garantia de 7 dias: não gostou, devolvemos.</p>
+  </div>
+
+  <footer class="footer"><p>DeutschBloom © 2026 — um espaço tranquilo para aprender de verdade.</p></footer>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script>
+    // Nesta pagina o usuario pode nao estar logado (acessivel pela landing)
+    const user = Auth.currentUser();
+    document.getElementById("nav-slot").innerHTML = user
+      ? '<div id="app-nav"></div>'
+      : `<header class="navbar">
+          <a class="brand" href="../index.html"><span aria-hidden="true">D</span> DeutschBloom</a>
+          <nav><a href="cursos.html">Conteúdo</a><a href="planos.html" class="active">Planos</a><a href="suporte.html">Suporte</a><a href="login.html">Entrar</a></nav>
+          <div class="nav-right"><a class="btn btn-primary btn-sm" href="cadastro.html">Criar conta grátis</a></div>
+        </header>`;
+  </script>
+  <script src="../assets/js/xp.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script>
+    if (user) renderNav("planos");
+
+    // Checkout real via Stripe — chama a Netlify Function, que cria a
+    // sessao e devolve a URL de pagamento pra onde a gente redireciona.
+    document.querySelectorAll(".subscribe-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        if (!user) {
+          // Sem conta ainda → cria conta primeiro, volta pra ca depois
+          window.location.href = "cadastro.html?plano=" + btn.dataset.plan;
+          return;
+        }
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = "Abrindo pagamento...";
+        try {
+          const res = await fetch("/.netlify/functions/create-checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ plan: btn.dataset.plan, email: user.email }),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.url) throw new Error(data.error || "erro ao iniciar pagamento");
+          window.location.href = data.url;
+        } catch (e) {
+          alert("Não deu pra abrir o pagamento agora: " + e.message);
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

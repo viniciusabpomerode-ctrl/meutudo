@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Faça uma sessão rápida de alemão por nível com frases, quiz e verbos reais do A1 ao C2.">
+  <title>Sessão Rápida de Alemão | DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .quick-wrap{max-width:820px;margin:0 auto;padding:34px 0 70px}
+    .quick-head{text-align:center;margin-bottom:24px}.quick-head h1{font-size:clamp(2rem,5vw,3.7rem);line-height:1.05;margin:8px 0}.quick-head p{max-width:620px;margin:0 auto;color:var(--text-secondary)}
+    .level-picker{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:26px 0}.level-choice{padding:15px 8px;border:1px solid var(--border-light);border-radius:14px;background:var(--card-bg);color:var(--text-primary);font-weight:700;cursor:pointer}.level-choice:hover,.level-choice.active{background:var(--color-primary);color:#fff;transform:translateY(-2px)}
+    .session-card{min-height:360px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}.session-card::after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-120px;top:-130px;background:var(--color-primary);opacity:.08}.step-line{display:flex;gap:6px;margin-bottom:22px}.step-dot{height:5px;flex:1;border-radius:8px;background:var(--border-light)}.step-dot.done,.step-dot.active{background:var(--color-primary)}
+    .kind{color:var(--color-primary-dark);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:.76rem}.main-de{font-size:clamp(1.65rem,4vw,2.65rem);line-height:1.2;margin:12px 0 7px}.translation{font-size:1rem;color:var(--text-secondary)}
+    .quiz-options{display:grid;gap:9px;margin-top:18px}.quiz-option{padding:13px 15px;border:1px solid var(--border-light);border-radius:12px;background:var(--card-bg);color:var(--text-primary);text-align:left;cursor:pointer}.quiz-option:hover{border-color:var(--color-primary)}.quiz-option.correct{border-color:var(--success);background:color-mix(in srgb,var(--success) 15%,var(--card-bg))}.quiz-option.wrong{border-color:var(--error);background:color-mix(in srgb,var(--error) 13%,var(--card-bg))}
+    .quick-actions{display:flex;justify-content:space-between;gap:10px;margin-top:24px;align-items:center}.feedback{font-size:.9rem;color:var(--text-secondary)}
+    .quick-result{text-align:center;padding:46px 22px}.quick-result strong{display:block;font-size:3.2rem;color:var(--color-primary-dark)}
+    @media(max-width:640px){.quick-wrap{padding:22px 0 50px}.level-picker{grid-template-columns:repeat(3,1fr)}.session-card{min-height:390px;padding:20px}.quick-actions{align-items:stretch;flex-direction:column}.quick-actions .btn{width:100%}}
+  </style>
+</head>
+<body>
+  <div id="app-nav"></div>
+  <main class="container quick-wrap">
+    <header class="quick-head">
+      <span class="eyebrow">Uma prática curta para avançar</span>
+      <h1>Sessão rápida</h1>
+      <p>Escolha seu nível. A cada rodada você encontra uma frase curta, responde um quiz e revisa um verbo do nosso acervo.</p>
+    </header>
+    <div class="level-picker" id="levels" aria-label="Escolha seu nível"></div>
+    <section class="card session-card" id="session"><p class="center muted">Escolha um nível para começar.</p></section>
+  </main>
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/xp.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script>
+    renderNav("sessao-rapida");
+    const levels=["A1","A2","B1","B2","C1","C2"];
+    const state={level:null,phrases:[],questions:[],verbs:[],round:0,step:0,score:0,answered:false,total:10};
+    const box=document.getElementById("session");
+    document.getElementById("levels").innerHTML=levels.map(l=>`<button class="level-choice" data-level="${l}">${l}</button>`).join("");
+    document.querySelectorAll(".level-choice").forEach(b=>b.addEventListener("click",()=>start(b.dataset.level)));
+    function pick(a){return a[Math.floor(Math.random()*a.length)]}
+    function dots(){return `<div class="step-line">${[0,1,2].map(i=>`<i class="step-dot ${i<state.step?'done':i===state.step?'active':''}"></i>`).join("")}</div>`}
+    async function loadQuiz(level){
+      const path=`quiz_${level.toLowerCase()}.json`;let r=null;
+      try{r=await fetch(`${AFB_R2_PUBLIC_URL}/data/${path}`)}catch(e){}
+      if(!r||!r.ok)r=await fetch(`../data/${path}`);
+      const j=await r.json();return j.questoes||j.questions||[];
+    }
+    async function start(level){
+      state.level=level;state.round=0;state.step=0;state.score=0;state.answered=false;
+      document.querySelectorAll(".level-choice").forEach(b=>b.classList.toggle("active",b.dataset.level===level));
+      box.innerHTML='<p class="center muted">Montando sua sessão com dados reais...</p>';
+      try{
+        const [data,verbs,questions]=await Promise.all([AFBData.nivel(level),AFBData.verbos(level),loadQuiz(level)]);
+        state.phrases=(data.dialog_themes||[]).flatMap(t=>(t.dialogs||[]).flatMap(d=>d.sentences||[])).filter(s=>s.german_text);
+        state.verbs=verbs||[];state.questions=questions||[];
+        render();
+      }catch(e){box.innerHTML='<div class="center"><h3>Não conseguimos montar a sessão agora.</h3><p class="muted">Verifique sua conexão e tente novamente.</p><button class="btn btn-primary" onclick="start(state.level)">Tentar novamente</button></div>'}
+    }
+    function render(){
+      if(state.round>=state.total){finish();return}
+      state.answered=false;
+      if(state.step===0)return renderPhrase();
+      if(state.step===1)return renderQuiz();
+      renderVerb();
+    }
+    function next(){state.step++;if(state.step>2){state.step=0;state.round++}render()}
+    function renderPhrase(){
+      const s=pick(state.phrases);box.innerHTML=`${dots()}<span class="kind">Frase curta · ${state.level}</span><h2 class="main-de">${s.german_text}</h2><p class="translation">${s.portuguese_translation||""}</p>${s.pronunciation?`<p class="muted">Pronúncia: ${s.pronunciation}</p>`:""}<div class="quick-actions"><span class="feedback">Rodada ${state.round+1} de ${state.total}</span><div>${s.audio_url?`<button class="btn btn-outline" id="listen">🔊 Ouvir</button>`:""} <button class="btn btn-primary" onclick="next()">Continuar</button></div></div>`;
+      const listen=document.getElementById("listen");if(listen)listen.onclick=()=>afbPlayAudio(s.audio_url,listen);
+    }
+    function renderQuiz(){
+      const q=pick(state.questions);box.innerHTML=`${dots()}<span class="kind">Quiz relâmpago · ${state.level}</span><h2 class="main-de" style="font-size:clamp(1.35rem,3vw,2rem)">${q.pergunta_pt||q.question||"Escolha a resposta correta"}</h2><div class="quiz-options">${(q.opcoes||q.options||[]).map(o=>`<button class="quiz-option" data-answer="${String(o).trim().charAt(0)}">${o}</button>`).join("")}</div><div class="quick-actions"><span class="feedback" id="feedback">Escolha uma alternativa</span><button class="btn btn-primary" id="continue" style="display:none" onclick="next()">Continuar</button></div>`;
+      document.querySelectorAll(".quiz-option").forEach(b=>b.onclick=()=>answerQuiz(b,q));
+    }
+    function answerQuiz(btn,q){
+      if(state.answered)return;state.answered=true;const correct=String(q.resposta||q.answer||"").trim().charAt(0).toUpperCase();const chosen=btn.dataset.answer.toUpperCase();
+      document.querySelectorAll(".quiz-option").forEach(b=>{if(b.dataset.answer.toUpperCase()===correct)b.classList.add("correct")});
+      if(chosen===correct){state.score++;SFX.correct();document.getElementById("feedback").textContent="Muito bem! Resposta correta."}else{btn.classList.add("wrong");SFX.wrong();document.getElementById("feedback").textContent=q.explicacao_pt||"Quase! Veja a resposta correta."}
+      document.getElementById("continue").style.display="inline-flex";
+    }
+    function renderVerb(){
+      const v=pick(state.verbs);const ex=(v.examples||[]).find(e=>e.tense==="presente")||(v.examples||[])[0];
+      box.innerHTML=`${dots()}<span class="kind">Verbo em foco · ${state.level}</span><h2 class="main-de">${v.base_verb}</h2><p class="translation">${v.portuguese_translation||""} · ${v.verb_type||"verbo"}</p>${ex?`<div class="card card-sm" style="margin-top:18px"><b>${ex.example_sentence_german||""}</b><p class="muted" style="margin:4px 0 0">${ex.example_sentence_portuguese||""}</p></div>`:""}<div class="quick-actions"><span class="feedback">+ revisão concluída</span><button class="btn btn-primary" onclick="next()">Próxima rodada</button></div>`;
+    }
+    function finish(){box.innerHTML=`<div class="quick-result"><span class="eyebrow">Sessão concluída</span><strong>${state.score}/${state.total}</strong><h2>Você manteve o alemão em movimento.</h2><p class="muted">Foram ${state.total} frases, ${state.total} quizzes e ${state.total} verbos do nível ${state.level}.</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px"><button class="btn btn-primary" onclick="start(state.level)">Fazer outra</button><a class="btn btn-outline" href="cursos.html?nivel=${state.level}">Estudar ${state.level}</a></div></div>`;SFX.correct()}
+  </script>
+</body>
+</html>

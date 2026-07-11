@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Rápido — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .quiz-container { max-width: 700px; margin: 0 auto; }
+    .quiz-card { background: var(--card-bg); border-radius: 16px; padding: 24px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+    .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    .quiz-score { font-size: 1.4rem; font-weight: 800; }
+    .quiz-streak { padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: .85rem; }
+    .streak-hot { background: #FF5722; color: #fff; animation: pulse .5s infinite alternate; }
+    .streak-warm { background: #FF9800; color: #fff; }
+    .streak-cold { background: var(--bg-secondary); }
+    @keyframes pulse { from{transform:scale(1)} to{transform:scale(1.05)} }
+    .quiz-timer { font-size: 2rem; font-weight: 800; text-align: center; margin: 12px 0; }
+    .timer-fast { color: #f44336; }
+    .quiz-word { font-size: 2rem; font-weight: 800; text-align: center; margin: 16px 0; }
+    .quiz-context { text-align: center; font-size: 1.1rem; color: var(--text-secondary); font-style: italic; margin: 8px 0; }
+    .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .quiz-opt {
+      padding: 16px; border-radius: 12px; border: 2px solid var(--border-light);
+      background: var(--card-bg); cursor: pointer; font-size: 1rem; font-weight: 600;
+      text-align: center; transition: .15s;
+    }
+    .quiz-opt:hover { border-color: var(--color-primary); transform: translateY(-1px); }
+    .quiz-opt.correct { border-color: #4CAF50; background: #E8F5E9; color:#1B5E20; animation: pop .3s; }
+    .quiz-opt.wrong { border-color: #f44336; background: #FFEBEE; color:#B71C1C; animation: shake .3s; }
+    @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+    .quiz-feedback { text-align: center; padding: 12px; border-radius: 8px; margin-top: 12px; font-weight: 600; display: none; }
+    .quiz-feedback.show { display: block; }
+    .fb-ok { background: #E8F5E9; color: #2E7D32; }
+    .fb-nok { background: #FFEBEE; color: #C62828; }
+    .quiz-end { text-align: center; padding: 40px 20px; }
+    .quiz-end .emoji { font-size: 4rem; }
+    .level-btns { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+    .lvl-btn { padding: 10px 20px; border-radius: 20px; border: 2px solid var(--border-light); background: var(--card-bg); cursor: pointer; font-weight: 700; }
+    .lvl-btn.active { border-color: var(--color-primary); background: var(--brand-light); }
+    .btn-play { display: block; margin: 20px auto; padding: 16px 48px; border-radius: 16px; border: none; background: var(--color-primary); color: #fff; font-size: 1.2rem; font-weight: 700; cursor: pointer; }
+    .btn-play:hover { opacity: .9; transform: scale(1.03); }
+    .combo-msg { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 3rem; font-weight: 900; pointer-events: none; animation: comboUp .8s forwards; z-index: 999; }
+    @keyframes comboUp { 0%{opacity:1;transform:translate(-50%,-50%) scale(.5)} 100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)} }
+    .q-audio-btn { background:transparent;border:1px solid var(--border-light);border-radius:6px;color:var(--text-secondary);cursor:pointer;padding:6px 12px;font-size:.8rem;transition:.2s;font-family:inherit }
+    .q-audio-btn:hover { border-color:var(--color-primary);color:var(--color-primary) }
+  </style>
+</head>
+<body>
+  <div id="app-nav"></div>
+
+  <div class="container quiz-container" style="padding-top:28px;">
+    <h2>⚡ Quiz Rápido</h2>
+    <p class="muted">Teste seus reflexos no alemão — rápido, divertido, viciante.</p>
+
+    <div id="menu-view">
+      <div class="level-btns" id="level-btns"></div>
+      <button class="btn-play" onclick="startQuiz()">▶ JOGAR</button>
+      <div id="high-score" style="text-align:center;margin-top:12px;"></div>
+    </div>
+
+    <div id="quiz-view" style="display:none;"></div>
+    <div id="combo-layer"></div>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/guest.js"></script>
+  <script>
+    renderNav("quiz");
+
+    // Modo visitante: so A1 com as primeiras 20 questoes; outros niveis com cadeado
+    let isGuest = true;
+
+    let level = "all";
+    let quizData = {}; // {A1: [...questions], A2: [...], ...}
+    let quizCounts = {}; // {A1: 50, A2: 47, ...}
+    let currentQuestions = [];
+    let currentIdx = 0;
+    let score = 0;
+    let streak = 0;
+    let bestStreak = 0;
+    let timer = 15;
+    let timerPaused = false;
+    let timerInterval = null;
+    let totalQuestions = 10;
+    let highScore = parseInt(localStorage.getItem("quiz_high") || "0");
+    let audioPlayer = new Audio();
+    const R2 = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
+
+    async function init() {
+      isGuest = await Guest.check();
+
+      // Load quiz counts from generated JSONs
+      const levels = ["A1","A2","B1","B2","C1","C2"];
+      let btns = isGuest
+        ? `<button class="lvl-btn" onclick="location.href='planos.html'">🔒 Misturado</button>`
+        : `<button class="lvl-btn active" onclick="setLevel('all')">🎲 Misturado</button>`;
+
+      for (const lv of levels) {
+        try {
+          // Try R2 first, fallback to local
+          let r = await fetch(`${R2}data/quiz_${lv.toLowerCase()}.json`).catch(() => null);
+          if (!r || !r.ok) r = await fetch(`../data/quiz_${lv.toLowerCase()}.json`);
+          const data = await r.json();
+          quizData[lv] = data.questoes || [];
+          // Visitante: so A1 liberado, limitado as primeiras questoes
+          if (isGuest) {
+            if (lv === "A1") quizData[lv] = quizData[lv].slice(0, AFB_FREE_LIMIT);
+            else quizData[lv] = [];
+          }
+          quizCounts[lv] = quizData[lv].length;
+          if (isGuest && lv !== "A1") {
+            btns += `<button class="lvl-btn" onclick="location.href='planos.html'">${lv} <small>🔒 500</small></button>`;
+          } else {
+            btns += `<button class="lvl-btn ${isGuest && lv === "A1" ? "active" : ""}" onclick="setLevel('${lv}')">${lv} <small>(${quizCounts[lv]}${isGuest ? " grátis" : ""})</small></button>`;
+          }
+        } catch(e) {
+          quizCounts[lv] = 0;
+          btns += `<button class="lvl-btn" onclick="setLevel('${lv}')">${lv} <small>(em breve)</small></button>`;
+        }
+      }
+
+      if (isGuest) level = "A1";
+      document.getElementById("level-btns").innerHTML = btns;
+      document.getElementById("high-score").innerHTML = (highScore ? `🏆 Recorde: ${highScore} pts` : "")
+        + (isGuest ? `<p class="muted" style="font-size:.8rem;margin-top:8px;">Você está jogando com ${AFB_FREE_LIMIT} questões grátis de 3.000 — <a href="planos.html" style="color:var(--color-primary-dark)"><b>desbloquear todas</b></a></p>` : "");
+    }
+
+    init();
+
+    function setLevel(lv) {
+      level = lv;
+      document.querySelectorAll(".lvl-btn").forEach(b => {
+        const isActive = lv === "all" ? b.textContent.includes("Misturado") : b.textContent.startsWith(lv);
+        b.classList.toggle("active", isActive);
+      });
+    }
+
+    async function startQuiz() {
+      let pool = [];
+      
+      if (level === "all") {
+        // Mix from all available quiz data
+        for (const [lv, questions] of Object.entries(quizData)) {
+          pool = pool.concat(questions.map(q => ({...q, level: lv})));
+        }
+      } else {
+        pool = (quizData[level] || []).map(q => ({...q, level}));
+      }
+      
+      if (pool.length < 4) {
+        alert("Gere os quizzes primeiro:\npython Cursoweb\\scripts\\gerar_simulados.py --workers 6");
+        return;
+      }
+      
+      pool.sort(() => Math.random() - 0.5);
+      currentQuestions = pool.slice(0, totalQuestions);
+      
+      currentIdx = 0;
+      score = 0;
+      streak = 0;
+      bestStreak = 0;
+      
+      document.getElementById("menu-view").style.display = "none";
+      document.getElementById("quiz-view").style.display = "";
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      if (currentIdx >= currentQuestions.length) return endQuiz();
+      
+      const q = currentQuestions[currentIdx];
+      const answer = q.resposta || "";
+      const opts = [...(q.opcoes||[])];
+      opts.sort(() => Math.random() - 0.5);
+      
+      timer = 15;
+      timerPaused = false;
+      clearInterval(timerInterval);
+      
+      let html = `
+        <div class="quiz-header">
+          <span>${currentIdx+1}/${totalQuestions} ${q.level?'['+q.level+']':''}</span>
+          <span class="quiz-score">⭐ ${score}</span>
+          <span class="quiz-streak ${streak>=5?'streak-hot':streak>=3?'streak-warm':'streak-cold'}">🔥 ${streak}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;justify-content:center;margin:8px 0;">
+          <div class="quiz-timer" id="timer-display">⏱ ${timer}s</div>
+          <button class="q-audio-btn" style="border-color:#FF9800;color:#FF9800;" id="pause-btn" onclick="togglePause()">⏯️ Pausar</button>
+        </div>
+        <div class="quiz-word">${q.pergunta_pt || q.contexto_de || ''}</div>
+        ${q.contexto_de ? `<div class="quiz-context">${q.contexto_de}</div>` : ''}
+        ${q.audio_url ? `<button class="q-audio-btn" onclick="event.stopPropagation();playQuizAudio('${q.audio_url}')">🎧 Ouvir</button>` : ''}
+        <div class="quiz-options">
+          ${opts.map((o, i) => {
+            const letter = o.charAt(0);
+            const audioKey = `opt${letter}_audio_url`;
+            const audioUrl = q[audioKey] || "";
+            return `<div class="quiz-opt" onclick="answer(this, '${letter}', '${answer}')">${o}${audioUrl ? ` <button class="q-audio-btn" style="padding:2px 8px;font-size:.7rem;margin-left:8px" onclick="event.stopPropagation();playQuizAudio('${audioUrl}')">▶</button>` : ""}</div>`;
+          }).join("")}
+        </div>
+        <div class="quiz-feedback" id="feedback"></div>
+      `;
+      
+      document.getElementById("quiz-view").innerHTML = html;
+      startTimer();
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        if (!timerPaused) {
+          timer--;
+          const td = document.getElementById("timer-display");
+          if (td) {
+            td.textContent = `⏱ ${timer}s`;
+            if (timer <= 5) td.classList.add("timer-fast");
+          }
+          if (timer <= 0) { clearInterval(timerInterval); timeUp(); }
+        }
+      }, 1000);
+    }
+
+    function togglePause() {
+      timerPaused = !timerPaused;
+      const btn = document.getElementById("pause-btn");
+      if (btn) btn.textContent = timerPaused ? "▶️ Continuar" : "⏯️ Pausar";
+    }
+
+    function playQuizAudio(url) {
+      audioPlayer.src = R2 + url;
+      audioPlayer.play().catch(()=>{});
+    }
+
+    function answer(el, chosen, correct) {
+      clearInterval(timerInterval);
+      const opts = document.querySelectorAll(".quiz-opt");
+      opts.forEach(o => o.style.pointerEvents = "none");
+      
+      // Extract just the letter (A, B, C, D) from option text
+      const chosenLetter = chosen.trim();
+      const correctLetter = correct.trim();
+      const isCorrect = chosenLetter === correctLetter;
+      
+      if (isCorrect) {
+        el.classList.add("correct");
+        SFX.correct();
+        streak++;
+        if (streak > bestStreak) bestStreak = streak;
+        const bonus = Math.min(streak, 5);
+        score += 10 + bonus;
+        
+        document.getElementById("feedback").className = "quiz-feedback show fb-ok";
+        document.getElementById("feedback").textContent = `✅ Correto! +${10+bonus} pts`;
+        
+        if (streak >= 5) showCombo(`🔥 x${streak}!`);
+        else if (streak >= 3) showCombo(`👏 x${streak}!`);
+      } else {
+        el.classList.add("wrong");
+        SFX.wrong();
+        opts.forEach(o => { if ((o.textContent.trim().charAt(0)||"") === correctLetter) o.classList.add("correct"); });
+        streak = 0;
+        
+        document.getElementById("feedback").className = "quiz-feedback show fb-nok";
+        const correctText = [...opts].find(o => (o.textContent.trim().charAt(0)||"") === correctLetter)?.textContent.trim() || correctLetter;
+        document.getElementById("feedback").textContent = `❌ Resposta: ${correctText}`;
+      }
+      
+      setTimeout(() => {
+        currentIdx++;
+        renderQuestion();
+      }, 1200);
+    }
+
+    function timeUp() {
+      SFX.wrong();
+      document.getElementById("feedback").className = "quiz-feedback show fb-nok";
+      document.getElementById("feedback").textContent = `⏰ Tempo esgotado!`;
+      streak = 0;
+      const opts = document.querySelectorAll(".quiz-opt");
+      opts.forEach(o => o.style.pointerEvents = "none");
+      
+      setTimeout(() => {
+        currentIdx++;
+        renderQuestion();
+      }, 1200);
+    }
+
+    function endQuiz() {
+      if (score > highScore) {
+        highScore = score;
+        localStorage.setItem("quiz_high", highScore);
+      }
+      
+      const emoji = score >= 100 ? "🏆" : score >= 60 ? "🎉" : score >= 30 ? "👍" : "📚";
+      const msg = score >= 100 ? "Incrível! Alemão afiado!" : score >= 60 ? "Muito bom!" : score >= 30 ? "Continue praticando!" : "Estude mais um pouco!";
+      
+      document.getElementById("quiz-view").innerHTML = `
+        <div class="quiz-end">
+          <div class="emoji">${emoji}</div>
+          <h2>${msg}</h2>
+          <div style="font-size:3rem;font-weight:900;margin:16px 0;">${score} pts</div>
+          <p>🔥 Melhor sequência: ${bestStreak}</p>
+          <p>🏆 Recorde: ${highScore} pts</p>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;">
+            <button class="btn-play" onclick="startQuiz()">🔄 Novo Quiz</button>
+            <button class="btn-play" style="background:var(--bg-secondary);color:var(--text-primary);" onclick="restartQuiz()">⬅ Escolher Nível</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function restartQuiz() {
+      document.getElementById("menu-view").style.display = "";
+      document.getElementById("quiz-view").style.display = "none";
+      document.getElementById("high-score").innerHTML = highScore ? `🏆 Recorde: ${highScore} pts` : "";
+    }
+
+    function showCombo(msg) {
+      const el = document.createElement("div");
+      el.className = "combo-msg";
+      el.textContent = msg;
+      document.getElementById("combo-layer").appendChild(el);
+      setTimeout(() => el.remove(), 800);
+    }
+
+    function escapeHtml(s) { return s.replace(/'/g, "\\'").replace(/"/g, '\\"'); }
+  </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escrita — DeutschBloom</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+.lvl-btn{padding:6px 14px;border-radius:20px;border:2px solid var(--border-light);background:transparent;font-weight:600;font-size:.82rem;cursor:pointer;color:var(--text-primary);font-family:inherit;margin:2px}
+.lvl-btn.active{background:var(--color-primary);color:#fff;border-color:var(--color-primary)}
+.german-sentence{font-size:1.3rem;font-weight:700;text-align:center;padding:28px 20px;background:var(--bg-secondary);border-radius:16px;border:1px solid var(--border-light);margin-bottom:12px}
+textarea{width:100%;min-height:90px;padding:14px;border-radius:12px;border:2px solid var(--border-light);background:var(--bg-primary);color:var(--text-primary);font-size:1rem;resize:vertical;box-sizing:border-box;font-family:inherit}
+textarea:focus{outline:none;border-color:var(--color-primary)}
+.trans-box{margin-top:12px;padding:14px;border-radius:12px;background:var(--bg-secondary);border:1px solid var(--border-light);cursor:pointer;user-select:none}
+.trans-box.blurred{filter:blur(6px)}.trans-box.blurred:hover{filter:blur(2px)}
+</style></head>
+<body>
+<div id="app-nav"></div>
+<div class="container" style="padding-top:28px;max-width:700px">
+<h2>✍️ Escrita</h2>
+<p id="count-line"><strong id="count">...</strong> frases disponiveis</p>
+<div id="filters" style="margin:10px 0">
+<button class="lvl-btn" data-l="random">🎲 Aleatorio</button>
+<button class="lvl-btn active" data-l="A1">A1</button><button class="lvl-btn" data-l="A2">A2</button>
+<button class="lvl-btn" data-l="B1">B1</button><button class="lvl-btn" data-l="B2">B2</button>
+<button class="lvl-btn" data-l="C1">C1</button><button class="lvl-btn" data-l="C2">C2</button>
+</div>
+<div class="card" id="card" style="display:none">
+<div class="german-sentence">
+<span id="german"></span>
+<span id="playbtn" style="cursor:pointer;opacity:.5;font-size:1rem;margin-left:8px;display:none" title="Ouvir">🔊</span>
+</div>
+<textarea id="input" placeholder="Digite a frase em alemao aqui..."></textarea>
+<div class="trans-box blurred" id="trans" title="Clique para revelar">
+<div style="font-size:.75rem;color:var(--text-secondary);margin-bottom:4px">Clique para ver traducao</div>
+<div id="transtext"></div>
+</div>
+<div style="display:flex;gap:10px;margin-top:16px">
+<button class="btn btn-outline" id="check" style="flex:1">✅ Verificar</button>
+<button class="btn btn-primary" id="next" style="flex:1">▶ Proxima</button>
+</div>
+</div>
+</div>
+<script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/xp.js"></script>
+<script src="../assets/js/nav.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/guest.js"></script>
+<script>
+renderNav("escrita");
+var R2="https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
+var pool=[],level="A1",current=null,audio=new Audio();
+var isGuest=true;
+function fetcher(path){return fetch("../"+path).then(function(r){if(!r.ok)return fetch(R2+path);return r}).then(function(r){return r.json()})}
+function addShort(german,portuguese,audioUrl,source,lv){
+  german=(german||"").trim();portuguese=(portuguese||"").trim();
+  var words=german.split(/\s+/).filter(Boolean).length;
+  if(!german||words>10||german.length>90)return;
+  var key=german.toLocaleLowerCase("de");if(pool.some(function(x){return x.key===key}))return;
+  pool.push({key:key,german:german,portuguese:portuguese,audio:audioUrl||null,source:source||"acervo",level:lv||""});
+}
+
+function loadData(){
+  pool=[];
+  var lvs=level==="random"?["A1","A2","B1","B2","C1","C2"]:[level];
+  // Carrega escrita nativa
+  var promises=[];
+  for(var i=0;i<lvs.length;i++){
+    (function(lv){
+      promises.push(fetcher("data/escrita/"+lv+".json").then(function(data){
+        for(var j=0;j<data.length;j++){
+          var s=data[j];
+          addShort(s.german,s.portuguese,null,"escrita",lv);
+        }
+      }).catch(function(){}));
+    })(lvs[i]);
+  }
+  // Girias
+  promises.push(fetcher("data/girias.json").then(function(g){
+    var exps=g.expressions||[];
+    for(var i=0;i<exps.length;i++){
+      var e=exps[i];
+      if(lvs.indexOf(e.level)>=0)addShort(e.german,e.portuguese,e.audio_url,"expressão",e.level);
+    }
+  }).catch(function(){}));
+  // Profissoes
+  promises.push(fetcher("data/profissoes.json").then(function(p){
+    var exps=p.expressions||[];
+    for(var i=0;i<exps.length;i++){
+      var phs=exps[i].phrases||[];
+      for(var j=0;j<phs.length;j++){
+        var ph=phs[j];
+        if(lvs.indexOf(ph.level)>=0)addShort(ph.de,ph.pt,ph.audio_url,"profissão",ph.level);
+      }
+    }
+  }).catch(function(){}));
+
+  // Diálogos e podcasts de todo o acervo, mantendo apenas frases curtas.
+  for(var k=0;k<lvs.length;k++)(function(lv){promises.push(fetcher("data/cursos/"+lv+".json").then(function(d){
+    (d.dialog_themes||[]).forEach(function(t){(t.dialogs||[]).forEach(function(di){(di.sentences||[]).forEach(function(s){addShort(s.german_text,s.portuguese_translation,s.audio_url,"diálogo",lv)})})});
+    (d.podcasts||[]).forEach(function(p){(p.sentences||p.transcript||[]).forEach(function(s){addShort(s.german_text||s.german||s.de,s.portuguese_translation||s.portuguese||s.pt,s.audio_url,"podcast",lv)})});
+  }).catch(function(){}))})(lvs[k]);
+  promises.push(fetcher("data/jogo_vocabulario.json").then(function(d){(d.words||d.vocabulary||d.items||[]).forEach(function(w){var lv=w.level||w.nivel||"A1";if(lvs.indexOf(lv)>=0)addShort(w.german||w.de||w.word,w.portuguese||w.pt||w.translation,w.audio_url,"vocabulário",lv)})}).catch(function(){}));
+
+  Promise.all(promises).then(function(){
+    var totalDisponivel=pool.length;
+    for(var i=pool.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var tmp=pool[i];pool[i]=pool[j];pool[j]=tmp;
+    }
+    if(isGuest&&pool.length>AFB_FREE_LIMIT)pool=pool.slice(0,AFB_FREE_LIMIT);
+    if(isGuest&&totalDisponivel>AFB_FREE_LIMIT){
+      document.getElementById("count-line").innerHTML="<strong>"+pool.length+"</strong> de "+totalDisponivel+" frases liberadas · <a href=\"planos.html\" style=\"color:var(--color-primary-dark)\"><b>🔒 desbloquear todas</b></a>";
+    }else{
+      document.getElementById("count").textContent=pool.length;
+    }
+    if(pool.length>0){document.getElementById("card").style.display="";nextSentence();}
+  });
+}
+
+function nextSentence(){
+  if(pool.length===0)return;
+  current=pool[Math.floor(Math.random()*pool.length)];
+  document.getElementById("german").textContent=current.german;
+  var pb=document.getElementById("playbtn");
+  if(current.audio){pb.style.display="inline";pb.onclick=function(){
+    var played=false;
+    var r2url=current.audio;if(r2url.indexOf("http")!==0)r2url=R2+r2url;
+    if(typeof AFBData!=="undefined"&&AFBData.signedAudioUrl){AFBData.signedAudioUrl(current.audio).then(function(url){if(url&&!played){audio.src=url;audio.play();played=true}}).catch(function(){})}
+    setTimeout(function(){if(!played){audio.src=r2url;audio.play()}},600);
+  };}else{pb.style.display="none";}
+  document.getElementById("input").value="";
+  document.getElementById("input").style.borderColor="";
+  document.getElementById("transtext").textContent=current.portuguese||"";
+  document.getElementById("trans").classList.add("blurred");
+  document.getElementById("check").textContent="✅ Verificar";
+  document.getElementById("check").disabled=false;
+}
+
+document.getElementById("check").onclick=function(){
+  if(!current)return;
+  var written=document.getElementById("input").value.trim();
+  var target=current.german.trim();
+  var n=function(t){return t.replace(/\s+/g," ").trim().toLowerCase();};
+  if(n(written)===n(target)){
+    document.getElementById("check").textContent="✅ Correto!";
+    document.getElementById("check").disabled=true;
+    document.getElementById("input").style.borderColor="#4CAF50";
+    document.getElementById("trans").classList.remove("blurred");
+    try{Progress.complete("escrita-"+Date.now(),5)}catch(e){}
+  }else{
+    document.getElementById("check").textContent="❌ Tente de novo";
+    document.getElementById("input").style.borderColor="#f44";
+    setTimeout(function(){document.getElementById("input").style.borderColor="";},1500);
+  }
+};
+
+document.getElementById("next").onclick=nextSentence;
+document.getElementById("trans").onclick=function(){this.classList.toggle("blurred");};
+
+document.getElementById("filters").onclick=function(e){
+  if(e.target.classList.contains("lvl-btn")){
+    var btns=document.querySelectorAll("#filters .lvl-btn");
+    for(var i=0;i<btns.length;i++)btns[i].classList.remove("active");
+    e.target.classList.add("active");
+    level=e.target.dataset.l;
+    loadData();
+  }
+};
+
+Guest.check().then(function(g){isGuest=g;loadData();});
+</script>
+</body></html>

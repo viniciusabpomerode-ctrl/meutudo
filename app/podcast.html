@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Podcast — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <div id="app-nav"></div>
+  <div class="container" style="padding-top:28px; max-width:760px;">
+    <a href="cursos.html" class="muted">← Voltar para Cursos</a>
+    <div class="card" id="content" style="margin-top:14px;">Carregando...</div>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/xp.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script>
+    // Visitante pode ver (bloqueio acontece nas listagens)
+    renderNav("cursos");
+
+    const params = new URLSearchParams(location.search);
+    const id = Number(params.get("id"));
+    const nivelParam = params.get("nivel");
+    const itemKey = `podcast-${id}`;
+
+    (async () => {
+      let podcast = null;
+      if (nivelParam) {
+        const data = await AFBData.nivel(nivelParam);
+        podcast = data.podcasts.find((p) => p.id === id) || null;
+      }
+      if (!podcast) {
+        const found = await AFBData.findAcrossLevels("podcast", id);
+        podcast = found ? found.item : null;
+      }
+      const el = document.getElementById("content");
+      if (!podcast) { el.innerHTML = "<p>Podcast não encontrado.</p>"; return; }
+
+      const done = Progress.isCompleted(itemKey);
+
+      el.innerHTML = `
+        <div class="flex-between">
+          <h2 style="margin:0;">${I18n.field(podcast, 'title')}</h2>
+          ${done ? '<span class="badge">✅ Concluído</span>' : `<span class="xp-pill">+${podcast.xp_reward} XP</span>`}
+        </div>
+        <p class="muted">${podcast.category} · Dificuldade ${podcast.difficulty_level}/5</p>
+        <p>${I18n.field(podcast, 'description') || ""}</p>
+        ${podcast.main_audio_url ? `
+          <button class="btn btn-outline btn-sm" onclick="afbPlayAudio('${podcast.main_audio_url}', this)">▶ Ouvir podcast completo</button>
+        ` : ""}
+
+        <h4 class="section-title">Frases</h4>
+        ${podcast.sentences.map((s) => `
+          <div class="sentence-row">
+            <div>
+              <div class="sentence-de">${s.german_text}</div>
+              <div class="sentence-pt">${I18n.field(s, 'portuguese_translation')}</div>
+              ${s.pronunciation ? `<div class="sentence-pron">🗣️ ${s.pronunciation}</div>` : ""}
+            </div>
+            <div class="flex gap-8">
+              ${s.audio_url ? `<button class="btn btn-ghost btn-sm" onclick="afbPlayAudio('${s.audio_url}', this)">▶</button>` : ""}
+              <span class="xp-pill">+${s.xp_reward}</span>
+            </div>
+          </div>`).join("")}
+
+        ${podcast.vocabulary.length ? `
+          <h4 class="section-title">Vocabulário</h4>
+          <div>${podcast.vocabulary.map((v) => `
+            <span class="vocab-chip"><b>${v.german_word}</b><span>${I18n.field(v, 'portuguese_translation')}</span></span>`).join("")}</div>
+        ` : ""}
+
+        ${podcast.grammar_tips && podcast.grammar_tips.length ? `
+          <h4 class="section-title">Dicas de gramática</h4>
+          ${podcast.grammar_tips.map((t) => `
+            <div class="tip-card">
+              <h4>${I18n.field(t, 'title')}</h4>
+              <p>${t.content}</p>
+              <p><b>${t.german_example}</b> — ${I18n.field(t, 'portuguese_example')}</p>
+            </div>`).join("")}
+        ` : ""}
+
+        <button class="btn btn-primary btn-block" id="complete-btn" style="margin-top:24px;" ${done ? "disabled" : ""}>
+          ${done ? "Já concluído" : `Marcar como concluído (+${podcast.xp_reward} XP)`}
+        </button>
+      `;
+
+      const btn = document.getElementById("complete-btn");
+      if (!done) {
+        btn.addEventListener("click", () => {
+          const result = Progress.complete(itemKey, podcast.xp_reward);
+          if (result.leveledUp) alert(`🎉 Parabéns! Você subiu para o nível ${result.newLevel}!`);
+          window.location.reload();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

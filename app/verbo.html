@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verbo — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    table.conj { width:100%; border-collapse:collapse; margin-top:10px; }
+    table.conj th, table.conj td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--border-light); font-size:.9rem; }
+    table.conj th { color:var(--text-secondary); font-size:.8rem; text-transform:uppercase; }
+  </style>
+</head>
+<body>
+  <div id="app-nav"></div>
+  <div class="container" style="padding-top:28px; max-width:760px;">
+    <a href="cursos.html" class="muted">← Voltar para Cursos</a>
+    <div class="card" id="content" style="margin-top:14px;">Carregando...</div>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/xp.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/saved_r2.js"></script>
+  <script>
+    // Visitante pode ver (bloqueio acontece nas listagens)
+    renderNav("cursos");
+
+    const params = new URLSearchParams(location.search);
+    const id = Number(params.get("id"));
+    const nivelParam = params.get("nivel");
+    const itemKey = `verb-${id}`;
+    const TENSE_LABEL = { passado: "Passado", presente: "Presente", futuro: "Futuro" };
+    const PRONOUN_LABEL = { ich: "ich", du: "du", er_sie_es: "er/sie/es", wir: "wir", ihr: "ihr", sie: "sie" };
+    const PRONOUN_ORDER = ["ich", "du", "er_sie_es", "wir", "ihr", "sie"];
+
+    (async () => {
+      let verb = null;
+      if (nivelParam) {
+        const verbs = await AFBData.verbos(nivelParam);
+        verb = verbs.find((v) => v.id === id) || null;
+      }
+      if (!verb) {
+        const found = await AFBData.findAcrossLevels("verb", id);
+        verb = found ? found.item : null;
+      }
+      const el = document.getElementById("content");
+      if (!verb) { el.innerHTML = "<p>Verbo não encontrado.</p>"; return; }
+
+      const done = Progress.isCompleted(itemKey);
+      const hasExamples = verb.examples.length > 0;
+      const nivelFound = nivelParam || "A1";
+
+      function tenseTable(tense) {
+        const rows = verb.examples
+          .filter((e) => e.tense === tense)
+          .sort((a, b) => PRONOUN_ORDER.indexOf(a.pronoun) - PRONOUN_ORDER.indexOf(b.pronoun));
+        if (!rows.length) return "";
+        return `
+          <h4 style="margin:18px 0 4px;">${TENSE_LABEL[tense]}</h4>
+          <table class="conj">
+            <tr><th>Pronome</th><th>Conjugação</th><th>Exemplo</th><th></th><th></th></tr>
+            ${rows.map((r, idx) => `
+              <tr>
+                <td>${PRONOUN_LABEL[r.pronoun]}</td>
+                <td><b>${r.conjugated_verb}</b></td>
+                <td>${r.example_sentence_german}<br><span class="muted" style="font-size:.82rem;">${I18n.field(r, 'example_sentence_portuguese')}</span></td>
+                <td>${r.audio_url ? `<button class="btn btn-ghost btn-sm" onclick="afbPlayAudio('${r.audio_url}', this)">▶</button>` : ""}</td>
+                <td id="save-ex-${r.id}"></td>
+              </tr>`).join("")}
+          </table>`;
+      }
+
+      el.innerHTML = `
+        <div class="flex-between" style="align-items:center;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <h2 style="margin:0;">${verb.base_verb}</h2>
+            ${verb.audio_url ? `<button class="btn btn-ghost btn-sm" onclick="afbPlayAudio('${verb.audio_url}', this)" title="Ouvir pronúncia">▶</button>` : ""}
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span id="verb-save-btn"></span>
+            ${done ? '<span class="badge">✅ Concluído</span>' : hasExamples ? `<span class="xp-pill">+${verb.xp_reward} XP</span>` : '<span class="badge">em breve</span>'}
+          </div>
+        </div>
+        <p class="muted">${I18n.field(verb, 'portuguese_translation')} · ${verb.verb_type || "verbo"}</p>
+
+        ${hasExamples
+          ? ["passado", "presente", "futuro"].map(tenseTable).join("")
+          : `<p class="muted center" style="padding:30px 0;">As conjugações completas deste verbo ainda estão sendo adicionadas 🚧</p>`}
+
+        ${hasExamples ? `
+          <button class="btn btn-primary btn-block" id="complete-btn" style="margin-top:24px;" ${done ? "disabled" : ""}>
+            ${done ? "Já concluído" : `Marcar como estudado (+${verb.xp_reward} XP)`}
+          </button>` : ""}
+      `;
+
+      // Botão de salvar o verbo
+      const verbSaveContainer = document.getElementById("verb-save-btn");
+      if (verbSaveContainer) {
+        const saveBtn = SavedItems.createSaveButton({
+          type: "verb", id: verb.id, parentId: null, nivel: nivelFound,
+          title: verb.base_verb + " - " + (verb.portuguese_translation || "")
+        });
+        verbSaveContainer.appendChild(saveBtn);
+      }
+
+      // Botões de salvar cada exemplo
+      verb.examples.forEach((ex) => {
+        const td = document.getElementById(`save-ex-${ex.id}`);
+        if (td) {
+          const saveBtn = SavedItems.createSaveButton({
+            type: "verb_example", id: ex.id, parentId: verb.id, nivel: nivelFound,
+            title: ex.conjugated_verb + " - " + ex.example_sentence_german.substring(0, 40)
+          });
+          td.appendChild(saveBtn);
+        }
+      });
+
+      const btn = document.getElementById("complete-btn");
+      if (btn && !done) {
+        btn.addEventListener("click", () => {
+          const result = Progress.complete(itemKey, verb.xp_reward);
+          if (result.leveledUp) alert(`🎉 Parabéns! Você subiu para o nível ${result.newLevel}!`);
+          window.location.reload();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

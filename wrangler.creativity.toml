@@ -1,0 +1,15 @@
+name = "deutschbloom-creativity"
+main = "workers/creativity-ai.js"
+compatibility_date = "2026-07-01"
+
+[ai]
+binding = "AI"
+
+# Crie o namespace com: npx wrangler kv namespace create LIMITS
+# Depois descomente e preencha o id retornado:
+# [[kv_namespaces]]
+# binding = "LIMITS"
+# id = "COLE_O_ID_AQUI"
+
+[vars]
+ALLOWED_ORIGINS = "https://deutschbloom.com,https://www.deutschbloom.com,http://localhost:8081"
