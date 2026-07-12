@@ -85,7 +85,7 @@
 
     <div class="card" id="pix-card" style="max-width:600px; margin:30px auto 0; display:none;">
       <h3 style="margin:0 0 6px; font-weight:500;">Prefere pagar por Pix?</h3>
-      <p class="muted" style="font-size:.88rem; margin:0 0 14px;">Enquanto o Pix automático não fica pronto, você pode pagar direto e a gente libera seu acesso assim que confirmar o recebimento (geralmente em poucas horas). <b style="color:var(--color-primary-dark)">O Vitalício sai por R$ 197 pagando no Pix</b> (R$ 100 mais barato que no cartão) — só pros primeiros 100 assinantes.</p>
+      <p class="muted" style="font-size:.88rem; margin:0 0 14px;">Enquanto o Pix automático não fica pronto, você pode pagar direto e a gente libera seu acesso em até <b>2 horas</b> depois de confirmar o recebimento. <b style="color:var(--color-primary-dark)">O Vitalício sai por R$ 197 pagando no Pix</b> (R$ 100 mais barato que no cartão) — só pros primeiros 100 assinantes.</p>
       <div class="form-group">
         <label>Chave Pix</label>
         <div style="display:flex; gap:8px;">
@@ -107,7 +107,11 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Mensagem pra gente (opcional — nome no Pix, horário, etc.)</label>
+          <label>Nome que aparece no comprovante do Pix</label>
+          <input type="text" name="payer_name" required placeholder="Igual apareceu pra você no pagamento">
+        </div>
+        <div class="form-group">
+          <label>Mensagem pra gente (opcional — horário do pagamento, etc.)</label>
           <textarea name="message" rows="2" style="width:100%;"></textarea>
         </div>
         <button class="btn btn-primary btn-block" type="submit">Marcar como pago</button>
@@ -282,11 +286,11 @@
         const res = await fetch("/.netlify/functions/pix-request", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ plan: form.get("plan"), message: form.get("message") }),
+          body: JSON.stringify({ plan: form.get("plan"), payer_name: form.get("payer_name"), message: form.get("message") }),
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "erro ao enviar");
-        statusEl.textContent = "Recebemos seu aviso! Vamos conferir e liberar seu acesso em breve.";
+        statusEl.textContent = "Recebemos seu aviso! Vamos conferir e liberar seu acesso em até 2 horas.";
         e.target.reset();
       } catch (err) {
         statusEl.textContent = "Não deu pra enviar agora: " + err.message;

@@ -9,7 +9,7 @@ exports.handler=async event=>{if(event.httpMethod==='OPTIONS')return{statusCode:
   if(event.httpMethod==='GET'){
    if(action==='users'){const page=Math.max(1,Number(event.queryStringParameters?.page)||1);const r=await fetch(`${A.SUPABASE_URL}/auth/v1/admin/users?page=${page}&per_page=50`,{headers:A.serviceHeaders()});return out(r.status,await r.json())}
    if(action==='admins')return out(200,{admins:await rest('app_admins?select=user_id,role,created_at&order=created_at.desc')});
-   if(action==='pix_requests')return out(200,{requests:await rest('pix_requests?status=eq.pending&select=id,email,name,plan,message,created_at&order=created_at.asc')});
+   if(action==='pix_requests')return out(200,{requests:await rest('pix_requests?status=eq.pending&select=id,email,name,payer_name,plan,message,created_at&order=created_at.asc')});
    const [admins,plans,credits,refs]=await Promise.all([rest('app_admins?select=user_id'),rest('user_premium?select=email,plan,active,expires_at'),rest('credit_ledger?select=amount_cents,reversed_at'),rest('referrals?select=status')]);
    return out(200,{admins:admins.length,plans:plans.length,activePlans:plans.filter(x=>x.active).length,creditsCents:credits.filter(x=>!x.reversed_at).reduce((s,x)=>s+x.amount_cents,0),referrals:refs.length});
   }

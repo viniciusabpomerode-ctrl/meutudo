@@ -18,6 +18,8 @@ exports.handler = async (event) => {
 
   const plan = PLANS.includes(body.plan) ? body.plan : null;
   if (!plan) return out(400, { error: 'invalid_plan' });
+  const payerName = String(body.payer_name || '').trim().slice(0, 80);
+  if (!payerName) return out(400, { error: 'payer_name_required' });
   const message = String(body.message || '').trim().slice(0, 500);
 
   try {
@@ -25,7 +27,7 @@ exports.handler = async (event) => {
     const r = await fetch(`${A.SUPABASE_URL}/rest/v1/pix_requests`, {
       method: 'POST',
       headers: A.serviceHeaders(),
-      body: JSON.stringify({ user_id: u.id, email: u.email, name, plan, message }),
+      body: JSON.stringify({ user_id: u.id, email: u.email, name, payer_name: payerName, plan, message }),
     });
     if (!r.ok) throw new Error(await r.text());
     return out(200, { ok: true });
