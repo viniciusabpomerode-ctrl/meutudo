@@ -168,10 +168,17 @@
     /* Acabamento específico dos três modelos da referência */
     [data-theme="moderno"] .sidebar { background:rgba(5,7,9,.88); }
     [data-theme="moderno"] .sidebar .brand2 { color:#f3e3c4; }
+    [data-theme="moderno"][data-mode="day"] .sidebar { background:rgba(var(--overlay-tint),.94); box-shadow:inset -1px 0 0 var(--border-light); }
+    [data-theme="moderno"][data-mode="day"] .sidebar .brand2 { color:var(--text-primary); }
     [data-theme="vikings"] .shell {
       background:linear-gradient(rgba(9,7,4,.78),rgba(9,7,4,.93)),url('assets/images/black-forest.png') center top/cover fixed;
     }
+    [data-theme="vikings"][data-mode="day"] .shell {
+      background:linear-gradient(rgba(var(--overlay-tint),.85),rgba(var(--overlay-tint),.96)),url('assets/images/black-forest.png') center top/cover fixed;
+    }
     [data-theme="vikings"] .sidebar { background:rgba(18,13,8,.86); box-shadow:inset -8px 0 28px rgba(0,0,0,.35); }
+    [data-theme="vikings"][data-mode="day"] .sidebar { background:rgba(var(--overlay-tint),.92); box-shadow:inset -1px 0 0 var(--border-light); }
+    [data-theme="vikings"][data-mode="day"] .sidebar .brand2 { color:var(--text-primary); }
     [data-theme="vikings"] .sidebar a { border-bottom:1px solid rgba(184,135,74,.07); border-radius:4px; }
     [data-theme="vikings"] .btn { border-radius:5px; }
     [data-theme="vikings"] .stat-tile { border-radius:6px; }
