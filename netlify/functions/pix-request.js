@@ -21,10 +21,11 @@ exports.handler = async (event) => {
   const message = String(body.message || '').trim().slice(0, 500);
 
   try {
+    const name = u.user_metadata?.name || u.email.split('@')[0];
     const r = await fetch(`${A.SUPABASE_URL}/rest/v1/pix_requests`, {
       method: 'POST',
       headers: A.serviceHeaders(),
-      body: JSON.stringify({ user_id: u.id, email: u.email, plan, message }),
+      body: JSON.stringify({ user_id: u.id, email: u.email, name, plan, message }),
     });
     if (!r.ok) throw new Error(await r.text());
     return out(200, { ok: true });

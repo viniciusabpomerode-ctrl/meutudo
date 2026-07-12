@@ -7,12 +7,15 @@ create table if not exists public.pix_requests (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
   email text not null,
+  name text,
   plan text not null check (plan in ('mensal','anual','fundador')),
   message text,
   status text not null default 'pending' check (status in ('pending','approved','rejected')),
   created_at timestamptz not null default now(),
   resolved_at timestamptz
 );
+
+alter table public.pix_requests add column if not exists name text;
 
 alter table public.pix_requests enable row level security;
 
