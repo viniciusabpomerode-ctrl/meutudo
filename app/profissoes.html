@@ -172,7 +172,7 @@
       }
       document.getElementById("counter-main").innerHTML = searchMain
         ? `${filtradas.length} resultado(s)`
-        : `<span style="background:var(--brand-light);color:var(--brand);padding:4px 12px;border-radius:20px;font-weight:700;">📚 ${allData.length} profissões · ${cats.size} categorias · 1200 frases</span>`;
+        : `<span style="background:var(--brand-light);color:var(--brand);padding:4px 12px;border-radius:20px;font-weight:700;">📚 ${allData.length} profissões · ${cats.size} categorias · ${allData.reduce((total, item) => total + (item.phrases || []).length, 0)} frases</span>`;
       document.getElementById("list-main").innerHTML = searchMain ? renderCards(filtradas) : "";
     }
 
