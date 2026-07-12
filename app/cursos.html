@@ -47,9 +47,9 @@
       const wrap = document.getElementById("level-tabs");
       wrap.innerHTML = LEVEL_ORDER.map((code) => {
         const info = XP_LEVELS[code];
-        // Visitante: A1 + uma amostra de 5 lições do A2;
-        // logado: destrava por XP como antes
-        const unlocked = isGuest ? (code === "A1" || code === "A2") : XPSystem.canAccessLevel(progress.xp, code);
+        // Visitante/gratis: A1 + uma amostra de 5 lições do A2;
+        // Premium: tudo liberado, sem depender de XP (e o que o plano promete).
+        const unlocked = isGuest ? (code === "A1" || code === "A2") : true;
         const lockLabel = isGuest ? "🔒 Premium" : "🔒 " + info.minXP + " XP";
         return `
           <div class="level-tab ${code === currentLevel ? "active-level" : ""} ${unlocked ? "" : "locked"}"

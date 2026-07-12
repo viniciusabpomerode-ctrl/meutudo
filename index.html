@@ -476,9 +476,11 @@
       function close() { sb.classList.remove('open'); overlay.classList.remove('open'); btn.textContent = '☰'; }
       btn.addEventListener('click', () => { sb.classList.contains('open') ? close() : open(); });
       overlay.addEventListener('click', close);
-      // Close sidebar when clicking a link on mobile
+      // Close sidebar when clicking a link on mobile -- fecha na hora, nao
+      // depois de um delay, senao a pagina ja navegou com o fundo nublado
+      // ainda visivel na transicao.
       sb.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-        if (window.innerWidth < 768) setTimeout(close, 150);
+        if (window.innerWidth < 768) close();
       }));
     })();
 

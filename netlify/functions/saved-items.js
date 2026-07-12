@@ -51,10 +51,17 @@ exports.handler = async (event) => {
   }
 
   if (event.httpMethod === "PUT") {
+    if (!event.body || event.body.length > 1_000_000) {
+      return { statusCode: 400, headers, body: '{"error":"invalid_payload"}' };
+    }
+    let items;
     try {
-      if (!event.body || event.body.length > 1_000_000) throw new Error("invalid_payload");
-      const items = JSON.parse(event.body);
-      if (!Array.isArray(items)) throw new Error("invalid_payload");
+      items = JSON.parse(event.body);
+      if (!Array.isArray(items)) throw new Error("not_array");
+    } catch (e) {
+      return { statusCode: 400, headers, body: '{"error":"invalid_payload"}' };
+    }
+    try {
       await s3.putObject({
         Bucket: "edicao",
         Key: key,
@@ -63,7 +70,11 @@ exports.handler = async (event) => {
       }).promise();
       return { statusCode: 200, headers, body: '{"ok":true}' };
     } catch (e) {
-      return { statusCode: 400, headers, body: '{"error":"invalid_payload"}' };
+      // Erro real de infraestrutura (credenciais R2, bucket, rede) --
+      // nao mascara mais como "invalid_payload", senao fica impossivel
+      // saber o que realmente esta falhando.
+      console.error("saved-items PUT falhou:", e.message);
+      return { statusCode: 500, headers, body: JSON.stringify({ error: "storage_failed", detail: e.message }) };
     }
   }
 

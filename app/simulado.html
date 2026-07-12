@@ -122,6 +122,11 @@
     }
 
     async function startSimulado(nivel) {
+      // Simulado e conteudo 100% Premium -- confere aqui tambem, nao so
+      // no clique do botao (alguem podia chamar essa funcao direto pelo
+      // console do navegador e pular a trava visual).
+      const free = (typeof Guest !== "undefined" && Guest.isFree) ? await Guest.isFree() : true;
+      if (free) { window.location.href = "planos.html"; return; }
       nivelAtual = nivel;
       document.getElementById("level-select").style.display = "none";
       try {
@@ -185,7 +190,7 @@
         }
         // Contexto (alemão) - escondido para Horen ate revelar
         if (q.contexto_de) {
-          if (cat === "hören" && !revealed) {
+          if (cat === "horen" && !revealed) {
             html += `<div class="q-context" style="filter:blur(6px);cursor:pointer;user-select:none" onclick="if(!reveladas[${q.id}]){reveladas[${q.id}]=true;render();}" title="Clique para revelar">${q.contexto_de}</div>`;
           } else {
             html += `<div class="q-context">${q.contexto_de}</div>`;

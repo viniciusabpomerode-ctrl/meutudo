@@ -309,8 +309,12 @@ button,a { -webkit-tap-highlight-color: transparent; }
 .nav-dd-item { display:block; padding:9px 12px; border-radius:8px; font-size:.86rem; color:var(--text-secondary); white-space:nowrap; }
 .nav-dd-item:hover, .nav-dd-item.active { background:rgba(214,168,95,.12); color:var(--color-primary-dark); }
 @media (max-width:1050px){
-  .nav-dropdown .nav-dd-menu { position:static; display:grid; margin-top:4px; box-shadow:none; background:transparent; border:none; padding:4px 0 4px 10px; grid-template-columns:1fr; }
-  .nav-dd-trigger { pointer-events:none; }
+  /* No celular o menu "Conteudo" vira um toggle (toca pra abrir/fechar)
+     em vez de ficar sempre aberto dentro da barra -- senao a barra fica
+     gigante e "suspensa" por cima do conteudo com os 13 itens listados. */
+  .nav-dropdown .nav-dd-menu { position:static; display:none; margin-top:4px; box-shadow:none; background:transparent; border:none; padding:4px 0 4px 10px; grid-template-columns:1fr; }
+  .nav-dropdown .nav-dd-menu.open { display:grid; }
+  .nav-dd-trigger { cursor:pointer; }
 }
 
 .btn { min-height:44px; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 20px; border-radius:12px; font-weight:600; font-size:.88rem; border:1px solid transparent; cursor:pointer; transition:transform .2s ease, background .2s ease, border-color .2s ease, opacity .2s ease; }

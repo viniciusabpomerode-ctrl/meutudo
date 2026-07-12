@@ -61,6 +61,22 @@ function _renderNavNow(active) {
       <div class="nav-right">${navRight}</div>
     </header>
   `;
+
+  // No celular o "Conteudo ▾" abre/fecha ao tocar (no desktop continua
+  // sendo so hover, via CSS).
+  const trigger = document.querySelector("#app-nav .nav-dd-trigger");
+  const menu = document.querySelector("#app-nav .nav-dd-menu");
+  if (trigger && menu) {
+    trigger.addEventListener("click", (e) => {
+      if (window.innerWidth > 1050) return;
+      e.stopPropagation();
+      menu.classList.toggle("open");
+    });
+    document.addEventListener("click", (e) => {
+      if (window.innerWidth > 1050) return;
+      if (!menu.contains(e.target) && e.target !== trigger) menu.classList.remove("open");
+    });
+  }
 }
 
 // ── Bandeja de ferramentas (LoFi + Pomodoro) ──

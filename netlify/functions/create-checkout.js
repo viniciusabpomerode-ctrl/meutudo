@@ -72,7 +72,7 @@ exports.handler = async (event) => {
   params.append("customer_email", email);
   params.append("client_reference_id", email);
   if (embedded) {
-    params.append("ui_mode", "embedded");
+    params.append("ui_mode", "embedded_page");
     params.append("return_url", `${origin}/app/perfil.html?checkout=sucesso&session_id={CHECKOUT_SESSION_ID}`);
   } else {
     params.append("success_url", `${origin}/app/perfil.html?checkout=sucesso`);
