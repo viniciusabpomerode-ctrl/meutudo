@@ -38,25 +38,31 @@ const SavedItems = (() => {
     try { return JSON.parse(localStorage.getItem("afb_saved") || "[]"); } catch { return []; }
   }
 
+  // Salva local primeiro (sempre funciona), depois tenta mandar pro R2.
+  // Retorna false se a sincronizacao com o servidor falhar -- o item fica
+  // salvo so localmente nesse caso, e quem chamou precisa avisar a pessoa.
   async function save(items) {
     localStorage.setItem("afb_saved", JSON.stringify(items));
     try {
-      await fetch(WORKER, await requestOptions("PUT", items));
-    } catch {}
+      const r = await fetch(WORKER, await requestOptions("PUT", items));
+      return r.ok;
+    } catch {
+      return false;
+    }
   }
 
   async function add({ type, id, parentId, nivel, refUrl, notes }) {
     let items = await load();
     items = items.filter(i => !(i.type===type && i.id===id));
     items.unshift({ type, id, parentId, nivel, refUrl:refUrl||window.location.href, notes:notes||"", reviewed_at:null, created_at:new Date().toISOString() });
-    await save(items); return true;
+    return await save(items);
   }
 
-  async function remove(type, id) { await save((await load()).filter(i => !(i.type===type && i.id===id))); return true; }
+  async function remove(type, id) { return await save((await load()).filter(i => !(i.type===type && i.id===id))); }
   async function getAll() { return await load(); }
   async function isSaved(type, id) { return (await load()).some(i => i.type===type && i.id===id); }
-  async function updateNotes(type, id, notes) { let items=await load(); const idx=items.findIndex(i=>i.type===type&&i.id===id); if(idx>=0){items[idx].notes=notes;await save(items);return true} return false; }
-  async function markReviewed(type, id) { let items=await load(); const idx=items.findIndex(i=>i.type===type&&i.id===id); if(idx>=0){items[idx].reviewed_at=new Date().toISOString();await save(items);return true} return false; }
+  async function updateNotes(type, id, notes) { let items=await load(); const idx=items.findIndex(i=>i.type===type&&i.id===id); if(idx>=0){items[idx].notes=notes;return await save(items)} return false; }
+  async function markReviewed(type, id) { let items=await load(); const idx=items.findIndex(i=>i.type===type&&i.id===id); if(idx>=0){items[idx].reviewed_at=new Date().toISOString();return await save(items)} return false; }
 
   function icon(saved) { const t=(typeof Theme!=="undefined"&&Theme.get())||"vikings"; return t==="guardians"?(saved?"❤️":"🤍"):(saved?"💛":"💛"); }
 
@@ -89,8 +95,20 @@ const SavedItems = (() => {
       }
       try{
         const saved=await isSaved(type,id);
-        if(saved){await remove(type,id);btn.innerHTML=icon(false);btn.style.opacity=".4";btn.style.borderColor="var(--border-light)";}
-        else{showNotesModal({title,onSave:async(notes)=>{btn.innerHTML="⏳";btn.disabled=true;const ok=await add({type,id,parentId,nivel,refUrl,notes});btn.innerHTML=icon(ok);btn.style.opacity=ok?"1":".4";btn.style.borderColor=ok?"var(--color-primary)":"var(--border-light)";btn.disabled=false;}});}
+        if(saved){
+          const synced=await remove(type,id);
+          btn.innerHTML=icon(false);btn.style.opacity=".4";btn.style.borderColor="var(--border-light)";
+          if(!synced)btn.title="Removido aqui, mas não deu pra confirmar com o servidor — confira sua internet.";
+        }
+        else{showNotesModal({title,onSave:async(notes)=>{
+          btn.innerHTML="⏳";btn.disabled=true;
+          const synced=await add({type,id,parentId,nivel,refUrl,notes});
+          btn.innerHTML=synced?icon(true):"⚠️";
+          btn.style.opacity="1";
+          btn.style.borderColor=synced?"var(--color-primary)":"#c9786d";
+          btn.title=synced?"Salvo":"Salvo só neste aparelho — não deu pra sincronizar com sua conta agora. Tenta de novo com internet.";
+          btn.disabled=false;
+        }});}
       }catch{btn.innerHTML="⚠️";}
     };
     return btn;
