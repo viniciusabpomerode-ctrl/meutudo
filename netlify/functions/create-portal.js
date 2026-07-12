@@ -4,12 +4,22 @@
 //
 // POST /.netlify/functions/create-portal
 // body: { email: string }
+const SUPABASE_URL = "https://zqrdpmrwnprtelgloawb.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_CVFm1nLMf9GCPr-RKKU6Rw_AFixWd5z";
+async function authenticatedUser(event) {
+  const authorization = event.headers.authorization || event.headers.Authorization || "";
+  if (!authorization.startsWith("Bearer ")) return null;
+  const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {headers:{apikey:SUPABASE_ANON_KEY,Authorization:authorization}});
+  if (!response.ok) return null;
+  const user = await response.json();
+  return user?.id && user?.email ? user : null;
+}
 
 exports.handler = async (event) => {
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Content-Type": "application/json",
   };
 
@@ -21,16 +31,9 @@ exports.handler = async (event) => {
     return { statusCode: 500, headers, body: JSON.stringify({ error: "STRIPE_SECRET_KEY nao configurada no Netlify" }) };
   }
 
-  let body;
-  try {
-    body = JSON.parse(event.body || "{}");
-  } catch {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: "invalid json" }) };
-  }
-  const { email } = body;
-  if (!email) {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: "email obrigatorio" }) };
-  }
+  const user = await authenticatedUser(event);
+  if (!user) return { statusCode: 401, headers, body: JSON.stringify({ error: "login obrigatorio" }) };
+  const email = user.email;
 
   const origin = event.headers.origin || `https://${event.headers.host}`;
   const authHeaders = {

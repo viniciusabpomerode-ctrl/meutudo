@@ -91,10 +91,8 @@
   <script src="../assets/js/auth.js"></script>
   <script>
     // Nesta pagina o usuario pode nao estar logado (acessivel pela landing)
-    const user = Auth.currentUser();
-    document.getElementById("nav-slot").innerHTML = user
-      ? '<div id="app-nav"></div>'
-      : `<header class="navbar">
+    let user = null;
+    document.getElementById("nav-slot").innerHTML = `<header class="navbar">
           <a class="brand" href="../index.html"><span aria-hidden="true">D</span> DeutschBloom</a>
           <nav><a href="cursos.html">Conteúdo</a><a href="planos.html" class="active">Planos</a><a href="suporte.html">Suporte</a><a href="login.html">Entrar</a></nav>
           <div class="nav-right"><a class="btn btn-primary btn-sm" href="cadastro.html">Criar conta grátis</a></div>
@@ -103,7 +101,13 @@
   <script src="../assets/js/xp.js"></script>
   <script src="../assets/js/nav.js"></script>
   <script>
-    if (user) renderNav("planos");
+    (async function initPlans(){
+    await Auth._ready();
+    user = Auth.currentUser();
+    if (user) {
+      document.getElementById("nav-slot").innerHTML = '<div id="app-nav"></div>';
+      renderNav("planos");
+    }
 
     // Auto-checkout: veio do cadastro com ?auto=mensal|anual|fundador
     const autoPlan = new URLSearchParams(location.search).get("auto");
@@ -126,10 +130,11 @@
         btn.disabled = true;
         btn.textContent = "Abrindo pagamento...";
         try {
+          const token = await Auth.accessToken();
           const res = await fetch("/.netlify/functions/create-checkout", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ plan: btn.dataset.plan, email: user.email }),
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ plan: btn.dataset.plan }),
           });
           const data = await res.json();
           if (!res.ok || !data.url) throw new Error(data.error || "erro ao iniciar pagamento");
@@ -141,6 +146,7 @@
         }
       });
     });
+    })();
   </script>
 </body>
 </html>

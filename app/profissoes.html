@@ -263,7 +263,7 @@
                 <div class="phrase-pt">${f.pt}</div>
               </div>
               <div style="display:flex;align-items:center;gap:6px;">
-                ${f.audio_url ? `<button class="btn-audio-sm" onclick="event.stopPropagation();playAudio('${f.audio_url}')" title="Ouvir">▶</button>` : ''}
+                ${f.audio_url ? `<button class="btn-audio-sm" onclick="event.stopPropagation();playAudio('${f.audio_url}',this)" title="Ouvir">▶</button>` : ''}
                 <span class="prof-phrase-save-${idx}_${lv}_${fi}"></span>
               </div>
             </div>
@@ -322,10 +322,10 @@
       return c[lv]||"#888";
     }
 
-    async function playAudio(filename) {
+    async function playAudio(filename, btn) {
       if(!filename) return;
       if(!audioEl.paused){audioEl.pause();return;}
-      afbPlayAudio(filename, null);
+      afbPlayAudio(filename, btn);
     }
 
     Guest.check().then((g) => { isGuest = g; load(); });

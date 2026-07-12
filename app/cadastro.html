@@ -44,6 +44,8 @@
   <script src="../assets/js/auth.js"></script>
   <script>
     Auth.redirectIfLoggedIn();
+    const referralCode = new URLSearchParams(location.search).get("ref");
+    if (referralCode) localStorage.setItem("afb_pending_referral", referralCode.toUpperCase());
     var form=document.getElementById("signup-form"),err=document.getElementById("err");
     form.addEventListener("submit", function(e){
       e.preventDefault();err.classList.remove("show");

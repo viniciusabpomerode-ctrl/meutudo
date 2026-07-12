@@ -59,6 +59,11 @@
     </div>
 
     <h3 class="section-title">Conta</h3>
+    <div class="card" id="referral-card" style="margin-bottom:16px">
+      <div class="flex-between" style="gap:12px;flex-wrap:wrap"><div><b>Indique e ganhe créditos</b><p class="muted" style="margin:3px 0">20% em créditos quando seu amigo assinar.</p></div><b id="credit-balance">R$ 0,00</b></div>
+      <div style="display:flex;gap:8px;margin-top:12px"><input id="referral-link" readonly aria-label="Seu link de indicação"><button class="btn btn-outline" id="copy-referral">Copiar</button></div>
+      <small class="muted" id="referral-count"></small>
+    </div>
     <div class="card">
       <button class="btn btn-ghost" id="logout-btn">Sair da conta</button>
     </div>
@@ -81,17 +86,23 @@
   <script src="../assets/js/nav.js"></script>
   <script src="../assets/js/i18n.js"></script>
   <script>
-    Auth.requireLogin();
-    renderNav("perfil");
-
+    (async function initProfile(){
+    await Auth._ready();
     const user = Auth.currentUser();
+    if (!user) {
+      const next = encodeURIComponent(location.pathname + location.search);
+      location.replace(`login.html?next=${next}`);
+      return;
+    }
+    renderNav("perfil");
     document.getElementById("name").value = user.name;
     document.getElementById("email").value = user.email;
 
-    document.getElementById("save-name").addEventListener("click", () => {
+    document.getElementById("save-name").addEventListener("click", async () => {
       const newName = document.getElementById("name").value.trim();
       if (newName) {
-        Auth.updateCurrentUser({ name: newName });
+        const result = await Auth.updateCurrentUser({ name: newName });
+        if (!result.ok) { alert("Não foi possível atualizar: " + result.error); return; }
         renderNav("perfil");
         alert("Nome atualizado!");
       }
@@ -157,6 +168,11 @@
 
     document.getElementById("logout-btn").addEventListener("click", () => Auth.logout());
 
+    try {
+      const token=await Auth.accessToken(),response=await fetch('/.netlify/functions/referrals',{headers:{Authorization:`Bearer ${token}`}}),ref=await response.json();
+      if(response.ok){const link=`${location.origin}/r/${ref.code}`;document.getElementById('referral-link').value=link;document.getElementById('credit-balance').textContent=(ref.balance_cents/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});document.getElementById('referral-count').textContent=`${ref.referrals.length} indicação(ões)`;document.getElementById('copy-referral').onclick=async()=>{await navigator.clipboard.writeText(link);document.getElementById('copy-referral').textContent='Copiado!'}}
+    } catch(e) {}
+
     // ── Assinatura ──
     const PLAN_LABEL = { mensal: "Premium Mensal", anual: "Premium Anual", fundador: "Premium Vitalício (Fundador)" };
     const checkoutStatus = new URLSearchParams(location.search).get("checkout");
@@ -169,9 +185,10 @@
       const actionsEl = document.getElementById("premium-actions");
 
       async function fetchWithRetry(maxTries) {
+        const token = await Auth.accessToken();
         for (let i = 0; i < maxTries; i++) {
           if (i > 0) await new Promise(r => setTimeout(r, 2000));
-          const res = await fetch(`/.netlify/functions/check-premium?email=${encodeURIComponent(user.email)}`);
+          const res = await fetch(`/.netlify/functions/check-premium`, {headers:{Authorization:`Bearer ${token}`}});
           const data = await res.json();
           if (data.premium) return data;
         }
@@ -179,7 +196,7 @@
       }
 
       try {
-        const data = checkoutStatus === "sucesso" ? await fetchWithRetry(5) : await fetch(`/.netlify/functions/check-premium?email=${encodeURIComponent(user.email)}`).then(r => r.json());
+        const data = checkoutStatus === "sucesso" ? await fetchWithRetry(5) : await fetch(`/.netlify/functions/check-premium`, {headers:{Authorization:`Bearer ${await Auth.accessToken()}`}}).then(r => r.json());
         if (data.premium) {
           statusEl.textContent = `✨ ${PLAN_LABEL[data.plan] || "Premium"} ativo`;
           noteEl.textContent = "Biblioteca completa liberada.";
@@ -193,8 +210,8 @@
               btn.disabled = true; btn.textContent = "Abrindo...";
               try {
                 const r = await fetch("/.netlify/functions/create-portal", {
-                  method: "POST", headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ email: user.email }),
+                  method: "POST", headers: { "Content-Type": "application/json", Authorization:`Bearer ${await Auth.accessToken()}` },
+                  body: "{}",
                 });
                 const d = await r.json();
                 if (!r.ok || !d.url) throw new Error(d.error || "erro");
@@ -219,6 +236,7 @@
         statusEl.textContent = checkoutStatus === "sucesso" ? "⏳ Verificando..." : "Plano grátis";
         actionsEl.innerHTML = `<a class="btn btn-primary btn-sm" href="planos.html">Ver planos</a>`;
       }
+    })();
     })();
   </script>
 </body>

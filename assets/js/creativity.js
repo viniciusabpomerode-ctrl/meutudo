@@ -2,7 +2,7 @@
   "use strict";
   renderNav("criatividade");
   const LEVELS=["A1","A2","B1","B2","C1","C2"], FREE_DAILY=3, GUEST_DAILY=1, COOLDOWN=30000;
-  const $=id=>document.getElementById(id);let questions=[],level=null,current=null,recognition=null,mediaRecorder=null,mediaStream=null,recordedBlob=null,recordUrl=null,recordStarted=0,recordTimer=null,cooldown=false;
+  const $=id=>document.getElementById(id);let questions=[],level=null,current=null,recognition=null,mediaRecorder=null,mediaStream=null,recordedBlob=null,recordUrl=null,recordStarted=0,recordTimer=null,cooldown=false,answerBeforeRecording="";
   const usageKey=()=>`afb_creativity_${new Date().toISOString().slice(0,10)}`;
   function usage(){try{return JSON.parse(localStorage.getItem(usageKey()))||{count:0,last:0}}catch(e){return {count:0,last:0}}}
   function isLogged(){return !!Auth.currentUser()}
@@ -28,14 +28,21 @@
   async function startRecording(){
     if(!navigator.mediaDevices||!window.MediaRecorder){$("record-status").textContent="Seu navegador não oferece gravação. Você pode digitar normalmente.";return}
     try{
-      mediaStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});const chunks=[];const mime=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":"audio/webm";
-      mediaRecorder=new MediaRecorder(mediaStream,{mimeType:mime});mediaRecorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};mediaRecorder.onstop=()=>{recordedBlob=new Blob(chunks,{type:mime});if(recordUrl)URL.revokeObjectURL(recordUrl);recordUrl=URL.createObjectURL(recordedBlob);$("record-playback").src=recordUrl;$("record-panel").classList.add("show");cleanupCapture();$("record-status").textContent="Gravação pronta. Ouça, confira a transcrição ou regrave."};mediaRecorder.start();
-      const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(SR){recognition=new SR();recognition.lang="de-DE";recognition.continuous=true;recognition.interimResults=true;let base=$("answer").value.trim();recognition.onresult=e=>{let final="",partial="";for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)final+=t+" ";else partial+=t}if(final)base=(base+" "+final).trim();$("answer").value=(base+" "+partial).trim();countWords()};recognition.onerror=()=>{};try{recognition.start()}catch(e){}}
+      mediaStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});const chunks=[];const mime=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":"audio/webm";answerBeforeRecording=$("answer").value.trim();
+      mediaRecorder=new MediaRecorder(mediaStream,{mimeType:mime});mediaRecorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};mediaRecorder.onstop=async()=>{recordedBlob=new Blob(chunks,{type:mime});if(recordUrl)URL.revokeObjectURL(recordUrl);recordUrl=URL.createObjectURL(recordedBlob);$("record-playback").src=recordUrl;$("record-panel").classList.add("show");cleanupCapture();if($("answer").value.trim()===answerBeforeRecording)await transcribeRecording();else $("record-status").textContent="Gravação e transcrição prontas. Confira o texto antes de analisar."};mediaRecorder.start();
+      const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(SR){recognition=new SR();recognition.lang="de-DE";recognition.continuous=true;recognition.interimResults=true;let base=$("answer").value.trim();recognition.onresult=e=>{let final="",partial="";for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)final+=t+" ";else partial+=t}if(final)base=(base+" "+final).trim();$("answer").value=(base+" "+partial).trim();countWords()};recognition.onerror=e=>{$("record-status").textContent=`Reconhecimento do navegador indisponível (${e.error}). Tentaremos a transcrição segura ao finalizar.`};try{recognition.start()}catch(e){}}
       recordStarted=Date.now();recordTimer=setInterval(()=>{const sec=Math.floor((Date.now()-recordStarted)/1000);$("record-status").innerHTML=`<span class="record-dot"></span> Gravando ${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`;if(sec>=180)stopRecording()},500);$("record").hidden=true;$("stop").hidden=false;$("record-status").className="recording";
     }catch(e){$("record-status").className="muted";$("record-status").textContent="Permita o acesso ao microfone para gravar sua resposta."}
   }
   function cleanupCapture(){if(recordTimer)clearInterval(recordTimer);recordTimer=null;if(mediaStream)mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null;if(recognition)try{recognition.stop()}catch(e){}recognition=null;$("record").hidden=false;$("stop").hidden=true;$("record-status").className="muted"}
   function stopRecording(){if(mediaRecorder&&mediaRecorder.state==="recording")mediaRecorder.stop();else cleanupCapture()}
+  async function transcribeRecording(){
+    if(!recordedBlob){return}
+    if(!window.AFB_CREATIVITY_API){$("record-status").textContent="Gravação pronta. Este navegador não gerou texto; digite a resposta ou ative o Worker de transcrição.";return}
+    const token=await Auth.accessToken();if(!token){$("record-status").textContent="Gravação pronta. Entre na conta para gerar a transcrição.";return}
+    $("record-status").textContent="Transcrevendo sua resposta em alemão...";
+    try{const r=await fetch(window.AFB_CREATIVITY_API+"/transcribe",{method:"POST",headers:{Authorization:`Bearer ${token}`,"Content-Type":recordedBlob.type||"audio/webm"},body:recordedBlob});const d=await r.json();if(!r.ok||!d.text)throw new Error(d.error||"transcription_failed");$("answer").value=(answerBeforeRecording+" "+d.text).trim();countWords();$("record-status").textContent="Transcrição pronta. Confira o texto antes de analisar."}catch(e){$("record-status").textContent="Não foi possível transcrever agora. A gravação continua disponível para ouvir."}
+  }
   function discardRecording(){if(recordUrl)URL.revokeObjectURL(recordUrl);recordUrl=null;recordedBlob=null;$("record-playback").removeAttribute("src");$("record-panel").classList.remove("show");$("record-status").className="muted";$("record-status").textContent="Você também pode responder falando."}
   async function analyze(){
     const answer=$("answer").value.trim(),words=answer.split(/\s+/).filter(Boolean).length,u=usage(),wait=COOLDOWN-(Date.now()-u.last);

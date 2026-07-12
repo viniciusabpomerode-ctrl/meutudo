@@ -23,6 +23,7 @@ function getSupabase(){
 
 var _afbSessionCache = null;
 var _afbAuthReadyPromise = null;
+async function syncPendingReferral(session){const code=localStorage.getItem('afb_pending_referral');if(!code||!session?.access_token)return;try{const r=await fetch('/.netlify/functions/referrals',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({code})});if(r.ok)localStorage.removeItem('afb_pending_referral')}catch(e){}}
 
 function getUserId(){
   var sb=getSupabase();
@@ -43,7 +44,7 @@ const Auth = {
           var sb=getSupabase();
           if(!sb){r(false);return}
           if(sb.auth.getSession){
-            sb.auth.getSession().then(function(x){_afbSessionCache=x&&x.data?x.data.session:null;r(true)}).catch(function(){r(true)});
+            sb.auth.getSession().then(function(x){_afbSessionCache=x&&x.data?x.data.session:null;syncPendingReferral(_afbSessionCache);r(true)}).catch(function(){r(true)});
             if(sb.auth.onAuthStateChange)sb.auth.onAuthStateChange(function(_event,session){_afbSessionCache=session||null});
           }else{
             try{_afbSessionCache=sb.auth.session?sb.auth.session():null}catch(e){}
@@ -113,7 +114,19 @@ const Auth = {
     return null;
   },
 
-  updateCurrentUser: function(patch){},
+  updateCurrentUser: async function(patch){
+    await Auth._ready();
+    var sb=getSupabase();
+    if(!sb)return {ok:false,error:"Supabase indisponivel"};
+    try{
+      var data={};
+      if(patch&&patch.name)data.name=String(patch.name).trim().slice(0,80);
+      var r=await sb.auth.updateUser({data:data});
+      if(r.error)return {ok:false,error:r.error.message};
+      if(_afbSessionCache&&r.data&&r.data.user)_afbSessionCache.user=r.data.user;
+      return {ok:true,user:r.data.user};
+    }catch(e){return {ok:false,error:e.message}}
+  },
 
   accessToken: async function(){
     await Auth._ready();
@@ -139,3 +152,12 @@ const Auth = {
     });
   }
 };
+
+// Proteção leve contra uso simultâneo. O servidor continua sendo a
+// autoridade; este arquivo apenas executa o heartbeat nas telas internas.
+if (location.pathname.includes('/app/') && !location.pathname.endsWith('/login.html') && !location.pathname.endsWith('/cadastro.html')) {
+  var sessionGuardScript=document.createElement('script');
+  sessionGuardScript.src='../assets/js/session-guard.js';
+  sessionGuardScript.defer=true;
+  document.head.appendChild(sessionGuardScript);
+}

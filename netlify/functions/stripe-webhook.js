@@ -43,6 +43,16 @@ async function upsertPremium(email, plan, active) {
   });
 }
 
+async function awardReferral(session) {
+  const userId=session.metadata?.user_id,amount=Math.floor((Number(session.amount_total)||0)*.20);
+  if(!userId||!amount)return;
+  const headers={apikey:process.env.SUPABASE_SERVICE_ROLE_KEY,Authorization:`Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,"Content-Type":"application/json"};
+  const rr=await fetch(`${SUPABASE_URL}/rest/v1/referrals?referred_user_id=eq.${userId}&status=eq.registered&select=referrer_user_id`,{headers});
+  const rows=await rr.json();if(!rows[0])return;
+  await fetch(`${SUPABASE_URL}/rest/v1/credit_ledger?on_conflict=reference_id`,{method:"POST",headers:{...headers,Prefer:"resolution=ignore-duplicates"},body:JSON.stringify({user_id:rows[0].referrer_user_id,amount_cents:amount,kind:"referral_reward",description:"20% em créditos por indicação confirmada",reference_id:`stripe:${session.id}`,available_at:new Date(Date.now()+7*86400000).toISOString()})});
+  await fetch(`${SUPABASE_URL}/rest/v1/referrals?referred_user_id=eq.${userId}`,{method:"PATCH",headers,body:JSON.stringify({status:"paid",paid_at:new Date().toISOString()})});
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "method not allowed" };
@@ -66,6 +76,7 @@ exports.handler = async (event) => {
       const email = session.customer_email || session.metadata?.email;
       const plan = session.metadata?.plan || "mensal";
       if (email) await upsertPremium(email, plan, true);
+      await awardReferral(session);
     }
 
     if (stripeEvent.type === "customer.subscription.deleted") {

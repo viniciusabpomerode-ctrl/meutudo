@@ -6,3 +6,8 @@
 
 [build.environment]
   NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/r/:code"
+  to = "/app/cadastro.html?ref=:code"
+  status = 302

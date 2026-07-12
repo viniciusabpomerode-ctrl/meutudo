@@ -2,17 +2,28 @@
 // GET /.netlify/functions/check-premium?email=fulano@exemplo.com
 
 const SUPABASE_URL = "https://zqrdpmrwnprtelgloawb.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_CVFm1nLMf9GCPr-RKKU6Rw_AFixWd5z";
+async function authenticatedUser(event) {
+  const authorization = event.headers.authorization || event.headers.Authorization || "";
+  if (!authorization.startsWith("Bearer ")) return null;
+  const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {headers:{apikey:SUPABASE_ANON_KEY,Authorization:authorization}});
+  if (!response.ok) return null;
+  const user = await response.json();
+  return user?.id && user?.email ? user : null;
+}
 
 exports.handler = async (event) => {
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Authorization",
     "Content-Type": "application/json",
   };
   if (event.httpMethod === "OPTIONS") return { statusCode: 204, headers };
 
-  const email = event.queryStringParameters?.email;
-  if (!email) return { statusCode: 400, headers, body: JSON.stringify({ error: "email obrigatorio" }) };
+  const user = await authenticatedUser(event);
+  if (!user) return { statusCode: 401, headers, body: JSON.stringify({ error: "unauthorized" }) };
+  const email = user.email;
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return { statusCode: 200, headers, body: JSON.stringify({ premium: false, plan: null }) };
   }

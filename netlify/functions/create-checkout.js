@@ -17,12 +17,22 @@ const MODE_BY_PLAN = {
   anual: "subscription",
   fundador: "payment",
 };
+const SUPABASE_URL = "https://zqrdpmrwnprtelgloawb.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_CVFm1nLMf9GCPr-RKKU6Rw_AFixWd5z";
+async function authenticatedUser(event) {
+  const authorization = event.headers.authorization || event.headers.Authorization || "";
+  if (!authorization.startsWith("Bearer ")) return null;
+  const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {headers:{apikey:SUPABASE_ANON_KEY,Authorization:authorization}});
+  if (!response.ok) return null;
+  const user = await response.json();
+  return user?.id && user?.email ? user : null;
+}
 
 exports.handler = async (event) => {
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Content-Type": "application/json",
   };
 
@@ -38,13 +48,13 @@ exports.handler = async (event) => {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "invalid json" }) };
   }
 
-  const { plan, email } = body;
+  const { plan } = body;
+  const user = await authenticatedUser(event);
+  if (!user) return { statusCode: 401, headers, body: JSON.stringify({ error: "login obrigatorio" }) };
+  const email = user.email;
   const priceId = PRICE_BY_PLAN[plan];
   if (!priceId) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "plano invalido ou price id nao configurado: " + plan }) };
-  }
-  if (!email) {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: "email obrigatorio" }) };
   }
   if (!process.env.STRIPE_SECRET_KEY) {
     return { statusCode: 500, headers, body: JSON.stringify({ error: "STRIPE_SECRET_KEY nao configurada no Netlify" }) };
@@ -62,6 +72,7 @@ exports.handler = async (event) => {
   params.append("cancel_url", `${origin}/app/planos.html?checkout=cancelado`);
   params.append("metadata[plan]", plan);
   params.append("metadata[email]", email);
+  params.append("metadata[user_id]", user.id);
 
   try {
     const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {

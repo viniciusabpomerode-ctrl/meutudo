@@ -24,6 +24,8 @@ scripts/*.py
 
 # SQL e CSVs (build artifacts)
 *.sql
+!supabase/
+!supabase/*.sql
 *.csv
 update_verbos.json
 relatorio_verbos.csv

@@ -514,3 +514,39 @@ a.card:hover { transform:translateY(-3px); background:var(--card-hover); }
 
 .mi-wavebar { animation:miWave 1s ease-in-out infinite alternate; transform-origin:bottom; }
 @keyframes miWave { from{opacity:.55; transform:scaleY(.7);} to{opacity:1; transform:scaleY(1);} }
+/* ============================================================
+   Legibilidade reforçada em todos os ambientes
+   ============================================================ */
+:root[data-theme][data-mode="night"] {
+  --text-secondary: color-mix(in srgb, var(--text-primary) 76%, transparent);
+  --border-light: color-mix(in srgb, var(--text-primary) 18%, transparent);
+}
+:root[data-theme][data-mode="day"] {
+  --text-secondary: color-mix(in srgb, var(--text-primary) 72%, transparent);
+  --border-light: color-mix(in srgb, var(--text-primary) 20%, transparent);
+}
+.muted,.phrase-pt,.sentence-pt,.track-sub,.price-note,.form-footer,small { color:var(--text-secondary)!important; }
+.card,.navbar,.nav-dd-menu,.journey-dialog,.ext-tray,.lofi-player,.pomo-box {
+  color:var(--text-primary);
+  border-color:var(--border-light);
+}
+input,select,textarea {
+  color:var(--text-primary)!important;
+  background:color-mix(in srgb,var(--bg-secondary) 88%,transparent)!important;
+  border:1px solid var(--border-light)!important;
+}
+input::placeholder,textarea::placeholder { color:var(--text-secondary);opacity:.9; }
+.badge,.tag,.pill,.level-badge { font-size:max(.78rem,12px);font-weight:650; }
+.btn,.navbar a,.nav-dd-trigger { font-size:max(.84rem,13px); }
+.card p,.card li,.sentence-row,.phrase-de,.phrase-pt { line-height:1.65; }
+.ext-arrow,.ext-tray,.lofi-player,.pomo-box {
+  background:color-mix(in srgb,var(--bg-secondary) 94%,#000 6%)!important;
+}
+.ext-tray .ext-item,.lofi-player .hdr span,.lofi-player p,.pomo-box .mode {
+  color:var(--text-primary)!important;
+}
+.lofi-player .lofi-extra .sts a,.lofi-player .lofi-extra .sts button {
+  border:1px solid var(--border-light);background:var(--card-hover);color:var(--text-primary);
+  border-radius:12px;padding:6px 10px;font:inherit;cursor:pointer;text-decoration:none;
+}
+@media(max-width:600px){body{font-size:1rem}.card{padding:18px}.lofi-player{width:min(360px,calc(100vw - 24px))!important;right:12px!important}}

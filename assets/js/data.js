@@ -73,6 +73,12 @@ const AFBData = {
   _signedCache: {},
   async signedAudioUrl(path) {
     if (!path) return null;
+    // Os JSONs mais novos podem trazer a URL completa do R2. O Supabase
+    // precisa somente da chave interna do objeto.
+    if (/^https?:\/\//i.test(path)) {
+      try { path = new URL(path).pathname.replace(/^\/+/, ""); }
+      catch { return null; }
+    }
     if (AFBData._signedCache[path]) return AFBData._signedCache[path];
     const res = await fetch(
       `${AFB_SUPABASE_URL}/storage/v1/object/sign/${AFB_AUDIO_BUCKET}/${path}`,
@@ -102,12 +108,15 @@ async function afbPlayAudio(path, btn) {
   const originalLabel = btn ? btn.textContent : null;
   if (btn) btn.textContent = "⏳";
 
-  const r2Url = `${AFB_R2_PUBLIC_URL}/${path}`;
-  const supabaseUrl = await AFBData.signedAudioUrl(path);
-
-  // Prefere Supabase; se falhar, R2 assume no onerror
-  let triedR2 = !supabaseUrl; // se Supabase nem retornou URL, ja vai direto pro R2
-  const url = supabaseUrl || r2Url;
+  const isAbsolute = /^https?:\/\//i.test(path);
+  const storagePath = isAbsolute
+    ? new URL(path).pathname.replace(/^\/+/, "")
+    : String(path).replace(/^\/+/, "");
+  const r2Url = isAbsolute ? path : `${AFB_R2_PUBLIC_URL}/${storagePath}`;
+  // A assinatura do Supabase começa agora, em paralelo. O R2 toca no mesmo
+  // clique para preservar a permissão de reprodução do navegador.
+  const supabasePromise = AFBData.signedAudioUrl(storagePath).catch(() => null);
+  let switchedToSupabase = false;
 
   let player = document.getElementById("afb-audio-player");
   if (!player) {
@@ -116,21 +125,21 @@ async function afbPlayAudio(path, btn) {
     player.style.display = "none";
     document.body.appendChild(player);
   }
-  player.onerror = () => {
-    if (!triedR2) {
-      // Supabase falhou → tenta R2 na hora
-      triedR2 = true;
-      player.src = r2Url;
-      player.play().catch(() => {});
-      return;
+  async function trySupabase() {
+    if (switchedToSupabase) return;
+    switchedToSupabase = true;
+    const supabaseUrl = await supabasePromise;
+    if (supabaseUrl) {
+      player.src = supabaseUrl;
+      try { await player.play(); return; } catch {}
     }
-    // Ambos falharam
     if (btn) {
       btn.textContent = "⚠️ áudio indisponível";
       setTimeout(() => { btn.textContent = originalLabel; }, 2000);
     }
-  };
-  player.src = url;
+  }
+  player.onerror = trySupabase;
+  player.src = r2Url;
   if (btn) btn.textContent = originalLabel;
-  player.play().catch(() => {});
+  player.play().catch(trySupabase);
 }

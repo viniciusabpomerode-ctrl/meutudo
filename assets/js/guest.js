@@ -23,7 +23,10 @@ var Guest = {
     if (Guest._premiumEmail === user.email && Guest._premiumCache !== null) {
       return Promise.resolve(Guest._premiumCache);
     }
-    return fetch("/.netlify/functions/check-premium?email=" + encodeURIComponent(user.email))
+    return Auth.accessToken().then(function(token) {
+      if (!token) return { ok: false, json: function(){ return Promise.resolve({premium:false}); } };
+      return fetch("/.netlify/functions/check-premium", {headers:{Authorization:"Bearer "+token}});
+    })
       .then(function(r) { return r.json(); })
       .then(function(d) {
         Guest._premiumEmail = user.email;

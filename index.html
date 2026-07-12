@@ -587,12 +587,16 @@
     });
 
     // ── Player lo-fi ──
+    const MUSIC_KEY="afb_music_state";
+    const savedMusic=(()=>{try{return JSON.parse(localStorage.getItem(MUSIC_KEY)||"{}")}catch{return{}}})();
     let playing = false;
     const lofiFrame = document.getElementById("lofi-frame");
-    let currentStation = "working";
+    let currentStation = savedMusic.station || "working";
+    function saveMusic(){localStorage.setItem(MUSIC_KEY,JSON.stringify({station:currentStation,playing}));document.dispatchEvent(new CustomEvent('afb:music-state',{detail:{station:currentStation,playing,title:`${currentStation} · LoFi`}}))}
     function loadStation(st) {
       currentStation = st;
       lofiFrame.src = `https://loficafe.net/embed/${st}?utm_source=alemaofacilbrasil&utm_medium=embed`;
+      saveMusic();
     }
     document.getElementById("play-btn").addEventListener("click", (e) => {
       miRipple(e.currentTarget);
@@ -600,8 +604,9 @@
       e.currentTarget.textContent = playing ? "❚❚" : "▶";
       document.getElementById("track-status").textContent = playing ? "LoFi Cafe · tocando agora" : "LoFi Cafe · pausado";
       document.getElementById("wave").style.opacity = playing ? "1" : ".5";
-      if (playing && !lofiFrame.src) loadStation(currentStation);
+      if (playing && !lofiFrame.getAttribute("src")) loadStation(currentStation);
       lofiFrame.style.display = playing ? "block" : "none";
+      saveMusic();
       SFX.ambientChime();
     });
     document.getElementById("expand-toggle").addEventListener("click", (e) => {
@@ -618,6 +623,7 @@
         if (playing) lofiFrame.style.display = "block";
       });
     });
+    window.AFBMusicPlayer={toggle(){document.getElementById('play-btn').click()},setStation:loadStation,state:()=>({station:currentStation,playing})};
 
     // ── Pomodoro editável (presets 5/15/25 + setas + edição direta) ──
     let pomoMin = 25, pomoRunning = false, pomoTimer = null, pomoSecsLeft = 25 * 60;

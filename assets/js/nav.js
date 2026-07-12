@@ -55,6 +55,9 @@ function renderNav(active) {
 // ── Bandeja de ferramentas (LoFi + Pomodoro) ──
 (function(){
 if (!window.location.pathname.includes("/app/")) return;
+const MUSIC_KEY="afb_music_state";
+function musicGet(){try{return{station:"working",playing:false,...JSON.parse(localStorage.getItem(MUSIC_KEY)||"{}")}}catch{return{station:"working",playing:false}}}
+function musicSet(patch){const state={...musicGet(),...patch};localStorage.setItem(MUSIC_KEY,JSON.stringify(state));document.dispatchEvent(new CustomEvent("afb:music-state",{detail:{...state,title:`${state.station} · LoFi`}}));return state}
 
 const S = document.createElement("style");
 S.textContent = `
@@ -101,7 +104,7 @@ document.head.appendChild(S);
 const arrow=document.createElement("button");arrow.className="ext-arrow";arrow.id="ext-arrow";arrow.textContent="^";arrow.title="Ferramentas";
 const tray=document.createElement("div");tray.className="ext-tray hidden";tray.id="ext-tray";
 tray.innerHTML='<div class="ext-item" id="tray-lofi"><span class="dot" id="tl-dot"></span><span id="tl-name">🎵 LoFi</span><span class="tray-play" id="tl-play" style="margin-left:auto;font-size:.8rem;padding:2px 8px;border-radius:8px;background:#444;color:#999">▶</span></div><div class="ext-item" id="tray-pomo"><span class="dot" id="tp-dot"></span>🍅 Pomodoro</div><div class="ext-item" id="tray-saved"><span class="dot" id="ts-dot"></span><span id="tray-saved-icon">❤️</span> Salvos</div>';
-const lofiFrame=document.createElement("iframe");lofiFrame.id="lofi-frame";lofiFrame.src="https://loficafe.net/embed/working?utm_source=alemaofacilbrasil&utm_medium=embed";lofiFrame.setAttribute("width","360");lofiFrame.setAttribute("height","80");lofiFrame.setAttribute("frameborder","0");lofiFrame.setAttribute("allow","autoplay");lofiFrame.setAttribute("loading","lazy");lofiFrame.style.cssText="position:fixed;bottom:-9999px;right:-9999px;border-radius:10px";
+const initialMusic=musicGet();const lofiFrame=document.createElement("iframe");lofiFrame.id="lofi-frame";lofiFrame.src=`https://loficafe.net/embed/${initialMusic.station}?utm_source=deutschbloom&utm_medium=embed`;lofiFrame.setAttribute("width","360");lofiFrame.setAttribute("height","80");lofiFrame.setAttribute("frameborder","0");lofiFrame.setAttribute("allow","autoplay");lofiFrame.setAttribute("loading","lazy");lofiFrame.style.cssText="position:fixed;bottom:-9999px;right:-9999px;border-radius:10px";
 
 const lofi=document.createElement("div");lofi.className="lofi-player hidden";lofi.id="lofi-player";
 lofi.innerHTML='<div class="hdr"><div class="left"><span>🎧 Working · LoFi Cafe</span></div><div><button class="expand-btn" id="lofi-expand" title="Expandir">⤢</button><button id="lofi-x">✕</button></div></div><div class="play-bar"><button id="lofi-play" style="width:44px;height:44px;border-radius:50%;border:none;background:var(--color-primary,#FFD700);color:#222;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">▶</button><span style="font-size:.8rem;color:#887a6a">Clique para ouvir</span></div><div class="lofi-extra"><p>🎵 Música ambiente para focar<br>Clique no player para ajustar volume</p><div class="sts"><a href="https://loficafe.net/embed/chilling" target="_blank">🧊 Chill</a><a href="https://loficafe.net/embed/studying" target="_blank">📚 Study</a><a href="https://loficafe.net/embed/working" target="_blank">💼 Work</a><a href="https://loficafe.net/embed/sleeping" target="_blank">😴 Sleep</a><a href="https://loficafe.net/embed/gaming" target="_blank">🎮 Game</a></div></div>';
@@ -115,14 +118,15 @@ arrow.onclick=()=>tray.classList.toggle("hidden");
 document.addEventListener("click",e=>{if(!arrow.contains(e.target)&&!tray.contains(e.target))tray.classList.add("hidden")});
 
 const ld=document.getElementById("tl-dot");const pd=document.getElementById("tp-dot");const lp=document.getElementById("tl-play");
-function lofiPlay(){lofiFrame.style.cssText="position:fixed;bottom:20px;right:20px;width:360px;border-radius:10px;z-index:9997";lofiFrame.src=lofiFrame.src;ld.classList.add("on");lp.textContent="⏸";lp.style.background="#2d7a2d";lp.style.color="#fff"}
-function lofiPause(){lofiFrame.style.cssText="position:fixed;bottom:-9999px;right:-9999px";ld.classList.remove("on");lp.textContent="▶";lp.style.background="#444";lp.style.color="#999"}
+function lofiPlay(){lofiFrame.style.cssText="position:fixed;bottom:20px;right:20px;width:360px;border-radius:10px;z-index:9997";lofiFrame.src=lofiFrame.src;ld.classList.add("on");lp.textContent="⏸";lp.style.background="#2d7a2d";lp.style.color="#fff";musicSet({playing:true})}
+function lofiPause(){lofiFrame.style.cssText="position:fixed;bottom:-9999px;right:-9999px";ld.classList.remove("on");lp.textContent="▶";lp.style.background="#444";lp.style.color="#999";musicSet({playing:false})}
 document.getElementById("tl-name").onclick=()=>{tray.classList.add("hidden");if(window.AFBMusicPlayer){document.querySelector(".music-player")?.scrollIntoView({behavior:"smooth",block:"center"});return}lofi.classList.remove("hidden")};
 lp.onclick=(e)=>{e.stopPropagation();tray.classList.add("hidden");if(window.AFBMusicPlayer){window.AFBMusicPlayer.toggle();return}const f=lofiFrame;if(f.style.bottom==="-9999px")lofiPlay();else lofiPause()};
 document.addEventListener("afb:music-state",function(e){var d=e.detail||{};document.getElementById("tl-name").textContent=d.title||"Música";lp.textContent=d.playing?"⏸":"▶";ld.classList.toggle("on",!!d.playing)});
 document.getElementById("lofi-x").onclick=()=>{lofi.classList.add("hidden");lofiPause()};
 document.getElementById("lofi-play").onclick=function(){const f=lofiFrame;if(f.style.bottom==="-9999px"){f.style.cssText="position:fixed;bottom:20px;right:20px;width:360px;border-radius:10px;z-index:9997";f.src=f.src;this.textContent="⏸"}else{f.style.cssText="position:fixed;bottom:-9999px;right:-9999px";this.textContent="▶"}};
 document.getElementById("lofi-expand").onclick=function(){lofi.classList.toggle("expanded");this.textContent=lofi.classList.contains("expanded")?"⤡":"⤢"};
+document.querySelectorAll('.lofi-extra .sts a').forEach(link=>{link.onclick=e=>{e.preventDefault();const station=link.href.split('/embed/')[1].split('?')[0];lofiFrame.src=`https://loficafe.net/embed/${station}?utm_source=deutschbloom&utm_medium=embed`;musicSet({station});if(musicGet().playing)lofiPlay()}});
 document.getElementById("tray-pomo").onclick=()=>{tray.classList.add("hidden");pomo.classList.toggle("hidden");pd.classList.toggle("on",!pomo.classList.contains("hidden"))};
 document.getElementById("pomo-x").onclick=()=>{pomo.classList.add("hidden");pd.classList.remove("on")};
 
