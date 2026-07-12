@@ -28,15 +28,26 @@ exports.handler = async (event) => {
     return { statusCode: 200, headers, body: JSON.stringify({ premium: false, plan: null }) };
   }
 
+  const serviceHeaders = {
+    apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+  };
+
   try {
+    // Quem administra o site tem acesso Premium automatico, sem precisar
+    // pagar/conceder plano separado.
+    const adminRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/app_admins?user_id=eq.${user.id}&select=role`,
+      { headers: serviceHeaders }
+    );
+    const adminRows = await adminRes.json();
+    if (adminRows[0]) {
+      return { statusCode: 200, headers, body: JSON.stringify({ premium: true, plan: "fundador" }) };
+    }
+
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/user_premium?email=eq.${encodeURIComponent(email)}&select=plan,active,expires_at`,
-      {
-        headers: {
-          apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
-        },
-      }
+      { headers: serviceHeaders }
     );
     const rows = await res.json();
     const row = rows[0];
