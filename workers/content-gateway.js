@@ -41,17 +41,24 @@ function sampleDeep(key, value) {
   return value;
 }
 
-async function checkPremium(request, env) {
+// So confere se o token e valido (sem checar plano) -- usado pra exigir
+// pelo menos login em audios, ja que visitante 100% anonimo nunca tem
+// botao de tocar pra itens travados mesmo, so pros liberados.
+async function getLoggedInUser(request) {
   const auth = request.headers.get("Authorization") || "";
-  if (!auth.startsWith("Bearer ")) return false;
-  if (!env.SUPABASE_SERVICE_ROLE_KEY) return false;
-
+  if (!auth.startsWith("Bearer ")) return null;
   const userRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
     headers: { apikey: SUPABASE_ANON_KEY, Authorization: auth },
   });
-  if (!userRes.ok) return false;
+  if (!userRes.ok) return null;
   const user = await userRes.json();
-  if (!user?.id || !user?.email) return false;
+  return user?.id && user?.email ? user : null;
+}
+
+async function checkPremium(request, env) {
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) return false;
+  const user = await getLoggedInUser(request);
+  if (!user) return false;
 
   const headers = {
     apikey: env.SUPABASE_SERVICE_ROLE_KEY,
@@ -108,7 +115,12 @@ export default {
     const isJson = key.startsWith("data/") && key.endsWith(".json");
 
     if (!isJson) {
-      // Audio/outros arquivos: repassa direto, com suporte a Range pra tocar.
+      // Audio/outros arquivos: repassa direto, com suporte a Range pra
+      // tocar. Nao exige login aqui de proposito -- o modo visitante deixa
+      // ouvir os itens liberados sem criar conta. A protecao real do audio
+      // vem do JSON: quem nao e Premium nunca descobre o nome/caminho dos
+      // arquivos de itens travados (o JSON amostrado nao inclui esses
+      // campos), entao nao tem como adivinhar/baixar em massa.
       const headers = new Headers(cors);
       object.writeHttpMetadata(headers);
       headers.set("etag", object.httpEtag);
