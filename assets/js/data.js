@@ -4,14 +4,12 @@ const AFB_SUPABASE_URL = "https://zqrdpmrwnprtelgloawb.supabase.co";
 const AFB_SUPABASE_ANON_KEY = "sb_publishable_CVFm1nLMf9GCPr-RKKU6Rw_AFixWd5z";
 const AFB_AUDIO_BUCKET = "podcast"; // mesmo bucket usado pelo app Flutter (bucket privado)
 
-// Cloudflare R2 — fallback para audios que nao estao no Supabase.
-// Depois que o Worker "content-gateway" for publicado, defina
-// window.AFB_CONTENT_GATEWAY_URL (ex: em cada pagina, antes deste script)
-// com a URL do Worker pra passar a usar ele em vez da URL publica direta
-// do R2 -- isso passa a exigir Premium pro conteudo completo. Sem essa
-// variavel definida, continua igual a hoje (URL publica direta).
+// Conteudo passa pelo Worker "content-gateway" (protege quem nao e Premium
+// de baixar o banco completo). window.AFB_CONTENT_GATEWAY_URL pode
+// sobrescrever isso (ex: apontar de volta pra URL publica do R2 em caso
+// de emergencia/debug).
 const AFB_R2_PUBLIC_URL = (typeof window !== "undefined" && window.AFB_CONTENT_GATEWAY_URL)
-  || "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev";
+  || "https://deutschbloom-content-gateway.quesaco93.workers.dev";
 
 const AFBData = {
   _cache: {},

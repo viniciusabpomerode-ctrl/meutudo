@@ -90,7 +90,7 @@
     let totalQuestions = 10;
     let highScore = parseInt(localStorage.getItem("quiz_high") || "0");
     let audioPlayer = new Audio();
-    const R2 = (window.AFB_CONTENT_GATEWAY_URL || "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev") + "/";
+    const R2 = (window.AFB_CONTENT_GATEWAY_URL || "https://deutschbloom-content-gateway.quesaco93.workers.dev") + "/";
 
     async function init() {
       isGuest = await Guest.isFree();
