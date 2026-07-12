@@ -40,7 +40,7 @@ var Guest = {
   // Para bloquear conteudo de usuario free, as paginas devem
   // combinar: Guest.check() (login) + Guest.isPremium() (plano)
   check: function () {
-    if (window.Auth && Auth._ready) {
+    if (typeof Auth !== "undefined" && Auth._ready) {
       return Auth._ready().then(function () {
         var user = Auth.currentUser();
         if (user) return false;

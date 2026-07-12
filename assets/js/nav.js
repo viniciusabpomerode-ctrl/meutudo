@@ -17,6 +17,17 @@ const AFB_CONTENT_PAGES = [
 ];
 
 function renderNav(active) {
+  _renderNavNow(active);
+  // Auth.currentUser() pode nao estar pronto ainda no primeiro desenho
+  // (a sessao do Supabase carrega de forma assincrona). Redesenha assim
+  // que a sessao real estiver confirmada, pra nao mostrar "visitante"
+  // por engano em quem ja esta logado.
+  if (typeof Auth !== "undefined" && Auth._ready) {
+    Auth._ready().then(() => _renderNavNow(active));
+  }
+}
+
+function _renderNavNow(active) {
   const user = Auth.currentUser();
   const isContentPage = AFB_CONTENT_PAGES.some((l) => l.key === active);
 
@@ -42,7 +53,7 @@ function renderNav(active) {
     : `<a class="btn btn-ghost btn-sm" href="login.html">Entrar</a>
        <a class="btn btn-primary btn-sm" href="cadastro.html">Criar conta</a>`;
   el.outerHTML = `
-    <header class="navbar">
+    <header class="navbar" id="app-nav">
       <a class="brand" href="../index.html">
         <span>${Theme.meta().icon}</span> DeutschBloom
       </a>
