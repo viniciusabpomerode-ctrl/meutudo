@@ -5,6 +5,23 @@
   const $=id=>document.getElementById(id);let questions=[],level=null,current=null,recognition=null,mediaRecorder=null,mediaStream=null,recordedBlob=null,recordUrl=null,recordStarted=0,recordTimer=null,cooldown=false,answerBeforeRecording="";
   const usageKey=()=>`afb_creativity_${new Date().toISOString().slice(0,10)}`;
   function usage(){try{return JSON.parse(localStorage.getItem(usageKey()))||{count:0,last:0}}catch(e){return {count:0,last:0}}}
+
+  // Gravacoes salvas -- so entra aqui se a pessoa clicar "Salvar", nunca
+  // fica em cache sem ela pedir. Guardado local (IndexedDB), nao vai pra
+  // nuvem -- e so um audio de pratica, nao "conteudo" do Caderno.
+  function openRecDB(){return new Promise((r,rej)=>{const req=indexedDB.open("afb_creativity_recs",1);req.onupgradeneeded=e=>e.target.result.createObjectStore("recs",{keyPath:"id"});req.onsuccess=()=>r(req.result);req.onerror=rej})}
+  function putSavedRec(rec){return openRecDB().then(db=>new Promise((r,rej)=>{const tx=db.transaction("recs","readwrite");tx.objectStore("recs").put(rec);tx.oncomplete=()=>r();tx.onerror=rej}))}
+  function getSavedRecs(){return openRecDB().then(db=>new Promise((r,rej)=>{const tx=db.transaction("recs","readonly");const req=tx.objectStore("recs").getAll();req.onsuccess=()=>r(req.result);req.onerror=rej}))}
+  function delSavedRec(id){return openRecDB().then(db=>new Promise((r,rej)=>{const tx=db.transaction("recs","readwrite");tx.objectStore("recs").delete(id);tx.oncomplete=()=>r();tx.onerror=rej}))}
+  function clearSavedRecs(){return openRecDB().then(db=>new Promise((r,rej)=>{const tx=db.transaction("recs","readwrite");tx.objectStore("recs").clear();tx.oncomplete=()=>r();tx.onerror=rej}))}
+  async function renderSavedRecs(){
+    const all=await getSavedRecs();
+    const card=$("saved-recs-card"),list=$("saved-recs-list");
+    if(!all.length){card.style.display="none";list.innerHTML="";return}
+    card.style.display="block";
+    all.sort((a,b)=>b.ts-a.ts);
+    list.innerHTML=all.map(rec=>`<div class="flex-between" style="padding:8px 0;border-bottom:1px solid var(--border-light);gap:8px;flex-wrap:wrap"><div style="min-width:0"><b style="font-size:.82rem">${esc(rec.prompt||"Gravação")}</b><p class="muted" style="margin:2px 0 0;font-size:.72rem">${new Date(rec.ts).toLocaleString("pt-BR")}</p></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><audio controls preload="none" style="height:32px;max-width:180px" src="${rec.base64}"></audio><button class="btn btn-ghost btn-sm" data-del-rec="${rec.id}">🗑️</button></div></div>`).join("");
+  }
   function isLogged(){return !!Auth.currentUser()}
   function maxAttempts(){return isLogged()?FREE_DAILY:GUEST_DAILY}
   function updateAttempts(){const u=usage(),left=Math.max(0,maxAttempts()-u.count);$("attempts").textContent=`${left} de ${maxAttempts()}`;$("attempt-note").textContent=isLogged()?"Seu limite diário está protegido.":"Visitantes recebem uma análise demonstrativa."}
@@ -12,6 +29,26 @@
     $("levels").innerHTML=LEVELS.map(l=>`<button class="level-btn" data-level="${l}">${l}</button>`).join("");
     $("levels").onclick=e=>{const b=e.target.closest("button");if(b)selectLevel(b.dataset.level)};
     $("answer").oninput=countWords;$("next").onclick=pickQuestion;$("analyze").onclick=analyze;$("record").onclick=startRecording;$("stop").onclick=()=>stopRecording();$("discard-record").onclick=discardRecording;
+    $("save-record").onclick=async()=>{
+      if(!recordedBlob)return;
+      const btn=$("save-record");btn.disabled=true;btn.textContent="Salvando...";
+      const reader=new FileReader();
+      reader.onload=async()=>{
+        await putSavedRec({id:"crea_"+Date.now(),prompt:current?current.prompt:"",ts:Date.now(),base64:reader.result});
+        btn.disabled=false;btn.textContent="✅ Salvo";setTimeout(()=>{btn.textContent="💾 Salvar gravação"},1500);
+        renderSavedRecs();
+      };
+      reader.readAsDataURL(recordedBlob);
+    };
+    $("clear-recs").onclick=async()=>{
+      if(!confirm("Excluir todas as gravações salvas neste aparelho?"))return;
+      await clearSavedRecs();renderSavedRecs();
+    };
+    $("saved-recs-list").addEventListener("click",async e=>{
+      const id=e.target.dataset.delRec;if(!id)return;
+      await delSavedRec(id);renderSavedRecs();
+    });
+    renderSavedRecs();
     try{
       let r=await fetch(`${AFB_R2_PUBLIC_URL}/data/criatividade.json`);
       if(!r.ok)r=await fetch("../data/criatividade.json");
