@@ -38,6 +38,30 @@
     const PRONOUN_LABEL = { ich: "ich", du: "du", er_sie_es: "er/sie/es", wir: "wir", ihr: "ihr", sie: "sie" };
     const PRONOUN_ORDER = ["ich", "du", "er_sie_es", "wir", "ihr", "sie"];
 
+    // Busca ao vivo no Supabase so o nome do audio (cursos_verb_examples.audio_url
+    // e cursos_verbs.audio_url) -- assim o audio tocado e sempre o mais atual,
+    // sem precisar regenerar o .json toda vez que alguem corrige um nome.
+    // O texto da frase continua vindo do arquivo rapido de sempre.
+    async function refreshAudioFromSupabase(verb) {
+      try {
+        const headers = { apikey: AFB_SUPABASE_ANON_KEY, Authorization: `Bearer ${AFB_SUPABASE_ANON_KEY}` };
+        const verbRes = await fetch(`${AFB_SUPABASE_URL}/rest/v1/cursos_verbs?id=eq.${verb.id}&select=audio_url`, { headers });
+        if (verbRes.ok) {
+          const rows = await verbRes.json();
+          if (rows[0] && rows[0].audio_url) verb.audio_url = rows[0].audio_url;
+        }
+        if (verb.examples && verb.examples.length) {
+          const exRes = await fetch(`${AFB_SUPABASE_URL}/rest/v1/cursos_verb_examples?verb_id=eq.${verb.id}&select=id,audio_url`, { headers });
+          if (exRes.ok) {
+            const rows = await exRes.json();
+            const byId = {};
+            rows.forEach((r) => { byId[r.id] = r.audio_url; });
+            verb.examples.forEach((ex) => { if (byId[ex.id]) ex.audio_url = byId[ex.id]; });
+          }
+        }
+      } catch (e) {}
+    }
+
     (async () => {
       let verb = null;
       if (nivelParam) {
@@ -50,6 +74,12 @@
       }
       const el = document.getElementById("content");
       if (!verb) { el.innerHTML = "<p>Verbo não encontrado.</p>"; return; }
+
+      // O nome do arquivo de audio busca sempre ao vivo no Supabase (rapido,
+      // e so esse campo) -- assim nao precisa regenerar o .json toda vez que
+      // alguem corrige um audio_url na tabela. O texto da frase continua
+      // vindo do arquivo rapido de sempre.
+      await refreshAudioFromSupabase(verb);
 
       const done = Progress.isCompleted(itemKey);
       const hasExamples = verb.examples.length > 0;
