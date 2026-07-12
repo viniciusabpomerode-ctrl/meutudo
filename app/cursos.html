@@ -134,7 +134,7 @@
       }
     }
 
-    Guest.check().then((g) => {
+    Guest.isFree().then((g) => {
       isGuest = g;
       if (isGuest && !["A1","A2"].includes(currentLevel)) currentLevel = "A1";
       renderLevelTabs();

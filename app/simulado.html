@@ -97,7 +97,7 @@
 
     // Modo visitante: simulados sao conteudo Premium — mostra a vitrine bloqueada
     let isGuest = true;
-    Guest.check().then((g) => {
+    Guest.isFree().then((g) => {
       isGuest = g;
       if (!isGuest) return;
       document.querySelectorAll(".level-btn").forEach((b) => {

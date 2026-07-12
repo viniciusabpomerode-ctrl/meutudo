@@ -92,7 +92,7 @@
     const R2 = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
 
     async function init() {
-      isGuest = await Guest.check();
+      isGuest = await Guest.isFree();
 
       // Load quiz counts from generated JSONs
       const levels = ["A1","A2","B1","B2","C1","C2"];

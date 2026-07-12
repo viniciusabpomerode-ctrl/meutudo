@@ -27,7 +27,9 @@
     renderNav("musica");
 
     (async () => {
-      const isGuest = await Guest.check();
+      const notLoggedIn = await Guest.check();
+      const isLoggedIn = !notLoggedIn;
+      const isGuest = notLoggedIn || !(await Guest.isPremium());
       const data = await AFBData.musica();
       const progress = Guest.safeProgress();
       const isVikings = Theme.get() === "vikings";
@@ -65,7 +67,7 @@
       }).join("") + (isGuest && lockedTotal > 0 ? Guest.banner(lockedTotal, "músicas com letra traduzida") : "");
 
       // Init save buttons (so nos cards liberados; logado ve todos)
-      if (!isGuest) {
+      if (isLoggedIn) {
         Object.entries(data.tracks_by_level).forEach(([lvlId, tracks]) => {
           tracks.forEach(t => {
             const span = document.querySelector(`.music-save-btn[data-id="${t.id}"]`);

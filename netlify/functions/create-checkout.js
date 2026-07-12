@@ -61,6 +61,9 @@ exports.handler = async (event) => {
   }
 
   const origin = event.headers.origin || `https://${event.headers.host}`;
+  // ui_mode=embedded: o checkout roda dentro da propria pagina (iframe do
+  // Stripe), sem sair do site. So precisa de return_url (nao success/cancel).
+  const embedded = body.embedded !== false;
 
   const params = new URLSearchParams();
   params.append("mode", MODE_BY_PLAN[plan]);
@@ -68,8 +71,13 @@ exports.handler = async (event) => {
   params.append("line_items[0][quantity]", "1");
   params.append("customer_email", email);
   params.append("client_reference_id", email);
-  params.append("success_url", `${origin}/app/perfil.html?checkout=sucesso`);
-  params.append("cancel_url", `${origin}/app/planos.html?checkout=cancelado`);
+  if (embedded) {
+    params.append("ui_mode", "embedded");
+    params.append("return_url", `${origin}/app/perfil.html?checkout=sucesso&session_id={CHECKOUT_SESSION_ID}`);
+  } else {
+    params.append("success_url", `${origin}/app/perfil.html?checkout=sucesso`);
+    params.append("cancel_url", `${origin}/app/planos.html?checkout=cancelado`);
+  }
   params.append("metadata[plan]", plan);
   params.append("metadata[email]", email);
   params.append("metadata[user_id]", user.id);
@@ -87,7 +95,7 @@ exports.handler = async (event) => {
     if (!res.ok) {
       return { statusCode: 500, headers, body: JSON.stringify({ error: data.error?.message || "erro no Stripe" }) };
     }
-    return { statusCode: 200, headers, body: JSON.stringify({ url: data.url }) };
+    return { statusCode: 200, headers, body: JSON.stringify(embedded ? { clientSecret: data.client_secret } : { url: data.url }) };
   } catch (e) {
     return { statusCode: 500, headers, body: JSON.stringify({ error: e.message }) };
   }

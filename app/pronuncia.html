@@ -241,7 +241,7 @@ function renderRecs(){
   });
 }
 
-Guest.check().then(function(g){isGuest=g;updateAttemptLabel();});
+Guest.isFree().then(function(g){isGuest=g;updateAttemptLabel();});
 
 function playRec(id){
   getAllRecs().then(function(recs){

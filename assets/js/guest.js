@@ -55,6 +55,15 @@ var Guest = {
     return Promise.resolve(true);
   },
 
+  // Resolve true se o conteudo deve ficar limitado (visitante OU
+  // logado sem plano pago) — e o que as paginas de conteudo devem
+  // usar pra decidir o que bloquear, nao Guest.check() sozinho.
+  isFree: async function () {
+    var guest = await Guest.check();
+    if (guest) return true;
+    return !(await Guest.isPremium());
+  },
+
   // Progress seguro: visitante nao tem progresso salvo
   safeProgress: function () {
     try {

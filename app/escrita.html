@@ -168,6 +168,6 @@ document.getElementById("filters").onclick=function(e){
   }
 };
 
-Guest.check().then(function(g){isGuest=g;loadData();});
+Guest.isFree().then(function(g){isGuest=g;loadData();});
 </script>
 </body></html>

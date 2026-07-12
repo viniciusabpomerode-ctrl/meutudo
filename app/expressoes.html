@@ -193,6 +193,7 @@
 
     // Modo visitante: primeiras AFB_FREE_LIMIT expressoes liberadas, resto com cadeado
     let isGuest = true;
+    let isLoggedIn = false;
     const guestFreeIds = new Set();
 
     const audioEl = document.getElementById("expr-audio");
@@ -396,11 +397,15 @@
     const _renderCards = renderCards;
     renderCards = function(lista) {
       const html = _renderCards(lista);
-      if (!isGuest) setTimeout(() => initSaveButtons(lista), 0);
+      if (isLoggedIn) setTimeout(() => initSaveButtons(lista), 0);
       return html;
     };
 
-    Guest.check().then((g) => { isGuest = g; load(); });
+    Promise.all([Guest.check(), Guest.isFree()]).then(([notLoggedIn, free]) => {
+      isLoggedIn = !notLoggedIn;
+      isGuest = free;
+      load();
+    });
   </script>
 </body>
 </html>

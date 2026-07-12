@@ -61,7 +61,7 @@
     <h3 class="section-title">Conta</h3>
     <div class="card" id="referral-card" style="margin-bottom:16px">
       <div class="flex-between" style="gap:12px;flex-wrap:wrap"><div><b>Indique e ganhe créditos</b><p class="muted" style="margin:3px 0">20% em créditos quando seu amigo assinar.</p></div><b id="credit-balance">R$ 0,00</b></div>
-      <div style="display:flex;gap:8px;margin-top:12px"><input id="referral-link" readonly aria-label="Seu link de indicação"><button class="btn btn-outline" id="copy-referral">Copiar</button></div>
+      <div style="display:flex;gap:8px;margin-top:12px"><input id="referral-link" readonly aria-label="Seu link de indicação" value="Carregando..."><button class="btn btn-outline" id="copy-referral" disabled>Copiar</button></div>
       <small class="muted" id="referral-count"></small>
     </div>
     <div class="card">
@@ -170,8 +170,21 @@
 
     try {
       const token=await Auth.accessToken(),response=await fetch('/.netlify/functions/referrals',{headers:{Authorization:`Bearer ${token}`}}),ref=await response.json();
-      if(response.ok){const link=`${location.origin}/r/${ref.code}`;document.getElementById('referral-link').value=link;document.getElementById('credit-balance').textContent=(ref.balance_cents/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});document.getElementById('referral-count').textContent=`${ref.referrals.length} indicação(ões)`;document.getElementById('copy-referral').onclick=async()=>{await navigator.clipboard.writeText(link);document.getElementById('copy-referral').textContent='Copiado!'}}
-    } catch(e) {}
+      if(response.ok){
+        const link=`${location.origin}/r/${ref.code}`;
+        document.getElementById('referral-link').value=link;
+        document.getElementById('copy-referral').disabled=false;
+        document.getElementById('credit-balance').textContent=(ref.balance_cents/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+        document.getElementById('referral-count').textContent=`${ref.referrals.length} indicação(ões)`;
+        document.getElementById('copy-referral').onclick=async()=>{await navigator.clipboard.writeText(link);document.getElementById('copy-referral').textContent='Copiado!'};
+      } else {
+        document.getElementById('referral-link').value='Não deu pra gerar o link agora';
+        document.getElementById('referral-count').textContent='Tenta atualizar a página em instantes.';
+      }
+    } catch(e) {
+      document.getElementById('referral-link').value='Não deu pra gerar o link agora';
+      document.getElementById('referral-count').textContent='Tenta atualizar a página em instantes.';
+    }
 
     // ── Assinatura ──
     const PLAN_LABEL = { mensal: "Premium Mensal", anual: "Premium Anual", fundador: "Premium Vitalício (Fundador)" };

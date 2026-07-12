@@ -100,6 +100,7 @@
 
     // Modo visitante: todas as profissões podem ser conhecidas; 10 frases em cada.
     let isGuest = true;
+    let isLoggedIn = false;
     let guestFreeProfId = null;
 
     const audioEl = document.getElementById("audio-el");
@@ -284,7 +285,7 @@
 
       // Save button for profession
       setTimeout(() => {
-        if (isGuest) return;
+        if (!isLoggedIn) return;
         const saveSpan = document.getElementById("prof-detail-save");
         if (saveSpan) saveSpan.appendChild(SavedItems.createSaveButton({
           type: "profession", id: String(e.id), nivel: e.level || "",
@@ -313,7 +314,7 @@
     const _renderCards = renderCards;
     renderCards = function(lista) {
       const html = _renderCards(lista);
-      if (!isGuest) setTimeout(initSaveButtons, 50);
+      if (isLoggedIn) setTimeout(initSaveButtons, 50);
       return html;
     };
 
@@ -328,7 +329,11 @@
       afbPlayAudio(filename, btn);
     }
 
-    Guest.check().then((g) => { isGuest = g; load(); });
+    Promise.all([Guest.check(), Guest.isFree()]).then(([notLoggedIn, free]) => {
+      isLoggedIn = !notLoggedIn;
+      isGuest = free;
+      load();
+    });
   </script>
 </body>
 </html>
