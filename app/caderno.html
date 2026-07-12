@@ -12,8 +12,9 @@
 .filter-bar{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;margin-bottom:14px;padding-bottom:4px;scrollbar-width:thin}
 .filter-chip{padding:6px 11px;border-radius:18px;border:1px solid var(--border-light);background:transparent;color:var(--text-secondary);cursor:pointer;font-size:.76rem;font-weight:600;font-family:inherit;transition:.2s;white-space:nowrap;flex:0 0 auto}
 .filter-chip:hover,.filter-chip.active{background:var(--color-primary);color:#222;border-color:var(--color-primary)}
-.day-group{margin-bottom:24px}
-.day-header{color:var(--text-secondary);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border-light)}
+.day-group{margin-bottom:14px}
+.day-header{color:var(--text-secondary);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.time-select{padding:6px 10px;border-radius:10px;border:1px solid var(--border-light);background:var(--bg-secondary);color:var(--text-primary);font-size:.8rem;font-family:inherit}
 .saved-card{background:var(--bg-secondary);border-radius:12px;padding:14px;margin-bottom:8px;border:1px solid var(--border-light);transition:.2s}
 .saved-card:hover{border-color:var(--color-primary)}
 .saved-card .top{display:flex;align-items:flex-start;gap:10px;cursor:pointer}
@@ -49,13 +50,16 @@
 <button class="filter-chip" data-f="profession">💼 Profissões</button>
 <button class="filter-chip" data-f="lyric">🎤 Letras</button>
 </div>
-<div class="filter-bar" id="time-filters" style="margin-bottom:20px;align-items:center;">
-<button class="filter-chip active" data-t="all">📅 Tudo</button>
-<button class="filter-chip" data-t="today">☀️ Hoje</button>
-<button class="filter-chip" data-t="week">📆 7 dias</button>
-<button class="filter-chip" data-t="month">🗓️ 30 dias</button>
-<button class="filter-chip" data-t="year">📅 1 ano</button>
-<input type="date" id="date-pick" style="padding:6px 10px;border-radius:20px;border:1px solid var(--border-light);background:var(--bg-secondary);color:var(--text-primary);font-size:.8rem;font-family:inherit;margin-left:8px;" title="Filtrar por data específica">
+<div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
+<select class="time-select" id="time-filters">
+<option value="all">📅 Qualquer data</option>
+<option value="today">☀️ Hoje</option>
+<option value="week">📆 Últimos 7 dias</option>
+<option value="month">🗓️ Últimos 30 dias</option>
+<option value="year">📅 Último ano</option>
+<option value="pick">🔎 Escolher uma data...</option>
+</select>
+<input type="date" id="date-pick" class="time-select" style="display:none;" title="Filtrar por data específica">
 </div>
 <div id="content"><p class="empty-state"><span class="big">📝</span><br>Carregando...</p></div>
 </div>
@@ -148,8 +152,14 @@ async function editNotes(t,id,cur){const n=prompt("Anotações:",cur==="undefine
 async function review(t,id){await SavedItems.markReviewed(t,id);load()}
 async function del(t,id){if(confirm("Remover?")){await SavedItems.remove(t,id);load()}}
 document.getElementById("filters").addEventListener("click",e=>{if(e.target.classList.contains("filter-chip")){document.querySelectorAll("#filters .filter-chip").forEach(b=>b.classList.remove("active"));e.target.classList.add("active");filter=e.target.dataset.f;render()}});
-document.getElementById("time-filters").addEventListener("click",e=>{if(e.target.classList.contains("filter-chip")){document.querySelectorAll("#time-filters .filter-chip").forEach(b=>b.classList.remove("active"));e.target.classList.add("active");timeFilter=e.target.dataset.t;document.getElementById("date-pick").value="";render()}});
-document.getElementById("date-pick").addEventListener("change",()=>{document.querySelectorAll("#time-filters .filter-chip").forEach(b=>b.classList.remove("active"));timeFilter="all";render()});
+document.getElementById("time-filters").addEventListener("change",e=>{
+  const v=e.target.value;
+  const datePick=document.getElementById("date-pick");
+  if(v==="pick"){datePick.style.display="";datePick.focus();timeFilter="all";}
+  else{datePick.style.display="none";datePick.value="";timeFilter=v;}
+  render();
+});
+document.getElementById("date-pick").addEventListener("change",()=>{timeFilter="all";render()});
 document.getElementById("search").addEventListener("input",e=>{query=e.target.value;render()});
 load();
 </script>

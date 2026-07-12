@@ -69,6 +69,7 @@
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/nav.js"></script>
   <script src="../assets/js/guest.js"></script>
+  <script src="../assets/js/rotation.js"></script>
   <script>
     renderNav("quiz");
 
@@ -142,24 +143,33 @@
 
     async function startQuiz() {
       let pool = [];
-      
+
       if (level === "all") {
         // Mix from all available quiz data
         for (const [lv, questions] of Object.entries(quizData)) {
-          pool = pool.concat(questions.map(q => ({...q, level: lv})));
+          pool = pool.concat(questions.map((q, i) => ({...q, level: lv, _rid: lv + "-" + i})));
         }
       } else {
-        pool = (quizData[level] || []).map(q => ({...q, level}));
+        pool = (quizData[level] || []).map((q, i) => ({...q, level, _rid: level + "-" + i}));
       }
-      
+
       if (pool.length < 4) {
         alert("Gere os quizzes primeiro:\npython Cursoweb\\scripts\\gerar_simulados.py --workers 6");
         return;
       }
-      
-      pool.sort(() => Math.random() - 0.5);
-      currentQuestions = pool.slice(0, totalQuestions);
-      
+
+      // Prioriza perguntas que a pessoa ainda nao viu; so repete quando
+      // ja viu tudo desse nivel.
+      const rotationNs = "quiz_" + level;
+      const preferred = (typeof ContentRotation !== "undefined")
+        ? ContentRotation.unseenPool(rotationNs, pool, q => q._rid)
+        : pool;
+      preferred.sort(() => Math.random() - 0.5);
+      currentQuestions = preferred.slice(0, totalQuestions);
+      if (typeof ContentRotation !== "undefined") {
+        ContentRotation.markManySeen(rotationNs, currentQuestions.map(q => q._rid));
+      }
+
       currentIdx = 0;
       score = 0;
       streak = 0;

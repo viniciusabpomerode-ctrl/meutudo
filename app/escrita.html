@@ -46,6 +46,7 @@ textarea:focus{outline:none;border-color:var(--color-primary)}
 <script src="../assets/js/nav.js"></script>
 <script src="../assets/js/data.js"></script>
 <script src="../assets/js/guest.js"></script>
+<script src="../assets/js/rotation.js"></script>
 <script>
 renderNav("escrita");
 var R2="https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
@@ -120,7 +121,10 @@ function loadData(){
 
 function nextSentence(){
   if(pool.length===0)return;
-  current=pool[Math.floor(Math.random()*pool.length)];
+  var rotationNs="escrita_"+(level||"all");
+  var preferred=(typeof ContentRotation!=="undefined")?ContentRotation.unseenPool(rotationNs,pool,function(x){return x.key}):pool;
+  current=preferred[Math.floor(Math.random()*preferred.length)];
+  if(typeof ContentRotation!=="undefined")ContentRotation.markSeen(rotationNs,current.key);
   document.getElementById("german").textContent=current.german;
   var pb=document.getElementById("playbtn");
   if(current.audio){pb.style.display="inline";pb.onclick=function(){

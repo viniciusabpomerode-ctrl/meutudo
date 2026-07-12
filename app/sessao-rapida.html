@@ -36,6 +36,7 @@
   <script src="../assets/js/nav.js"></script>
   <script src="../assets/js/i18n.js"></script>
   <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/rotation.js"></script>
   <script>
     renderNav("sessao-rapida");
     const levels=["A1","A2","B1","B2","C1","C2"];
@@ -43,7 +44,12 @@
     const box=document.getElementById("session");
     document.getElementById("levels").innerHTML=levels.map(l=>`<button class="level-choice" data-level="${l}">${l}</button>`).join("");
     document.querySelectorAll(".level-choice").forEach(b=>b.addEventListener("click",()=>start(b.dataset.level)));
-    function pick(a){return a[Math.floor(Math.random()*a.length)]}
+    function pick(a,ns,idFn){
+      const preferred=(typeof ContentRotation!=="undefined"&&ns)?ContentRotation.unseenPool(ns,a,idFn):a;
+      const item=preferred[Math.floor(Math.random()*preferred.length)];
+      if(typeof ContentRotation!=="undefined"&&ns)ContentRotation.markSeen(ns,idFn(item));
+      return item;
+    }
     function dots(){return `<div class="step-line">${[0,1,2].map(i=>`<i class="step-dot ${i<state.step?'done':i===state.step?'active':''}"></i>`).join("")}</div>`}
     async function loadQuiz(level){
       const path=`quiz_${level.toLowerCase()}.json`;let r=null;
@@ -71,11 +77,11 @@
     }
     function next(){state.step++;if(state.step>2){state.step=0;state.round++}render()}
     function renderPhrase(){
-      const s=pick(state.phrases);box.innerHTML=`${dots()}<span class="kind">Frase curta · ${state.level}</span><h2 class="main-de">${s.german_text}</h2><p class="translation">${s.portuguese_translation||""}</p>${s.pronunciation?`<p class="muted">Pronúncia: ${s.pronunciation}</p>`:""}<div class="quick-actions"><span class="feedback">Rodada ${state.round+1} de ${state.total}</span><div>${s.audio_url?`<button class="btn btn-outline" id="listen">🔊 Ouvir</button>`:""} <button class="btn btn-primary" onclick="next()">Continuar</button></div></div>`;
+      const s=pick(state.phrases,"sessao_phrase_"+state.level,x=>x.id!=null?x.id:x.german_text);box.innerHTML=`${dots()}<span class="kind">Frase curta · ${state.level}</span><h2 class="main-de">${s.german_text}</h2><p class="translation">${s.portuguese_translation||""}</p>${s.pronunciation?`<p class="muted">Pronúncia: ${s.pronunciation}</p>`:""}<div class="quick-actions"><span class="feedback">Rodada ${state.round+1} de ${state.total}</span><div>${s.audio_url?`<button class="btn btn-outline" id="listen">🔊 Ouvir</button>`:""} <button class="btn btn-primary" onclick="next()">Continuar</button></div></div>`;
       const listen=document.getElementById("listen");if(listen)listen.onclick=()=>afbPlayAudio(s.audio_url,listen);
     }
     function renderQuiz(){
-      const q=pick(state.questions);box.innerHTML=`${dots()}<span class="kind">Quiz relâmpago · ${state.level}</span><h2 class="main-de" style="font-size:clamp(1.35rem,3vw,2rem)">${q.pergunta_pt||q.question||"Escolha a resposta correta"}</h2><div class="quiz-options">${(q.opcoes||q.options||[]).map(o=>`<button class="quiz-option" data-answer="${String(o).trim().charAt(0)}">${o}</button>`).join("")}</div><div class="quick-actions"><span class="feedback" id="feedback">Escolha uma alternativa</span><button class="btn btn-primary" id="continue" style="display:none" onclick="next()">Continuar</button></div>`;
+      const q=pick(state.questions,"sessao_quiz_"+state.level,x=>x.id!=null?x.id:(x.pergunta_pt||x.question));box.innerHTML=`${dots()}<span class="kind">Quiz relâmpago · ${state.level}</span><h2 class="main-de" style="font-size:clamp(1.35rem,3vw,2rem)">${q.pergunta_pt||q.question||"Escolha a resposta correta"}</h2><div class="quiz-options">${(q.opcoes||q.options||[]).map(o=>`<button class="quiz-option" data-answer="${String(o).trim().charAt(0)}">${o}</button>`).join("")}</div><div class="quick-actions"><span class="feedback" id="feedback">Escolha uma alternativa</span><button class="btn btn-primary" id="continue" style="display:none" onclick="next()">Continuar</button></div>`;
       document.querySelectorAll(".quiz-option").forEach(b=>b.onclick=()=>answerQuiz(b,q));
     }
     function answerQuiz(btn,q){
@@ -85,7 +91,7 @@
       document.getElementById("continue").style.display="inline-flex";
     }
     function renderVerb(){
-      const v=pick(state.verbs);const ex=(v.examples||[]).find(e=>e.tense==="presente")||(v.examples||[])[0];
+      const v=pick(state.verbs,"sessao_verb_"+state.level,x=>x.id!=null?x.id:x.base_verb);const ex=(v.examples||[]).find(e=>e.tense==="presente")||(v.examples||[])[0];
       box.innerHTML=`${dots()}<span class="kind">Verbo em foco · ${state.level}</span><h2 class="main-de">${v.base_verb}</h2><p class="translation">${v.portuguese_translation||""} · ${v.verb_type||"verbo"}</p>${ex?`<div class="card card-sm" style="margin-top:18px"><b>${ex.example_sentence_german||""}</b><p class="muted" style="margin:4px 0 0">${ex.example_sentence_portuguese||""}</p></div>`:""}<div class="quick-actions"><span class="feedback">+ revisão concluída</span><button class="btn btn-primary" onclick="next()">Próxima rodada</button></div>`;
     }
     function finish(){box.innerHTML=`<div class="quick-result"><span class="eyebrow">Sessão concluída</span><strong>${state.score}/${state.total}</strong><h2>Você manteve o alemão em movimento.</h2><p class="muted">Foram ${state.total} frases, ${state.total} quizzes e ${state.total} verbos do nível ${state.level}.</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px"><button class="btn btn-primary" onclick="start(state.level)">Fazer outra</button><a class="btn btn-outline" href="cursos.html?nivel=${state.level}">Estudar ${state.level}</a></div></div>`;SFX.correct()}
