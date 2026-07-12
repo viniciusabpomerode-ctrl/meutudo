@@ -136,12 +136,23 @@ export default {
     const premium = await checkPremium(request, env).catch(() => false);
     const text = await object.text();
     let data;
-    try { data = JSON.parse(text); } catch { return new Response(text, { status: 200, headers: { ...cors, "Content-Type": "application/json" } }); }
+    try {
+      data = JSON.parse(text);
+    } catch {
+      // JSON corrompido/malformado: nunca devolve o texto cru sem checar
+      // Premium -- por seguranca, trata como indisponivel pra quem nao
+      // e Premium, em vez de vazar o conteudo original.
+      if (!premium) return new Response("conteudo indisponivel", { status: 502, headers: cors });
+      return new Response(text, { status: 200, headers: { ...cors, "Content-Type": "application/json" } });
+    }
 
     const body = premium ? data : sampleDeep("", data);
     return new Response(JSON.stringify(body), {
+      // Nunca cacheia entre pessoas diferentes -- a resposta depende de
+      // quem esta pedindo (Premium ou nao), cache compartilhado podia
+      // vazar a versao completa pra quem nao pagou (ou o contrario).
       status: 200,
-      headers: { ...cors, "Content-Type": "application/json", "Cache-Control": premium ? "private, no-store" : "public, max-age=300" },
+      headers: { ...cors, "Content-Type": "application/json", "Cache-Control": "private, no-store", Vary: "Authorization" },
     });
   },
 };
