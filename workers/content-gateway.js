@@ -83,6 +83,25 @@ async function checkPremium(request, env) {
   return !!row && row.active && !expired;
 }
 
+// Limite de requisicoes por IP -- protege contra alguem (ou um script)
+// bombardeando o Worker de pedidos pra tentar contornar a amostra fazendo
+// milhares de tentativas. Sem o KV configurado, nao bloqueia nada (nao
+// quebra o site se essa parte nao for configurada).
+const RATE_LIMIT = 120; // pedidos por minuto por IP
+const RATE_WINDOW_MS = 60000;
+async function checkRateLimit(request, env) {
+  if (!env.GATEWAY_LIMITS) return true;
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  const key = `rl:${ip}`;
+  const now = Date.now();
+  let entry = null;
+  try { entry = await env.GATEWAY_LIMITS.get(key, "json"); } catch {}
+  if (!entry || now - entry.windowStart > RATE_WINDOW_MS) entry = { windowStart: now, count: 0 };
+  entry.count++;
+  try { await env.GATEWAY_LIMITS.put(key, JSON.stringify(entry), { expirationTtl: 90 }); } catch {}
+  return entry.count <= RATE_LIMIT;
+}
+
 function corsHeaders(env, origin) {
   const allowed = (env.ALLOWED_ORIGINS || "").split(",").map((s) => s.trim());
   const ok = allowed.includes(origin);
@@ -100,6 +119,9 @@ export default {
     const cors = corsHeaders(env, origin);
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     if (request.method !== "GET") return new Response("method not allowed", { status: 405, headers: cors });
+
+    const okRate = await checkRateLimit(request, env).catch(() => true);
+    if (!okRate) return new Response("muitas requisicoes, tenta de novo em instantes", { status: 429, headers: cors });
 
     const url = new URL(request.url);
     let key = decodeURIComponent(url.pathname.replace(/^\/+/, ""));

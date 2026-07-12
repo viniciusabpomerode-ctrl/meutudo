@@ -9,6 +9,13 @@ bucket_name = "edicao"
 [vars]
 ALLOWED_ORIGINS = "https://deutschbloom.com,https://www.deutschbloom.com,http://localhost:8081"
 
+# Limite de requisicoes por IP -- crie o namespace com:
+#   npx wrangler kv namespace create GATEWAY_LIMITS --config wrangler.content-gateway.toml
+# Depois cole o "id" retornado aqui e descomente:
+# [[kv_namespaces]]
+# binding = "GATEWAY_LIMITS"
+# id = "COLE_O_ID_AQUI"
+
 # Depois de publicar (npx wrangler deploy --config wrangler.content-gateway.toml),
 # cadastre o secret com a MESMA chave service_role ja usada nas Netlify Functions:
 #   npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY --config wrangler.content-gateway.toml
