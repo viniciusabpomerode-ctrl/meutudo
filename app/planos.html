@@ -82,6 +82,34 @@
     </div>
 
     <p class="muted center" style="font-size:.78rem; margin-top:26px;">Pagamento processado com segurança via Stripe · Garantia de 7 dias: não gostou, devolvemos.</p>
+
+    <div class="card" id="pix-card" style="max-width:600px; margin:30px auto 0;">
+      <h3 style="margin:0 0 6px; font-weight:500;">Prefere pagar por Pix?</h3>
+      <p class="muted" style="font-size:.88rem; margin:0 0 14px;">Enquanto o Pix automático não fica pronto, você pode pagar direto e a gente libera seu acesso assim que confirmar o recebimento (geralmente em poucas horas). <b style="color:var(--color-primary-dark)">O Vitalício sai por R$ 197 pagando no Pix</b> (R$ 100 mais barato que no cartão) — só pros primeiros 100 assinantes.</p>
+      <div class="form-group">
+        <label>Chave Pix</label>
+        <div style="display:flex; gap:8px;">
+          <input id="pix-key" readonly value="Carregando...">
+          <button class="btn btn-outline" id="pix-copy" type="button">Copiar</button>
+        </div>
+      </div>
+      <form id="pix-form">
+        <div class="form-group">
+          <label>Qual plano você pagou?</label>
+          <select name="plan" required>
+            <option value="mensal">Mensal — R$ 14,99</option>
+            <option value="anual">Anual — R$ 149</option>
+            <option value="fundador">Vitalício (Fundador) — R$ 197 no Pix</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mensagem pra gente (opcional — nome no Pix, horário, etc.)</label>
+          <textarea name="message" rows="2" style="width:100%;"></textarea>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Já paguei, avisar</button>
+      </form>
+      <p class="muted" id="pix-status" style="font-size:.85rem; margin:10px 0 0;"></p>
+    </div>
   </div>
 
   <!-- Checkout embutido: o pagamento acontece aqui mesmo, sem sair do site -->
@@ -98,10 +126,15 @@
   <script src="../assets/js/sfx.js"></script>
   <script src="../assets/js/auth.js"></script>
   <script>
+    // Chave Pix pra receber pagamento manual enquanto o Pix automatico
+    // do Stripe nao fica pronto. Pode ser CPF/CNPJ, e-mail, telefone ou
+    // chave aleatoria — o que estiver cadastrado no seu banco.
+    window.AFB_PIX_KEY = "";
+
     // Cole aqui a chave PUBLICAVEL do Stripe (pk_live_... ou pk_test_...),
     // painel do Stripe > Desenvolvedores > Chaves de API. Essa chave é
     // segura pra ficar no navegador (é a chave SECRETA que nunca pode).
-    window.AFB_STRIPE_PK = "";
+    window.AFB_STRIPE_PK = "pk_live_51ToRAH47Ro17zBzBf4hLHXCHJtyuBIkWVIlHmQ6VzU0ENL894QMwTsUTT8HQTHKy2egBHgRfsaY5wz9mD5xePAvR00kBNiBoDM";
   </script>
   <script>
     // Nesta pagina o usuario pode nao estar logado (acessivel pela landing)
@@ -189,6 +222,49 @@
           btn.textContent = originalText;
         }
       });
+    });
+
+    // ── Pix manual ──
+    const pixKeyInput = document.getElementById("pix-key");
+    if (window.AFB_PIX_KEY) {
+      pixKeyInput.value = window.AFB_PIX_KEY;
+    } else {
+      pixKeyInput.value = "Chave Pix não configurada ainda";
+      document.getElementById("pix-form").querySelector("button[type=submit]").disabled = true;
+    }
+    document.getElementById("pix-copy").addEventListener("click", async () => {
+      if (!window.AFB_PIX_KEY) return;
+      await navigator.clipboard.writeText(window.AFB_PIX_KEY);
+      document.getElementById("pix-copy").textContent = "Copiado!";
+      setTimeout(() => { document.getElementById("pix-copy").textContent = "Copiar"; }, 2000);
+    });
+    document.getElementById("pix-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const statusEl = document.getElementById("pix-status");
+      if (!user) {
+        window.location.href = "cadastro.html?next=planos.html";
+        return;
+      }
+      const form = new FormData(e.target);
+      const btn = e.target.querySelector("button[type=submit]");
+      btn.disabled = true;
+      statusEl.textContent = "Enviando...";
+      try {
+        const token = await Auth.accessToken();
+        const res = await fetch("/.netlify/functions/pix-request", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ plan: form.get("plan"), message: form.get("message") }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "erro ao enviar");
+        statusEl.textContent = "Recebemos seu aviso! Vamos conferir e liberar seu acesso em breve.";
+        e.target.reset();
+      } catch (err) {
+        statusEl.textContent = "Não deu pra enviar agora: " + err.message;
+      } finally {
+        btn.disabled = false;
+      }
     });
     })();
   </script>

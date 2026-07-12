@@ -60,9 +60,24 @@
 
     <h3 class="section-title">Conta</h3>
     <div class="card" id="referral-card" style="margin-bottom:16px">
-      <div class="flex-between" style="gap:12px;flex-wrap:wrap"><div><b>Indique e ganhe créditos</b><p class="muted" style="margin:3px 0">20% em créditos quando seu amigo assinar.</p></div><b id="credit-balance">R$ 0,00</b></div>
+      <div class="flex-between" style="gap:12px;flex-wrap:wrap">
+        <div>
+          <span class="eyebrow">Indique e ganhe</span>
+          <b style="display:block;font-size:1.05rem;margin-top:2px;">Chame seus amigos pra aprender alemão 🇩🇪</b>
+        </div>
+        <div style="text-align:right;">
+          <b id="credit-balance" style="font-size:1.3rem;">R$ 0,00</b>
+          <p class="muted" style="margin:2px 0 0;font-size:.75rem;">seu saldo em créditos</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:14px;margin:14px 0;flex-wrap:wrap;font-size:.85rem;color:var(--text-secondary);">
+        <div style="flex:1;min-width:150px;">① Manda seu link</div>
+        <div style="flex:1;min-width:150px;">② Seu amigo assina um plano</div>
+        <div style="flex:1;min-width:150px;">③ Você ganha 20% em créditos, direto na sua carteira</div>
+      </div>
       <div style="display:flex;gap:8px;margin-top:12px"><input id="referral-link" readonly aria-label="Seu link de indicação" value="Carregando..."><button class="btn btn-outline" id="copy-referral" disabled>Copiar</button></div>
       <small class="muted" id="referral-count"></small>
+      <p class="muted" style="font-size:.78rem;margin:10px 0 0;">O crédito cai na sua carteira 7 dias depois que seu amigo pagar (é a garantia de reembolso dele, se ele desistir dentro desse prazo o crédito não é gerado). Pra usar seu saldo, é só chamar no <a href="suporte.html" style="color:var(--color-primary-dark)">Suporte</a>.</p>
     </div>
     <div class="card">
       <button class="btn btn-ghost" id="logout-btn">Sair da conta</button>
