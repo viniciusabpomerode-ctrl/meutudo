@@ -55,10 +55,10 @@ async function getLoggedInUser(request) {
   return user?.id && user?.email ? user : null;
 }
 
-async function checkPremium(request, env) {
-  if (!env.SUPABASE_SERVICE_ROLE_KEY) return false;
+async function resolveAccess(request, env) {
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) return { user: null, isAdmin: false, isPremium: false };
   const user = await getLoggedInUser(request);
-  if (!user) return false;
+  if (!user) return { user: null, isAdmin: false, isPremium: false };
 
   const headers = {
     apikey: env.SUPABASE_SERVICE_ROLE_KEY,
@@ -71,7 +71,7 @@ async function checkPremium(request, env) {
     { headers }
   );
   const adminRows = await adminRes.json().catch(() => []);
-  if (adminRows[0]) return true;
+  if (adminRows[0]) return { user, isAdmin: true, isPremium: true };
 
   const premRes = await fetch(
     `${SUPABASE_URL}/rest/v1/user_premium?email=eq.${encodeURIComponent(user.email)}&select=active,expires_at`,
@@ -80,7 +80,31 @@ async function checkPremium(request, env) {
   const rows = await premRes.json().catch(() => []);
   const row = rows[0];
   const expired = row?.expires_at && new Date(row.expires_at) < new Date();
-  return !!row && row.active && !expired;
+  const isPremium = !!row && row.active && !expired;
+  return { user, isAdmin: false, isPremium };
+}
+
+// Registra quantas vezes cada conta pediu conteudo completo hoje --
+// permite o admin perceber se alguem esta baixando tudo de forma
+// automatizada (um humano estudando nao faz dezenas de pedidos rapido).
+async function trackUsage(env, userId) {
+  if (!env.GATEWAY_LIMITS || !userId) return;
+  const day = new Date().toISOString().slice(0, 10);
+  const key = `usage:${day}:${userId}`;
+  try {
+    const current = Number((await env.GATEWAY_LIMITS.get(key)) || "0");
+    await env.GATEWAY_LIMITS.put(key, String(current + 1), { expirationTtl: 172800 });
+  } catch {}
+}
+
+async function usageReport(env) {
+  if (!env.GATEWAY_LIMITS) return [];
+  const day = new Date().toISOString().slice(0, 10);
+  const list = await env.GATEWAY_LIMITS.list({ prefix: `usage:${day}:` });
+  const entries = await Promise.all(
+    list.keys.map(async (k) => ({ userId: k.name.split(":")[2], count: Number((await env.GATEWAY_LIMITS.get(k.name)) || "0") }))
+  );
+  return entries.sort((a, b) => b.count - a.count);
 }
 
 // Limite de requisicoes por IP -- protege contra alguem (ou um script)
@@ -124,6 +148,16 @@ export default {
     if (!okRate) return new Response("muitas requisicoes, tenta de novo em instantes", { status: 429, headers: cors });
 
     const url = new URL(request.url);
+
+    // Relatorio de uso -- so admin ve, mostra quem pediu conteudo demais
+    // hoje (indicio de download em massa em vez de estudo normal).
+    if (url.pathname === "/admin/usage-report") {
+      const access = await resolveAccess(request, env).catch(() => ({ isAdmin: false }));
+      if (!access.isAdmin) return new Response(JSON.stringify({ error: "forbidden" }), { status: 403, headers: { ...cors, "Content-Type": "application/json" } });
+      const report = await usageReport(env);
+      return new Response(JSON.stringify({ report }), { status: 200, headers: { ...cors, "Content-Type": "application/json", "Cache-Control": "private, no-store" } });
+    }
+
     let key = decodeURIComponent(url.pathname.replace(/^\/+/, ""));
 
     // Nunca deixa sair da pasta de dados nem listar o bucket.
@@ -155,7 +189,9 @@ export default {
     }
 
     // JSON de conteudo: aplica amostra pra quem nao tem Premium.
-    const premium = await checkPremium(request, env).catch(() => false);
+    const access = await resolveAccess(request, env).catch(() => ({ user: null, isPremium: false }));
+    const premium = access.isPremium;
+    if (access.user) await trackUsage(env, access.user.id);
     const text = await object.text();
     let data;
     try {

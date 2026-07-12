@@ -31,6 +31,17 @@ exports.handler=async event=>{if(event.httpMethod==='OPTIONS')return{statusCode:
    await audit(adm,action,null,{id,email:req.email,plan:req.plan,approve});
    return out(200,{ok:true});
   }
+  if(action==='ban_user'||action==='unban_user'){
+   const email=String(b.email||'').toLowerCase();if(!email)return out(400,{error:'invalid_email'});
+   const users=await fetch(`${A.SUPABASE_URL}/auth/v1/admin/users?per_page=1000`,{headers:A.serviceHeaders()}).then(r=>r.json());
+   const u=(users.users||[]).find(x=>x.email?.toLowerCase()===email);
+   if(!u)return out(404,{error:'user_not_found'});
+   const duration=action==='ban_user'?String(b.duration||'876000h'):'none';
+   const r=await fetch(`${A.SUPABASE_URL}/auth/v1/admin/users/${u.id}`,{method:'PUT',headers:A.serviceHeaders(),body:JSON.stringify({ban_duration:duration})});
+   if(!r.ok)return out(500,{error:'ban_failed',detail:(await r.text()).slice(0,200)});
+   await audit(adm,action,u.id,{email,duration});
+   return out(200,{ok:true});
+  }
   if(action==='adjust_credits'){const amount=Math.trunc(Number(b.amount_cents)||0);if(!amount)return out(400,{error:'invalid_amount'});await rest('credit_ledger',{method:'POST',body:JSON.stringify({user_id:b.user_id,amount_cents:amount,kind:'admin_adjustment',description:String(b.description||'Ajuste administrativo').slice(0,160),reference_id:`admin:${adm.user.id}:${Date.now()}`})});await audit(adm,action,b.user_id,{amount});return out(200,{ok:true})}
   return out(400,{error:'invalid_action'});
  }catch(e){return out(500,{error:'admin_operation_failed',detail:e.message.slice(0,300)})}};
