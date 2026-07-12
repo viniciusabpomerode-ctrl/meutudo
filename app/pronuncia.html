@@ -65,7 +65,7 @@
 <script src="../assets/js/guest.js"></script>
 <script>
 renderNav("pronuncia");
-var R2="https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
+var R2=(window.AFB_CONTENT_GATEWAY_URL||"https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev")+"/";
 var pool=[],level="all",current=null,audio=new Audio();
 var mediaRecorder=null,recordedBlob=null,recFilter="all";
 var isGuest=true,attempts=parseInt(localStorage.getItem("afb_pron_attempts")||"0",10);
@@ -114,7 +114,14 @@ function delRec(id){
 function loadData(){
   pool=[];
   var lvs=level==="all"?["A1","A2","B1","B2","C1","C2"]:[level];
-  var fetcher=function(path){return fetch("../"+path).then(function(r){if(!r.ok)return fetch(R2+path);return r}).then(function(r){return r.json()})};
+  var fetcher=function(path){
+    var authHeaders={};
+    var tokenP=(typeof Auth!=="undefined"&&Auth.accessToken)?Auth.accessToken().catch(function(){return null}):Promise.resolve(null);
+    return tokenP.then(function(token){
+      if(token)authHeaders={Authorization:"Bearer "+token};
+      return fetch("../"+path).then(function(r){if(!r.ok)return fetch(R2+path,{headers:authHeaders});return r}).then(function(r){return r.json()});
+    });
+  };
   
   fetcher("data/girias.json").then(function(g){
     var exps=g.expressions||[];

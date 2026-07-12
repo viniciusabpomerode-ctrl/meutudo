@@ -90,7 +90,7 @@
     let totalQuestions = 10;
     let highScore = parseInt(localStorage.getItem("quiz_high") || "0");
     let audioPlayer = new Audio();
-    const R2 = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
+    const R2 = (window.AFB_CONTENT_GATEWAY_URL || "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev") + "/";
 
     async function init() {
       isGuest = await Guest.isFree();
@@ -101,10 +101,12 @@
         ? `<button class="lvl-btn" onclick="location.href='planos.html'">🔒 Misturado</button>`
         : `<button class="lvl-btn active" onclick="setLevel('all')">🎲 Misturado</button>`;
 
+      let authHeaders = {};
+      try { if (typeof Auth !== "undefined" && Auth.accessToken) { const t = await Auth.accessToken(); if (t) authHeaders = { Authorization: `Bearer ${t}` }; } } catch {}
       for (const lv of levels) {
         try {
           // Try R2 first, fallback to local
-          let r = await fetch(`${R2}data/quiz_${lv.toLowerCase()}.json`).catch(() => null);
+          let r = await fetch(`${R2}data/quiz_${lv.toLowerCase()}.json`, { headers: authHeaders }).catch(() => null);
           if (!r || !r.ok) r = await fetch(`../data/quiz_${lv.toLowerCase()}.json`);
           const data = await r.json();
           quizData[lv] = data.questoes || [];

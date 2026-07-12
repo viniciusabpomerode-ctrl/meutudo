@@ -104,7 +104,7 @@
     let guestFreeProfId = null;
 
     const audioEl = document.getElementById("audio-el");
-    const R2 = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
+    const R2 = (window.AFB_CONTENT_GATEWAY_URL || "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev") + "/";
     let allData = [];
     let activeCat = null;
     let activeLevel = "todos";
@@ -120,7 +120,9 @@
 
     async function load() {
       try {
-        let r = await fetch(`${R2}data/profissoes.json`).catch(() => null);
+        let authHeaders = {};
+        try { if (typeof Auth !== "undefined" && Auth.accessToken) { const t = await Auth.accessToken(); if (t) authHeaders = { Authorization: `Bearer ${t}` }; } } catch {}
+        let r = await fetch(`${R2}data/profissoes.json`, { headers: authHeaders }).catch(() => null);
         if (!r || !r.ok) r = await fetch("../data/profissoes.json");
         allData = (await r.json()).expressions || [];
         if (allData.length) guestFreeProfId = allData[0].id;

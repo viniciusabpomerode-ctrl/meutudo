@@ -4,8 +4,14 @@ const AFB_SUPABASE_URL = "https://zqrdpmrwnprtelgloawb.supabase.co";
 const AFB_SUPABASE_ANON_KEY = "sb_publishable_CVFm1nLMf9GCPr-RKKU6Rw_AFixWd5z";
 const AFB_AUDIO_BUCKET = "podcast"; // mesmo bucket usado pelo app Flutter (bucket privado)
 
-// Cloudflare R2 — fallback para audios que nao estao no Supabase
-const AFB_R2_PUBLIC_URL = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev";
+// Cloudflare R2 — fallback para audios que nao estao no Supabase.
+// Depois que o Worker "content-gateway" for publicado, defina
+// window.AFB_CONTENT_GATEWAY_URL (ex: em cada pagina, antes deste script)
+// com a URL do Worker pra passar a usar ele em vez da URL publica direta
+// do R2 -- isso passa a exigir Premium pro conteudo completo. Sem essa
+// variavel definida, continua igual a hoje (URL publica direta).
+const AFB_R2_PUBLIC_URL = (typeof window !== "undefined" && window.AFB_CONTENT_GATEWAY_URL)
+  || "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev";
 
 const AFBData = {
   _cache: {},
@@ -27,9 +33,20 @@ const AFBData = {
       urls.push(`../data/${lang}/${path}.json`);
     }
 
+    // Manda o token de acesso quando existir -- o content-gateway usa isso
+    // pra saber se devolve o conteudo completo (Premium) ou uma amostra.
+    // Fetch direto no R2/local ignora esse header sem problema nenhum.
+    let authHeaders = {};
+    try {
+      if (typeof Auth !== "undefined" && Auth.accessToken) {
+        const token = await Auth.accessToken();
+        if (token) authHeaders = { Authorization: `Bearer ${token}` };
+      }
+    } catch {}
+
     for (const url of urls) {
       try {
-        const r = await fetch(url, { cache: "no-cache" });
+        const r = await fetch(url, { cache: "no-cache", headers: authHeaders });
         if (r.ok) { res = r; break; }
       } catch {}
     }

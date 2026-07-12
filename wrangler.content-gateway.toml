@@ -1,0 +1,14 @@
+name = "deutschbloom-content-gateway"
+main = "workers/content-gateway.js"
+compatibility_date = "2026-07-01"
+
+[[r2_buckets]]
+binding = "CONTENT"
+bucket_name = "edicao"
+
+[vars]
+ALLOWED_ORIGINS = "https://deutschbloom.com,https://www.deutschbloom.com,http://localhost:8081"
+
+# Depois de publicar (npx wrangler deploy --config wrangler.content-gateway.toml),
+# cadastre o secret com a MESMA chave service_role ja usada nas Netlify Functions:
+#   npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY --config wrangler.content-gateway.toml

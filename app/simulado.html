@@ -112,7 +112,7 @@
     let nivelAtual = "", secaoAtual = "todas";
     let finalizado = false;
     let audioEl = new Audio();
-    const R2 = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
+    const R2 = (window.AFB_CONTENT_GATEWAY_URL || "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev") + "/";
 
     function playAudioUrl(path) {
       if (!path) return;
@@ -125,7 +125,9 @@
       nivelAtual = nivel;
       document.getElementById("level-select").style.display = "none";
       try {
-        let r = await fetch(`${R2}data/simulado_${nivel}.json`).catch(() => null);
+        let authHeaders = {};
+        try { if (typeof Auth !== "undefined" && Auth.accessToken) { const t = await Auth.accessToken(); if (t) authHeaders = { Authorization: `Bearer ${t}` }; } } catch {}
+        let r = await fetch(`${R2}data/simulado_${nivel}.json`, { headers: authHeaders }).catch(() => null);
         if (!r || !r.ok) r = await fetch(`../data/simulado_${nivel}.json`);
         const data = await r.json();
         const all = data.questoes || [];

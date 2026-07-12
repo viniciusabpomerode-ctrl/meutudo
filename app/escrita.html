@@ -49,10 +49,17 @@ textarea:focus{outline:none;border-color:var(--color-primary)}
 <script src="../assets/js/rotation.js"></script>
 <script>
 renderNav("escrita");
-var R2="https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
+var R2=(window.AFB_CONTENT_GATEWAY_URL||"https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev")+"/";
 var pool=[],level="A1",current=null,audio=new Audio();
 var isGuest=true;
-function fetcher(path){return fetch("../"+path).then(function(r){if(!r.ok)return fetch(R2+path);return r}).then(function(r){return r.json()})}
+function fetcher(path){
+  var authHeaders={};
+  var tokenP=(typeof Auth!=="undefined"&&Auth.accessToken)?Auth.accessToken().catch(function(){return null}):Promise.resolve(null);
+  return tokenP.then(function(token){
+    if(token)authHeaders={Authorization:"Bearer "+token};
+    return fetch("../"+path).then(function(r){if(!r.ok)return fetch(R2+path,{headers:authHeaders});return r}).then(function(r){return r.json()});
+  });
+}
 function addShort(german,portuguese,audioUrl,source,lv){
   german=(german||"").trim();portuguese=(portuguese||"").trim();
   var words=german.split(/\s+/).filter(Boolean).length;

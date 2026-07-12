@@ -53,7 +53,9 @@
     function dots(){return `<div class="step-line">${[0,1,2].map(i=>`<i class="step-dot ${i<state.step?'done':i===state.step?'active':''}"></i>`).join("")}</div>`}
     async function loadQuiz(level){
       const path=`quiz_${level.toLowerCase()}.json`;let r=null;
-      try{r=await fetch(`${AFB_R2_PUBLIC_URL}/data/${path}`)}catch(e){}
+      let authHeaders={};
+      try{if(typeof Auth!=="undefined"&&Auth.accessToken){const t=await Auth.accessToken();if(t)authHeaders={Authorization:`Bearer ${t}`}}}catch(e){}
+      try{r=await fetch(`${AFB_R2_PUBLIC_URL}/data/${path}`,{headers:authHeaders})}catch(e){}
       if(!r||!r.ok)r=await fetch(`../data/${path}`);
       const j=await r.json();return j.questoes||j.questions||[];
     }
