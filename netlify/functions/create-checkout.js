@@ -67,6 +67,9 @@ exports.handler = async (event) => {
 
   const params = new URLSearchParams();
   params.append("mode", MODE_BY_PLAN[plan]);
+  // Garante ao menos cartao mesmo quando os metodos automaticos da conta
+  // ainda nao estao configurados para a moeda/fluxo desta sessao.
+  params.append("payment_method_types[0]", "card");
   params.append("line_items[0][price]", priceId);
   params.append("line_items[0][quantity]", "1");
   params.append("customer_email", email);

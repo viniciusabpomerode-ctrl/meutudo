@@ -225,7 +225,7 @@
             } else if (l === r) cls = "selected";
             const audioKey = `opt${l}_audio_url`;
             const au = q[audioKey] || "";
-            html += `<div class="q-option ${cls}" onclick="${answered&&!revealed?'':`responder(${q.id},'${l}')`}">${opt}${au ? ` <button class="q-audio-btn" style="padding:2px 8px;font-size:.7rem;margin-left:8px" onclick="event.stopPropagation();playAudioUrl('${au}')">▶</button>` : ""}</div>`;
+            html += `<div class="q-option ${cls}" onclick="${revealed?'':`responder(${q.id},'${l}')`}">${opt}${au ? ` <button class="q-audio-btn" style="padding:2px 8px;font-size:.7rem;margin-left:8px" onclick="event.stopPropagation();playAudioUrl('${au}')">▶</button>` : ""}</div>`;
           });
           html += `</div>`;
         }
@@ -244,7 +244,7 @@
 
         // Reveal button (only when answered and not yet revealed)
         if (answered && !revealed) {
-          html += `<button class="q-audio-btn" style="margin-top:8px;border-color:#FF9800;color:#FF9800;" onclick="revelar(${q.id})">👁️ Revelar gabarito</button>`;
+          html += `<button class="q-audio-btn" style="margin-top:8px;border-color:#FF9800;color:#FF9800;" onclick="revelar(${q.id})">✅ Conferir resposta</button>`;
         }
         if (revealed && q.explicacao_pt) {
           html += `<div class="q-explanation show">💡 ${q.explicacao_pt}</div>`;
@@ -272,7 +272,7 @@
     }
 
     function responder(qid, ans) {
-      if (respostas[qid] !== undefined && !reveladas[qid]) return;
+      if (reveladas[qid] || finalizado) return;
       respostas[qid] = ans; render();
       if (typeof SFX !== 'undefined') SFX.click();
     }
@@ -280,7 +280,14 @@
       const v = document.getElementById("inp-"+qid)?.value?.trim();
       if (v) { respostas[qid] = v; render(); }
     }
-    function revelar(qid) { reveladas[qid] = true; render(); }
+    function revelar(qid) {
+      if (respostas[qid] === undefined || reveladas[qid]) return;
+      reveladas[qid] = true;
+      const q = questoes.find(item => item.id === qid);
+      const ok = q && String(respostas[qid]).toLowerCase().trim() === String(q.resposta).toLowerCase().trim();
+      if (typeof SFX !== 'undefined') ok ? SFX.correct() : SFX.wrong();
+      render();
+    }
     function finalizar() {
       if (Object.keys(respostas).length < questoes.length) {
         if (!confirm(`Faltam ${questoes.length - Object.keys(respostas).length} questões. Finalizar mesmo assim?`)) return;

@@ -51,7 +51,6 @@
     .cat-folder .folder-icon { font-size: 2rem; margin-bottom: 8px; }
     .cat-folder .folder-name { font-weight: 700; font-size: .9rem; }
     .cat-folder .folder-count { font-size: .78rem; color: var(--text-secondary); margin-top: 4px; }
-    .level-filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
   </style>
 </head>
 <body>
@@ -72,7 +71,6 @@
       <span class="back-link" onclick="voltar()">← Voltar para categorias</span>
       <h2 class="mt-0" id="cat-title"></h2>
       <input type="text" class="search-bar" id="search-cat" placeholder="🔍 Buscar nesta categoria...">
-      <div class="level-filter-row" id="level-filters" style="margin-bottom:16px;"></div>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <div class="counter" id="counter-cat" style="margin-bottom:0;"></div>
       </div>
@@ -107,7 +105,6 @@
     const R2 = (window.AFB_CONTENT_GATEWAY_URL || "https://deutschbloom-content-gateway.quesaco93.workers.dev") + "/";
     let allData = [];
     let activeCat = null;
-    let activeLevel = "todos";
     let activeProf = null;
     let searchMain = "";
     let searchCat = "";
@@ -133,7 +130,7 @@
     }
 
     function voltar() {
-      activeCat = null; activeLevel = "todos"; activeProf = null; searchCat = "";
+      activeCat = null; activeProf = null; searchCat = "";
       document.getElementById("main-view").style.display = "";
       document.getElementById("cat-view").style.display = "none";
       document.getElementById("prof-view").style.display = "none";
@@ -182,7 +179,7 @@
     });
 
     function abrirCat(cat) {
-      activeCat = cat; activeLevel = "todos";
+      activeCat = cat;
       document.getElementById("main-view").style.display = "none";
       document.getElementById("cat-view").style.display = "";
       document.getElementById("prof-view").style.display = "none";
@@ -191,25 +188,13 @@
     }
 
     function renderCat() {
-      const levels = ["A1","A2","B1","B2","C1","C2"];
       const dados = allData.filter(e => e.category === activeCat);
-      const wrap = document.getElementById("level-filters");
-      let html = `<span class="cat-chip ${activeLevel==='todos'?'active':''}" onclick="setLevel('todos')">Todos (${dados.length})</span>`;
-      for (const lv of levels) {
-        const n = dados.filter(e => e.levels.includes(lv)).length;
-        if (n > 0) html += `<span class="cat-chip ${activeLevel===lv?'active':''}" onclick="setLevel('${lv}')" style="border-color:${levelColor(lv)}">${lv} (${n})</span>`;
-      }
-      wrap.innerHTML = html;
-
       let filtradas = dados;
-      if (activeLevel !== "todos") filtradas = filtradas.filter(e => e.levels.includes(activeLevel));
       if (searchCat) filtradas = filtrar(filtradas, searchCat);
 
       document.getElementById("counter-cat").textContent = `${filtradas.length} ${filtradas.length!==1?'profissões':'profissão'}`;
       document.getElementById("list-cat").innerHTML = filtradas.length ? renderCards(filtradas) : '<div class="empty-state"><p>Nenhuma encontrada.</p></div>';
     }
-
-    function setLevel(lv) { activeLevel = lv; searchCat = ""; document.getElementById("search-cat").value = ""; renderCat(); }
 
     document.getElementById("search-cat").addEventListener("input", (e) => {
       searchCat = e.target.value.toLowerCase().trim();

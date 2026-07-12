@@ -3,6 +3,23 @@
 
 const SavedItems = (() => {
   const WORKER = "/.netlify/functions/saved-items";
+  let cache = null;
+  let loading = null;
+
+  function localItems() {
+    try { return JSON.parse(localStorage.getItem("afb_saved") || "[]"); } catch { return []; }
+  }
+  function mergeItems(remote, local) {
+    const map = new Map();
+    [...(remote||[]), ...(local||[])].forEach(i => map.set(`${i.type}:${i.id}`, i));
+    return [...map.values()].sort((a,b) => String(b.created_at||"").localeCompare(String(a.created_at||"")));
+  }
+  async function timedFetch(url, options, ms=8000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms);
+    try { return await fetch(url, {...options, signal:controller.signal}); }
+    finally { clearTimeout(timer); }
+  }
 
   function getUserId() {
     // Tenta Supabase Auth primeiro
@@ -31,30 +48,40 @@ const SavedItems = (() => {
   }
 
   async function load() {
-    try {
-      const r = await fetch(WORKER, await requestOptions("GET"));
-      if (r.ok) return await r.json();
-    } catch {}
-    try { return JSON.parse(localStorage.getItem("afb_saved") || "[]"); } catch { return []; }
+    if (cache) return cache;
+    if (loading) return loading;
+    loading = (async () => {
+      const local = localItems();
+      try {
+        const r = await timedFetch(WORKER, await requestOptions("GET"));
+        if (r.ok) cache = mergeItems(await r.json(), local);
+      } catch {}
+      cache = cache || local;
+      localStorage.setItem("afb_saved", JSON.stringify(cache));
+      loading = null;
+      return cache;
+    })();
+    return loading;
   }
 
   // Salva local primeiro (sempre funciona), depois tenta mandar pro R2.
   // Retorna false se a sincronizacao com o servidor falhar -- o item fica
   // salvo so localmente nesse caso, e quem chamou precisa avisar a pessoa.
   async function save(items) {
+    cache = items;
     localStorage.setItem("afb_saved", JSON.stringify(items));
     try {
-      const r = await fetch(WORKER, await requestOptions("PUT", items));
+      const r = await timedFetch(WORKER, await requestOptions("PUT", items));
       return r.ok;
     } catch {
       return false;
     }
   }
 
-  async function add({ type, id, parentId, nivel, refUrl, notes }) {
+  async function add({ type, id, parentId, nivel, refUrl, notes, title, subtitle, audioUrl }) {
     let items = await load();
     items = items.filter(i => !(i.type===type && i.id===id));
-    items.unshift({ type, id, parentId, nivel, refUrl:refUrl||window.location.href, notes:notes||"", reviewed_at:null, created_at:new Date().toISOString() });
+    items.unshift({ type, id, parentId, nivel, refUrl:refUrl||window.location.href, notes:notes||"", title:title||"", subtitle:subtitle||"", audioUrl:audioUrl||"", reviewed_at:null, created_at:new Date().toISOString() });
     return await save(items);
   }
 
@@ -80,12 +107,12 @@ const SavedItems = (() => {
     document.getElementById("ns").onclick=()=>close(document.getElementById("nt").value);
   }
 
-  function createSaveButton({ type, id, parentId, nivel, title, refUrl }) {
+  function createSaveButton({ type, id, parentId, nivel, title, subtitle, audioUrl, refUrl }) {
     const btn=document.createElement("button");
     btn.className="btn-save";btn.title="Salvar para depois";btn.innerHTML=icon(false);
     btn.style.cssText="background:transparent;border:1px solid var(--border-light);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:1rem;transition:.2s;opacity:.4;line-height:1";
     btn.onmouseenter=()=>{btn.style.opacity="1";btn.style.borderColor="var(--color-primary)";};
-    btn.onmouseleave=()=>{isSaved(type,id).then(s=>{btn.style.opacity=s?"1":".4";btn.style.borderColor=s?"var(--color-primary)":"var(--border-light)";});};
+    btn.onmouseleave=()=>{};
     isSaved(type,id).then(s=>{btn.innerHTML=icon(s);btn.style.opacity=s?"1":".4";btn.style.borderColor=s?"var(--color-primary)":"var(--border-light)";});
     btn.onclick=async(e)=>{
       e.preventDefault();e.stopPropagation();
@@ -102,7 +129,7 @@ const SavedItems = (() => {
         }
         else{showNotesModal({title,onSave:async(notes)=>{
           btn.innerHTML="⏳";btn.disabled=true;
-          const synced=await add({type,id,parentId,nivel,refUrl,notes});
+          const synced=await add({type,id,parentId,nivel,refUrl,notes,title,subtitle,audioUrl});
           btn.innerHTML=synced?icon(true):"⚠️";
           btn.style.opacity="1";
           btn.style.borderColor=synced?"var(--color-primary)":"#c9786d";

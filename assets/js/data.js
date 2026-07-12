@@ -44,7 +44,7 @@ const AFBData = {
 
     for (const url of urls) {
       try {
-        const r = await fetch(url, { cache: "no-cache", headers: authHeaders });
+        const r = await fetch(url, { cache: "default", headers: authHeaders });
         if (r.ok) { res = r; break; }
       } catch {}
     }

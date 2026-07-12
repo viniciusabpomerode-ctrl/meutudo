@@ -39,7 +39,7 @@
       let totalTracks = 0;
       let lockedTotal = 0;
       el.innerHTML = data.levels.map((lvl) => {
-        const tracks = data.tracks_by_level[lvl.id] || [];
+        const tracks = (data.tracks_by_level[lvl.id] || []).filter(t => Array.isArray(t.lyrics) && t.lyrics.length > 0);
         totalTracks += tracks.length;
         lockedTotal += Math.max(0, tracks.length - 10);
         const name = isVikings ? lvl.vikings_name : lvl.guardians_name;
@@ -59,7 +59,7 @@
                 </div>
                 <b style="display:block; margin-top:8px;">${t.title_german}</b>
                 <span class="muted" style="font-size:.82rem;">${I18n.field(t, 'title_portuguese')} · ${t.artist}</span>
-                <span class="music-save-btn" data-id="${t.id}" style="position:absolute;top:8px;right:8px;" onclick="event.preventDefault();event.stopPropagation();"></span>
+                <span class="music-save-btn" data-id="${t.id}" style="display:block;margin-top:10px;width:max-content;" onclick="event.preventDefault();event.stopPropagation();"></span>
               </a>`;
             }).join("")}
           </div>
@@ -69,7 +69,7 @@
       // Init save buttons (so nos cards liberados; logado ve todos)
       if (isLoggedIn) {
         Object.entries(data.tracks_by_level).forEach(([lvlId, tracks]) => {
-          tracks.forEach(t => {
+          tracks.filter(t => Array.isArray(t.lyrics) && t.lyrics.length > 0).forEach(t => {
             const span = document.querySelector(`.music-save-btn[data-id="${t.id}"]`);
             if (!span) return;
             const btn = SavedItems.createSaveButton({

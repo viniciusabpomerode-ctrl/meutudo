@@ -125,6 +125,12 @@ S.textContent = `
 .pomo-box .acts button:hover{opacity:.85}
 .pomo-box .acts .start{background:var(--color-primary,#FFD700);color:#222!important}
 .pomo-box .acts .reset{background:transparent;border:1px solid #555!important;color:#888!important;padding:8px 16px}
+@media(max-width:640px){
+  .ext-arrow{right:12px;bottom:max(12px,env(safe-area-inset-bottom))}
+  .ext-tray{right:12px;bottom:60px}
+  .lofi-player,.pomo-box{right:12px;bottom:64px;width:calc(100vw - 24px);max-height:calc(100svh - 90px);overflow:auto}
+  #lofi-frame{right:12px!important;bottom:64px!important;width:calc(100vw - 24px)!important}
+}
 `;
 document.head.appendChild(S);
 
@@ -162,12 +168,18 @@ const sd=document.getElementById("ts-dot");
 document.getElementById("tray-saved").onclick=()=>{ window.location.href = "caderno.html"; };
 // old saved panel cleanup
 try { document.getElementById("saved-x")?.remove(); document.getElementById("saved-box")?.remove(); } catch(e){}
-const PW=25*60,PB=5*60;let pt=null,pm="work",ps=PW,pr=false;
+const PW=25*60,PB=5*60,POMO_KEY="afb_pomodoro_state";
+let pt=null,pm="work",ps=PW,pr=false,endAt=0;
+function pomoSave(){localStorage.setItem(POMO_KEY,JSON.stringify({mode:pm,seconds:ps,running:pr,endAt:pr?endAt:0}))}
+function pomoLoad(){try{const x=JSON.parse(localStorage.getItem(POMO_KEY)||"{}");pm=x.mode==="break"?"break":"work";pr=!!x.running;endAt=Number(x.endAt)||0;ps=pr&&endAt?Math.max(0,Math.ceil((endAt-Date.now())/1000)):Math.max(0,Number(x.seconds)||(pm==="work"?PW:PB))}catch(e){}}
+function pomoTick(){if(!pr)return;if(endAt)ps=Math.max(0,Math.ceil((endAt-Date.now())/1000));if(ps<=0){pm=pm==="work"?"break":"work";ps=pm==="work"?PW:PB;endAt=Date.now()+ps*1000;pomoSave()}u()}
 document.getElementById("pomo-start").onclick=function(){
-if(pr){pr=false;if(pt){clearInterval(pt);pt=null}this.textContent="▶ Continuar"}
-else{pr=true;pt=setInterval(()=>{if(pr&&ps>0){ps--;u()}else if(ps<=0){pr=false;if(pt){clearInterval(pt);pt=null}this.textContent="▶ Iniciar";pm=pm==="work"?"break":"work";ps=pm==="work"?PW:PB;u()}},1000);this.textContent="⏸ Pausar"}};
-document.getElementById("pomo-reset").onclick=()=>{pr=false;if(pt){clearInterval(pt);pt=null}pm="work";ps=PW;document.getElementById("pomo-start").textContent="▶ Iniciar";u()};
-function u(){const e=document.getElementById("pomo-time"),m=document.getElementById("pomo-mode"),b=document.getElementById("pomo-bar"),mi=Math.floor(ps/60),s=ps%60;e.textContent=String(mi).padStart(2,"0")+":"+String(s).padStart(2,"0");const t=pm==="work"?PW:PB,p=t>0?((t-ps)/t)*100:0;b.style.width=p+"%";const c=pm==="work"?"var(--color-primary,#FFD700)":"var(--color-warm,#6C5CE7)";b.style.background=c;m.textContent=pm==="work"?"📚 Foco":"☕ Pausa";m.style.color=c}u();
+if(pr){pr=false;if(pt){clearInterval(pt);pt=null}endAt=0;this.textContent="▶ Continuar";pomoSave()}
+else{pr=true;endAt=Date.now()+ps*1000;pt=setInterval(pomoTick,1000);this.textContent="⏸ Pausar";pomoSave()}};
+document.getElementById("pomo-reset").onclick=()=>{pr=false;if(pt){clearInterval(pt);pt=null}pm="work";ps=PW;endAt=0;document.getElementById("pomo-start").textContent="▶ Iniciar";pomoSave();u()};
+function u(){const e=document.getElementById("pomo-time"),m=document.getElementById("pomo-mode"),b=document.getElementById("pomo-bar"),mi=Math.floor(ps/60),s=ps%60;e.textContent=String(mi).padStart(2,"0")+":"+String(s).padStart(2,"0");const t=pm==="work"?PW:PB,p=t>0?((t-ps)/t)*100:0;b.style.width=p+"%";const c=pm==="work"?"var(--color-primary,#FFD700)":"var(--color-warm,#6C5CE7)";b.style.background=c;m.textContent=pm==="work"?"📚 Foco":"☕ Pausa";m.style.color=c;pomoSave()}
+pomoLoad();if(pr){pomoTick();pt=setInterval(pomoTick,1000);document.getElementById("pomo-start").textContent="⏸ Pausar";pd.classList.add("on")}u();
+if(initialMusic.playing)setTimeout(lofiPlay,300);
 })();
 
 // Mede tempo de estudo nas páginas internas e sincroniza o Plano de Jornada.

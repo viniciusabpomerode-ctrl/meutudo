@@ -56,7 +56,7 @@
 
     <div id="menu-view">
       <div class="level-btns" id="level-btns"></div>
-      <button class="btn-play" onclick="startQuiz()">▶ JOGAR</button>
+      <button class="btn-play" id="play-btn" onclick="startQuiz()" disabled>Carregando quizzes...</button>
       <div id="high-score" style="text-align:center;margin-top:12px;"></div>
     </div>
 
@@ -129,6 +129,9 @@
 
       if (isGuest) level = "A1";
       document.getElementById("level-btns").innerHTML = btns;
+      const playBtn = document.getElementById("play-btn");
+      playBtn.disabled = false;
+      playBtn.textContent = "▶ JOGAR";
       document.getElementById("high-score").innerHTML = (highScore ? `🏆 Recorde: ${highScore} pts` : "")
         + (isGuest ? `<p class="muted" style="font-size:.8rem;margin-top:8px;">Você está jogando com ${AFB_FREE_LIMIT} questões grátis de 3.000 — <a href="planos.html" style="color:var(--color-primary-dark)"><b>desbloquear todas</b></a></p>` : "");
     }
@@ -156,7 +159,7 @@
       }
 
       if (pool.length < 4) {
-        alert("Gere os quizzes primeiro:\npython Cursoweb\\scripts\\gerar_simulados.py --workers 6");
+        alert("Os quizzes ainda não terminaram de carregar. Aguarde um instante e tente novamente.");
         return;
       }
 
