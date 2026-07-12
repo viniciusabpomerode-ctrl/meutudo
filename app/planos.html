@@ -93,13 +93,17 @@
           <button class="btn btn-outline" id="pix-copy" type="button">Copiar</button>
         </div>
       </div>
+      <div id="pix-qr-wrap" style="text-align:center; margin:14px 0; display:none;">
+        <div id="pix-qr" style="display:inline-block; max-width:220px; background:#fff; padding:10px; border-radius:10px;"></div>
+        <p class="muted" style="font-size:.78rem; margin:6px 0 0;">Aponte a câmera do seu banco pro QR code — já vem com o valor certinho</p>
+      </div>
       <form id="pix-form">
         <div class="form-group">
           <label>Qual plano você pagou?</label>
-          <select name="plan" required>
-            <option value="mensal">Mensal — R$ 14,99</option>
-            <option value="anual">Anual — R$ 149</option>
-            <option value="fundador">Vitalício (Fundador) — R$ 197 no Pix</option>
+          <select name="plan" id="pix-plan-select" required>
+            <option value="mensal" data-amount="14.99">Mensal — R$ 14,99</option>
+            <option value="anual" data-amount="149.00">Anual — R$ 149</option>
+            <option value="fundador" data-amount="197.00">Vitalício (Fundador) — R$ 197 no Pix</option>
           </select>
         </div>
         <div class="form-group">
@@ -130,12 +134,19 @@
     // do Stripe nao fica pronto. Pode ser CPF/CNPJ, e-mail, telefone ou
     // chave aleatoria — o que estiver cadastrado no seu banco.
     window.AFB_PIX_KEY = "";
+    // Nome e cidade cadastrados na sua conta bancaria (aparecem no QR code
+    // pro pagador conferir que e voce mesmo). Sem acento, o codigo mesmo
+    // remove se tiver.
+    window.AFB_PIX_NAME = "";
+    window.AFB_PIX_CITY = "";
 
     // Cole aqui a chave PUBLICAVEL do Stripe (pk_live_... ou pk_test_...),
     // painel do Stripe > Desenvolvedores > Chaves de API. Essa chave é
     // segura pra ficar no navegador (é a chave SECRETA que nunca pode).
     window.AFB_STRIPE_PK = "pk_live_51ToRAH47Ro17zBzBf4hLHXCHJtyuBIkWVIlHmQ6VzU0ENL894QMwTsUTT8HQTHKy2egBHgRfsaY5wz9mD5xePAvR00kBNiBoDM";
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <script src="../assets/js/pix.js"></script>
   <script>
     // Nesta pagina o usuario pode nao estar logado (acessivel pela landing)
     let user = null;
@@ -226,8 +237,24 @@
 
     // ── Pix manual ──
     const pixKeyInput = document.getElementById("pix-key");
+    const pixQrWrap = document.getElementById("pix-qr-wrap");
+    const pixPlanSelect = document.getElementById("pix-plan-select");
+    function updatePixQR() {
+      if (!window.AFB_PIX_KEY) return;
+      const amount = pixPlanSelect.options[pixPlanSelect.selectedIndex].dataset.amount;
+      const payload = buildPixPayload({
+        key: window.AFB_PIX_KEY,
+        name: window.AFB_PIX_NAME,
+        city: window.AFB_PIX_CITY,
+        amount,
+      });
+      renderPixQR(document.getElementById("pix-qr"), payload);
+      pixQrWrap.style.display = "block";
+    }
     if (window.AFB_PIX_KEY) {
       pixKeyInput.value = window.AFB_PIX_KEY;
+      updatePixQR();
+      pixPlanSelect.addEventListener("change", updatePixQR);
     } else {
       pixKeyInput.value = "Chave Pix não configurada ainda";
       document.getElementById("pix-form").querySelector("button[type=submit]").disabled = true;
