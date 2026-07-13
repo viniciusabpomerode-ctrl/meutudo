@@ -11,7 +11,8 @@ function miAnimateNumber(el, target, duration) {
     if (done) return;
     const p = Math.min(1, (t - start) / duration);
     const eased = 1 - Math.pow(1 - p, 3);
-    el.textContent = Math.round(eased * target).toLocaleString("pt-BR");
+    const locale = (typeof I18n !== "undefined" && I18n.getCurrent() !== "pt") ? "en-US" : "pt-BR";
+    el.textContent = Math.round(eased * target).toLocaleString(locale);
     if (p < 1) requestAnimationFrame(step);
     else done = true;
   }
