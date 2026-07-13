@@ -44,9 +44,16 @@ async def main():
 
     data = json.loads(Path(args.json_file).read_text(encoding="utf-8"))
     jobs = []
+    skipped_no_plural = 0
     for w in data["words"]:
         jobs.append((w["german"], w["audio_word_url"]))
-        jobs.append((w["plural"], w["audio_plural_url"]))
+        # Substantivos abstratos (emocoes, conceitos) nao tem plural — a
+        # planilha marca "-" e o Edge TTS falha ("No audio was received")
+        # se tentarmos sintetizar um traco sozinho. Pula esses de proposito.
+        if w["plural"].strip() and w["plural"].strip() != "-":
+            jobs.append((w["plural"], w["audio_plural_url"]))
+        else:
+            skipped_no_plural += 1
         jobs.append((w["example"]["de"], w["audio_example_url"]))
 
     output = Path(args.output)
@@ -78,7 +85,7 @@ async def main():
                     stats["failed"] += 1
                 print(f"ERRO {path}: {exc}")
 
-    print(f"Total de audios a processar: {len(jobs)} ({len(data['words'])} palavras x 3)")
+    print(f"Total de audios a processar: {len(jobs)} ({len(data['words'])} palavras, {skipped_no_plural} sem plural)")
     await asyncio.gather(*(run(text, url) for text, url in jobs))
     print(stats)
 
