@@ -49,6 +49,7 @@ const I18n = {
       if (localStorage.getItem(AFB_LANG_KEY)) return; // usuario ja escolheu enquanto isso rodava
       if (data.country === "BR") {
         this._current = "pt";
+        localStorage.setItem(AFB_LANG_KEY, "pt");
         this._listeners.forEach(fn => fn("pt"));
         location.reload();
       } else {
