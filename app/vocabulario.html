@@ -205,12 +205,13 @@
       return lista.map((e) => {
         const locked = isGuest && !guestFreeIds.has(e.id);
         if (locked) return Guest.lockedRowHidden(e.level);
+        const hasPlural = e.plural && e.plural.trim() !== "-";
         return `
         <div class="voc-card" id="voc-${e.id}">
           <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
             <div style="flex:1">
               <div class="german">${e.german}</div>
-              <div class="plural">Plural: ${e.plural}</div>
+              <div class="plural">${hasPlural ? `Plural: ${e.plural}` : "Sem plural (substantivo abstrato)"}</div>
               <div class="portuguese">${e.portuguese}</div>
               <div class="meta">
                 <span class="level-badge" style="background:${levelColor(e.level)}">${e.level}</span>
@@ -218,7 +219,7 @@
               </div>
               <div class="audio-row">
                 <button class="btn-audio-sm" onclick="playAudio('${e.audio_word_url}',this)">▶ Palavra</button>
-                <button class="btn-audio-sm" onclick="playAudio('${e.audio_plural_url}',this)">▶ Plural</button>
+                ${hasPlural ? `<button class="btn-audio-sm" onclick="playAudio('${e.audio_plural_url}',this)">▶ Plural</button>` : ""}
                 <button class="btn-audio-sm" onclick="playAudio('${e.audio_example_url}',this)">▶ Frase</button>
               </div>
               <div class="example">
