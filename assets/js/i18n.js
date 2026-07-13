@@ -88,8 +88,12 @@ const I18n = {
     if (this._current === "pt") return {};
     if (this._contentTranslations) return this._contentTranslations;
     if (this._translationPromise) return this._translationPromise;
-    this._translationPromise = fetch(`/data/${this._current}.json`, { cache: "default" })
-      .then(r => r.ok ? r.json() : { translations: {} })
+    // R2 nao cobra por trafego de saida — busca de la primeiro (arquivos de
+    // 7-12MB por idioma) e so cai pro Netlify se o R2 falhar por algum motivo.
+    const r2Url = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/data/" + this._current + ".json";
+    this._translationPromise = fetch(r2Url, { cache: "default" })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .catch(() => fetch(`/data/${this._current}.json`, { cache: "default" }).then(r => r.ok ? r.json() : { translations: {} }))
       .then(data => (this._contentTranslations = data.translations || {}))
       .catch(() => (this._contentTranslations = {}));
     return this._translationPromise;
