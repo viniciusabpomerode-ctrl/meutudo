@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocabulário — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .search-bar {
+      width: 100%; padding: 14px 20px; border-radius: 999px;
+      border: 2px solid var(--border-light); font-size: 1rem; margin-bottom: 16px;
+      background: var(--card-bg);
+    }
+    .search-bar:focus { outline: none; border-color: var(--color-primary); }
+    .cat-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .cat-chip {
+      padding: 8px 16px; border-radius: 999px; border: 2px solid var(--border-light);
+      background: var(--card-bg); cursor: pointer; font-size: .85rem; font-weight: 600;
+      transition: .2s; white-space: nowrap;
+    }
+    .cat-chip:hover { border-color: var(--color-primary); }
+    .cat-chip.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+    .voc-card {
+      background: var(--card-bg); border-radius: var(--radius); padding: 16px 20px;
+      margin-bottom: 10px; border-left: 4px solid var(--color-primary);
+    }
+    .voc-card .german { font-size: 1.15rem; font-weight: 700; }
+    .voc-card .plural { font-size: .82rem; color: var(--text-secondary); }
+    .voc-card .portuguese { font-size: 1rem; color: var(--text-secondary); margin-top: 2px; }
+    .voc-card .meta { display: flex; gap: 8px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+    .voc-card .level-badge { padding: 2px 10px; border-radius: 999px; font-size: .72rem; font-weight: 800; color: #fff; }
+    .voc-card .tag { padding: 2px 8px; border-radius: 999px; font-size: .72rem; background: var(--bg-secondary); color: var(--text-secondary); }
+    .voc-card .example { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-light); }
+    .voc-card .example-de { font-size: .9rem; font-weight: 600; }
+    .voc-card .example-pt { font-size: .85rem; color: var(--text-secondary); }
+    .audio-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+    .btn-audio-sm { border: none; background: var(--color-primary); color: #fff; cursor: pointer; font-size: .72rem; padding: 4px 10px; border-radius: 999px; display: flex; align-items: center; gap: 4px; }
+    .btn-audio-sm:hover { opacity: .85; }
+    .counter { font-size: .85rem; color: var(--text-secondary); margin-bottom: 10px; }
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+    .back-link { cursor:pointer; color: var(--color-primary-dark); font-weight:600; font-size:.9rem; margin-bottom:12px; display:inline-block; }
+    .back-link:hover { text-decoration: underline; }
+    .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .cat-folder { background: var(--card-bg); border-radius: var(--radius); padding: 20px 16px; cursor: pointer; text-align: center; transition: .2s; border: 2px solid transparent; }
+    .cat-folder:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.1); border-color: var(--color-primary); }
+    .cat-folder .folder-icon { font-size: 2rem; margin-bottom: 8px; }
+    .cat-folder .folder-name { font-weight: 700; font-size: .9rem; }
+    .cat-folder .folder-count { font-size: .78rem; color: var(--text-secondary); margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div id="app-nav"></div>
+
+  <div class="container" style="padding-top:28px; max-width:900px;">
+    <div id="main-view">
+      <h2 class="mt-0">📚 Vocabulário em Alemão</h2>
+      <p class="muted">2.500 palavras do dia a dia, organizadas em 25 categorias — com plural e frase de exemplo em áudio.</p>
+
+      <input type="text" class="search-bar" id="search-main" placeholder="🔍 Buscar em todas as categorias...">
+      <div class="counter" id="counter-main" style="margin-bottom:16px;"></div>
+      <div class="cat-grid" id="cat-grid"></div>
+      <div id="list-main"></div>
+    </div>
+
+    <div id="cat-view" style="display:none;">
+      <span class="back-link" onclick="voltar()">← Voltar para categorias</span>
+      <h2 class="mt-0" id="cat-title"></h2>
+      <input type="text" class="search-bar" id="search-cat" placeholder="🔍 Buscar nesta categoria...">
+      <div class="cat-filters" id="level-filters"></div>
+      <div class="counter" id="counter-cat"></div>
+      <div id="list-cat"></div>
+    </div>
+  </div>
+
+  <div id="audio-player" style="display:none;"><audio id="audio-el"></audio></div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/saved_r2.js"></script>
+  <script src="../assets/js/guest.js"></script>
+  <script>
+    renderNav("vocabulario");
+
+    let isGuest = true;
+    let isLoggedIn = false;
+
+    const audioEl = document.getElementById("audio-el");
+    const R2 = (window.AFB_CONTENT_GATEWAY_URL || "https://deutschbloom-content-gateway.quesaco93.workers.dev") + "/";
+    let allData = [];
+    let activeCat = null;
+    let activeLevel = "todos";
+    let searchMain = "";
+    let searchCat = "";
+    let guestFreeIds = new Set();
+
+    const catIcons = {
+      "Casa e Cômodos": "🏠", "Cozinha": "🍳", "Banheiro": "🚿", "Roupas e Acessórios": "👕",
+      "Comida e Bebida": "🍽️", "Corpo Humano": "🧍", "Família e Pessoas": "👨‍👩‍👧", "Profissões": "💼",
+      "Escola e Educação": "🏫", "Árvores, Plantas e Flores": "🌳", "Trabalho e Escritório": "🗄️",
+      "Cidade e Lugares": "🏙️", "Transporte": "🚌", "Natureza": "🏞️", "Animais": "🐾",
+      "Cores, Formas e Materiais": "🎨", "Tecnologia": "💻", "Esportes": "⚽", "Música e Arte": "🎵",
+      "Saúde e Hospital": "🏥", "Compras e Dinheiro": "💰", "Ferramentas": "🔧", "Viagem e Férias": "🧳",
+      "Emoções": "😊", "Calendário e Tempo Cronológico": "📅",
+    };
+    const levelOrder = {A1:0, A2:1, B1:2, B2:3, C1:4, C2:5};
+    const AFB_FREE_PER_CATEGORY = 20;
+
+    async function load() {
+      try {
+        let authHeaders = {};
+        try { if (typeof Auth !== "undefined" && Auth.accessToken) { const t = await Auth.accessToken(); if (t) authHeaders = { Authorization: `Bearer ${t}` }; } } catch {}
+        let r = await fetch(`${R2}data/vocabulario.json`, { headers: authHeaders }).catch(() => null);
+        if (!r || !r.ok) r = await fetch("../data/vocabulario.json");
+        allData = (await r.json()).words || [];
+        if (isGuest) {
+          const perCategory = {};
+          allData.forEach((w) => {
+            const c = w.category || "outras";
+            perCategory[c] = perCategory[c] || 0;
+            if (perCategory[c]++ < AFB_FREE_PER_CATEGORY) guestFreeIds.add(w.id);
+          });
+        }
+        renderMain();
+      } catch (e) {
+        document.getElementById("cat-grid").innerHTML = '<div class="empty-state"><div class="icon">📭</div><h3>Em breve!</h3></div>';
+      }
+    }
+
+    function voltar() {
+      activeCat = null; searchCat = ""; activeLevel = "todos";
+      document.getElementById("main-view").style.display = "";
+      document.getElementById("cat-view").style.display = "none";
+      document.getElementById("search-cat").value = "";
+      renderMain();
+    }
+
+    function renderMain() {
+      const cats = new Set(allData.map(e => e.category));
+      const counts = {};
+      for (const c of cats) counts[c] = allData.filter(e => e.category === c).length;
+
+      document.getElementById("cat-grid").innerHTML = [...cats].sort().map(c => `
+        <div class="cat-folder" onclick="abrirCat('${c.replace(/'/g, "\\'")}')">
+          <div class="folder-icon">${catIcons[c] || "📁"}</div>
+          <div class="folder-name">${c}</div>
+          <div class="folder-count">${counts[c]} palavras</div>
+        </div>
+      `).join("");
+
+      let filtradas = allData;
+      if (searchMain) filtradas = filtrar(filtradas, searchMain);
+      document.getElementById("counter-main").innerHTML = searchMain
+        ? `${filtradas.length} resultado(s)`
+        : `<span style="background:var(--brand-light);color:var(--brand);padding:4px 12px;border-radius:20px;font-weight:700;">📚 ${allData.length} palavras · ${cats.size} categorias</span>`;
+      document.getElementById("list-main").innerHTML = searchMain ? renderCards(filtradas) : "";
+    }
+
+    document.getElementById("search-main").addEventListener("input", (e) => {
+      searchMain = e.target.value.toLowerCase().trim();
+      renderMain();
+    });
+
+    function abrirCat(cat) {
+      activeCat = cat; activeLevel = "todos";
+      document.getElementById("main-view").style.display = "none";
+      document.getElementById("cat-view").style.display = "";
+      document.getElementById("cat-title").textContent = (catIcons[cat] || "📁") + " " + cat;
+      renderCat();
+    }
+
+    function setLevel(lv) { activeLevel = lv; renderCat(); }
+
+    function renderCat() {
+      const dados = allData.filter(e => e.category === activeCat);
+      const levels = ["A1","A2","B1","B2","C1","C2"];
+      document.getElementById("level-filters").innerHTML = `<span class="cat-chip ${activeLevel==='todos'?'active':''}" onclick="setLevel('todos')">Todos (${dados.length})</span>` +
+        levels.map(lv => {
+          const n = dados.filter(e => e.level === lv).length;
+          if (!n) return "";
+          return `<span class="cat-chip ${activeLevel===lv?'active':''}" onclick="setLevel('${lv}')">${lv} (${n})</span>`;
+        }).join("");
+
+      let filtradas = activeLevel === "todos" ? dados : dados.filter(e => e.level === activeLevel);
+      if (searchCat) filtradas = filtrar(filtradas, searchCat);
+
+      document.getElementById("counter-cat").textContent = `${filtradas.length} ${filtradas.length!==1?'palavras':'palavra'}`;
+      document.getElementById("list-cat").innerHTML = filtradas.length ? renderCards(filtradas) : '<div class="empty-state"><p>Nenhuma encontrada.</p></div>';
+    }
+
+    document.getElementById("search-cat").addEventListener("input", (e) => {
+      searchCat = e.target.value.toLowerCase().trim();
+      renderCat();
+    });
+
+    function filtrar(lista, q) {
+      return lista.filter(e => (e.german||"").toLowerCase().includes(q) || (e.portuguese||"").toLowerCase().includes(q) || (e.category||"").toLowerCase().includes(q));
+    }
+
+    function renderCards(lista) {
+      return lista.map((e) => {
+        const locked = isGuest && !guestFreeIds.has(e.id);
+        if (locked) return Guest.lockedRowHidden(e.level);
+        return `
+        <div class="voc-card" id="voc-${e.id}">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+            <div style="flex:1">
+              <div class="german">${e.german}</div>
+              <div class="plural">Plural: ${e.plural}</div>
+              <div class="portuguese">${e.portuguese}</div>
+              <div class="meta">
+                <span class="level-badge" style="background:${levelColor(e.level)}">${e.level}</span>
+                <span class="tag">${e.category||""}</span>
+              </div>
+              <div class="audio-row">
+                <button class="btn-audio-sm" onclick="playAudio('${e.audio_word_url}',this)">▶ Palavra</button>
+                <button class="btn-audio-sm" onclick="playAudio('${e.audio_plural_url}',this)">▶ Plural</button>
+                <button class="btn-audio-sm" onclick="playAudio('${e.audio_example_url}',this)">▶ Frase</button>
+              </div>
+              <div class="example">
+                <div class="example-de">${e.example.de}</div>
+                <div class="example-pt">${e.example.pt}</div>
+              </div>
+            </div>
+            <span class="voc-save-btn-${e.id}"></span>
+          </div>
+        </div>`;
+      }).join("");
+    }
+
+    function initSaveButtons() {
+      document.querySelectorAll('[class*="voc-save-btn-"]').forEach(span => {
+        const match = span.className.match(/voc-save-btn-(\d+)/);
+        if (!match) return;
+        const e = allData.find(w => w.id === Number(match[1]));
+        if (!e || span.children.length > 0) return;
+        span.appendChild(SavedItems.createSaveButton({
+          type: "vocabulario", id: String(e.id), nivel: e.level || "",
+          title: e.german, refUrl: window.location.href
+        }));
+      });
+    }
+    const _renderCards = renderCards;
+    renderCards = function(lista) {
+      const html = _renderCards(lista);
+      if (isLoggedIn) setTimeout(initSaveButtons, 50);
+      return html;
+    };
+
+    function levelColor(lv) {
+      const c={A1:"#4CAF50",A2:"#2196F3",B1:"#FF9800",B2:"#9C27B0",C1:"#E91E63",C2:"#607D8B"};
+      return c[lv]||"#888";
+    }
+
+    async function playAudio(filename, btn) {
+      if(!filename) return;
+      if(!audioEl.paused){audioEl.pause();return;}
+      afbPlayAudio(filename, btn);
+    }
+
+    Promise.all([Guest.check(), Guest.isFree()]).then(([notLoggedIn, free]) => {
+      isLoggedIn = !notLoggedIn;
+      isGuest = free;
+      load();
+    });
+  </script>
+</body>
+</html>
