@@ -41,8 +41,8 @@
       <article class="card price-card featured">
         <span class="price-flag">Mais popular · economize 17%</span>
         <span class="eyebrow">Premium Anual</span>
-        <div class="price-tag">R$ 149<small>/ano</small></div>
-        <p class="price-note">equivale a R$ 12,42/mês · pagamento único anual</p>
+        <div class="price-tag" data-price-usd="US$ 49.99<small>/year</small>">R$ 149<small>/ano</small></div>
+        <p class="price-note" data-price-note-usd="equals US$ 4.17/month · single annual payment">equivale a R$ 12,42/mês · pagamento único anual</p>
         <ul>
           <li>Todos os 63.000 itens liberados</li>
           <li>1.225 diálogos + 1.315 verbos conjugados</li>
@@ -51,13 +51,13 @@
           <li>Áudio de alta qualidade em todo o conteúdo</li>
           <li>Progresso sincronizado na nuvem</li>
         </ul>
-        <button class="btn btn-primary btn-block subscribe-btn" data-plan="anual" data-price-brl="149.00">Assinar anual — R$ 149</button>
+        <button class="btn btn-primary btn-block subscribe-btn" data-plan="anual" data-price-brl="149.00" data-label-usd="Subscribe yearly — US$ 49.99">Assinar anual — R$ 149</button>
       </article>
 
       <article class="card price-card">
         <span class="eyebrow">Premium Mensal</span>
-        <div class="price-tag">R$ 14,99<small>/mês</small></div>
-        <p class="price-note">cancele quando quiser</p>
+        <div class="price-tag" data-price-usd="US$ 8.99<small>/month</small>">R$ 14,99<small>/mês</small></div>
+        <p class="price-note" data-price-note-usd="cancel anytime">cancele quando quiser</p>
         <ul>
           <li>Todos os 63.000 itens liberados</li>
           <li>1.225 diálogos + 1.315 verbos conjugados</li>
@@ -66,7 +66,7 @@
           <li>Áudio de alta qualidade em todo o conteúdo</li>
           <li>Progresso sincronizado na nuvem</li>
         </ul>
-        <button class="btn btn-outline btn-block subscribe-btn" data-plan="mensal" data-price-brl="14.99">Assinar mensal — R$ 14,99</button>
+        <button class="btn btn-outline btn-block subscribe-btn" data-plan="mensal" data-price-brl="14.99" data-label-usd="Subscribe monthly — US$ 8.99">Assinar mensal — R$ 14,99</button>
       </article>
     </div>
 
@@ -74,10 +74,10 @@
       <div class="flex-between" style="flex-wrap:wrap; gap:14px;">
         <div>
           <span class="badge" style="background:rgba(214,168,95,.18); color:var(--color-primary-dark);">🏅 Oferta de fundador · vagas limitadas</span>
-          <h3 style="margin:10px 0 4px; font-weight:500;">Acesso vitalício por R$ 297</h3>
-          <p class="muted" style="margin:0; font-size:.86rem;">Só para os primeiros 100 assinantes: pague uma vez, use para sempre — incluindo tudo que ainda vamos lançar.</p>
+          <h3 id="founder-title" style="margin:10px 0 4px; font-weight:500;" data-title-usd="Lifetime access for US$ 89">Acesso vitalício por R$ 297</h3>
+          <p class="muted" id="founder-desc" style="margin:0; font-size:.86rem;" data-desc-usd="Only for the first 100 subscribers: pay once, use forever — including everything we're still going to launch.">Só para os primeiros 100 assinantes: pague uma vez, use para sempre — incluindo tudo que ainda vamos lançar.</p>
         </div>
-        <button class="btn btn-primary subscribe-btn" data-plan="fundador" data-price-brl="297.00" style="flex-shrink:0;">Garantir vaga — R$ 297</button>
+        <button class="btn btn-primary subscribe-btn" data-plan="fundador" data-price-brl="297.00" data-label-usd="Claim your spot — US$ 89" style="flex-shrink:0;">Garantir vaga — R$ 297</button>
       </div>
     </div>
 
@@ -118,6 +118,7 @@
       </form>
       <p class="muted" id="pix-status" style="font-size:.85rem; margin:10px 0 0;"></p>
     </div>
+
   </div>
 
   <!-- Checkout embutido: o pagamento acontece aqui mesmo, sem sair do site -->
@@ -170,6 +171,30 @@
     if (user) {
       document.getElementById("nav-slot").innerHTML = '<div id="app-nav"></div>';
       renderNav("planos");
+    }
+
+    // Detecta se o visitante e do Brasil pra decidir moeda e forma de
+    // pagamento manual (Pix pro Brasil, PayPal pro resto do mundo).
+    let isBR = true;
+    try {
+      const geoRes = await fetch("/.netlify/functions/geo", { cache: "no-store" });
+      const geoData = await geoRes.json();
+      isBR = geoData.country ? geoData.country === "BR" : (I18n.getCurrent() !== "en");
+    } catch (e) {
+      isBR = I18n.getCurrent() !== "en";
+    }
+
+    if (!isBR) {
+      document.querySelectorAll("[data-price-usd]").forEach(el => { el.innerHTML = el.dataset.priceUsd; });
+      document.querySelectorAll("[data-price-note-usd]").forEach(el => { el.textContent = el.dataset.priceNoteUsd; });
+      document.querySelectorAll("[data-label-usd]").forEach(el => { el.textContent = el.dataset.labelUsd; });
+      const founderTitle = document.getElementById("founder-title");
+      const founderDesc = document.getElementById("founder-desc");
+      if (founderTitle) founderTitle.textContent = founderTitle.dataset.titleUsd;
+      if (founderDesc) founderDesc.textContent = founderDesc.dataset.descUsd;
+    }
+
+    if (user && isBR) {
       document.getElementById("pix-card").style.display = "block";
     }
 
@@ -299,6 +324,7 @@
         btn.disabled = false;
       }
     });
+
     })();
   </script>
 </body>
