@@ -50,7 +50,10 @@ const AFBData = {
     }
 
     if (!res || !res.ok) throw new Error(`Falha ao carregar ${path}.json`);
-    const json = await res.json();
+    let json = await res.json();
+    if (lang !== "pt" && typeof I18n !== "undefined" && I18n.translateData) {
+      json = await I18n.translateData(json);
+    }
     AFBData._cache[key] = json;
     return json;
   },

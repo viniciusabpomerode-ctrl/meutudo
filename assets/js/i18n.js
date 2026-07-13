@@ -16,11 +16,15 @@ const AFB_LANG_KEY = "afb_language";
 const I18n = {
   _current: "pt",
   _listeners: [],
+  _contentTranslations: null,
+  _translationPromise: null,
 
   // ── Inicialização ──
   init() {
     const saved = localStorage.getItem(AFB_LANG_KEY);
-    this._current = saved && AppLanguage[saved] ? saved : "pt";
+    const requested = new URLSearchParams(location.search).get("lang");
+    this._current = requested && AppLanguage[requested] ? requested : (saved && AppLanguage[saved] ? saved : "pt");
+    if (requested && AppLanguage[requested]) localStorage.setItem(AFB_LANG_KEY, requested);
   },
 
   getCurrent() {
@@ -48,6 +52,95 @@ const I18n = {
 
   onChange(fn) {
     this._listeners.push(fn);
+  },
+
+  async loadContentTranslations() {
+    if (this._current === "pt") return {};
+    if (this._contentTranslations) return this._contentTranslations;
+    if (this._translationPromise) return this._translationPromise;
+    this._translationPromise = fetch(`/data/${this._current}.json`, { cache: "default" })
+      .then(r => r.ok ? r.json() : { translations: {} })
+      .then(data => (this._contentTranslations = data.translations || {}))
+      .catch(() => (this._contentTranslations = {}));
+    return this._translationPromise;
+  },
+
+  async translateData(value) {
+    const map = await this.loadContentTranslations();
+    const germanField = /(?:german|_de(?:_|$)|^de$|base_verb|conjugated_verb|german_example|example_sentence_german|contexto_de|prompt$|modelAnswer|pronunciation)/i;
+    const visit = (item, key = "") => {
+      if (typeof item === "string") return map["" + item.replace(/\s+/g, " ").trim()] || item;
+      if (Array.isArray(item)) return item.map(child => visit(child, key));
+      if (item && typeof item === "object") {
+        Object.keys(item).forEach(childKey => {
+          if (!germanField.test(childKey)) item[childKey] = visit(item[childKey], childKey);
+        });
+      }
+      return item;
+    };
+    return visit(value);
+  },
+
+  async applyPageTranslations(root = document.body) {
+    if (this._current === "pt" || !root) return;
+    const map = await this.loadContentTranslations();
+    const ui = {
+      "Conteúdo":"Content","Conteúdo ▾":"Content ▾","Planos":"Plans","Clique para ouvir":"Click to listen",
+      "Música ambiente para focar":"Ambient music for focus","🎵 Música ambiente para focar":"🎵 Ambient music for focus","Clique no player para ajustar volume":"Click the player to adjust the volume",
+      "Foco":"Focus","📚 Foco":"📚 Focus","Bom dia! 👋":"Good morning! 👋","Boa tarde! 👋":"Good afternoon! 👋","Boa noite! 👋":"Good evening! 👋",
+      "dias seguidos":"day streak","Marcar como concluída":"Mark as completed","Ver planos":"View plans",
+      "Iniciante":"Beginner","Básico":"Basic","Intermediário":"Intermediate","Avançado":"Advanced","Proficiente":"Proficient","Mestre":"Master",
+      "Ainda tem mais":"There is more","Desbloquear tudo":"Unlock everything","Simulados Goethe-Zertifikat":"Goethe-Zertifikat Practice Tests","📝 Simulados Goethe-Zertifikat":"📝 Goethe-Zertifikat Practice Tests",
+      "Fica à vontade pra continuar navegando. Quando quiser abrir tudo de uma vez, o Premium libera a biblioteca inteira — e você continua no mesmo lugar, sem perder nada.":"Feel free to keep browsing. When you want full access, Premium unlocks the entire library and you continue right where you left off.",
+      "Treinar":"Practice","Acompanhar":"Track","Outros":"Other","Escrita":"Writing","Seu plano de jornada":"Your learning journey",
+      "Meta desta semana":"This week's goal","dias ativos":"active days","missões":"missions","Um diálogo":"One dialogue",
+      "Pratique alemão em contexto":"Practice German in context","Um verbo em foco":"One verb in focus","Veja exemplos e conjugação":"See examples and conjugation",
+      "Quiz curto":"Short quiz","Teste o que ficou na memória":"Test what you remember","teste seus reflexos":"test your reflexes",
+      "prova oficial":"official exam","frases profissionais":"professional phrases","frases conjugadas":"conjugated sentences",
+      "Criar conta pra não perder seu progresso":"Create an account so you don't lose your progress"
+      ,"Misturado":"Mixed","em breve":"coming soon","JOGAR":"PLAY","▶ JOGAR":"▶ PLAY","desbloquear todas":"unlock all"
+      ,"Você está jogando com 20 questões grátis de 3.000 —":"You are playing with 20 free questions out of 3,000 —"
+    };
+    const fragments = {
+      " frases":" sentences"," verbos":" verbs"," por dia":" per day"," dias por semana":" days per week"," nível ":" level ",
+      " de 60 min":" of 60 min"," da sua meta pessoal — sem comparar com toda a biblioteca.":" of your personal goal — without comparing yourself to the whole library.",
+      " questões de simulado Goethe":" Goethe practice-test questions"," te esperando aqui dentro":" waiting for you inside",
+      "Mais ":"More ","frases, quizzes e verbos":"sentences, quizzes and verbs"
+    };
+    const translateText = text => {
+      const compact = text.replace(/\s+/g, " ").trim();
+      if (!compact) return text;
+      let translated = map[compact] || ui[compact];
+      if (!translated) {
+        translated = compact;
+        Object.entries(fragments).forEach(([source, target]) => { translated = translated.replace(source, target); });
+        if (translated === compact) return text;
+      }
+      const start = text.match(/^\s*/)?.[0] || "";
+      const end = text.match(/\s*$/)?.[0] || "";
+      return start + translated + end;
+    };
+    const apply = node => {
+      if (node.nodeType === 3) {
+        const parent = node.parentElement;
+        if (parent?.closest?.('[lang="de"],.sentence-de,.german,.phrase-de,.quiz-context,.german-text,.german-word,[data-no-translate]')) return;
+        node.nodeValue = translateText(node.nodeValue || "");
+      }
+      if (node.nodeType !== 1) return;
+      if (["SCRIPT", "STYLE", "CODE", "TEXTAREA"].includes(node.tagName)) return;
+      ["placeholder", "title", "aria-label"].forEach(attr => {
+        const value = node.getAttribute?.(attr);
+        if (value) node.setAttribute(attr, translateText(value));
+      });
+      node.childNodes.forEach(apply);
+    };
+    apply(root);
+    if (!this._translationObserver) {
+      this._translationObserver = new MutationObserver(changes => {
+        changes.forEach(change => change.addedNodes.forEach(apply));
+      });
+      this._translationObserver.observe(document.body, { childList: true, subtree: true });
+    }
   },
 
   // ── Campo dinâmico com suporte a _{lang} ──
@@ -479,3 +572,8 @@ const I18n = {
 
 // Inicializa
 I18n.init();
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => I18n.applyPageTranslations());
+} else {
+  I18n.applyPageTranslations();
+}
