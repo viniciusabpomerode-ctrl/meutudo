@@ -6,6 +6,7 @@ const AFB_CONTENT_PAGES = [
   { href: "cursos.html?tab=verbos", label: "📖 Verbos", key: "verbos" },
   { href: "musica.html", label: "🎵 Música", key: "musica" },
   { href: "expressoes.html", label: "🗣️ Gírias", key: "expressoes" },
+  { href: "vocabulario.html", label: "📚 Vocabulário", key: "vocabulario" },
   { href: "profissoes.html", label: "💼 Profissões", key: "profissoes" },
   { href: "quiz.html", label: "⚡ Quiz", key: "quiz" },
   { href: "simulado.html", label: "📝 Simulado Goethe", key: "simulado" },
@@ -80,8 +81,10 @@ function _renderNavNow(active) {
 }
 
 // ── Bandeja de ferramentas (LoFi + Pomodoro) ──
+// Presente em todas as paginas (Inicio incluso), arrastavel e redimensionavel,
+// com posicao/tamanho salvos por elemento (localStorage) pra manter onde o
+// usuario deixou ao navegar entre paginas.
 (function(){
-if (!window.location.pathname.includes("/app/")) return;
 const MUSIC_KEY="afb_music_state";
 function musicGet(){try{return{station:"working",playing:false,...JSON.parse(localStorage.getItem(MUSIC_KEY)||"{}")}}catch{return{station:"working",playing:false}}}
 function musicSet(patch){const state={...musicGet(),...patch};localStorage.setItem(MUSIC_KEY,JSON.stringify(state));document.dispatchEvent(new CustomEvent("afb:music-state",{detail:{...state,title:`${state.station} · LoFi`}}));return state}
@@ -97,7 +100,8 @@ S.textContent = `
 .ext-tray .ext-item .dot{width:8px;height:8px;border-radius:50%;background:#555;transition:.3s}
 .ext-tray .ext-item .dot.on{background:#7ecf7e;box-shadow:0 0 6px #7ecf7e}
 .ext-tray .tray-play{transition:.2s;cursor:pointer}
-.lofi-player{position:fixed;bottom:80px;right:80px;z-index:9998;background:rgba(25,25,35,.95);border-radius:16px;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,.4);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);width:360px;font-family:inherit;overflow:hidden}
+.lofi-player{position:fixed;bottom:80px;right:80px;z-index:9998;background:rgba(25,25,35,.95);border-radius:16px;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,.4);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);width:360px;min-width:220px;min-height:120px;font-family:inherit;overflow:auto;resize:both}
+.lofi-player .hdr{cursor:move}
 .lofi-player.hidden{opacity:0;transform:scale(.8) translateY(10px);pointer-events:none}
 .lofi-player .hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .lofi-player .hdr .left{display:flex;align-items:center;gap:8px}
@@ -111,7 +115,8 @@ S.textContent = `
 .lofi-player .lofi-extra .sts a{padding:4px 10px;border-radius:12px;font-size:.75rem;background:rgba(255,255,255,.06);color:#b8a99a;text-decoration:none}
 .lofi-player .lofi-extra .sts a:hover{background:rgba(255,255,255,.12);color:#e0d5c1}
 .lofi-player .play-bar{display:flex;align-items:center;gap:10px;padding:8px 0;margin-bottom:8px}
-.pomo-box{position:fixed;bottom:80px;right:80px;z-index:9998;background:rgba(25,25,35,.95);border-radius:16px;padding:20px;box-shadow:0 8px 30px rgba(0,0,0,.4);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);width:280px;font-family:inherit;text-align:center}
+.pomo-box{position:fixed;bottom:80px;right:80px;z-index:9998;background:rgba(25,25,35,.95);border-radius:16px;padding:20px;box-shadow:0 8px 30px rgba(0,0,0,.4);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);width:280px;min-width:220px;min-height:180px;font-family:inherit;text-align:center;overflow:auto;resize:both}
+.pomo-box .hdr{cursor:move}
 .pomo-box.hidden{opacity:0;transform:scale(.8) translateY(10px);pointer-events:none}
 .pomo-box .hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .pomo-box .hdr span{font-size:.78rem;color:#b8a99a;font-weight:600}
@@ -147,6 +152,59 @@ const saved=document.createElement("div");saved.className="pomo-box hidden";save
 saved.innerHTML='<div class="hdr"><span>📝 Caderno</span><button id="saved-x">✕</button></div><div id="saved-list" style="max-height:400px;overflow-y:auto;text-align:left;font-size:.82rem"><p style="color:#887a6a;text-align:center;padding:20px">Carregando...</p></div>';
 document.body.append(arrow,tray,lofiFrame,lofi,pomo,saved);
 
+// ── Arrastar e redimensionar (posicao/tamanho salvos por widget) ──
+function makeDraggable(el,key){
+  const POS_KEY="afb_widget_pos_"+key;
+  try{
+    const saved=JSON.parse(localStorage.getItem(POS_KEY)||"null");
+    if(saved&&typeof saved.left==="number"&&typeof saved.top==="number"){
+      el.style.left=saved.left+"px";el.style.top=saved.top+"px";
+      el.style.right="auto";el.style.bottom="auto";
+    }
+    if(saved&&saved.width){el.style.width=saved.width}
+    if(saved&&saved.height){el.style.height=saved.height}
+  }catch(e){}
+  const hdr=el.querySelector(".hdr");
+  if(hdr){
+    let dragging=false,startX=0,startY=0,startLeft=0,startTop=0;
+    const onMove=(e)=>{
+      if(!dragging)return;
+      const p=e.touches?e.touches[0]:e;
+      let left=startLeft+(p.clientX-startX),top=startTop+(p.clientY-startY);
+      left=Math.max(4,Math.min(window.innerWidth-60,left));
+      top=Math.max(4,Math.min(window.innerHeight-40,top));
+      el.style.left=left+"px";el.style.top=top+"px";el.style.right="auto";el.style.bottom="auto";
+    };
+    const onUp=()=>{
+      if(!dragging)return;dragging=false;
+      const r=el.getBoundingClientRect();
+      const cur=JSON.parse(localStorage.getItem(POS_KEY)||"{}");
+      localStorage.setItem(POS_KEY,JSON.stringify({...cur,left:r.left,top:r.top}));
+      document.removeEventListener("mousemove",onMove);document.removeEventListener("mouseup",onUp);
+      document.removeEventListener("touchmove",onMove);document.removeEventListener("touchend",onUp);
+    };
+    const onDown=(e)=>{
+      if(e.target.tagName==="BUTTON")return;
+      dragging=true;const p=e.touches?e.touches[0]:e;const r=el.getBoundingClientRect();
+      startX=p.clientX;startY=p.clientY;startLeft=r.left;startTop=r.top;
+      document.addEventListener("mousemove",onMove);document.addEventListener("mouseup",onUp);
+      document.addEventListener("touchmove",onMove,{passive:false});document.addEventListener("touchend",onUp);
+    };
+    hdr.addEventListener("mousedown",onDown);
+    hdr.addEventListener("touchstart",onDown,{passive:true});
+  }
+  if(window.ResizeObserver){
+    let first=true;
+    new ResizeObserver(()=>{
+      if(first){first=false;return}
+      const cur=JSON.parse(localStorage.getItem(POS_KEY)||"{}");
+      localStorage.setItem(POS_KEY,JSON.stringify({...cur,width:el.style.width||el.offsetWidth+"px",height:el.style.height||el.offsetHeight+"px"}));
+    }).observe(el);
+  }
+}
+makeDraggable(lofi,"lofi");
+makeDraggable(pomo,"pomo");
+
 arrow.onclick=()=>tray.classList.toggle("hidden");
 document.addEventListener("click",e=>{if(!arrow.contains(e.target)&&!tray.contains(e.target))tray.classList.add("hidden")});
 
@@ -165,7 +223,8 @@ document.getElementById("pomo-x").onclick=()=>{pomo.classList.add("hidden");pd.c
 
 // ── Salvos ──
 const sd=document.getElementById("ts-dot");
-document.getElementById("tray-saved").onclick=()=>{ window.location.href = "caderno.html"; };
+const APP_PREFIX=window.location.pathname.includes("/app/")?"":"app/";
+document.getElementById("tray-saved").onclick=()=>{ window.location.href = APP_PREFIX+"caderno.html"; };
 // old saved panel cleanup
 try { document.getElementById("saved-x")?.remove(); document.getElementById("saved-box")?.remove(); } catch(e){}
 const PW=25*60,PB=5*60,POMO_KEY="afb_pomodoro_state";
