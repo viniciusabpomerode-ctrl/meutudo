@@ -5,11 +5,20 @@
 // POST /.netlify/functions/create-checkout
 // body: { plan: "mensal" | "anual" | "fundador", email: string }
 
-const PRICE_BY_PLAN = {
-  mensal: process.env.STRIPE_PRICE_MENSAL,
-  anual: process.env.STRIPE_PRICE_ANUAL,
-  fundador: process.env.STRIPE_PRICE_FUNDADOR,
+// Preco por moeda: BRL usa as variaveis antigas (uma so, sem sufixo).
+// EUR/USD tem price IDs proprios pro mensal e anual. O vitalicio usa um
+// price ID so, multi-moeda (configurado direto no Stripe com "paridades"
+// por moeda), entao nao precisa de variavel separada por moeda.
+const PRICE_BY_PLAN_CURRENCY = {
+  mensal: { brl: process.env.STRIPE_PRICE_MENSAL, eur: process.env.STRIPE_PRICE_MENSAL_EUR, usd: process.env.STRIPE_PRICE_MENSAL_USD },
+  anual: { brl: process.env.STRIPE_PRICE_ANUAL, eur: process.env.STRIPE_PRICE_ANUAL_EUR, usd: process.env.STRIPE_PRICE_ANUAL_USD },
+  fundador: { brl: process.env.STRIPE_PRICE_FUNDADOR, eur: process.env.STRIPE_PRICE_FUNDADOR, usd: process.env.STRIPE_PRICE_FUNDADOR },
 };
+function resolvePriceId(plan, currency) {
+  const byPlan = PRICE_BY_PLAN_CURRENCY[plan];
+  if (!byPlan) return null;
+  return byPlan[currency] || byPlan.brl;
+}
 
 // "fundador" e pagamento unico (vitalicio); os outros dois sao assinatura recorrente
 const MODE_BY_PLAN = {
@@ -49,10 +58,11 @@ exports.handler = async (event) => {
   }
 
   const { plan } = body;
+  const currency = ["eur", "usd"].includes(body.currency) ? body.currency : "brl";
   const user = await authenticatedUser(event);
   if (!user) return { statusCode: 401, headers, body: JSON.stringify({ error: "login obrigatorio" }) };
   const email = user.email;
-  const priceId = PRICE_BY_PLAN[plan];
+  const priceId = resolvePriceId(plan, currency);
   if (!priceId) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "plano invalido ou price id nao configurado: " + plan }) };
   }
@@ -84,6 +94,7 @@ exports.handler = async (event) => {
   params.append("metadata[plan]", plan);
   params.append("metadata[email]", email);
   params.append("metadata[user_id]", user.id);
+  params.append("metadata[currency]", currency);
 
   try {
     const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {

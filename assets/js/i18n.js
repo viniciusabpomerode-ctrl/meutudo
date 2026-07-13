@@ -25,6 +25,14 @@ const I18n = {
 
   // ── Inicialização ──
   init() {
+    // Em localhost, força português sempre (geo não funciona sem Netlify Dev)
+    const isLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+    if (isLocal) {
+      this._current = "pt";
+      document.documentElement.dir = "ltr";
+      return;
+    }
+
     const saved = localStorage.getItem(AFB_LANG_KEY);
     const requested = new URLSearchParams(location.search).get("lang");
     if (requested && AppLanguage[requested]) {
@@ -133,8 +141,39 @@ const I18n = {
       "Quiz curto":"Short quiz","Teste o que ficou na memória":"Test what you remember","teste seus reflexos":"test your reflexes",
       "prova oficial":"official exam","frases profissionais":"professional phrases","frases conjugadas":"conjugated sentences",
       "Criar conta pra não perder seu progresso":"Create an account so you don't lose your progress"
+      ,"Meu perfil":"My profile","Nome":"Name","E-mail":"Email","Salvar":"Save","Estatísticas":"Statistics",
+      "XP total":"Total XP","Nível":"Level","Concluídos":"Completed","Ambiente de estudo":"Study environment",
+      "Trocar ambiente":"Switch environment","Idioma":"Language","Altere o idioma da interface do app.":"Change the app's interface language.",
+      "Trocar idioma":"Switch language","Assinatura":"Subscription","Verificando...":"Checking...","Conta":"Account",
+      "Indique e ganhe":"Refer and earn","Chame seus amigos pra aprender alemão 🇩🇪":"Invite your friends to learn German 🇩🇪",
+      "seu saldo em créditos":"your credit balance","① Manda seu link":"① Send your link",
+      "② Seu amigo assina um plano":"② Your friend subscribes to a plan",
+      "③ Você ganha 20% em créditos, direto na sua carteira":"③ You earn 20% in credits, straight to your wallet",
+      "Seu link de indicação":"Your referral link","Carregando...":"Loading...","Copiar":"Copy","Sair da conta":"Log out",
+      "Plano grátis":"Free plan","Premium Mensal":"Monthly Premium","Premium Anual":"Yearly Premium","Premium Vitalício (Fundador)":"Lifetime Premium (Founder)",
+      "O crédito cai na sua carteira 7 dias depois que seu amigo pagar (é a garantia de reembolso dele, se ele desistir dentro desse prazo o crédito não é gerado). Pra usar seu saldo, é só chamar no ":"Your credit lands in your wallet 7 days after your friend pays (that's their refund-guarantee window — if they cancel within it, no credit is generated). To use your balance, just reach out via ",
+      "/ano":"/year","/mês":"/month"
       ,"Misturado":"Mixed","em breve":"coming soon","JOGAR":"PLAY","▶ JOGAR":"▶ PLAY","desbloquear todas":"unlock all"
       ,"Você está jogando com 20 questões grátis de 3.000 —":"You are playing with 20 free questions out of 3,000 —"
+      ,"Investimento":"Investment","Escolha seu plano":"Choose your plan","Grátis":"Free"
+      ,"para sempre · sem cartão":"forever · no card needed"
+      ,"Mais popular · economize 17%":"Most popular · save 17%"
+      ,"cancele quando quiser":"cancel anytime","Usar grátis":"Use for free"
+      ,"20 conteúdos de cada categoria":"20 items per category"
+      ,"Quiz de nivelamento":"Placement quiz"
+      ,"Rádio lo-fi e Pomodoro":"Lo-fi radio & Pomodoro"
+      ,"Sistema de XP e níveis":"XP & leveling system"
+      ,"Biblioteca completa (63.000 itens)":"Full library (63,000 items)"
+      ,"Simulados Goethe completos":"Full Goethe practice tests"
+      ,"Todos os 63.000 itens liberados":"All 63,000 items unlocked"
+      ,"1.225 diálogos + 1.315 verbos conjugados":"1,225 dialogs + 1,315 conjugated verbs"
+      ,"3.000 questões de quiz + simulados Goethe":"3,000 quiz questions + Goethe practice tests"
+      ,"1.509 gírias e 1.200 frases de profissões":"1,509 slang terms + 1,200 professional phrases"
+      ,"Áudio de alta qualidade em todo o conteúdo":"High-quality audio across all content"
+      ,"Progresso sincronizado na nuvem":"Cloud-synced progress"
+      ,"Oferta de fundador · vagas limitadas":"Founder offer · limited spots"
+      ,"Garantir vaga — R$ 297":"Claim your spot — R$ 297"
+      ,"Pagamento processado com segurança via Stripe · Garantia de 7 dias: não gostou, devolvemos.":"Secure payment via Stripe · 7-day guarantee: not satisfied? We'll refund you."
     };
     const uiFallbacks = {
       en: {
@@ -172,7 +211,38 @@ const I18n = {
         "prova oficial": "examen oficial", "frases profissionais": "frases profesionales", "frases conjugadas": "frases conjugadas",
         "Criar conta pra não perder seu progresso": "Crea una cuenta para no perder tu progreso",
         "Misturado": "Mixto", "JOGAR": "JUGAR", "▶ JOGAR": "▶ JUGAR", "desbloquear todas": "desbloquear todas",
-        "Você está jogando com 20 questões grátis de 3.000 —": "Estás jugando con 20 preguntas gratis de 3.000 —"
+        "Você está jogando com 20 questões grátis de 3.000 —": "Estás jugando con 20 preguntas gratis de 3.000 —",
+        "Meu perfil":"Mi perfil", "Nome":"Nombre", "E-mail":"Correo electrónico", "Salvar":"Guardar", "Estatísticas":"Estadísticas",
+        "XP total":"XP total", "Nível":"Nivel", "Concluídos":"Completados", "Ambiente de estudo":"Entorno de estudio",
+        "Trocar ambiente":"Cambiar entorno", "Idioma":"Idioma", "Altere o idioma da interface do app.":"Cambia el idioma de la interfaz de la app.",
+        "Trocar idioma":"Cambiar idioma", "Assinatura":"Suscripción", "Verificando...":"Verificando...", "Conta":"Cuenta",
+        "Indique e ganhe":"Recomienda y gana", "Chame seus amigos pra aprender alemão 🇩🇪":"Invita a tus amigos a aprender alemán 🇩🇪",
+        "seu saldo em créditos":"tu saldo en créditos", "① Manda seu link":"① Envía tu enlace",
+        "② Seu amigo assina um plano":"② Tu amigo se suscribe a un plan",
+        "③ Você ganha 20% em créditos, direto na sua carteira":"③ Ganas un 20% en créditos, directo a tu billetera",
+        "Seu link de indicação":"Tu enlace de recomendación", "Carregando...":"Cargando...", "Copiar":"Copiar", "Sair da conta":"Cerrar sesión",
+        "Plano grátis":"Plan gratis", "Premium Mensal":"Premium Mensual", "Premium Anual":"Premium Anual", "Premium Vitalício (Fundador)":"Premium Vitalicio (Fundador)",
+        "O crédito cai na sua carteira 7 dias depois que seu amigo pagar (é a garantia de reembolso dele, se ele desistir dentro desse prazo o crédito não é gerado). Pra usar seu saldo, é só chamar no ":"Tu crédito llega a tu billetera 7 días después de que tu amigo pague (es su ventana de garantía de reembolso; si cancela dentro de ese plazo, no se genera crédito). Para usar tu saldo, solo contáctanos en ",
+        "/ano":"/año","/mês":"/mes"
+        ,"Investimento":"Inversión","Escolha seu plano":"Elige tu plan","Grátis":"Gratis"
+        ,"para sempre · sem cartão":"para siempre · sin tarjeta"
+        ,"Mais popular · economize 17%":"Más popular · ahorra 17%"
+        ,"cancele quando quiser":"cancela cuando quieras","Usar grátis":"Usar gratis"
+        ,"20 conteúdos de cada categoria":"20 contenidos por categoría"
+        ,"Quiz de nivelamento":"Cuestionario de nivel"
+        ,"Rádio lo-fi e Pomodoro":"Radio lo-fi y Pomodoro"
+        ,"Sistema de XP e níveis":"Sistema de XP y niveles"
+        ,"Biblioteca completa (63.000 itens)":"Biblioteca completa (63.000 ítems)"
+        ,"Simulados Goethe completos":"Simulacros Goethe completos"
+        ,"Todos os 63.000 itens liberados":"Todos los 63.000 ítems desbloqueados"
+        ,"1.225 diálogos + 1.315 verbos conjugados":"1.225 diálogos + 1.315 verbos conjugados"
+        ,"3.000 questões de quiz + simulados Goethe":"3.000 preguntas de quiz + simulacros Goethe"
+        ,"1.509 gírias e 1.200 frases de profissões":"1.509 jergas + 1.200 frases profesionales"
+        ,"Áudio de alta qualidade em todo o conteúdo":"Audio de alta calidad en todo el contenido"
+        ,"Progresso sincronizado na nuvem":"Progreso sincronizado en la nube"
+        ,"Oferta de fundador · vagas limitadas":"Oferta fundador · plazas limitadas"
+        ,"Garantir vaga — R$ 297":"Reservar plaza — R$ 297"
+        ,"Pagamento processado com segurança via Stripe · Garantia de 7 dias: não gostou, devolvemos.":"Pago seguro vía Stripe · Garantía de 7 días: ¿no te gusta? Te devolvemos el dinero."
       },
       fr: {
         "Conteúdo": "Contenu", "Conteúdo ▾": "Contenu ▾", "Planos": "Forfaits",
@@ -197,7 +267,38 @@ const I18n = {
         "prova oficial": "examen officiel", "frases profissionais": "phrases professionnelles", "frases conjugadas": "phrases conjuguées",
         "Criar conta pra não perder seu progresso": "Créez un compte pour ne pas perdre votre progression",
         "Misturado": "Mixte", "JOGAR": "JOUER", "▶ JOGAR": "▶ JOUER", "desbloquear todas": "débloquer toutes",
-        "Você está jogando com 20 questões grátis de 3.000 —": "Vous jouez avec 20 questions gratuites sur 3 000 —"
+        "Você está jogando com 20 questões grátis de 3.000 —": "Vous jouez avec 20 questions gratuites sur 3 000 —",
+        "Meu perfil":"Mon profil", "Nome":"Nom", "E-mail":"E-mail", "Salvar":"Enregistrer", "Estatísticas":"Statistiques",
+        "XP total":"XP total", "Nível":"Niveau", "Concluídos":"Terminés", "Ambiente de estudo":"Environnement d'étude",
+        "Trocar ambiente":"Changer d'environnement", "Idioma":"Langue", "Altere o idioma da interface do app.":"Changez la langue de l'interface de l'application.",
+        "Trocar idioma":"Changer de langue", "Assinatura":"Abonnement", "Verificando...":"Vérification...", "Conta":"Compte",
+        "Indique e ganhe":"Parrainez et gagnez", "Chame seus amigos pra aprender alemão 🇩🇪":"Invitez vos amis à apprendre l'allemand 🇩🇪",
+        "seu saldo em créditos":"votre solde de crédits", "① Manda seu link":"① Envoyez votre lien",
+        "② Seu amigo assina um plano":"② Votre ami s'abonne à un forfait",
+        "③ Você ganha 20% em créditos, direto na sua carteira":"③ Vous gagnez 20% en crédits, directement dans votre portefeuille",
+        "Seu link de indicação":"Votre lien de parrainage", "Carregando...":"Chargement...", "Copiar":"Copier", "Sair da conta":"Se déconnecter",
+        "Plano grátis":"Forfait gratuit", "Premium Mensal":"Premium Mensuel", "Premium Anual":"Premium Annuel", "Premium Vitalício (Fundador)":"Premium à Vie (Fondateur)",
+        "O crédito cai na sua carteira 7 dias depois que seu amigo pagar (é a garantia de reembolso dele, se ele desistir dentro desse prazo o crédito não é gerado). Pra usar seu saldo, é só chamar no ":"Votre crédit arrive dans votre portefeuille 7 jours après le paiement de votre ami (c'est sa fenêtre de garantie de remboursement ; s'il annule pendant cette période, aucun crédit n'est généré). Pour utiliser votre solde, contactez-nous simplement via ",
+        "/ano":"/an","/mês":"/mois"
+        ,"Investimento":"Investissement","Escolha seu plano":"Choisissez votre forfait","Grátis":"Gratuit"
+        ,"para sempre · sem cartão":"pour toujours · sans carte"
+        ,"Mais popular · economize 17%":"Le plus populaire · économisez 17%"
+        ,"cancele quando quiser":"annulez quand vous voulez","Usar grátis":"Utiliser gratuitement"
+        ,"20 conteúdos de cada categoria":"20 contenus par catégorie"
+        ,"Quiz de nivelamento":"Quiz de positionnement"
+        ,"Rádio lo-fi e Pomodoro":"Radio lo-fi et Pomodoro"
+        ,"Sistema de XP e níveis":"Système d'XP et de niveaux"
+        ,"Biblioteca completa (63.000 itens)":"Bibliothèque complète (63 000 éléments)"
+        ,"Simulados Goethe completos":"Simulations Goethe complètes"
+        ,"Todos os 63.000 itens liberados":"Les 63 000 éléments débloqués"
+        ,"1.225 diálogos + 1.315 verbos conjugados":"1 225 dialogues + 1 315 verbes conjugués"
+        ,"3.000 questões de quiz + simulados Goethe":"3 000 questions de quiz + simulations Goethe"
+        ,"1.509 gírias e 1.200 frases de profissões":"1 509 expressions familières + 1 200 phrases professionnelles"
+        ,"Áudio de alta qualidade em todo o conteúdo":"Audio haute qualité sur tout le contenu"
+        ,"Progresso sincronizado na nuvem":"Progression synchronisée dans le cloud"
+        ,"Oferta de fundador · vagas limitadas":"Offre fondateur · places limitées"
+        ,"Garantir vaga — R$ 297":"Réserver ma place — R$ 297"
+        ,"Pagamento processado com segurança via Stripe · Garantia de 7 dias: não gostou, devolvemos.":"Paiement sécurisé via Stripe · Garantie 7 jours : pas satisfait ? On vous rembourse."
       },
       it: {
         "Conteúdo": "Contenuto", "Conteúdo ▾": "Contenuto ▾", "Planos": "Piani",
@@ -222,7 +323,38 @@ const I18n = {
         "prova oficial": "esame ufficiale", "frases profissionais": "frasi professionali", "frases conjugadas": "frasi coniugate",
         "Criar conta pra não perder seu progresso": "Crea un account per non perdere i tuoi progressi",
         "Misturado": "Misto", "JOGAR": "GIOCA", "▶ JOGAR": "▶ GIOCA", "desbloquear todas": "sblocca tutte",
-        "Você está jogando com 20 questões grátis de 3.000 —": "Stai giocando con 20 domande gratuite su 3.000 —"
+        "Você está jogando com 20 questões grátis de 3.000 —": "Stai giocando con 20 domande gratuite su 3.000 —",
+        "Meu perfil":"Il mio profilo", "Nome":"Nome", "E-mail":"Email", "Salvar":"Salva", "Estatísticas":"Statistiche",
+        "XP total":"XP totale", "Nível":"Livello", "Concluídos":"Completati", "Ambiente de estudo":"Ambiente di studio",
+        "Trocar ambiente":"Cambia ambiente", "Idioma":"Lingua", "Altere o idioma da interface do app.":"Cambia la lingua dell'interfaccia dell'app.",
+        "Trocar idioma":"Cambia lingua", "Assinatura":"Abbonamento", "Verificando...":"Verifica in corso...", "Conta":"Account",
+        "Indique e ganhe":"Invita e guadagna", "Chame seus amigos pra aprender alemão 🇩🇪":"Invita i tuoi amici a imparare il tedesco 🇩🇪",
+        "seu saldo em créditos":"il tuo saldo crediti", "① Manda seu link":"① Invia il tuo link",
+        "② Seu amigo assina um plano":"② Il tuo amico si abbona a un piano",
+        "③ Você ganha 20% em créditos, direto na sua carteira":"③ Guadagni il 20% in crediti, direttamente nel tuo portafoglio",
+        "Seu link de indicação":"Il tuo link di invito", "Carregando...":"Caricamento...", "Copiar":"Copia", "Sair da conta":"Esci dall'account",
+        "Plano grátis":"Piano gratuito", "Premium Mensal":"Premium Mensile", "Premium Anual":"Premium Annuale", "Premium Vitalício (Fundador)":"Premium a Vita (Fondatore)",
+        "O crédito cai na sua carteira 7 dias depois que seu amigo pagar (é a garantia de reembolso dele, se ele desistir dentro desse prazo o crédito não é gerado). Pra usar seu saldo, é só chamar no ":"Il tuo credito arriva nel portafoglio 7 giorni dopo che il tuo amico paga (è la sua finestra di garanzia di rimborso; se annulla entro quel periodo, non viene generato alcun credito). Per usare il tuo saldo, contattaci semplicemente su ",
+        "/ano":"/anno","/mês":"/mese"
+        ,"Investimento":"Investimento","Escolha seu plano":"Scegli il tuo piano","Grátis":"Gratuito"
+        ,"para sempre · sem cartão":"per sempre · senza carta"
+        ,"Mais popular · economize 17%":"Più popolare · risparmia il 17%"
+        ,"cancele quando quiser":"cancella quando vuoi","Usar grátis":"Usa gratis"
+        ,"20 conteúdos de cada categoria":"20 contenuti per categoria"
+        ,"Quiz de nivelamento":"Quiz di posizionamento"
+        ,"Rádio lo-fi e Pomodoro":"Radio lo-fi e Pomodoro"
+        ,"Sistema de XP e níveis":"Sistema di XP e livelli"
+        ,"Biblioteca completa (63.000 itens)":"Libreria completa (63.000 elementi)"
+        ,"Simulados Goethe completos":"Simulazioni Goethe complete"
+        ,"Todos os 63.000 itens liberados":"Tutti i 63.000 elementi sbloccati"
+        ,"1.225 diálogos + 1.315 verbos conjugados":"1.225 dialoghi + 1.315 verbi coniugati"
+        ,"3.000 questões de quiz + simulados Goethe":"3.000 domande quiz + simulazioni Goethe"
+        ,"1.509 gírias e 1.200 frases de profissões":"1.509 espressioni colloquiali + 1.200 frasi professionali"
+        ,"Áudio de alta qualidade em todo o conteúdo":"Audio di alta qualità su tutti i contenuti"
+        ,"Progresso sincronizado na nuvem":"Progresso sincronizzato nel cloud"
+        ,"Oferta de fundador · vagas limitadas":"Offerta fondatore · posti limitati"
+        ,"Garantir vaga — R$ 297":"Prenota il tuo posto — R$ 297"
+        ,"Pagamento processado com segurança via Stripe · Garantia de 7 dias: não gostou, devolvemos.":"Pagamento sicuro via Stripe · Garanzia 7 giorni: non sei soddisfatto? Ti rimborsiamo."
       },
       tr: {
         "Conteúdo": "İçerik", "Conteúdo ▾": "İçerik ▾", "Planos": "Planlar",
@@ -247,7 +379,38 @@ const I18n = {
         "prova oficial": "resmi sınav", "frases profissionais": "mesleki cümleler", "frases conjugadas": "çekimli cümleler",
         "Criar conta pra não perder seu progresso": "İlerlemenizi kaybetmemek için hesap oluşturun",
         "Misturado": "Karışık", "JOGAR": "OYNA", "▶ JOGAR": "▶ OYNA", "desbloquear todas": "hepsinin kilidini aç",
-        "Você está jogando com 20 questões grátis de 3.000 —": "3.000 sorudan 20 ücretsiz soruyla oynuyorsunuz —"
+        "Você está jogando com 20 questões grátis de 3.000 —": "3.000 sorudan 20 ücretsiz soruyla oynuyorsunuz —",
+        "Meu perfil":"Profilim", "Nome":"Ad", "E-mail":"E-posta", "Salvar":"Kaydet", "Estatísticas":"İstatistikler",
+        "XP total":"Toplam XP", "Nível":"Seviye", "Concluídos":"Tamamlanan", "Ambiente de estudo":"Çalışma ortamı",
+        "Trocar ambiente":"Ortamı değiştir", "Idioma":"Dil", "Altere o idioma da interface do app.":"Uygulama arayüzü dilini değiştirin.",
+        "Trocar idioma":"Dili değiştir", "Assinatura":"Abonelik", "Verificando...":"Kontrol ediliyor...", "Conta":"Hesap",
+        "Indique e ganhe":"Davet et, kazan", "Chame seus amigos pra aprender alemão 🇩🇪":"Arkadaşlarını Almanca öğrenmeye davet et 🇩🇪",
+        "seu saldo em créditos":"kredi bakiyeniz", "① Manda seu link":"① Bağlantını gönder",
+        "② Seu amigo assina um plano":"② Arkadaşın bir plana abone olur",
+        "③ Você ganha 20% em créditos, direto na sua carteira":"③ Doğrudan cüzdanına %20 kredi kazanırsın",
+        "Seu link de indicação":"Davet bağlantınız", "Carregando...":"Yükleniyor...", "Copiar":"Kopyala", "Sair da conta":"Hesaptan çık",
+        "Plano grátis":"Ücretsiz plan", "Premium Mensal":"Aylık Premium", "Premium Anual":"Yıllık Premium", "Premium Vitalício (Fundador)":"Ömür Boyu Premium (Kurucu)",
+        "O crédito cai na sua carteira 7 dias depois que seu amigo pagar (é a garantia de reembolso dele, se ele desistir dentro desse prazo o crédito não é gerado). Pra usar seu saldo, é só chamar no ":"Arkadaşın ödeme yaptıktan 7 gün sonra kredi cüzdanına düşer (bu onun iade garantisi süresidir; bu süre içinde vazgeçerse kredi oluşturulmaz). Bakiyeni kullanmak için buradan bize ulaş: ",
+        "/ano":"/yıl","/mês":"/ay"
+        ,"Investimento":"Yatırım","Escolha seu plano":"Planını seç","Grátis":"Ücretsiz"
+        ,"para sempre · sem cartão":"sonsuza kadar · kart gerekmez"
+        ,"Mais popular · economize 17%":"En popüler · %17 tasarruf"
+        ,"cancele quando quiser":"istediğiniz zaman iptal edin","Usar grátis":"Ücretsiz kullan"
+        ,"20 conteúdos de cada categoria":"Her kategoriden 20 içerik"
+        ,"Quiz de nivelamento":"Seviye belirleme testi"
+        ,"Rádio lo-fi e Pomodoro":"Lo-fi radyo ve Pomodoro"
+        ,"Sistema de XP e níveis":"XP ve seviye sistemi"
+        ,"Biblioteca completa (63.000 itens)":"Tam kütüphane (63.000 öğe)"
+        ,"Simulados Goethe completos":"Tam Goethe deneme sınavları"
+        ,"Todos os 63.000 itens liberados":"63.000 öğenin tamamı açıldı"
+        ,"1.225 diálogos + 1.315 verbos conjugados":"1.225 diyalog + 1.315 çekimli fiil"
+        ,"3.000 questões de quiz + simulados Goethe":"3.000 quiz sorusu + Goethe deneme sınavları"
+        ,"1.509 gírias e 1.200 frases de profissões":"1.509 argo ifade + 1.200 mesleki cümle"
+        ,"Áudio de alta qualidade em todo o conteúdo":"Tüm içerikte yüksek kaliteli ses"
+        ,"Progresso sincronizado na nuvem":"Bulutta senkronize ilerleme"
+        ,"Oferta de fundador · vagas limitadas":"Kurucu teklifi · sınırlı kontenjan"
+        ,"Garantir vaga — R$ 297":"Yerini ayır — R$ 297"
+        ,"Pagamento processado com segurança via Stripe · Garantia de 7 dias: não gostou, devolvemos.":"Stripe ile güvenli ödeme · 7 gün garanti: memnun kalmazsanız iade ediyoruz."
       },
       ar: {
         "Conteúdo": "المحتوى", "Conteúdo ▾": "المحتوى ▾", "Planos": "الخطط",
@@ -272,7 +435,38 @@ const I18n = {
         "prova oficial": "امتحان رسمي", "frases profissionais": "جمل مهنية", "frases conjugadas": "جمل مصرَّفة",
         "Criar conta pra não perder seu progresso": "أنشئ حسابًا حتى لا تفقد تقدمك",
         "Misturado": "مختلط", "JOGAR": "العب", "▶ JOGAR": "▶ العب", "desbloquear todas": "فتح الكل",
-        "Você está jogando com 20 questões grátis de 3.000 —": "أنت تلعب بـ 20 سؤالًا مجانيًا من أصل 3000 —"
+        "Você está jogando com 20 questões grátis de 3.000 —": "أنت تلعب بـ 20 سؤالًا مجانيًا من أصل 3000 —",
+        "Meu perfil":"ملفي الشخصي", "Nome":"الاسم", "E-mail":"البريد الإلكتروني", "Salvar":"حفظ", "Estatísticas":"الإحصائيات",
+        "XP total":"XP الإجمالي", "Nível":"المستوى", "Concluídos":"مكتمل", "Ambiente de estudo":"بيئة الدراسة",
+        "Trocar ambiente":"تغيير البيئة", "Idioma":"اللغة", "Altere o idioma da interface do app.":"غيّر لغة واجهة التطبيق.",
+        "Trocar idioma":"تغيير اللغة", "Assinatura":"الاشتراك", "Verificando...":"جارٍ التحقق...", "Conta":"الحساب",
+        "Indique e ganhe":"أحِل واربح", "Chame seus amigos pra aprender alemão 🇩🇪":"ادعُ أصدقاءك لتعلم الألمانية 🇩🇪",
+        "seu saldo em créditos":"رصيدك من الأرصدة", "① Manda seu link":"① أرسل رابطك",
+        "② Seu amigo assina um plano":"② يشترك صديقك في خطة",
+        "③ Você ganha 20% em créditos, direto na sua carteira":"③ تربح 20% كرصيد، مباشرة إلى محفظتك",
+        "Seu link de indicação":"رابط الإحالة الخاص بك", "Carregando...":"جارٍ التحميل...", "Copiar":"نسخ", "Sair da conta":"تسجيل الخروج",
+        "Plano grátis":"الخطة المجانية", "Premium Mensal":"بريميوم شهري", "Premium Anual":"بريميوم سنوي", "Premium Vitalício (Fundador)":"بريميوم مدى الحياة (مؤسس)",
+        "O crédito cai na sua carteira 7 dias depois que seu amigo pagar (é a garantia de reembolso dele, se ele desistir dentro desse prazo o crédito não é gerado). Pra usar seu saldo, é só chamar no ":"يصل الرصيد إلى محفظتك بعد 7 أيام من دفع صديقك (هذه فترة ضمان الاسترداد الخاصة به؛ إذا ألغى خلالها، لن يتم إنشاء رصيد). لاستخدام رصيدك، تواصل معنا عبر ",
+        "/ano":"/سنة","/mês":"/شهر"
+        ,"Investimento":"استثمار","Escolha seu plano":"اختر خطتك","Grátis":"مجاني"
+        ,"para sempre · sem cartão":"للأبد · بدون بطاقة"
+        ,"Mais popular · economize 17%":"الأكثر شعبية · وفر 17%"
+        ,"cancele quando quiser":"ألغِ وقتما تشاء","Usar grátis":"استخدم مجاناً"
+        ,"20 conteúdos de cada categoria":"20 محتوى من كل فئة"
+        ,"Quiz de nivelamento":"اختبار تحديد المستوى"
+        ,"Rádio lo-fi e Pomodoro":"راديو lo-fi وبومودورو"
+        ,"Sistema de XP e níveis":"نظام XP والمستويات"
+        ,"Biblioteca completa (63.000 itens)":"المكتبة الكاملة (63.000 عنصر)"
+        ,"Simulados Goethe completos":"اختبارات غوته التجريبية الكاملة"
+        ,"Todos os 63.000 itens liberados":"جميع العناصر الـ 63.000 مفتوحة"
+        ,"1.225 diálogos + 1.315 verbos conjugados":"1.225 حوار + 1.315 فعل مصرف"
+        ,"3.000 questões de quiz + simulados Goethe":"3.000 سؤال اختبار + اختبارات غوته التجريبية"
+        ,"1.509 gírias e 1.200 frases de profissões":"1.509 تعبير عامي + 1.200 عبارة مهنية"
+        ,"Áudio de alta qualidade em todo o conteúdo":"صوت عالي الجودة في كل المحتوى"
+        ,"Progresso sincronizado na nuvem":"تقدم متزامن سحابياً"
+        ,"Oferta de fundador · vagas limitadas":"عرض المؤسس · مقاعد محدودة"
+        ,"Garantir vaga — R$ 297":"احجز مقعدك — R$ 297"
+        ,"Pagamento processado com segurança via Stripe · Garantia de 7 dias: não gostou, devolvemos.":"دفع آمن عبر Stripe · ضمان 7 أيام: غير راضٍ؟ نعيد لك المال."
       },
       he: {
         "Conteúdo": "תוכן", "Conteúdo ▾": "תוכן ▾", "Planos": "תוכניות",
@@ -297,7 +491,38 @@ const I18n = {
         "prova oficial": "מבחן רשמי", "frases profissionais": "משפטים מקצועיים", "frases conjugadas": "משפטים נטויים",
         "Criar conta pra não perder seu progresso": "צור חשבון כדי לא לאבד את ההתקדמות שלך",
         "Misturado": "מעורב", "JOGAR": "שחק", "▶ JOGAR": "▶ שחק", "desbloquear todas": "פתח את כולן",
-        "Você está jogando com 20 questões grátis de 3.000 —": "אתה משחק עם 20 שאלות חינם מתוך 3,000 —"
+        "Você está jogando com 20 questões grátis de 3.000 —": "אתה משחק עם 20 שאלות חינם מתוך 3,000 —",
+        "Meu perfil":"הפרופיל שלי", "Nome":"שם", "E-mail":"אימייל", "Salvar":"שמור", "Estatísticas":"סטטיסטיקות",
+        "XP total":"XP כולל", "Nível":"רמה", "Concluídos":"הושלמו", "Ambiente de estudo":"סביבת לימוד",
+        "Trocar ambiente":"החלף סביבה", "Idioma":"שפה", "Altere o idioma da interface do app.":"שנה את שפת הממשק של האפליקציה.",
+        "Trocar idioma":"החלף שפה", "Assinatura":"מנוי", "Verificando...":"בודק...", "Conta":"חשבון",
+        "Indique e ganhe":"הפנה והרווח", "Chame seus amigos pra aprender alemão 🇩🇪":"הזמן את חבריך ללמוד גרמנית 🇩🇪",
+        "seu saldo em créditos":"יתרת הקרדיט שלך", "① Manda seu link":"① שלח את הקישור שלך",
+        "② Seu amigo assina um plano":"② החבר שלך נרשם לתוכנית",
+        "③ Você ganha 20% em créditos, direto na sua carteira":"③ אתה מרוויח 20% בקרדיט, ישירות לארנק שלך",
+        "Seu link de indicação":"קישור ההפניה שלך", "Carregando...":"טוען...", "Copiar":"העתק", "Sair da conta":"התנתק",
+        "Plano grátis":"תוכנית חינמית", "Premium Mensal":"פרימיום חודשי", "Premium Anual":"פרימיום שנתי", "Premium Vitalício (Fundador)":"פרימיום לכל החיים (מייסד)",
+        "O crédito cai na sua carteira 7 dias depois que seu amigo pagar (é a garantia de reembolso dele, se ele desistir dentro desse prazo o crédito não é gerado). Pra usar seu saldo, é só chamar no ":"הקרדיט מגיע לארנק שלך 7 ימים אחרי שהחבר שלך משלם (זהו חלון הבטחת ההחזר שלו; אם הוא מבטל בתוך פרק הזמן הזה, לא נוצר קרדיט). כדי להשתמש ביתרה שלך, פשוט צור קשר דרך ",
+        "/ano":"/שנה","/mês":"/חודש"
+        ,"Investimento":"השקעה","Escolha seu plano":"בחר את התוכנית שלך","Grátis":"חינם"
+        ,"para sempre · sem cartão":"לתמיד · ללא כרטיס"
+        ,"Mais popular · economize 17%":"הכי פופולרי · חסוך 17%"
+        ,"cancele quando quiser":"בטל מתי שתרצה","Usar grátis":"השתמש בחינם"
+        ,"20 conteúdos de cada categoria":"20 תכנים מכל קטגוריה"
+        ,"Quiz de nivelamento":"בוחן רמה"
+        ,"Rádio lo-fi e Pomodoro":"רדיו lo-fi ופומודורו"
+        ,"Sistema de XP e níveis":"מערכת XP ורמות"
+        ,"Biblioteca completa (63.000 itens)":"ספרייה מלאה (63.000 פריטים)"
+        ,"Simulados Goethe completos":"מבחני גתה מלאים"
+        ,"Todos os 63.000 itens liberados":"כל 63.000 הפריטים פתוחים"
+        ,"1.225 diálogos + 1.315 verbos conjugados":"1.225 דיאלוגים + 1.315 פעלים מוטים"
+        ,"3.000 questões de quiz + simulados Goethe":"3.000 שאלות בוחן + מבחני גתה"
+        ,"1.509 gírias e 1.200 frases de profissões":"1.509 ביטויי סלנג + 1.200 משפטים מקצועיים"
+        ,"Áudio de alta qualidade em todo o conteúdo":"שמע באיכות גבוהה בכל התכנים"
+        ,"Progresso sincronizado na nuvem":"התקדמות מסונכרנת בענן"
+        ,"Oferta de fundador · vagas limitadas":"הצעת מייסד · מקומות מוגבלים"
+        ,"Garantir vaga — R$ 297":"הבטח את מקומך — R$ 297"
+        ,"Pagamento processado com segurança via Stripe · Garantia de 7 dias: não gostou, devolvemos.":"תשלום מאובטח דרך Stripe · אחריות 7 ימים: לא מרוצה? נחזיר לך את הכסף."
       },
       hi: {
         "Conteúdo": "सामग्री", "Conteúdo ▾": "सामग्री ▾", "Planos": "योजनाएँ",
@@ -322,7 +547,38 @@ const I18n = {
         "prova oficial": "आधिकारिक परीक्षा", "frases profissionais": "व्यावसायिक वाक्य", "frases conjugadas": "क्रिया-रूपी वाक्य",
         "Criar conta pra não perder seu progresso": "अपनी प्रगति न खोने के लिए खाता बनाएं",
         "Misturado": "मिश्रित", "JOGAR": "खेलें", "▶ JOGAR": "▶ खेलें", "desbloquear todas": "सभी अनलॉक करें",
-        "Você está jogando com 20 questões grátis de 3.000 —": "आप 3,000 में से 20 मुफ़्त प्रश्नों के साथ खेल रहे हैं —"
+        "Você está jogando com 20 questões grátis de 3.000 —": "आप 3,000 में से 20 मुफ़्त प्रश्नों के साथ खेल रहे हैं —",
+        "Meu perfil":"मेरी प्रोफ़ाइल", "Nome":"नाम", "E-mail":"ईमेल", "Salvar":"सहेजें", "Estatísticas":"आँकड़े",
+        "XP total":"कुल XP", "Nível":"स्तर", "Concluídos":"पूर्ण", "Ambiente de estudo":"अध्ययन वातावरण",
+        "Trocar ambiente":"वातावरण बदलें", "Idioma":"भाषा", "Altere o idioma da interface do app.":"ऐप के इंटरफ़ेस की भाषा बदलें।",
+        "Trocar idioma":"भाषा बदलें", "Assinatura":"सदस्यता", "Verificando...":"जाँच हो रही है...", "Conta":"खाता",
+        "Indique e ganhe":"रेफर करें और कमाएँ", "Chame seus amigos pra aprender alemão 🇩🇪":"अपने दोस्तों को जर्मन सीखने के लिए आमंत्रित करें 🇩🇪",
+        "seu saldo em créditos":"आपका क्रेडिट शेष", "① Manda seu link":"① अपना लिंक भेजें",
+        "② Seu amigo assina um plano":"② आपका दोस्त एक योजना सदस्यता लेता है",
+        "③ Você ganha 20% em créditos, direto na sua carteira":"③ आप सीधे अपने वॉलेट में 20% क्रेडिट कमाते हैं",
+        "Seu link de indicação":"आपका रेफरल लिंक", "Carregando...":"लोड हो रहा है...", "Copiar":"कॉपी करें", "Sair da conta":"लॉग आउट करें",
+        "Plano grátis":"मुफ़्त योजना", "Premium Mensal":"मासिक प्रीमियम", "Premium Anual":"वार्षिक प्रीमियम", "Premium Vitalício (Fundador)":"आजीवन प्रीमियम (संस्थापक)",
+        "O crédito cai na sua carteira 7 dias depois que seu amigo pagar (é a garantia de reembolso dele, se ele desistir dentro desse prazo o crédito não é gerado). Pra usar seu saldo, é só chamar no ":"आपका मित्र भुगतान करने के 7 दिन बाद क्रेडिट आपके वॉलेट में आता है (यह उसकी रिफंड-गारंटी अवधि है; यदि वह इस दौरान रद्द करता है, तो कोई क्रेडिट नहीं बनता)। अपने शेष का उपयोग करने के लिए, बस यहाँ संपर्क करें: ",
+        "/ano":"/वर्ष","/mês":"/माह"
+        ,"Investimento":"निवेश","Escolha seu plano":"अपनी योजना चुनें","Grátis":"मुफ़्त"
+        ,"para sempre · sem cartão":"हमेशा के लिए · बिना कार्ड"
+        ,"Mais popular · economize 17%":"सबसे लोकप्रिय · 17% बचत"
+        ,"cancele quando quiser":"जब चाहें रद्द करें","Usar grátis":"मुफ़्त उपयोग करें"
+        ,"20 conteúdos de cada categoria":"प्रत्येक श्रेणी से 20 सामग्री"
+        ,"Quiz de nivelamento":"स्तर निर्धारण प्रश्नोत्तरी"
+        ,"Rádio lo-fi e Pomodoro":"लो-फाई रेडियो और पोमोडोरो"
+        ,"Sistema de XP e níveis":"XP और स्तर प्रणाली"
+        ,"Biblioteca completa (63.000 itens)":"पूर्ण लाइब्रेरी (63,000 आइटम)"
+        ,"Simulados Goethe completos":"पूर्ण गोथे अभ्यास परीक्षा"
+        ,"Todos os 63.000 itens liberados":"सभी 63,000 आइटम खुले"
+        ,"1.225 diálogos + 1.315 verbos conjugados":"1,225 संवाद + 1,315 संयुग्मित क्रियाएँ"
+        ,"3.000 questões de quiz + simulados Goethe":"3,000 प्रश्नोत्तरी प्रश्न + गोथे अभ्यास"
+        ,"1.509 gírias e 1.200 frases de profissões":"1,509 स्लैंग + 1,200 पेशेवर वाक्यांश"
+        ,"Áudio de alta qualidade em todo o conteúdo":"सभी सामग्री में उच्च-गुणवत्ता ऑडियो"
+        ,"Progresso sincronizado na nuvem":"क्लाउड-सिंक प्रगति"
+        ,"Oferta de fundador · vagas limitadas":"संस्थापक प्रस्ताव · सीमित स्थान"
+        ,"Garantir vaga — R$ 297":"अपनी जगह पक्की करें — R$ 297"
+        ,"Pagamento processado com segurança via Stripe · Garantia de 7 dias: não gostou, devolvemos.":"Stripe के माध्यम से सुरक्षित भुगतान · 7-दिन की गारंटी: संतुष्ट नहीं? हम रिफ़ंड करेंगे।"
       },
       pl: {
         "Conteúdo": "Treść", "Conteúdo ▾": "Treść ▾", "Planos": "Plany",
@@ -347,7 +603,38 @@ const I18n = {
         "prova oficial": "egzamin oficjalny", "frases profissionais": "zdania zawodowe", "frases conjugadas": "odmienione zdania",
         "Criar conta pra não perder seu progresso": "Załóż konto, aby nie stracić postępów",
         "Misturado": "Mieszane", "JOGAR": "GRAJ", "▶ JOGAR": "▶ GRAJ", "desbloquear todas": "odblokuj wszystkie",
-        "Você está jogando com 20 questões grátis de 3.000 —": "Grasz z 20 darmowymi pytaniami z 3000 —"
+        "Você está jogando com 20 questões grátis de 3.000 —": "Grasz z 20 darmowymi pytaniami z 3000 —",
+        "Meu perfil":"Mój profil", "Nome":"Imię", "E-mail":"E-mail", "Salvar":"Zapisz", "Estatísticas":"Statystyki",
+        "XP total":"Łączne XP", "Nível":"Poziom", "Concluídos":"Ukończone", "Ambiente de estudo":"Środowisko nauki",
+        "Trocar ambiente":"Zmień środowisko", "Idioma":"Język", "Altere o idioma da interface do app.":"Zmień język interfejsu aplikacji.",
+        "Trocar idioma":"Zmień język", "Assinatura":"Subskrypcja", "Verificando...":"Sprawdzanie...", "Conta":"Konto",
+        "Indique e ganhe":"Poleć i zarabiaj", "Chame seus amigos pra aprender alemão 🇩🇪":"Zaproś znajomych do nauki niemieckiego 🇩🇪",
+        "seu saldo em créditos":"Twoje saldo kredytów", "① Manda seu link":"① Wyślij swój link",
+        "② Seu amigo assina um plano":"② Twój znajomy subskrybuje plan",
+        "③ Você ganha 20% em créditos, direto na sua carteira":"③ Zarabiasz 20% w kredytach, prosto na swoje konto",
+        "Seu link de indicação":"Twój link polecający", "Carregando...":"Ładowanie...", "Copiar":"Kopiuj", "Sair da conta":"Wyloguj się",
+        "Plano grátis":"Plan darmowy", "Premium Mensal":"Premium Miesięczny", "Premium Anual":"Premium Roczny", "Premium Vitalício (Fundador)":"Premium Dożywotni (Założyciel)",
+        "O crédito cai na sua carteira 7 dias depois que seu amigo pagar (é a garantia de reembolso dele, se ele desistir dentro desse prazo o crédito não é gerado). Pra usar seu saldo, é só chamar no ":"Twój kredyt trafia na konto 7 dni po zapłacie znajomego (to jego okno gwarancji zwrotu; jeśli zrezygnuje w tym czasie, kredyt nie zostanie naliczony). Aby wykorzystać saldo, skontaktuj się z nami przez ",
+        "/ano":"/rok","/mês":"/miesiąc"
+        ,"Investimento":"Inwestycja","Escolha seu plano":"Wybierz plan","Grátis":"Darmowy"
+        ,"para sempre · sem cartão":"na zawsze · bez karty"
+        ,"Mais popular · economize 17%":"Najpopularniejszy · oszczędź 17%"
+        ,"cancele quando quiser":"anuluj kiedy chcesz","Usar grátis":"Używaj za darmo"
+        ,"20 conteúdos de cada categoria":"20 treści z każdej kategorii"
+        ,"Quiz de nivelamento":"Quiz poziomujący"
+        ,"Rádio lo-fi e Pomodoro":"Radio lo-fi i Pomodoro"
+        ,"Sistema de XP e níveis":"System XP i poziomów"
+        ,"Biblioteca completa (63.000 itens)":"Pełna biblioteka (63.000 elementów)"
+        ,"Simulados Goethe completos":"Pełne testy próbne Goethe"
+        ,"Todos os 63.000 itens liberados":"Wszystkie 63.000 elementów odblokowane"
+        ,"1.225 diálogos + 1.315 verbos conjugados":"1.225 dialogów + 1.315 czasowników odmienionych"
+        ,"3.000 questões de quiz + simulados Goethe":"3.000 pytań quizowych + testy próbne Goethe"
+        ,"1.509 gírias e 1.200 frases de profissões":"1.509 wyrażeń slangowych + 1.200 zwrotów zawodowych"
+        ,"Áudio de alta qualidade em todo o conteúdo":"Wysokiej jakości audio we wszystkich treściach"
+        ,"Progresso sincronizado na nuvem":"Postęp synchronizowany w chmurze"
+        ,"Oferta de fundador · vagas limitadas":"Oferta założycielska · ograniczona liczba miejsc"
+        ,"Garantir vaga — R$ 297":"Zarezerwuj miejsce — R$ 297"
+        ,"Pagamento processado com segurança via Stripe · Garantia de 7 dias: não gostou, devolvemos.":"Bezpieczna płatność Stripe · 7-dniowa gwarancja: nie podoba Ci się? Zwracamy pieniądze."
       }
     };
     const activeUi = uiFallbacks[this._current] || {};
@@ -356,7 +643,10 @@ const I18n = {
       " de 60 min":" of 60 min"," da sua meta pessoal — sem comparar com toda a biblioteca.":" of your personal goal — without comparing yourself to the whole library.",
       " questões de simulado Goethe":" Goethe practice-test questions"," te esperando aqui dentro":" waiting for you inside",
       "Mais ":"More ","frases, quizzes e verbos":"sentences, quizzes and verbs",
-      "frases profissionais":"professional phrases","frases conjugadas":"conjugated sentences"
+      "frases profissionais":"professional phrases","frases conjugadas":"conjugated sentences",
+      " ativo":" active"," indicação(ões)":" referral(s)",
+      "Premium Vitalício (Fundador)":"Lifetime Premium (Founder)","Premium Mensal":"Monthly Premium","Premium Anual":"Yearly Premium",
+      "Assinar anual — ":"Subscribe yearly — ","Assinar mensal — ":"Subscribe monthly — ","Garantir vaga — ":"Claim your spot — ","Acesso vitalício por ":"Lifetime access for "
     };
     const fragmentFallbacks = {
       en: fragments,
@@ -365,56 +655,80 @@ const I18n = {
         " nível ": " nivel ", " de 60 min": " de 60 min", " da sua meta pessoal — sem comparar com toda a biblioteca.": " de tu objetivo personal, sin compararte con toda la biblioteca.",
         " questões de simulado Goethe": " preguntas de simulacros Goethe", " te esperando aqui dentro": " esperándote aquí dentro",
         "Mais ": "Más ", "frases, quizzes e verbos": "frases, cuestionarios y verbos",
-        "frases profissionais": "frases profesionales", "frases conjugadas": "frases conjugadas"
+        "frases profissionais": "frases profesionales", "frases conjugadas": "frases conjugadas",
+        " ativo": " activo", " indicação(ões)": " recomendación(es)",
+        "Premium Vitalício (Fundador)": "Premium Vitalicio (Fundador)", "Premium Mensal": "Premium Mensual", "Premium Anual": "Premium Anual",
+        "Assinar anual — ": "Suscribirse anual — ", "Assinar mensal — ": "Suscribirse mensual — ", "Garantir vaga — ": "Asegurar mi plaza — ", "Acesso vitalício por ": "Acceso vitalicio por "
       },
       fr: {
         " frases": " phrases", " verbos": " verbes", " por dia": " par jour", " dias por semana": " jours par semaine", " nível ": " niveau ",
         " de 60 min": " de 60 min", " da sua meta pessoal — sem comparar com toda a biblioteca.": " de votre objectif personnel — sans vous comparer à toute la bibliothèque.",
         " questões de simulado Goethe": " questions de simulation Goethe", " te esperando aqui dentro": " qui vous attendent ici",
         "Mais ": "Plus de ", "frases, quizzes e verbos": "phrases, quiz et verbes",
-        "frases profissionais": "phrases professionnelles", "frases conjugadas": "phrases conjuguées"
+        "frases profissionais": "phrases professionnelles", "frases conjugadas": "phrases conjuguées",
+        " ativo": " actif", " indicação(ões)": " parrainage(s)",
+        "Premium Vitalício (Fundador)": "Premium à Vie (Fondateur)", "Premium Mensal": "Premium Mensuel", "Premium Anual": "Premium Annuel",
+        "Assinar anual — ": "S'abonner annuel — ", "Assinar mensal — ": "S'abonner mensuel — ", "Garantir vaga — ": "Réserver ma place — ", "Acesso vitalício por ": "Accès à vie pour "
       },
       it: {
         " frases": " frasi", " verbos": " verbi", " por dia": " al giorno", " dias por semana": " giorni a settimana", " nível ": " livello ",
         " de 60 min": " di 60 min", " da sua meta pessoal — sem comparar com toda a biblioteca.": " del tuo obiettivo personale — senza confrontarti con l'intera biblioteca.",
         " questões de simulado Goethe": " domande di simulazione Goethe", " te esperando aqui dentro": " ad aspettarti qui dentro",
         "Mais ": "Altre ", "frases, quizzes e verbos": "frasi, quiz e verbi",
-        "frases profissionais": "frasi professionali", "frases conjugadas": "frasi coniugate"
+        "frases profissionais": "frasi professionali", "frases conjugadas": "frasi coniugate",
+        " ativo": " attivo", " indicação(ões)": " invito(i)",
+        "Premium Vitalício (Fundador)": "Premium a Vita (Fondatore)", "Premium Mensal": "Premium Mensile", "Premium Anual": "Premium Annuale",
+        "Assinar anual — ": "Abbonati annuale — ", "Assinar mensal — ": "Abbonati mensile — ", "Garantir vaga — ": "Assicurati il posto — ", "Acesso vitalício por ": "Accesso a vita per "
       },
       tr: {
         " frases": " cümle", " verbos": " fiil", " por dia": " günde", " dias por semana": " haftada gün", " nível ": " seviye ",
         " de 60 min": " 60 dakikadan", " da sua meta pessoal — sem comparar com toda a biblioteca.": " kişisel hedefinizin — tüm kütüphaneyle karşılaştırmadan.",
         " questões de simulado Goethe": " Goethe simülasyon sorusu", " te esperando aqui dentro": " sizi burada bekliyor",
         "Mais ": "Daha fazla ", "frases, quizzes e verbos": "cümle, test ve fiil",
-        "frases profissionais": "mesleki cümleler", "frases conjugadas": "çekimli cümleler"
+        "frases profissionais": "mesleki cümleler", "frases conjugadas": "çekimli cümleler",
+        " ativo": " aktif", " indicação(ões)": " davet(ler)",
+        "Premium Vitalício (Fundador)": "Ömür Boyu Premium (Kurucu)", "Premium Mensal": "Aylık Premium", "Premium Anual": "Yıllık Premium",
+        "Assinar anual — ": "Yıllık abone ol — ", "Assinar mensal — ": "Aylık abone ol — ", "Garantir vaga — ": "Yerini garantile — ", "Acesso vitalício por ": "Ömür boyu erişim "
       },
       ar: {
         " frases": " جملة", " verbos": " فعل", " por dia": " يوميًا", " dias por semana": " أيام في الأسبوع", " nível ": " مستوى ",
         " de 60 min": " من 60 دقيقة", " da sua meta pessoal — sem comparar com toda a biblioteca.": " من هدفك الشخصي — دون مقارنة نفسك بالمكتبة بأكملها.",
         " questões de simulado Goethe": " سؤال محاكاة غوته", " te esperando aqui dentro": " في انتظارك هنا",
         "Mais ": "المزيد من ", "frases, quizzes e verbos": "جمل واختبارات وأفعال",
-        "frases profissionais": "جمل مهنية", "frases conjugadas": "جمل مصرَّفة"
+        "frases profissionais": "جمل مهنية", "frases conjugadas": "جمل مصرَّفة",
+        " ativo": " نشط", " indicação(ões)": " إحالة(ات)",
+        "Premium Vitalício (Fundador)": "بريميوم مدى الحياة (مؤسس)", "Premium Mensal": "بريميوم شهري", "Premium Anual": "بريميوم سنوي",
+        "Assinar anual — ": "اشترك سنويًا — ", "Assinar mensal — ": "اشترك شهريًا — ", "Garantir vaga — ": "احجز مكانك — ", "Acesso vitalício por ": "وصول مدى الحياة مقابل "
       },
       he: {
         " frases": " משפטים", " verbos": " פעלים", " por dia": " ליום", " dias por semana": " ימים בשבוע", " nível ": " רמה ",
         " de 60 min": " מתוך 60 דקות", " da sua meta pessoal — sem comparar com toda a biblioteca.": " מהיעד האישי שלך — בלי להשוות את עצמך לכל הספרייה.",
         " questões de simulado Goethe": " שאלות סימולציית גתה", " te esperando aqui dentro": " מחכים לך כאן",
         "Mais ": "עוד ", "frases, quizzes e verbos": "משפטים, חידונים ופעלים",
-        "frases profissionais": "משפטים מקצועיים", "frases conjugadas": "משפטים נטויים"
+        "frases profissionais": "משפטים מקצועיים", "frases conjugadas": "משפטים נטויים",
+        " ativo": " פעיל", " indicação(ões)": " הפניה(ות)",
+        "Premium Vitalício (Fundador)": "פרימיום לכל החיים (מייסד)", "Premium Mensal": "פרימיום חודשי", "Premium Anual": "פרימיום שנתי",
+        "Assinar anual — ": "הרשמה שנתית — ", "Assinar mensal — ": "הרשמה חודשית — ", "Garantir vaga — ": "הבטח את מקומך — ", "Acesso vitalício por ": "גישה לכל החיים תמורת "
       },
       hi: {
         " frases": " वाक्य", " verbos": " क्रियाएँ", " por dia": " प्रतिदिन", " dias por semana": " दिन प्रति सप्ताह", " nível ": " स्तर ",
         " de 60 min": " 60 मिनट में से", " da sua meta pessoal — sem comparar com toda a biblioteca.": " आपके व्यक्तिगत लक्ष्य का — पूरी लाइब्रेरी से तुलना किए बिना।",
         " questões de simulado Goethe": " गोएथे सिमुलेशन प्रश्न", " te esperando aqui dentro": " यहाँ आपका इंतज़ार कर रहे हैं",
         "Mais ": "और अधिक ", "frases, quizzes e verbos": "वाक्य, क्विज़ और क्रियाएँ",
-        "frases profissionais": "व्यावसायिक वाक्य", "frases conjugadas": "क्रिया-रूपी वाक्य"
+        "frases profissionais": "व्यावसायिक वाक्य", "frases conjugadas": "क्रिया-रूपी वाक्य",
+        " ativo": " सक्रिय", " indicação(ões)": " रेफरल",
+        "Premium Vitalício (Fundador)": "आजीवन प्रीमियम (संस्थापक)", "Premium Mensal": "मासिक प्रीमियम", "Premium Anual": "वार्षिक प्रीमियम",
+        "Assinar anual — ": "वार्षिक सदस्यता लें — ", "Assinar mensal — ": "मासिक सदस्यता लें — ", "Garantir vaga — ": "अपनी जगह सुरक्षित करें — ", "Acesso vitalício por ": "आजीवन पहुँच के लिए "
       },
       pl: {
         " frases": " zdań", " verbos": " czasowników", " por dia": " dziennie", " dias por semana": " dni w tygodniu", " nível ": " poziom ",
         " de 60 min": " z 60 min", " da sua meta pessoal — sem comparar com toda a biblioteca.": " Twojego osobistego celu — bez porównywania się z całą biblioteką.",
         " questões de simulado Goethe": " pytań symulacyjnych Goethe", " te esperando aqui dentro": " czeka tu na Ciebie",
         "Mais ": "Więcej ", "frases, quizzes e verbos": "zdań, quizów i czasowników",
-        "frases profissionais": "zdań zawodowych", "frases conjugadas": "odmienionych zdań"
+        "frases profissionais": "zdań zawodowych", "frases conjugadas": "odmienionych zdań",
+        " ativo": " aktywny", " indicação(ões)": " polecenie(a)",
+        "Premium Vitalício (Fundador)": "Premium Dożywotni (Założyciel)", "Premium Mensal": "Premium Miesięczny", "Premium Anual": "Premium Roczny",
+        "Assinar anual — ": "Subskrybuj rocznie — ", "Assinar mensal — ": "Subskrybuj miesięcznie — ", "Garantir vaga — ": "Zarezerwuj miejsce — ", "Acesso vitalício por ": "Dożywotni dostęp za "
       }
     };
     const activeFragments = fragmentFallbacks[this._current] || {};
