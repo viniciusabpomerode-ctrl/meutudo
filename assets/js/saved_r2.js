@@ -7,11 +7,31 @@ const SavedItems = (() => {
   let loading = null;
 
   function localItems() {
-    try { return JSON.parse(localStorage.getItem("afb_saved") || "[]"); } catch { return []; }
+    try { return JSON.parse(localStorage.getItem("afb_saved") || "[]").map(normalizeItem); } catch { return []; }
+  }
+  function normalizeItem(item) {
+    item = item || {};
+    const normalized = {
+      ...item,
+      type: item.type || item.item_type || "",
+      id: item.id ?? item.item_id ?? "",
+      parentId: item.parentId ?? item.parent_id ?? null,
+      nivel: item.nivel || item.level || "",
+      refUrl: item.refUrl || item.link || item.link_url || ""
+    };
+    // Conserva fotografias antigas apenas quando elas realmente existem.
+    // Referencias novas continuam pequenas e sem duplicar o conteudo.
+    if (item.title || item.item_title) normalized.title = item.title || item.item_title;
+    if (item.subtitle || item.sub) normalized.subtitle = item.subtitle || item.sub;
+    if (item.audioUrl || item.audio || item.audio_url) normalized.audioUrl = item.audioUrl || item.audio || item.audio_url;
+    return normalized;
+  }
+  function sameRef(item, type, id) {
+    return item.type === type && String(item.id) === String(id);
   }
   function mergeItems(remote, local) {
     const map = new Map();
-    [...(remote||[]), ...(local||[])].forEach(i => map.set(`${i.type}:${i.id}`, i));
+    [...(remote||[]), ...(local||[])].map(normalizeItem).forEach(i => map.set(`${i.type}:${String(i.id)}`, i));
     return [...map.values()].sort((a,b) => String(b.created_at||"").localeCompare(String(a.created_at||"")));
   }
   async function timedFetch(url, options, ms=8000) {
@@ -78,18 +98,21 @@ const SavedItems = (() => {
     }
   }
 
-  async function add({ type, id, parentId, nivel, refUrl, notes, title, subtitle, audioUrl }) {
+  async function add({ type, id, parentId, nivel, refUrl, notes }) {
     let items = await load();
-    items = items.filter(i => !(i.type===type && i.id===id));
-    items.unshift({ type, id, parentId, nivel, refUrl:refUrl||window.location.href, notes:notes||"", title:title||"", subtitle:subtitle||"", audioUrl:audioUrl||"", reviewed_at:null, created_at:new Date().toISOString() });
+    items = items.filter(i => !sameRef(i, type, id));
+    // Igual aos dialogos: guarda somente a referencia. O caderno resolve o
+    // nome, traducao e audio na fonte atual, portanto correcoes de conteudo
+    // aparecem automaticamente sem criar uma copia antiga no JSON do aluno.
+    items.unshift({ type, id:String(id), parentId:parentId == null ? null : String(parentId), nivel:nivel||"", refUrl:refUrl||window.location.href, notes:notes||"", reviewed_at:null, created_at:new Date().toISOString() });
     return await save(items);
   }
 
-  async function remove(type, id) { return await save((await load()).filter(i => !(i.type===type && i.id===id))); }
+  async function remove(type, id) { return await save((await load()).filter(i => !sameRef(i, type, id))); }
   async function getAll() { return await load(); }
-  async function isSaved(type, id) { return (await load()).some(i => i.type===type && i.id===id); }
-  async function updateNotes(type, id, notes) { let items=await load(); const idx=items.findIndex(i=>i.type===type&&i.id===id); if(idx>=0){items[idx].notes=notes;return await save(items)} return false; }
-  async function markReviewed(type, id) { let items=await load(); const idx=items.findIndex(i=>i.type===type&&i.id===id); if(idx>=0){items[idx].reviewed_at=new Date().toISOString();return await save(items)} return false; }
+  async function isSaved(type, id) { return (await load()).some(i => sameRef(i, type, id)); }
+  async function updateNotes(type, id, notes) { let items=await load(); const idx=items.findIndex(i=>sameRef(i,type,id)); if(idx>=0){items[idx].notes=notes;return await save(items)} return false; }
+  async function markReviewed(type, id) { let items=await load(); const idx=items.findIndex(i=>sameRef(i,type,id)); if(idx>=0){items[idx].reviewed_at=new Date().toISOString();return await save(items)} return false; }
 
   function icon(saved) { const t=(typeof Theme!=="undefined"&&Theme.get())||"vikings"; return t==="guardians"?(saved?"❤️":"🤍"):(saved?"💛":"💛"); }
 

@@ -144,7 +144,7 @@
   <script src="../assets/js/nav.js"></script>
   <script src="../assets/js/data.js"></script>
   <script src="../assets/js/i18n.js?v=20260714-ui8"></script>
-    <script src="../assets/js/saved_r2.js"></script>
+    <script src="../assets/js/saved_r2.js?v=20260714-ref2"></script>
     <script src="../assets/js/content-freshness.js?v=20260714-1"></script>
   <script>
     // Visitante pode ver (bloqueio acontece nas listagens)
@@ -473,7 +473,7 @@
               </div>
               <div class="flex gap-8" style="align-items:center;">
                 ${s.audio_url ? `<button class="btn btn-ghost btn-sm" onclick="playSentenceAudio('${s.audio_url}', this)">▶</button>` : ""}
-                ${ContentFreshness.badge(s)}<span class="save-slot" data-type="phrase" data-id="${s.id}" data-parent-id="${dialog.id}" data-title="${s.german_text.replace(/"/g,'&quot;')}" data-sub="${I18n.field(s,'portuguese_translation').replace(/"/g,'&quot;')}"></span>
+                ${ContentFreshness.badge(s)}<span class="save-slot" data-type="phrase" data-id="${s.id}" data-parent-id="${dialog.id}" data-title="${s.german_text.replace(/"/g,'&quot;')}" data-sub="${I18n.field(s,'portuguese_translation').replace(/"/g,'&quot;')}" data-audio="${s.audio_url||''}"></span>
                 <span class="xp-pill">+${s.xp_reward}</span>
               </div>
             </div>`).join("")}
@@ -482,7 +482,7 @@
         ${dialog.vocabulary && dialog.vocabulary.length ? `
           <h4 class="section-title">Vocabulário</h4>
           <div>${dialog.vocabulary.map((v) => `
-            <span class="vocab-chip"><b>${v.german_word} ${ContentFreshness.badge(v)}</b><span>${I18n.field(v, 'portuguese_translation')}</span>${v.audio_url ? `<button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:.7rem" onclick="event.stopPropagation();playSentenceAudio('${v.audio_url}', this)">▶</button>` : ""}<span class="save-slot" data-type="word" data-id="${v.id}" data-parent-id="${dialog.id}" data-title="${v.german_word}" data-sub="${I18n.field(v,'portuguese_translation')}"></span></span>`).join("")}</div>
+            <span class="vocab-chip"><b>${v.german_word} ${ContentFreshness.badge(v)}</b><span>${I18n.field(v, 'portuguese_translation')}</span>${v.audio_url ? `<button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:.7rem" onclick="event.stopPropagation();playSentenceAudio('${v.audio_url}', this)">▶</button>` : ""}<span class="save-slot" data-type="word" data-id="${v.id}" data-parent-id="${dialog.id}" data-title="${v.german_word}" data-sub="${I18n.field(v,'portuguese_translation')}" data-audio="${v.audio_url||''}"></span></span>`).join("")}</div>
         ` : ""}
 
         ${dialog.grammar_tips && dialog.grammar_tips.length ? `
@@ -514,8 +514,8 @@
           type: "dialog", id: dialog.id, nivel: nivelParam,
           title: I18n.field(dialog, 'title'),
           subtitle: dialog.german_title || "",
-          preview: (dialog.sentences||[])[0]?.german_text || "",
-          link: window.location.href
+          audioUrl: dialog.main_audio_url || "",
+          refUrl: window.location.href
         }));
       }
 
@@ -528,7 +528,8 @@
         const parentId = parseInt(slot.dataset.parentId) || dialog.id;
         if (id && typeof SavedItems !== "undefined") {
           slot.appendChild(SavedItems.createSaveButton({
-            type, id, parentId, nivel: nivelParam, title,
+            type, id, parentId, nivel: nivelParam, title, subtitle: sub,
+            audioUrl: slot.dataset.audio || "",
             refUrl: window.location.href
           }));
         }
