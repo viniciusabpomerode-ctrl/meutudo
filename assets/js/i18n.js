@@ -22,6 +22,63 @@ const AppLanguage = {
   pl: { code: "pl", name: "Polski", flag: "🇵🇱" },
 };
 
+const I18N_DOCUMENT_LANGUAGE = {
+  pt: "pt-BR", en: "en-US", es: "es-ES", fr: "fr-FR", it: "it-IT",
+  tr: "tr-TR", ar: "ar-SA", he: "he-IL", hi: "hi-IN", pl: "pl-PL"
+};
+
+// Textos da pagina inicial que podem surgir depois da primeira traducao
+// (login, plano de estudos e contadores) e metadados que ficam no <head>.
+// O tradutor visual percorre o <body>; por isso estes reparos tambem cobrem
+// o titulo da aba e os textos montados pelo JavaScript depois do carregamento.
+const DYNAMIC_UI_REPAIRS = {
+  en: {
+    "Aprenda Alemão do A1 ao C2 | DeutschBloom":"Learn German from A1 to C2 | DeutschBloom",
+    "Bom dia, ":"Good morning, ", "Boa tarde, ":"Good afternoon, ", "Boa noite, ":"Good evening, ",
+    "30 dias":"30 days", "25 categorias temáticas":"25 thematic categories", "63.000+ conteúdos":"63,000+ learning items"
+  },
+  es: {
+    "Aprenda Alemão do A1 ao C2 | DeutschBloom":"Aprende alemán de A1 a C2 | DeutschBloom",
+    "Bom dia, ":"¡Buenos días, ", "Boa tarde, ":"¡Buenas tardes, ", "Boa noite, ":"¡Buenas noches, ",
+    "30 dias":"30 días", "25 categorias temáticas":"25 categorías temáticas", "63.000+ conteúdos":"Más de 63.000 contenidos"
+  },
+  fr: {
+    "Aprenda Alemão do A1 ao C2 | DeutschBloom":"Apprenez l’allemand du niveau A1 au C2 | DeutschBloom",
+    "Bom dia, ":"Bonjour, ", "Boa tarde, ":"Bonjour, ", "Boa noite, ":"Bonsoir, ",
+    "30 dias":"30 jours", "25 categorias temáticas":"25 catégories thématiques", "63.000+ conteúdos":"Plus de 63 000 contenus"
+  },
+  it: {
+    "Aprenda Alemão do A1 ao C2 | DeutschBloom":"Impara il tedesco dal livello A1 al C2 | DeutschBloom",
+    "Bom dia, ":"Buongiorno, ", "Boa tarde, ":"Buon pomeriggio, ", "Boa noite, ":"Buonasera, ",
+    "30 dias":"30 giorni", "25 categorias temáticas":"25 categorie tematiche", "63.000+ conteúdos":"Oltre 63.000 contenuti"
+  },
+  tr: {
+    "Aprenda Alemão do A1 ao C2 | DeutschBloom":"A1’den C2’ye Almanca Öğrenin | DeutschBloom",
+    "Bom dia, ":"Günaydın, ", "Boa tarde, ":"İyi günler, ", "Boa noite, ":"İyi akşamlar, ",
+    "30 dias":"30 gün", "25 categorias temáticas":"25 tematik kategori", "63.000+ conteúdos":"63.000’den fazla içerik"
+  },
+  ar: {
+    "Aprenda Alemão do A1 ao C2 | DeutschBloom":"تعلّم الألمانية من A1 إلى C2 | DeutschBloom",
+    "Bom dia, ":"صباح الخير، ", "Boa tarde, ":"مساء الخير، ", "Boa noite, ":"مساء الخير، ",
+    "30 dias":"30 يومًا", "25 categorias temáticas":"25 فئة موضوعية", "63.000+ conteúdos":"أكثر من 63,000 محتوى"
+  },
+  he: {
+    "Aprenda Alemão do A1 ao C2 | DeutschBloom":"לימוד גרמנית מרמה A1 עד C2 | DeutschBloom",
+    "Bom dia, ":"בוקר טוב, ", "Boa tarde, ":"צהריים טובים, ", "Boa noite, ":"ערב טוב, ",
+    "30 dias":"30 ימים", "25 categorias temáticas":"25 קטגוריות נושאיות", "63.000+ conteúdos":"יותר מ־63,000 תכנים"
+  },
+  hi: {
+    "Aprenda Alemão do A1 ao C2 | DeutschBloom":"A1 से C2 तक जर्मन सीखें | DeutschBloom",
+    "Bom dia, ":"सुप्रभात, ", "Boa tarde, ":"नमस्कार, ", "Boa noite, ":"शुभ संध्या, ",
+    "30 dias":"30 दिन", "25 categorias temáticas":"25 विषयगत श्रेणियाँ", "63.000+ conteúdos":"63,000 से अधिक शिक्षण सामग्री"
+  },
+  pl: {
+    "Aprenda Alemão do A1 ao C2 | DeutschBloom":"Ucz się niemieckiego od A1 do C2 | DeutschBloom",
+    "Bom dia, ":"Dzień dobry, ", "Boa tarde, ":"Dzień dobry, ", "Boa noite, ":"Dobry wieczór, ",
+    "30 dias":"30 dni", "25 categorias temáticas":"25 kategorii tematycznych", "63.000+ conteúdos":"Ponad 63 000 materiałów"
+  }
+};
+
 // Textos curtos de interface que surgem dinamicamente ou ficam divididos por
 // tags HTML. Eles nao faziam parte dos lotes originais do DeepL e, por isso,
 // escapavam dos mapas grandes de conteudo em todos os idiomas.
@@ -754,7 +811,8 @@ const I18n = {
     const activeUi = {
       ...(uiFallbacks[this._current] || {}),
       ...(DEEP_TRANSLATIONS[this._current] || {}),
-      ...(UI_REPAIRS[this._current] || {})
+      ...(UI_REPAIRS[this._current] || {}),
+      ...(DYNAMIC_UI_REPAIRS[this._current] || {})
     };
     const fragments = {
       " frases":" sentences"," verbos":" verbs"," por dia":" per day"," dias por semana":" days per week"," nível ":" level ",
@@ -851,7 +909,8 @@ const I18n = {
     };
     const activeFragments = {
       ...(fragmentFallbacks[this._current] || {}),
-      ...(UI_FRAGMENT_REPAIRS[this._current] || {})
+      ...(UI_FRAGMENT_REPAIRS[this._current] || {}),
+      ...(DYNAMIC_UI_REPAIRS[this._current] || {})
     };
     // Numeros como "1.312" ou "38.802" usam ponto de milhar (padrao BR).
     // Fora do portugues, a convencao mais comum e virgula ("1,312"), entao
@@ -897,13 +956,17 @@ const I18n = {
       if (node.nodeType === 3) {
         const parent = node.parentElement;
         if (parent?.closest?.('[lang="de"],.sentence-de,.german,.phrase-de,.quiz-context,.german-text,.german-word,[data-no-translate]')) return;
-        node.nodeValue = translateText(node.nodeValue || "");
+        const translatedValue = translateText(node.nodeValue || "");
+        if (translatedValue !== node.nodeValue) node.nodeValue = translatedValue;
       }
       if (node.nodeType !== 1) return;
       if (["SCRIPT", "STYLE", "CODE"].includes(node.tagName)) return;
       ["placeholder", "title", "aria-label"].forEach(attr => {
         const value = node.getAttribute?.(attr);
-        if (value) node.setAttribute(attr, translateText(value));
+        if (value) {
+          const translatedValue = translateText(value);
+          if (translatedValue !== value) node.setAttribute(attr, translatedValue);
+        }
       });
       // Traduz atributos do textarea (principalmente placeholder), mas nunca
       // toca no texto digitado pelo aluno.
@@ -911,11 +974,25 @@ const I18n = {
       node.childNodes.forEach(apply);
     };
     apply(root);
+
+    // O titulo da aba e os metadados ficam fora do body. Mantem tambem o
+    // idioma/fluxo do documento corretos para leitor de tela e navegador.
+    document.documentElement.lang = I18N_DOCUMENT_LANGUAGE[this._current] || this._current;
+    document.documentElement.dir = AppLanguage[this._current]?.rtl ? "rtl" : "ltr";
+    document.title = translateText(document.title);
+    document.querySelectorAll('meta[name="description"],meta[property="og:title"],meta[property="og:description"],meta[name="twitter:title"],meta[name="twitter:description"]').forEach(meta => {
+      const value = meta.getAttribute("content") || "";
+      const translatedValue = translateText(value);
+      if (translatedValue !== value) meta.setAttribute("content", translatedValue);
+    });
     if (!this._translationObserver) {
       this._translationObserver = new MutationObserver(changes => {
-        changes.forEach(change => change.addedNodes.forEach(apply));
+        changes.forEach(change => {
+          if (change.type === "characterData") apply(change.target);
+          else change.addedNodes.forEach(apply);
+        });
       });
-      this._translationObserver.observe(document.body, { childList: true, subtree: true });
+      this._translationObserver.observe(document.body, { childList: true, characterData: true, subtree: true });
     }
     // Revela a página — tradução (pelo menos a da interface) concluída
     document.documentElement.classList.remove('i18n-pending');
