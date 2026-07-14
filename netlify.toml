@@ -12,20 +12,26 @@
   to = "/app/cadastro.html?ref=:code"
   status = 302
 
-# Cache de 1 ano para assets estáticos (JS, CSS, imagens, fontes)
+# JS/CSS mudam a cada correção de bug e o nome do arquivo nunca muda,
+# então cache longo (principalmente "immutable") deixa gente presa numa
+# versão antiga por semanas/meses sem perceber. 1h + revalidação: ainda
+# ganha velocidade em navegações dentro do site, mas pega correção nova
+# rápido.
 [[headers]]
   for = "/assets/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=3600, must-revalidate"
 
-# Cache de 1 ano para imagens
+# Imagens raramente mudam (e quando mudam, quase sempre é upload de nome
+# novo) — cache longo aqui é seguro.
 [[headers]]
   for = "/imagens_alemao/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Cache de 30 dias para HTML (Netlify invalida no deploy automaticamente)
+# HTML: cache curto com revalidação, pra correção de bug chegar em minutos
+# pra quem já visitou o site, em vez de até 30 dias depois.
 [[headers]]
   for = "/*.html"
   [headers.values]
-    Cache-Control = "public, max-age=2592000"
+    Cache-Control = "public, max-age=300, must-revalidate"
