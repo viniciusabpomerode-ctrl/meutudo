@@ -595,3 +595,4 @@ input::placeholder,textarea::placeholder { color:var(--text-secondary);opacity:.
 .btn-speed{border:1px solid var(--border-light);background:var(--card-hover);color:var(--text-primary);border-radius:20px;padding:6px 14px;font-size:.82rem;font-weight:600;cursor:pointer;transition:.2s}
 .btn-speed:hover{border-color:var(--color-primary)}
 .btn-speed.active{background:var(--color-primary);color:#fff;border-color:var(--color-primary)}
+.content-new-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;background:#ff4f87;color:#fff;font-size:.65rem;font-weight:900;letter-spacing:.04em;line-height:1;vertical-align:middle;box-shadow:0 0 0 3px rgba(255,79,135,.12)}

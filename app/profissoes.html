@@ -93,6 +93,7 @@
   <script src="../assets/js/i18n.js?v=20260714-ui5"></script>
   <script src="../assets/js/saved_r2.js"></script>
   <script src="../assets/js/guest.js"></script>
+  <script src="../assets/js/content-freshness.js?v=20260714-1"></script>
   <script>
     renderNav("profissoes");
 
@@ -158,7 +159,7 @@
       document.getElementById("cat-grid").innerHTML = [...cats].sort().map(c => `
         <div class="cat-folder" onclick="abrirCat('${c}')">
           <div class="folder-icon">${catIcons[c] || "📁"}</div>
-          <div class="folder-name">${c}</div>
+          <div class="folder-name">${c} ${ContentFreshness.badgeAny(allData.filter(e=>e.category===c))}</div>
           <div class="folder-count">${counts[c]} profissões</div>
         </div>
       `).join("");
@@ -211,7 +212,7 @@
         <div class="prof-card" id="prof-${i}">
           <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;" onclick="abrirProf(${i})">
             <div>
-              <div class="german">👤 ${e.profession||""}</div>
+              <div class="german">👤 ${e.profession||""} ${ContentFreshness.badge(e)}</div>
               <div class="portuguese">${e.german||""}</div>
               <div class="meta">
                 <span class="level-badge" style="background:${levelColor(e.level)}">${e.levels.sort().join(' · ')}</span>
@@ -247,7 +248,7 @@
             return `
             <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;margin:4px 0;background:var(--bg-secondary);border-radius:8px;gap:8px;">
               <div style="flex:1">
-                <div class="phrase-de">${f.de}</div>
+                <div class="phrase-de">${f.de} ${ContentFreshness.badge(f)}</div>
                 <div class="phrase-pt">${f.pt}</div>
               </div>
               <div style="display:flex;align-items:center;gap:6px;">
@@ -262,7 +263,7 @@
       document.getElementById("prof-detail").innerHTML = `
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;">
           <div>
-            <h2 style="margin:0;">👤 ${e.profession}</h2>
+            <h2 style="margin:0;">👤 ${e.profession} ${ContentFreshness.badge(e)}</h2>
             <p class="muted" style="margin:4px 0;">${e.category} · ${(e.phrases||[]).length} frases · ${e.levels.sort().join(' → ')}</p>
           </div>
           <span id="prof-detail-save"></span>

@@ -1,4 +1,6 @@
 const A=require('./_auth');
+const AWS=require('aws-sdk');
+const s3=new AWS.S3({endpoint:`https://${process.env.R2_ID}.r2.cloudflarestorage.com`,accessKeyId:process.env.R2_KEY,secretAccessKey:process.env.R2_SECRET,region:'auto',signatureVersion:'v4'});
 const H={"Content-Type":"application/json","Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"Authorization,Content-Type","Access-Control-Allow-Methods":"GET,POST,OPTIONS","Cache-Control":"no-store"};
 const out=(statusCode,data)=>({statusCode,headers:H,body:JSON.stringify(data)});
 async function rest(path,options={}){const r=await fetch(`${A.SUPABASE_URL}/rest/v1/${path}`,{...options,headers:A.serviceHeaders(options.headers||{})});const data=await r.text();if(!r.ok)throw new Error(data);return data?JSON.parse(data):null}
@@ -11,6 +13,7 @@ exports.handler=async event=>{if(event.httpMethod==='OPTIONS')return{statusCode:
    if(action==='admins')return out(200,{admins:await rest('app_admins?select=user_id,role,created_at&order=created_at.desc')});
    if(action==='pix_requests')return out(200,{requests:await rest('pix_requests?status=eq.pending&select=id,email,name,payer_name,plan,message,created_at&order=created_at.asc')});
    if(action==='pix_history')return out(200,{requests:await rest('pix_requests?status=neq.pending&select=id,email,name,payer_name,plan,message,status,created_at,resolved_at&order=resolved_at.desc&limit=100')});
+   if(action==='content_reports'){const listed=await s3.listObjectsV2({Bucket:'edicao',Prefix:'content_reports/open/',MaxKeys:200}).promise(),tickets=await Promise.all((listed.Contents||[]).map(async o=>{try{return JSON.parse((await s3.getObject({Bucket:'edicao',Key:o.Key}).promise()).Body.toString())}catch{return null}}));return out(200,{tickets:tickets.filter(Boolean).sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)))})}
    const [admins,plans,credits,refs]=await Promise.all([rest('app_admins?select=user_id'),rest('user_premium?select=email,plan,active,expires_at'),rest('credit_ledger?select=amount_cents,reversed_at'),rest('referrals?select=status')]);
    return out(200,{admins:admins.length,plans:plans.length,activePlans:plans.filter(x=>x.active).length,creditsCents:credits.filter(x=>!x.reversed_at).reduce((s,x)=>s+x.amount_cents,0),referrals:refs.length});
   }
@@ -43,6 +46,7 @@ exports.handler=async event=>{if(event.httpMethod==='OPTIONS')return{statusCode:
    return out(200,{ok:true});
   }
   if(action==='adjust_credits'){const amount=Math.trunc(Number(b.amount_cents)||0);if(!amount)return out(400,{error:'invalid_amount'});await rest('credit_ledger',{method:'POST',body:JSON.stringify({user_id:b.user_id,amount_cents:amount,kind:'admin_adjustment',description:String(b.description||'Ajuste administrativo').slice(0,160),reference_id:`admin:${adm.user.id}:${Date.now()}`})});await audit(adm,action,b.user_id,{amount});return out(200,{ok:true})}
+  if(action==='resolve_content_report'){const id=String(b.id||'').replace(/[^a-zA-Z0-9-]/g,'');if(!id)return out(400,{error:'invalid_id'});const from=`content_reports/open/${id}.json`,to=`content_reports/resolved/${id}.json`,obj=await s3.getObject({Bucket:'edicao',Key:from}).promise(),ticket=JSON.parse(obj.Body.toString());ticket.status='resolved';ticket.resolved_at=new Date().toISOString();ticket.resolved_by=adm.user.id;await s3.putObject({Bucket:'edicao',Key:to,Body:JSON.stringify(ticket),ContentType:'application/json'}).promise();await s3.deleteObject({Bucket:'edicao',Key:from}).promise();await audit(adm,action,ticket.user_id,{id,item:ticket.item});return out(200,{ok:true})}
   return out(400,{error:'invalid_action'});
  }catch(e){return out(500,{error:'admin_operation_failed',detail:e.message.slice(0,300)})}};
 

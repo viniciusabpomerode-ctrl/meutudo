@@ -144,7 +144,8 @@
   <script src="../assets/js/nav.js"></script>
   <script src="../assets/js/data.js"></script>
   <script src="../assets/js/i18n.js?v=20260714-ui5"></script>
-  <script src="../assets/js/saved_r2.js"></script>
+    <script src="../assets/js/saved_r2.js"></script>
+    <script src="../assets/js/content-freshness.js?v=20260714-1"></script>
   <script>
     // Visitante pode ver (bloqueio acontece nas listagens)
     renderNav("cursos");
@@ -450,7 +451,7 @@
 
       el.innerHTML = `
         <div class="flex-between">
-          <h2 style="margin:0;">${I18n.field(dialog, 'title')}</h2>
+          <h2 style="margin:0;">${I18n.field(dialog, 'title')} ${ContentFreshness.badge(dialog)}</h2>
           <div style="display:flex;align-items:center;gap:8px">
             <span id="save-btn-place"></span>
             ${done ? '<span class="badge">✅ Concluído</span>' : `<span class="xp-pill">+${dialog.xp_reward} XP</span>`}
@@ -472,7 +473,7 @@
               </div>
               <div class="flex gap-8" style="align-items:center;">
                 ${s.audio_url ? `<button class="btn btn-ghost btn-sm" onclick="playSentenceAudio('${s.audio_url}', this)">▶</button>` : ""}
-                <span class="save-slot" data-type="phrase" data-id="${s.id}" data-parent-id="${dialog.id}" data-title="${s.german_text.replace(/"/g,'&quot;')}" data-sub="${I18n.field(s,'portuguese_translation').replace(/"/g,'&quot;')}"></span>
+                ${ContentFreshness.badge(s)}<span class="save-slot" data-type="phrase" data-id="${s.id}" data-parent-id="${dialog.id}" data-title="${s.german_text.replace(/"/g,'&quot;')}" data-sub="${I18n.field(s,'portuguese_translation').replace(/"/g,'&quot;')}"></span>
                 <span class="xp-pill">+${s.xp_reward}</span>
               </div>
             </div>`).join("")}
@@ -481,13 +482,13 @@
         ${dialog.vocabulary && dialog.vocabulary.length ? `
           <h4 class="section-title">Vocabulário</h4>
           <div>${dialog.vocabulary.map((v) => `
-            <span class="vocab-chip"><b>${v.german_word}</b><span>${I18n.field(v, 'portuguese_translation')}</span>${v.audio_url ? `<button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:.7rem" onclick="event.stopPropagation();playSentenceAudio('${v.audio_url}', this)">▶</button>` : ""}<span class="save-slot" data-type="word" data-id="${v.id}" data-parent-id="${dialog.id}" data-title="${v.german_word}" data-sub="${I18n.field(v,'portuguese_translation')}"></span></span>`).join("")}</div>
+            <span class="vocab-chip"><b>${v.german_word} ${ContentFreshness.badge(v)}</b><span>${I18n.field(v, 'portuguese_translation')}</span>${v.audio_url ? `<button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:.7rem" onclick="event.stopPropagation();playSentenceAudio('${v.audio_url}', this)">▶</button>` : ""}<span class="save-slot" data-type="word" data-id="${v.id}" data-parent-id="${dialog.id}" data-title="${v.german_word}" data-sub="${I18n.field(v,'portuguese_translation')}"></span></span>`).join("")}</div>
         ` : ""}
 
         ${dialog.grammar_tips && dialog.grammar_tips.length ? `
           <h4 class="section-title">Dicas de gramática</h4>
           ${dialog.grammar_tips.map((t) => `
-            <div class="tip-card">
+            <div class="tip-card">${ContentFreshness.badge(t)}
               <div style="display:flex;justify-content:space-between;align-items:start">
                 <h4>${I18n.field(t, 'title')}</h4>
                 <span class="save-slot" data-type="grammar" data-id="${t.id}" data-title="${I18n.field(t,'title').replace(/"/g,'&quot;')}" data-sub="${(t.german_example||'').replace(/"/g,'&quot;')}" data-preview="${(t.german_example||'').replace(/"/g,'&quot;')}"></span>

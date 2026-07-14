@@ -29,6 +29,7 @@
 .empty-state{text-align:center;padding:60px 20px;color:var(--text-secondary)}
 .empty-state .big{font-size:3rem;margin-bottom:12px}
 .review-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.7rem;background:rgba(126,207,126,.15);color:#7ecf7e;margin-left:6px}
+.report-btn{margin-left:auto;color:#e8a84c!important}.report-btn:hover{border-color:#e8a84c!important}
 @media(max-width:600px){#time-filters{display:grid!important;grid-template-columns:repeat(3,auto);overflow:visible}#date-pick{grid-column:1/-1;margin-left:0!important;width:100%}}
 </style>
 </head>
@@ -66,6 +67,7 @@
 <script src="../assets/js/theme.js"></script>
   <script src="../assets/js/sfx.js"></script>
 <script src="../assets/js/auth.js"></script>
+<script src="../assets/js/xp.js"></script>
 <script src="../assets/js/nav.js"></script>
 <script src="../assets/js/i18n.js?v=20260714-ui5"></script>
 <script src="../assets/js/data.js"></script>
@@ -74,7 +76,7 @@
 renderNav("caderno");
 const R2="https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
 const ICONS={dialog:"💬",phrase:"💬",word:"🔤",grammar:"📖",music:"🎵",giria:"🗣️",verbo:"🔤"};
-let all=[],filter="all",timeFilter="all",query="",cache={};
+let all=[],filter="all",timeFilter="all",query="",cache={},viewItems=[];
 const ad=new Audio();
 function playAudio(audioPath, btn){
   if(!audioPath)return;
@@ -141,15 +143,16 @@ async function render(){
   }
   if(query){const q=query.toLowerCase();items=items.filter(i=>(i.notes||"").toLowerCase().includes(q)||(i.title||"").toLowerCase().includes(q))}
   if(!items.length){el.innerHTML='<div class="empty-state"><div class="big">📝</div><p>Nenhum item.</p><p class="muted">Salve frases clicando 💛!</p></div>';return}
-  const resolved=await Promise.all(items.map(async i=>{const r=await resolve(i);return{...i,...r}}));
+  const resolved=await Promise.all(items.map(async i=>{const r=await resolve(i);return{...i,...r}}));viewItems=resolved;resolved.forEach((i,n)=>i._viewIndex=n);
   const groups=group(resolved);let h="";
   for(const[lbl,gi]of Object.entries(groups)){h+=`<div class="day-group"><div class="day-header">${lbl}</div>`;
-    for(const i of gi){h+=`<div class="saved-card"><div class="top" onclick="window.location='${i.link||"#"}'"><span class="icon">${ICONS[i.type]||"📌"}</span><div class="body"><div class="title">${i.title||"Sem título"}${i.reviewed_at?'<span class="review-tag">✅</span>':''}</div>${i.sub?`<div class="sub">${i.sub}</div>`:""}</div>${i.audio?`<button class="btn-sm" style="flex-shrink:0" onclick="event.stopPropagation();playAudio('${i.audio}',this)">▶</button>`:""}</div>${i.notes?`<div class="notes">📝 ${i.notes}</div>`:""}<div class="actions"><button class="btn-sm" onclick="editNotes('${i.type}',${i.id},'${(i.notes||"").replace(/'/g,"\\'")}')">✏️ ${i.notes?'Editar':'Anotar'}</button><button class="btn-sm" onclick="review('${i.type}',${i.id})">✅</button><button class="btn-sm" style="color:#f44;border-color:transparent" onclick="del('${i.type}',${i.id})">🗑️</button></div></div>`}h+="</div>"}
+    for(const i of gi){h+=`<div class="saved-card"><div class="top" onclick="window.location='${i.link||"#"}'"><span class="icon">${ICONS[i.type]||"📌"}</span><div class="body"><div class="title">${i.title||"Sem título"}${i.reviewed_at?'<span class="review-tag">✅</span>':''}</div>${i.sub?`<div class="sub">${i.sub}</div>`:""}</div>${i.audio?`<button class="btn-sm" style="flex-shrink:0" onclick="event.stopPropagation();playAudio('${i.audio}',this)">▶</button>`:""}</div>${i.notes?`<div class="notes">📝 ${i.notes}</div>`:""}<div class="actions"><button class="btn-sm" onclick="editNotes('${i.type}',${i.id},'${(i.notes||"").replace(/'/g,"\\'")}')">✏️ ${i.notes?'Editar':'Anotar'}</button><button class="btn-sm" onclick="review('${i.type}',${i.id})">✅</button><button class="btn-sm report-btn" title="Relatar um erro neste conteúdo" onclick="reportItem(${i._viewIndex})">❗ Relatar</button><button class="btn-sm" style="color:#f44;border-color:transparent" onclick="del('${i.type}',${i.id})">🗑️</button></div></div>`}h+="</div>"}
   el.innerHTML=h;
 }
 async function load(){all=await SavedItems.getAll();render()}
 async function editNotes(t,id,cur){const n=prompt("Anotações:",cur==="undefined"?"":cur);if(n!==null){await SavedItems.updateNotes(t,id,n);load()}}
-async function review(t,id){await SavedItems.markReviewed(t,id);load()}
+async function review(t,id){await SavedItems.markReviewed(t,id);try{Progress.complete(`saved-${t}-${id}`,0)}catch(e){}load()}
+async function reportItem(index){const i=viewItems[index];if(!i)return;const message=prompt(`O que está errado em “${i.title||"este conteúdo"}”?\nExplique como deveria ficar:`);if(message===null)return;if(message.trim().length<5){alert("Escreva um pouco mais para conseguirmos entender o erro.");return}try{const token=await Auth.accessToken(),r=await fetch("/.netlify/functions/content-report",{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},body:JSON.stringify({message,item:{type:i.type,id:i.id,parentId:i.parentId,nivel:i.nivel,title:i.title,subtitle:i.sub,refUrl:i.link||i.refUrl}})}),d=await r.json();if(!r.ok)throw new Error(d.error||"erro");alert(`Relato enviado! Ticket ${d.id}. Obrigado por ajudar a corrigir o conteúdo.`)}catch(e){alert("Não foi possível enviar o relato agora. Tente novamente em instantes.")}}
 async function del(t,id){if(confirm("Remover?")){await SavedItems.remove(t,id);load()}}
 document.getElementById("filters").addEventListener("click",e=>{if(e.target.classList.contains("filter-chip")){document.querySelectorAll("#filters .filter-chip").forEach(b=>b.classList.remove("active"));e.target.classList.add("active");filter=e.target.dataset.f;render()}});
 document.getElementById("time-filters").addEventListener("change",e=>{

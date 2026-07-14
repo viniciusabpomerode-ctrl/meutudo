@@ -189,6 +189,7 @@
   <script src="../assets/js/i18n.js?v=20260714-ui5"></script>
   <script src="../assets/js/saved_r2.js"></script>
   <script src="../assets/js/guest.js"></script>
+  <script src="../assets/js/content-freshness.js?v=20260714-1"></script>
   <script>
     renderNav("expressoes");
 
@@ -246,7 +247,7 @@
       document.getElementById("cat-grid").innerHTML = [...cats].sort().map(c => `
         <div class="cat-folder" onclick="abrirCat('${c}')">
           <div class="folder-icon">${catIcons[c] || "📁"}</div>
-          <div class="folder-name">${categoryLabel(c)}</div>
+          <div class="folder-name">${categoryLabel(c)} ${ContentFreshness.badgeAny(allData.filter(e=>e.category===c))}</div>
           <div class="folder-count">${counts[c]} expressões</div>
         </div>
       `).join("");
@@ -333,7 +334,7 @@
         <div class="expr-card" id="expr-${i}" onclick="toggleExpand(${i})">
           <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
             <div>
-              <div class="german">${e.german||""}</div>
+              <div class="german">${e.german||""} ${ContentFreshness.badge(e)}</div>
               <div class="portuguese">${e.portuguese||""}</div>
               ${e.literal?`<div class="literal">Lit: ${e.literal}</div>`:""}
               <div class="meta">

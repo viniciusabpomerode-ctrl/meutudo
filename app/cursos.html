@@ -31,6 +31,7 @@
   <script src="../assets/js/i18n.js?v=20260714-ui5"></script>
   <script src="../assets/js/data.js"></script>
   <script src="../assets/js/guest.js"></script>
+  <script src="../assets/js/content-freshness.js?v=20260714-1"></script>
   <script>
     renderNav("cursos");
 
@@ -97,7 +98,7 @@
           }
           return `
           <a class="card card-sm center" href="verbo.html?id=${v.id}&nivel=${currentLevel}">
-            <b style="font-size:1.1rem;">${v.base_verb}</b>
+            <b style="font-size:1.1rem;">${v.base_verb} ${ContentFreshness.badge(v)}</b>
             <p class="muted" style="margin:4px 0; font-size:.85rem;">${I18n.field(v, 'portuguese_translation')}</p>
             ${progress.completed.includes("verb-" + v.id) ? '<span class="badge">✅</span>' : `<span class="xp-pill">+${v.xp_reward} XP</span>`}
           </a>`;
@@ -112,7 +113,7 @@
         if (!themes.length) { el.innerHTML = emptyMsg(); return; }
         let dIdx = 0;
         el.innerHTML = themes.map((th) => `
-          <h4 style="margin:20px 0 8px;">${I18n.field(th, 'title')}</h4>
+          <h4 style="margin:20px 0 8px;">${I18n.field(th, 'title')} ${ContentFreshness.badgeAny(th)}</h4>
           <p class="muted" style="margin:0 0 10px; font-size:.88rem;">${I18n.field(th, 'description') || ""}</p>
           <div class="grid grid-3">
             ${th.dialogs.map((d) => {
@@ -123,7 +124,7 @@
               return `
               <a class="card card-sm" href="dialogo.html?id=${d.id}&nivel=${currentLevel}">
                 <div class="flex-between">
-                  <b>${I18n.field(d, 'title')}</b>
+                  <b>${I18n.field(d, 'title')} ${ContentFreshness.badge(d)}</b>
                   ${progress.completed.includes("dialog-" + d.id) ? '<span class="badge">✅</span>' : `<span class="xp-pill">+${d.xp_reward} XP</span>`}
                 </div>
                 <p class="muted" style="font-size:.85rem; margin:6px 0 0;">${I18n.field(d, 'description') || ""}</p>

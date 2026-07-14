@@ -243,4 +243,4 @@ if(initialMusic.playing)setTimeout(lofiPlay,300);
 })();
 
 // Mede tempo de estudo nas páginas internas e sincroniza o Plano de Jornada.
-(function(){if(document.querySelector('script[src*="study-plan.js"]'))return;const s=document.createElement("script");s.src="../assets/js/study-plan.js?v=20260714-time2";s.onload=()=>StudyPlan.init();document.head.appendChild(s)})();
+(function(){if(document.querySelector('script[src*="study-plan.js"]'))return;const s=document.createElement("script");s.src="../assets/js/study-plan.js?v=20260714-time3";s.onload=()=>StudyPlan.init();document.head.appendChild(s)})();
