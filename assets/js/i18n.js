@@ -2,6 +2,13 @@
 // SISTEMA DE IDIOMAS — portado do app Flutter
 // ============================================
 
+// Evita flicker: esconde a página até a tradução carregar (só para não-PT)
+(function() {
+  const style = document.createElement('style');
+  style.textContent = 'html.i18n-pending body{visibility:hidden}';
+  document.head.appendChild(style);
+})();
+
 const AppLanguage = {
   pt: { code: "pt", name: "Português", flag: "🇧🇷" },
   en: { code: "en", name: "English", flag: "🇺🇸" },
@@ -775,6 +782,8 @@ const I18n = {
       });
       this._translationObserver.observe(document.body, { childList: true, subtree: true });
     }
+    // Revela a página — tradução concluída
+    document.documentElement.classList.remove('i18n-pending');
   },
 
   // ── Campo dinâmico com suporte a _{lang} ──
@@ -1206,6 +1215,10 @@ const I18n = {
 
 // Inicializa
 I18n.init();
+// Se idioma não for PT, esconde a página até traduzir
+if (I18n._current !== 'pt') {
+  document.documentElement.classList.add('i18n-pending');
+}
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => I18n.applyPageTranslations());
 } else {
