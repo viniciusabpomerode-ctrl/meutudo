@@ -427,7 +427,7 @@
     const _renderCards = renderCards;
     renderCards = function(lista) {
       const html = _renderCards(lista);
-      if (isLoggedIn) setTimeout(() => initSaveButtons(lista), 0);
+      setTimeout(() => initSaveButtons(lista), 0);
       return html;
     };
 

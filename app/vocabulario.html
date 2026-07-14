@@ -251,7 +251,7 @@
     const _renderCards = renderCards;
     renderCards = function(lista) {
       const html = _renderCards(lista);
-      if (isLoggedIn) setTimeout(initSaveButtons, 50);
+      setTimeout(initSaveButtons, 50);
       return html;
     };
 
