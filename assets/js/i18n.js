@@ -860,7 +860,10 @@ const I18n = {
       // baixar. Use sempre o mapa mais recente para que o observer criado
       // agora tambem traduza cards e listas renderizados mais tarde.
       const liveMap = this._contentTranslations || map;
-      let translated = liveMap[compact] || activeUi[compact];
+      // A interface revisada tem prioridade sobre o mapa grande. Isso permite
+      // corrigir traducoes antigas/incompletas como os tipos de verbo sem
+      // alterar o conteudo didatico nem os arquivos do R2.
+      let translated = activeUi[compact] || liveMap[compact];
       if (!translated) {
         // Nao traduza apenas pedacos enquanto o mapa completo ainda carrega.
         // Isso preserva o texto original para que a segunda passagem consiga
