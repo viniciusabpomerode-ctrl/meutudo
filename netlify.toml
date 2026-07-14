@@ -11,3 +11,21 @@
   from = "/r/:code"
   to = "/app/cadastro.html?ref=:code"
   status = 302
+
+# Cache de 1 ano para assets estáticos (JS, CSS, imagens, fontes)
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache de 1 ano para imagens
+[[headers]]
+  for = "/imagens_alemao/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache de 30 dias para HTML (Netlify invalida no deploy automaticamente)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
