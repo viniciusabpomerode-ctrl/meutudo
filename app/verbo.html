@@ -109,6 +109,7 @@
           </div>
         </div>
         <p class="muted">${I18n.field(verb, 'portuguese_translation')} · ${verb.verb_type || "verbo"}</p>
+        <div class="afb-speed-row"><span class="afb-speed-label">Velocidade do áudio:</span><span id="speed-control"></span></div>
 
         ${hasExamples
           ? ["passado", "presente", "futuro"].map(tenseTable).join("")
@@ -119,6 +120,8 @@
             ${done ? "Já concluído" : `Marcar como estudado (+${verb.xp_reward} XP)`}
           </button>` : ""}
       `;
+
+      afbRenderSpeedControl("speed-control");
 
       // Botão de salvar o verbo
       const verbSaveContainer = document.getElementById("verb-save-btn");

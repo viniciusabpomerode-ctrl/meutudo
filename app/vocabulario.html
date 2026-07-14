@@ -53,6 +53,7 @@
   <div id="app-nav"></div>
 
   <div class="container" style="padding-top:28px; max-width:900px;">
+    <div class="afb-speed-row"><span class="afb-speed-label">Velocidade do áudio:</span><span id="speed-control"></span></div>
     <div id="main-view">
       <h2 class="mt-0">📚 Vocabulário em Alemão</h2>
       <p class="muted">2.500 palavras do dia a dia, organizadas em 25 categorias — com plural e frase de exemplo em áudio.</p>
@@ -85,6 +86,7 @@
   <script src="../assets/js/guest.js"></script>
   <script>
     renderNav("vocabulario");
+    afbRenderSpeedControl("speed-control");
 
     let isGuest = true;
     let isLoggedIn = false;

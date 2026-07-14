@@ -585,3 +585,10 @@ input::placeholder,textarea::placeholder { color:var(--text-secondary);opacity:.
   border-radius:12px;padding:6px 10px;font:inherit;cursor:pointer;text-decoration:none;
 }
 @media(max-width:600px){body{font-size:1rem}.card{padding:18px}.lofi-player{width:min(360px,calc(100vw - 24px))!important;right:12px!important}}
+
+/* Seletor de velocidade de áudio — verbos, vocabulário etc. (ver afbRenderSpeedControl em data.js) */
+.afb-speed-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.afb-speed-row .afb-speed-label{font-size:.82rem;color:var(--text-secondary)}
+.btn-speed{border:1px solid var(--border-light);background:var(--card-hover);color:var(--text-primary);border-radius:20px;padding:6px 14px;font-size:.82rem;font-weight:600;cursor:pointer;transition:.2s}
+.btn-speed:hover{border-color:var(--color-primary)}
+.btn-speed.active{background:var(--color-primary);color:#fff;border-color:var(--color-primary)}

@@ -39,7 +39,7 @@ function _renderNavNow(active) {
   const linksHtml = `
     <a href="../index.html" class="${active === "dashboard" ? "active" : ""}">Início</a>
     <div class="nav-dropdown">
-      <span class="nav-dd-trigger ${isContentPage ? "active" : ""}">Conteúdo ▾</span>
+      <a href="cursos.html" class="nav-dd-trigger ${isContentPage ? "active" : ""}">Conteúdo ▾</a>
       <div class="nav-dd-menu">${dropdownItems}</div>
     </div>
     <a href="planos.html" class="${active === "planos" ? "active" : ""}">Planos</a>
@@ -70,6 +70,7 @@ function _renderNavNow(active) {
   if (trigger && menu) {
     trigger.addEventListener("click", (e) => {
       if (window.innerWidth > 1050) return;
+      e.preventDefault();
       e.stopPropagation();
       menu.classList.toggle("open");
     });

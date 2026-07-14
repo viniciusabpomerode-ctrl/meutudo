@@ -119,6 +119,31 @@ const AFBData = {
   },
 };
 
+// Velocidade de reprodução — compartilhada entre verbos, gírias e
+// vocabulário (cada aluno ajusta uma vez e continua valendo em toda parte).
+const AFB_SPEED_KEY = "afb_playback_speed";
+function afbGetSpeed() {
+  const s = parseFloat(localStorage.getItem(AFB_SPEED_KEY));
+  return [0.5, 0.75, 1.0].includes(s) ? s : 1.0;
+}
+function afbSetSpeed(speed) {
+  localStorage.setItem(AFB_SPEED_KEY, String(speed));
+  const player = document.getElementById("afb-audio-player");
+  if (player) player.playbackRate = speed;
+  document.querySelectorAll("[data-afb-speed]").forEach((b) => {
+    b.classList.toggle("active", parseFloat(b.dataset.afbSpeed) === speed);
+  });
+}
+// Insere o seletor de velocidade (0.5x/0.75x/1x) num container da página.
+function afbRenderSpeedControl(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const current = afbGetSpeed();
+  el.innerHTML = [0.5, 0.75, 1.0].map((s) =>
+    `<button type="button" class="btn-speed${s === current ? " active" : ""}" data-afb-speed="${s}" onclick="afbSetSpeed(${s})">${s}x</button>`
+  ).join("");
+}
+
 // Cria (ou reaproveita) um <audio> escondido na pagina e toca o caminho dado.
 // Tenta Supabase e Cloudflare R2 em paralelo — se um falhar, troca instantaneamente.
 async function afbPlayAudio(path, btn) {
@@ -143,12 +168,14 @@ async function afbPlayAudio(path, btn) {
     player.style.display = "none";
     document.body.appendChild(player);
   }
+  player.playbackRate = afbGetSpeed();
   async function trySupabase() {
     if (switchedToSupabase) return;
     switchedToSupabase = true;
     const supabaseUrl = await supabasePromise;
     if (supabaseUrl) {
       player.src = supabaseUrl;
+      player.playbackRate = afbGetSpeed();
       try { await player.play(); return; } catch {}
     }
     if (btn) {

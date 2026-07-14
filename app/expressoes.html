@@ -202,7 +202,7 @@
     let activeLevel = "todos";
     let searchMain = "";
     let searchCat = "";
-    let currentSpeed = 1.0;
+    let currentSpeed = afbGetSpeed();
     let sortMode = "level";
     let audioBaseUrl = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
     
@@ -376,6 +376,7 @@
 
     function setSpeed(s) {
       currentSpeed=s; audioEl.playbackRate=s;
+      afbSetSpeed(s);
       document.querySelectorAll(".btn-speed").forEach(b=>b.classList.toggle("active",parseFloat(b.textContent)===s));
     }
 

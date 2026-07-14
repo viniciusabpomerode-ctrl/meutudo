@@ -23,14 +23,25 @@ const SUPABASE_ANON_KEY = "sb_publishable_CVFm1nLMf9GCPr-RKKU6Rw_AFixWd5z";
 const FREE_LIMIT = 20;
 const FREE_LIMIT_STRICT = 10;
 const STRICT_KEYS = /verb|giria|express|palavra|word/i;
+// "words" do vocabulario.json e um array combinado de 25 categorias (20
+// itens gratis cada, pela regra da propria pagina) -- nao e uma listinha
+// por item como "verbs"/"giria", entao precisa de um limite bem maior que
+// o STRICT padrao pra nao truncar quase tudo.
+const VOCABULARIO_FREE_LIMIT = 500;
 
 // Limita listas dentro do JSON pra dar so uma amostra. Nao tenta ser
 // pixel-perfeito com o que o frontend mostra como "gratis" -- o objetivo
 // aqui e garantir que o banco de dados inteiro nunca saia sem Premium.
 function sampleDeep(key, value) {
   if (Array.isArray(value)) {
-    const limit = STRICT_KEYS.test(key || "") ? FREE_LIMIT_STRICT : FREE_LIMIT;
-    const limited = value.length > limit ? value.slice(0, limit) : value;
+    const limit = key === "words" ? VOCABULARIO_FREE_LIMIT : (STRICT_KEYS.test(key || "") ? FREE_LIMIT_STRICT : FREE_LIMIT);
+    // Amostra distribuida (nao so o comeco) -- arrays grandes agrupados por
+    // categoria (ex: vocabulario com 2.500 itens em 25 categorias, 100 cada)
+    // tinham as primeiras N sempre da MESMA categoria se so pegassemos o
+    // inicio, dando a impressao de "so uma categoria existe".
+    const limited = value.length > limit
+      ? Array.from({ length: limit }, (_, i) => value[Math.floor((i * value.length) / limit)])
+      : value;
     return limited.map((v) => sampleDeep("", v));
   }
   if (value && typeof value === "object") {
