@@ -43,16 +43,17 @@ const I18n = {
 
   // ── Inicialização ──
   init() {
-    // Em localhost, força português sempre (geo não funciona sem Netlify Dev)
+    const requested = new URLSearchParams(location.search).get("lang");
+    // Em localhost, usa português por padrão (geo não funciona sem Netlify
+    // Dev), mas aceita ?lang= para testar os idiomas sem gastar deploy.
     const isLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1";
     if (isLocal) {
-      this._current = "pt";
-      document.documentElement.dir = "ltr";
+      this._current = requested && AppLanguage[requested] ? requested : "pt";
+      document.documentElement.dir = this.getCurrentLang().rtl ? "rtl" : "ltr";
       return;
     }
 
     const saved = localStorage.getItem(AFB_LANG_KEY);
-    const requested = new URLSearchParams(location.search).get("lang");
     if (requested && AppLanguage[requested]) {
       this._current = requested;
       localStorage.setItem(AFB_LANG_KEY, requested);
@@ -129,12 +130,19 @@ const I18n = {
   async translateData(value) {
     const map = await this.loadContentTranslations();
     const germanField = /(?:german|_de(?:_|$)|^de$|base_verb|conjugated_verb|german_example|example_sentence_german|contexto_de|prompt$|modelAnswer|pronunciation)/i;
+    // Campos estruturais controlam filtros, agrupamentos e arquivos. Eles nao
+    // sao texto visivel e precisam continuar identicos em qualquer idioma.
+    // Ex.: verbo.html agrupa exemplos por tense="passado|presente|futuro";
+    // traduzir esses valores fazia todas as sentencas (e seus audios) sumirem.
+    const structuralField = /^(?:id|.*_id|tense|pronoun|code|slug|status|audio_url|audio_path|image_url|image_path|url|href)$/i;
     const visit = (item, key = "") => {
       if (typeof item === "string") return map["" + item.replace(/\s+/g, " ").trim()] || item;
       if (Array.isArray(item)) return item.map(child => visit(child, key));
       if (item && typeof item === "object") {
         Object.keys(item).forEach(childKey => {
-          if (!germanField.test(childKey)) item[childKey] = visit(item[childKey], childKey);
+          if (!germanField.test(childKey) && !structuralField.test(childKey)) {
+            item[childKey] = visit(item[childKey], childKey);
+          }
         });
       }
       return item;
@@ -769,8 +777,16 @@ const I18n = {
     const translateText = text => {
       const compact = text.replace(/\s+/g, " ").trim();
       if (!compact) return text;
-      let translated = map[compact] || activeUi[compact];
+      // A primeira passagem acontece antes de o arquivo grande terminar de
+      // baixar. Use sempre o mapa mais recente para que o observer criado
+      // agora tambem traduza cards e listas renderizados mais tarde.
+      const liveMap = this._contentTranslations || map;
+      let translated = liveMap[compact] || activeUi[compact];
       if (!translated) {
+        // Nao traduza apenas pedacos enquanto o mapa completo ainda carrega.
+        // Isso preserva o texto original para que a segunda passagem consiga
+        // encontra-lo como chave e aplicar a traducao integral.
+        if (!this._contentTranslations) return reformatNumbers(text);
         translated = compact;
         Object.entries(activeFragments)
           .sort((a, b) => b[0].length - a[0].length)
