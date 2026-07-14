@@ -194,7 +194,14 @@ const I18n = {
     this._translationPromise = fetch(r2Url, { cache: "default" })
       .then(r => r.ok ? r.json() : Promise.reject())
       .catch(() => fetch(`/data/${this._current}.json`, { cache: "default" }).then(r => r.ok ? r.json() : { translations: {} }))
-      .then(data => (this._contentTranslations = data.translations || {}))
+      .then(data => {
+        const translations = data.translations || {};
+        // O DeepL removeu o texto e deixou somente "A)" nestas duas chaves.
+        // Mantém o reparo local até o próximo lote completo de traduções.
+        if (this._current === "en") translations["A) Boa tarde"] = "A) Good afternoon";
+        if (this._current === "hi") translations["A) Boa tarde"] = "A) शुभ दोपहर";
+        return (this._contentTranslations = translations);
+      })
       .catch(() => (this._contentTranslations = {}));
     return this._translationPromise;
   },
