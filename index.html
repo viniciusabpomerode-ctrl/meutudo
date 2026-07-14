@@ -101,13 +101,13 @@
 
     /* ── Destaque no "Descobrir por onde começar" — chama atenção de quem
        ainda não sabe o nível, sem ser irritante (pulso lento e sutil) ── */
-    .discover-wrapper { display:inline-flex; border-radius:999px; }
-    .discover-btn { position:relative; animation:discoverPulse 2.6s ease-in-out infinite; }
-    @keyframes discoverPulse {
-      0%, 100% { box-shadow:0 0 0 0 color-mix(in srgb, var(--color-primary) 45%, transparent); }
-      50% { box-shadow:0 0 0 9px color-mix(in srgb, var(--color-primary) 0%, transparent); }
-    }
-    .discover-btn:hover { animation-play-state:paused; }
+    .discover-wrapper { display:inline-flex; border-radius:999px; position:relative; }
+    .discover-btn { position:relative; z-index:1; min-height:56px; padding:16px 32px!important; font-size:1rem!important; font-weight:700!important; color:#fff!important; border-color:color-mix(in srgb,var(--color-primary) 72%,#fff)!important; background:linear-gradient(135deg,var(--color-primary),var(--color-primary-dark))!important; box-shadow:0 10px 26px color-mix(in srgb,var(--color-primary) 35%,transparent); animation:discoverHeroPulse 2.8s ease-in-out infinite; }
+    .discover-wrapper::after { content:""; position:absolute; inset:-6px; border:2px solid var(--color-primary); border-radius:999px; pointer-events:none; animation:discoverHeroRing 2.8s ease-out infinite; }
+    @keyframes discoverHeroPulse { 0%,100% { transform:translateY(0); box-shadow:0 10px 26px color-mix(in srgb,var(--color-primary) 35%,transparent); } 50% { transform:translateY(-2px); box-shadow:0 14px 34px color-mix(in srgb,var(--color-primary) 56%,transparent); } }
+    @keyframes discoverHeroRing { 0% { transform:scale(.94); opacity:.6; } 100% { transform:scale(1.12); opacity:0; } }
+    .discover-btn:hover { animation-play-state:paused; transform:translateY(-2px); }
+    @media(max-width:640px){.discover-wrapper{width:100%}.discover-btn{width:100%;padding:15px 20px!important;font-size:.96rem!important}}
 
     /* ── Focus row: LoFi + Pomodoro side by side ── */
     .foco-row { display:grid; grid-template-columns:1.65fr .85fr; gap:12px; margin-bottom:24px; }
@@ -344,7 +344,7 @@
       <div class="quick-row mi-stagger">
         <button class="btn btn-primary mi-breathe" id="start-session-btn" style="padding:12px 24px;">▶ Iniciar sessão de estudo</button>
         <a class="btn btn-outline" href="app/sessao-rapida.html" style="padding:12px 20px;">⚡ Sessão rápida</a>
-        <span class="discover-wrapper"><a class="btn btn-ghost discover-btn" href="app/teste-rapido.html" style="padding:15px 26px;">🧭 Descobrir por onde começar</a></span>
+        <span class="discover-wrapper"><a class="btn btn-ghost discover-btn" href="app/teste-rapido.html">🧭 Descobrir por onde começar</a></span>
       </div>
 
       <section class="card journey-card mi-stagger" id="journey-card" aria-labelledby="journey-title">
