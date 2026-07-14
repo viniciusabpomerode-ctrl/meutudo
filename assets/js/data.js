@@ -21,15 +21,14 @@ const AFBData = {
     if (AFBData._cache[key]) return AFBData._cache[key];
 
     let res = null;
-    // Tenta R2 primeiro, depois local
+    // Todo idioma usa a mesma base didática em português. A tradução é
+    // aplicada abaixo por I18n.translateData; não busca uma cópia paralela
+    // por idioma, que pode estar incompleta ou fora de sincronia (sobretudo
+    // em verbos e músicas).
     const urls = [
       `${AFB_R2_PUBLIC_URL}/data/${path}.json`,
       `../data/${path}.json`,
     ];
-    if (lang !== "pt") {
-      urls.unshift(`${AFB_R2_PUBLIC_URL}/data/${lang}/${path}.json`);
-      urls.push(`../data/${lang}/${path}.json`);
-    }
 
     // Manda o token de acesso quando existir -- o content-gateway usa isso
     // pra saber se devolve o conteudo completo (Premium) ou uma amostra.

@@ -807,7 +807,12 @@ const I18n = {
     // O mapa de conteudo ainda nao tinha chegado — quando chegar, traduz
     // de novo por cima (o texto ja visivel em portugues vira traduzido).
     if (mapWasIncomplete) {
-      contentPromise.then(() => { if (this._current !== 'pt') apply(root); });
+      // Chama o método de novo, em vez de reutilizar `apply`: ele fecha
+      // sobre o mapa vazio da primeira passada. Na segunda, o mapa já está
+      // carregado e todo conteúdo pendente recebe sua tradução.
+      contentPromise.then(() => {
+        if (this._current !== 'pt') this.applyPageTranslations(root);
+      });
     }
   },
 
