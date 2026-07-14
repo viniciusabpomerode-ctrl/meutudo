@@ -110,7 +110,7 @@
     let searchMain = "";
     let searchCat = "";
 
-    const catIcons = {
+    let catIcons = {
       "Alimentação": "🍽️", "Hotelaria e Turismo": "🏨",
       "Saúde": "🏥", "Transporte": "🚌"
     };
@@ -123,6 +123,31 @@
         let r = await fetch(`${R2}data/profissoes.json`, { headers: authHeaders }).catch(() => null);
         if (!r || !r.ok) r = await fetch("../data/profissoes.json");
         allData = (await r.json()).expressions || [];
+        const lang = I18n.getCurrent();
+        if (lang !== "pt") {
+          // O i18n busca o mapa no R2 primeiro e usa o arquivo do deploy apenas
+          // como fallback. Traduz antes de renderizar sem tocar no alemão/áudio.
+          const localeMap = await I18n.loadContentTranslations();
+          if (Object.keys(localeMap).length) {
+            const translate = value => {
+              if (typeof value !== "string") return value;
+              return localeMap[value.replace(/\s+/g, " ").trim()] || value;
+            };
+            catIcons = Object.fromEntries(Object.entries(catIcons).map(([name, icon]) => [translate(name), icon]));
+            allData.forEach(item => {
+              item.portuguese = translate(item.portuguese);
+              item.profession = translate(item.profession);
+              item.category = translate(item.category);
+              if (Array.isArray(item.tags)) item.tags = item.tags.map(translate);
+              (item.phrases || []).forEach(phrase => { phrase.pt = translate(phrase.pt); });
+            });
+            // A mesma versão completa traduz o título, subtítulo, contadores,
+            // placeholders e textos dinâmicos observados pelo i18n global.
+            I18n._contentTranslations = localeMap;
+            I18n._translationPromise = Promise.resolve(localeMap);
+            I18n.applyPageTranslations();
+          }
+        }
         if (allData.length) guestFreeProfId = allData[0].id;
         renderMain();
       } catch (e) {

@@ -2,7 +2,7 @@
   "use strict";
   renderNav("criatividade");
   const LEVELS=["A1","A2","B1","B2","C1","C2"], FREE_DAILY=3, GUEST_DAILY=1, COOLDOWN=30000;
-  const $=id=>document.getElementById(id);let questions=[],level=null,current=null,recognition=null,mediaRecorder=null,mediaStream=null,recordedBlob=null,recordUrl=null,recordStarted=0,recordTimer=null,cooldown=false,answerBeforeRecording="";
+  const $=id=>document.getElementById(id);let questions=[],level=null,current=null,recognition=null,mediaRecorder=null,mediaStream=null,recordedBlob=null,recordUrl=null,recordStarted=0,recordTimer=null,recordPausedAt=0,recordPausedTotal=0,recordingSession=0,cooldown=false,answerBeforeRecording="";
   const usageKey=()=>`afb_creativity_${new Date().toISOString().slice(0,10)}`;
   function usage(){try{return JSON.parse(localStorage.getItem(usageKey()))||{count:0,last:0}}catch(e){return {count:0,last:0}}}
 
@@ -28,7 +28,7 @@
   async function init(){
     $("levels").innerHTML=LEVELS.map(l=>`<button class="level-btn" data-level="${l}">${l}</button>`).join("");
     $("levels").onclick=e=>{const b=e.target.closest("button");if(b)selectLevel(b.dataset.level)};
-    $("answer").oninput=countWords;$("next").onclick=pickQuestion;$("analyze").onclick=analyze;$("record").onclick=startRecording;$("stop").onclick=()=>stopRecording();$("discard-record").onclick=discardRecording;
+    $("answer").oninput=countWords;$("next").onclick=pickQuestion;$("analyze").onclick=analyze;$("record").onclick=startRecording;$("pause").onclick=togglePauseRecording;$("stop").onclick=()=>stopRecording();$("discard-record").onclick=discardRecording;
     $("save-record").onclick=async()=>{
       if(!recordedBlob)return;
       const btn=$("save-record");btn.disabled=true;btn.textContent="Salvando...";
@@ -59,6 +59,7 @@
   }
   function selectLevel(l){level=l;document.querySelectorAll(".level-btn").forEach(b=>b.classList.toggle("active",b.dataset.level===l));$("practice").hidden=false;pickQuestion();$("practice").scrollIntoView({behavior:"smooth",block:"start"})}
   function pickQuestion(){const list=questions.filter(q=>q.level===level),pool=list.filter(q=>!current||q.id!==current.id);current=pool[Math.floor(Math.random()*pool.length)]||list[0];if(!current)return;
+    cancelActiveRecording();
     if(mediaRecorder&&mediaRecorder.state==="recording")stopRecording();discardRecording();$("category").textContent=`${current.level} · ${current.category}`;$("position").textContent=`${list.indexOf(current)+1} de ${list.length}`;$("prompt").textContent=current.prompt;$("prompt-pt").textContent=current.promptPt;$("minimum").textContent=current.minWords;$("guide").innerHTML=current.guide.map(x=>`<li>${x}</li>`).join("");$("vocabulary").innerHTML=current.vocabulary.map(x=>`<span class="word-chip">${x}</span>`).join("");$("connectors").innerHTML=current.connectors.map(x=>`<span class="word-chip">${x}</span>`).join("");$("answer").value="";$("result").classList.remove("show");countWords();
   }
   function countWords(){const n=$("answer").value.trim().split(/\s+/).filter(Boolean).length;$("words").textContent=n}
@@ -81,6 +82,37 @@
     try{const r=await fetch(window.AFB_CREATIVITY_API+"/transcribe",{method:"POST",headers:{Authorization:`Bearer ${token}`,"Content-Type":recordedBlob.type||"audio/webm"},body:recordedBlob});const d=await r.json();if(!r.ok||!d.text)throw new Error(d.error||"transcription_failed");$("answer").value=(answerBeforeRecording+" "+d.text).trim();countWords();$("record-status").textContent="Transcrição pronta. Confira o texto antes de analisar."}catch(e){$("record-status").textContent="Não foi possível transcrever agora. A gravação continua disponível para ouvir."}
   }
   function discardRecording(){if(recordUrl)URL.revokeObjectURL(recordUrl);recordUrl=null;recordedBlob=null;$("record-playback").removeAttribute("src");$("record-panel").classList.remove("show");$("record-status").className="muted";$("record-status").textContent="Você também pode responder falando."}
+  // Controle robusto do microfone: pausa/retoma, encerra ao trocar de
+  // pergunta ou página e ignora callbacks de uma gravação já descartada.
+  async function startRecording(){
+    if(!navigator.mediaDevices||!window.MediaRecorder){$("record-status").textContent="Seu navegador não oferece gravação. Você pode digitar normalmente.";return}
+    const session=++recordingSession;
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});
+      if(session!==recordingSession){stream.getTracks().forEach(t=>t.stop());return}
+      mediaStream=stream;const chunks=[];const mime=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":"audio/webm";answerBeforeRecording=$("answer").value.trim();
+      const recorder=new MediaRecorder(stream,{mimeType:mime});mediaRecorder=recorder;
+      recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+      recorder.onstop=async()=>{
+        cleanupCapture();
+        if(session!==recordingSession)return;
+        recordedBlob=new Blob(chunks,{type:mime});if(recordUrl)URL.revokeObjectURL(recordUrl);recordUrl=URL.createObjectURL(recordedBlob);$("record-playback").src=recordUrl;$("record-panel").classList.add("show");
+        if($("answer").value.trim()===answerBeforeRecording)await transcribeRecording();else $("record-status").textContent="Gravação e transcrição prontas. Confira o texto antes de analisar.";
+      };
+      recorder.start();
+      const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(SR){recognition=new SR();recognition.lang="de-DE";recognition.continuous=true;recognition.interimResults=true;let base=$("answer").value.trim();recognition.onresult=e=>{let final="",partial="";for(let i=e.resultIndex;i<e.results.length;i++){const text=e.results[i][0].transcript;if(e.results[i].isFinal)final+=text+" ";else partial+=text}if(final)base=(base+" "+final).trim();$("answer").value=(base+" "+partial).trim();countWords()};recognition.onerror=()=>{};try{recognition.start()}catch(e){}}
+      recordStarted=Date.now();recordPausedAt=0;recordPausedTotal=0;recordTimer=setInterval(()=>{if(!mediaRecorder)return;if(mediaRecorder.state==="paused")return;const sec=Math.floor((Date.now()-recordStarted-recordPausedTotal)/1000);$("record-status").innerHTML=`<span class="record-dot"></span> Gravando ${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`;if(sec>=180)stopRecording()},500);
+      $("record").hidden=true;$("pause").hidden=false;$("stop").hidden=false;$("record-status").className="recording";
+    }catch(e){cleanupCapture();$("record-status").className="muted";$("record-status").textContent="Permita o acesso ao microfone para gravar sua resposta."}
+  }
+  function resetRecordingControls(){$("record").hidden=false;$("pause").hidden=true;$("pause").textContent="⏸ Pausar";$("stop").hidden=true;$("record-status").className="muted"}
+  function cleanupCapture(){if(recordTimer)clearInterval(recordTimer);recordTimer=null;if(mediaStream)mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null;if(recognition)try{recognition.stop()}catch(e){}recognition=null;mediaRecorder=null;resetRecordingControls()}
+  function stopRecording(){if(mediaRecorder&&mediaRecorder.state!=="inactive")mediaRecorder.stop();else cleanupCapture()}
+  function togglePauseRecording(){if(!mediaRecorder)return;if(mediaRecorder.state==="recording"){mediaRecorder.pause();recordPausedAt=Date.now();$("pause").textContent="▶ Retomar";$("record-status").textContent="Gravação pausada."}else if(mediaRecorder.state==="paused"){recordPausedTotal+=Date.now()-recordPausedAt;recordPausedAt=0;mediaRecorder.resume();$("pause").textContent="⏸ Pausar";$("record-status").className="recording"}}
+  function cancelActiveRecording(){recordingSession++;const recorder=mediaRecorder;if(recorder&&recorder.state!=="inactive"){recorder.onstop=()=>cleanupCapture();try{recorder.stop()}catch(e){}}cleanupCapture()}
+  function discardRecording(){if(mediaRecorder)cancelActiveRecording();if(recordUrl)URL.revokeObjectURL(recordUrl);recordUrl=null;recordedBlob=null;$("record-playback").removeAttribute("src");$("record-panel").classList.remove("show");$("record-status").className="muted";$("record-status").textContent="Você também pode responder falando."}
+  window.addEventListener("pagehide",cancelActiveRecording);
+
   async function analyze(){
     if(!current){showMessage("Escolha um nível e uma pergunta antes de analisar.");return}
     const answer=$("answer").value.trim(),words=answer.split(/\s+/).filter(Boolean).length,u=usage(),wait=COOLDOWN-(Date.now()-u.last);

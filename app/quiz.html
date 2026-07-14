@@ -210,7 +210,6 @@
         </div>
         <div class="quiz-word">${q.pergunta_pt || q.contexto_de || ''}</div>
         ${q.contexto_de ? `<div class="quiz-context">${q.contexto_de}</div>` : ''}
-        ${q.audio_url ? `<button class="q-audio-btn" onclick="event.stopPropagation();playQuizAudio('${q.audio_url}')">🎧 Ouvir</button>` : ''}
         <div class="quiz-options">
           ${opts.map((o, i) => {
             const letter = o.charAt(0);

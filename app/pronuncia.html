@@ -35,7 +35,11 @@
 <div class="tag" id="tag"></div>
 <div class="hint" id="hint"></div>
 <button class="btn btn-outline" id="play" style="margin:8px;width:100%">🔊 Ouvir original</button>
-<button class="btn-rec" id="rec">🎤 Gravar minha pronuncia</button>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn-rec" id="rec" style="flex:1">🎤 Gravar minha pronuncia</button>
+<button class="btn btn-outline" id="pause-rec" hidden>⏸ Pausar</button>
+<button class="btn btn-ghost" id="stop-rec" hidden>⏹ Parar</button>
+</div>
 <div class="rec-panel" id="recpanel">
 <p style="font-weight:600;margin:0 0 8px">🎧 Sua gravacao:</p>
 <audio id="recplay" controls style="width:100%;margin-bottom:8px"></audio>
@@ -68,7 +72,7 @@
 renderNav("pronuncia");
 var R2=(window.AFB_CONTENT_GATEWAY_URL||"https://deutschbloom-content-gateway.quesaco93.workers.dev")+"/";
 var pool=[],level="all",current=null,audio=new Audio();
-var mediaRecorder=null,recordedBlob=null,recFilter="all";
+var mediaRecorder=null,mediaStream=null,recordedBlob=null,recordUrl=null,recFilter="all",captureGeneration=0;
 var isGuest=true,attempts=parseInt(localStorage.getItem("afb_pron_attempts")||"0",10);
 function updateAttemptLabel(){var el=document.getElementById("guest-attempts");if(!isGuest){el.style.display="none";return}el.style.display="block";el.textContent=(AFB_FREE_PRONUNCIATION-attempts)+" de "+AFB_FREE_PRONUNCIATION+" tentativas gratuitas restantes";document.getElementById("rec").disabled=attempts>=AFB_FREE_PRONUNCIATION;}
 
@@ -143,12 +147,14 @@ function loadData(){
 
 function nextSentence(){
   if(pool.length===0)return;
+  cancelActiveCapture();
   current=pool[Math.floor(Math.random()*pool.length)];
   document.getElementById("german").textContent=current.german;
   document.getElementById("tag").textContent=current.type;
   document.getElementById("hint").textContent=current.portuguese||"";
   document.getElementById("recpanel").classList.remove("show");
   recordedBlob=null;
+  if(recordUrl){URL.revokeObjectURL(recordUrl);recordUrl=null}
 }
 
 document.getElementById("play").onclick=function(){
@@ -169,23 +175,59 @@ document.getElementById("play").onclick=function(){
 };
 
 document.getElementById("rec").onclick=function(){
-  if(mediaRecorder&&mediaRecorder.state==="recording"){mediaRecorder.stop();return}
   if(isGuest&&attempts>=AFB_FREE_PRONUNCIATION){location.href="cadastro.html?next=pronuncia.html";return}
+  var generation=++captureGeneration;
   navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    if(generation!==captureGeneration){stream.getTracks().forEach(function(t){t.stop()});return}
+    mediaStream=stream;
     if(isGuest){attempts++;localStorage.setItem("afb_pron_attempts",String(attempts));updateAttemptLabel()}
     var chunks=[];
-    mediaRecorder=new MediaRecorder(stream,{mimeType:"audio/webm"});
+    var options=MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?{mimeType:"audio/webm;codecs=opus"}:{};
+    mediaRecorder=new MediaRecorder(stream,options);
     mediaRecorder.ondataavailable=function(e){if(e.data.size>0)chunks.push(e.data)};
     mediaRecorder.onstop=function(){
-      stream.getTracks().forEach(function(t){t.stop()});
-      recordedBlob=new Blob(chunks,{type:"audio/webm"});
-      document.getElementById("recplay").src=URL.createObjectURL(recordedBlob);
+      releaseMicrophone();
+      if(generation!==captureGeneration)return;
+      recordedBlob=new Blob(chunks,{type:mediaRecorder&&mediaRecorder.mimeType||"audio/webm"});
+      if(recordUrl)URL.revokeObjectURL(recordUrl);
+      recordUrl=URL.createObjectURL(recordedBlob);
+      document.getElementById("recplay").src=recordUrl;
       document.getElementById("recpanel").classList.add("show");
+      mediaRecorder=null;
     };
     mediaRecorder.start();
-    document.getElementById("rec").textContent="⏹ Parar gravacao";
+    document.getElementById("rec").hidden=true;
     document.getElementById("rec").classList.add("recording");
+    document.getElementById("pause-rec").hidden=false;
+    document.getElementById("stop-rec").hidden=false;
   }).catch(function(){alert("Permita o microfone!")});
+};
+
+function resetRecordingControls(){
+  var rec=document.getElementById("rec"),pause=document.getElementById("pause-rec"),stop=document.getElementById("stop-rec");
+  rec.hidden=false;rec.textContent="🎤 Gravar minha pronuncia";rec.classList.remove("recording");
+  pause.hidden=true;pause.textContent="⏸ Pausar";stop.hidden=true;
+}
+function releaseMicrophone(){
+  if(mediaStream)mediaStream.getTracks().forEach(function(t){t.stop()});
+  mediaStream=null;resetRecordingControls();
+}
+function cancelActiveCapture(){
+  captureGeneration++;
+  var recorder=mediaRecorder;
+  if(recorder&&recorder.state!=="inactive"){
+    recorder.onstop=function(){releaseMicrophone()};
+    try{recorder.stop()}catch(e){releaseMicrophone()}
+  }else releaseMicrophone();
+  mediaRecorder=null;
+}
+document.getElementById("pause-rec").onclick=function(){
+  if(!mediaRecorder)return;
+  if(mediaRecorder.state==="recording"){mediaRecorder.pause();this.textContent="▶ Retomar";document.getElementById("rec").classList.remove("recording")}
+  else if(mediaRecorder.state==="paused"){mediaRecorder.resume();this.textContent="⏸ Pausar";document.getElementById("rec").classList.add("recording")}
+};
+document.getElementById("stop-rec").onclick=function(){
+  if(mediaRecorder&&mediaRecorder.state!=="inactive")mediaRecorder.stop();else releaseMicrophone();
 };
 
 document.getElementById("save").onclick=function(){
@@ -202,7 +244,7 @@ document.getElementById("save").onclick=function(){
 };
 
 document.getElementById("discard").onclick=function(){
-  recordedBlob=null;document.getElementById("recpanel").classList.remove("show");
+  cancelActiveCapture();recordedBlob=null;if(recordUrl){URL.revokeObjectURL(recordUrl);recordUrl=null}document.getElementById("recpanel").classList.remove("show");
 };
 
 document.getElementById("next").onclick=nextSentence;
@@ -270,6 +312,7 @@ window.onbeforeunload=function(){
     reader.readAsDataURL(recordedBlob);
   }
 };
+window.addEventListener("pagehide",cancelActiveCapture);
 
 loadData();renderRecs();
 </script>
