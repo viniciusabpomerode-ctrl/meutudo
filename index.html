@@ -477,7 +477,7 @@
   <script defer src="assets/js/sfx.js"></script>
   <script defer src="assets/js/auth.js"></script>
   <script defer src="assets/js/xp.js"></script>
-  <script defer src="assets/js/study-plan.js"></script>
+  <script defer src="assets/js/study-plan.js?v=20260714-time2"></script>
   <script defer src="assets/js/guest.js"></script>
   <script defer src="assets/js/microinteracoes.js"></script>
   <script defer src="assets/js/nav.js"></script>
@@ -580,10 +580,10 @@
 
     function renderJourney(){
       const p=StudyPlan.load(),s=StudyPlan.summary(),done=StudyPlan.completedToday(),missions=StudyPlan.missions();
-      const pct=Math.min(100,Math.round((s.minutes/Math.max(1,s.minutesGoal))*100));
+      const pct=Math.min(100,Math.round(((s.seconds||s.minutes*60)/Math.max(60,s.minutesGoal*60))*100)),shownMinutes=s.minutes>0?s.minutes:(s.seconds>0?"<1":0);
       document.getElementById("journey-title").textContent=StudyPlan.GOALS[p.goal]||StudyPlan.GOALS.general;
       document.getElementById("journey-sub").textContent=`${p.minutesPerDay} min por dia · ${p.daysPerWeek} dias por semana · nível ${p.level}`;
-      document.getElementById("journey-summary").innerHTML=`<div class="journey-progress"><div class="flex-between"><b>Meta desta semana</b><span>${s.minutes} de ${s.minutesGoal} min</span></div><div class="line"><i style="width:${pct}%"></i></div><small>${pct}% da sua meta pessoal — sem comparar com toda a biblioteca.</small></div><div class="journey-numbers"><div><b>${s.activeDays}/${s.daysGoal}</b><span>dias ativos</span></div><div><b>${s.missionCount}</b><span>missões</span></div></div>`;
+      document.getElementById("journey-summary").innerHTML=`<div class="journey-progress"><div class="flex-between"><b>Meta desta semana</b><span>${shownMinutes} de ${s.minutesGoal} min</span></div><div class="line"><i style="width:${pct}%"></i></div><small>${pct}% da sua meta pessoal — sem comparar com toda a biblioteca.</small></div><div class="journey-numbers"><div><b>${s.activeDays}/${s.daysGoal}</b><span>dias ativos</span></div><div><b>${s.missionCount}</b><span>missões</span></div></div>`;
       document.getElementById("journey-missions").innerHTML=missions.map(m=>`<div class="mission-card ${done.includes(m.id)?"done":""}"><a class="mission-icon" href="app/${m.href}">${m.icon}</a><a class="mission-copy" href="app/${m.href}"><b>${m.label}</b><span>${m.detail}</span></a><button class="mission-check" data-mission="${m.id}" title="Marcar como concluída">${done.includes(m.id)?"✓":""}</button></div>`).join("");
       document.querySelectorAll("[data-mission]").forEach(b=>b.onclick=()=>{StudyPlan.toggleMission(b.dataset.mission);renderJourney();showAchievement()});
     }
