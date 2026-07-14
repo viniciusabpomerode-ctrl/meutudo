@@ -6,13 +6,12 @@
   const usageKey=()=>`afb_creativity_${new Date().toISOString().slice(0,10)}`;
   function usage(){try{return JSON.parse(localStorage.getItem(usageKey()))||{count:0,last:0}}catch(e){return {count:0,last:0}}}
 
-  // Gravacoes salvas -- so entra aqui se a pessoa clicar "Salvar", nunca
-  // fica em cache sem ela pedir. Guardado local (IndexedDB), nao vai pra
-  // nuvem -- e so um audio de pratica, nao "conteudo" do Caderno.
+  // O audio continua local no IndexedDB; o Caderno/R2 guarda somente a
+  // referencia leve para exibir a gravacao sem duplicar o arquivo de voz.
   function openRecDB(){return new Promise((r,rej)=>{const req=indexedDB.open("afb_creativity_recs",1);req.onupgradeneeded=e=>e.target.result.createObjectStore("recs",{keyPath:"id"});req.onsuccess=()=>r(req.result);req.onerror=rej})}
   function putSavedRec(rec){return openRecDB().then(db=>new Promise((r,rej)=>{const tx=db.transaction("recs","readwrite");tx.objectStore("recs").put(rec);tx.oncomplete=()=>r();tx.onerror=rej}))}
   function getSavedRecs(){return openRecDB().then(db=>new Promise((r,rej)=>{const tx=db.transaction("recs","readonly");const req=tx.objectStore("recs").getAll();req.onsuccess=()=>r(req.result);req.onerror=rej}))}
-  function delSavedRec(id){return openRecDB().then(db=>new Promise((r,rej)=>{const tx=db.transaction("recs","readwrite");tx.objectStore("recs").delete(id);tx.oncomplete=()=>r();tx.onerror=rej}))}
+  function delSavedRec(id){return openRecDB().then(db=>new Promise((r,rej)=>{const tx=db.transaction("recs","readwrite");tx.objectStore("recs").delete(id);tx.oncomplete=()=>{if(typeof SavedItems!=="undefined")SavedItems.remove("creativity_recording",id).catch(()=>{});r()};tx.onerror=rej}))}
   function clearSavedRecs(){return openRecDB().then(db=>new Promise((r,rej)=>{const tx=db.transaction("recs","readwrite");tx.objectStore("recs").clear();tx.oncomplete=()=>r();tx.onerror=rej}))}
   async function renderSavedRecs(){
     const all=await getSavedRecs();
@@ -32,9 +31,11 @@
     $("save-record").onclick=async()=>{
       if(!recordedBlob)return;
       const btn=$("save-record");btn.disabled=true;btn.textContent="Salvando...";
+      const recId="crea_"+Date.now();
       const reader=new FileReader();
       reader.onload=async()=>{
-        await putSavedRec({id:"crea_"+Date.now(),prompt:current?current.prompt:"",ts:Date.now(),base64:reader.result});
+        await putSavedRec({id:recId,prompt:current?current.prompt:"",translation:current?current.promptPt||"":"",level:level||"",mime:recordedBlob.type||"audio/webm",ts:Date.now(),base64:reader.result});
+        await SavedItems.add({type:"creativity_recording",id:recId,nivel:level||"",refUrl:"criatividade.html"});
         btn.disabled=false;btn.textContent="✅ Salvo";setTimeout(()=>{btn.textContent="💾 Salvar gravação"},1500);
         renderSavedRecs();
       };
@@ -42,7 +43,9 @@
     };
     $("clear-recs").onclick=async()=>{
       if(!confirm("Excluir todas as gravações salvas neste aparelho?"))return;
-      await clearSavedRecs();renderSavedRecs();
+      const saved=await getSavedRecs();await clearSavedRecs();
+      if(typeof SavedItems!=="undefined")await Promise.all(saved.map(rec=>SavedItems.remove("creativity_recording",rec.id).catch(()=>{})));
+      renderSavedRecs();
     };
     $("saved-recs-list").addEventListener("click",async e=>{
       const id=e.target.dataset.delRec;if(!id)return;

@@ -68,6 +68,7 @@
 <script src="../assets/js/nav.js"></script>
 <script src="../assets/js/data.js"></script>
 <script src="../assets/js/guest.js"></script>
+<script src="../assets/js/saved_r2.js?v=20260714-ref3"></script>
 <script>
 renderNav("pronuncia");
 var R2=(window.AFB_CONTENT_GATEWAY_URL||"https://deutschbloom-content-gateway.quesaco93.workers.dev")+"/";
@@ -110,7 +111,10 @@ function delRec(id){
     return new Promise(function(r,rej){
       var tx=db.transaction("recs","readwrite");
       tx.objectStore("recs").delete(id);
-      tx.oncomplete=function(){r()};
+      tx.oncomplete=function(){
+        if(typeof SavedItems!=="undefined")SavedItems.remove("pronunciation_recording",id).catch(function(){});
+        r();
+      };
       tx.onerror=rej;
     });
   });
@@ -130,13 +134,13 @@ function loadData(){
   
   fetcher("data/girias.json").then(function(g){
     var exps=g.expressions||[];
-    for(var i=0;i<exps.length;i++){var e=exps[i];if(lvs.indexOf(e.level)>=0)pool.push({german:e.german,portuguese:e.portuguese,type:"giria",audio:e.audio_url})}
+    for(var i=0;i<exps.length;i++){var e=exps[i];if(lvs.indexOf(e.level)>=0)pool.push({german:e.german,portuguese:e.portuguese,type:"giria",level:e.level,audio:e.audio_url})}
     return fetcher("data/profissoes.json");
   }).then(function(p){
     var exps=p.expressions||[];
-    for(var i=0;i<exps.length;i++){var e=exps[i];var phs=e.phrases||[];for(var j=0;j<phs.length;j++){var ph=phs[j];if(lvs.indexOf(ph.level)>=0)pool.push({german:ph.de,portuguese:ph.pt,type:"profissao",audio:ph.audio_url})}}
+    for(var i=0;i<exps.length;i++){var e=exps[i];var phs=e.phrases||[];for(var j=0;j<phs.length;j++){var ph=phs[j];if(lvs.indexOf(ph.level)>=0)pool.push({german:ph.de,portuguese:ph.pt,type:"profissao",level:ph.level,audio:ph.audio_url})}}
     var dp=[];
-    for(var k=0;k<lvs.length;k++){(function(lv){dp.push(fetcher("data/cursos/"+lv+".json").then(function(d){var themes=d.dialog_themes||[];for(var a=0;a<themes.length;a++){var dialogs=themes[a].dialogs||[];for(var b=0;b<dialogs.length;b++){var ss=dialogs[b].sentences||[];for(var c=0;c<ss.length;c++){var s=ss[c];if(s.audio_url&&s.german_text)pool.push({german:s.german_text,portuguese:s.portuguese_translation,type:"dialogo",audio:s.audio_url})}}}}).catch(function(){}))})(lvs[k])}
+    for(var k=0;k<lvs.length;k++){(function(lv){dp.push(fetcher("data/cursos/"+lv+".json").then(function(d){var themes=d.dialog_themes||[];for(var a=0;a<themes.length;a++){var dialogs=d.dialog_themes[a].dialogs||[];for(var b=0;b<dialogs.length;b++){var ss=dialogs[b].sentences||[];for(var c=0;c<ss.length;c++){var s=ss[c];if(s.audio_url&&s.german_text)pool.push({german:s.german_text,portuguese:s.portuguese_translation,type:"dialogo",level:lv,audio:s.audio_url})}}}}).catch(function(){}))})(lvs[k])}
     return Promise.all(dp);
   }).then(function(){
     for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=pool[i];pool[i]=pool[j];pool[j]=tmp}
@@ -233,9 +237,14 @@ document.getElementById("stop-rec").onclick=function(){
 document.getElementById("save").onclick=function(){
   if(!recordedBlob||!current)return;
   if(isGuest){location.href="login.html?next=pronuncia.html";return}
+  var recId="pron_"+Date.now();
+  var recMeta={id:recId,text:current.german,translation:current.portuguese||"",level:current.level||"",source:current.type||"",mime:recordedBlob.type||"audio/webm",ts:Date.now(),saved:true};
   var reader=new FileReader();
   reader.onload=function(){
-    putRec({id:"pron_"+Date.now(),text:current.german,ts:Date.now(),saved:true,base64:reader.result.split(",")[1]}).then(function(){
+    recMeta.base64=reader.result.split(",")[1];
+    putRec(recMeta).then(function(){
+      return SavedItems.add({type:"pronunciation_recording",id:recId,nivel:recMeta.level,refUrl:"pronuncia.html"});
+    }).then(function(){
       document.getElementById("recpanel").classList.remove("show");
       renderRecs();
     });

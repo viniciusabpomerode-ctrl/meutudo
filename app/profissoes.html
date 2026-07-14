@@ -59,7 +59,7 @@
   <div class="container" style="padding-top:28px; max-width:900px;">
     <div id="main-view">
       <h2 class="mt-0">💼 Profissões em Alemão</h2>
-      <p class="muted">Aprenda alemão no contexto do trabalho — 4.500 frases reais de 90 profissões, do A1 ao C2.</p>
+      <p class="muted" id="prof-intro">Aprenda alemão no contexto do trabalho — 4.500 frases reais de 90 profissões, do A1 ao C2.</p>
 
       <input type="text" class="search-bar" id="search-main" placeholder="🔍 Buscar em todas as profissões...">
       <div class="counter" id="counter-main" style="margin-bottom:16px;"></div>
@@ -115,6 +115,18 @@
       "Saúde": "🏥", "Transporte": "🚌"
     };
     const levelOrder = {A1:0, A2:1, B1:2, B2:3, C1:4, C2:5};
+    const professionIntro = {
+      pt:"Aprenda alemão no contexto do trabalho — 4.500 frases reais de 90 profissões, do A1 ao C2.",
+      en:"Learn German in a work context — 4,500 real-life sentences from 90 professions, from A1 to C2.",
+      es:"Aprende alemán en el contexto laboral — 4500 frases reales de 90 profesiones, del A1 al C2.",
+      fr:"Apprenez l’allemand dans un contexte professionnel — 4 500 phrases authentiques issues de 90 métiers, du niveau A1 au C2.",
+      it:"Impara il tedesco nel contesto lavorativo — 4.500 frasi reali di 90 professioni, dal livello A1 al C2.",
+      tr:"İş bağlamında Almanca öğrenin — A1'den C2'ye 90 meslekten 4.500 gerçek cümle.",
+      ar:"تعلّم الألمانية في سياق العمل — 4,500 جملة واقعية من 90 مهنة، من A1 إلى C2.",
+      he:"למדו גרמנית בהקשר מקצועי — 4,500 משפטים אמיתיים מ־90 מקצועות, מרמה A1 עד C2.",
+      hi:"कामकाजी संदर्भ में जर्मन सीखें — 90 पेशों के 4,500 वास्तविक वाक्य, A1 से C2 तक।",
+      pl:"Ucz się niemieckiego w kontekście zawodowym — 4500 autentycznych zdań z 90 zawodów, od A1 do C2."
+    };
 
     async function load() {
       try {
@@ -128,6 +140,7 @@
           // O i18n busca o mapa no R2 primeiro e usa o arquivo do deploy apenas
           // como fallback. Traduz antes de renderizar sem tocar no alemão/áudio.
           const localeMap = await I18n.loadContentTranslations();
+          localeMap[professionIntro.pt] = professionIntro[lang] || professionIntro.pt;
           if (Object.keys(localeMap).length) {
             const translate = value => {
               if (typeof value !== "string") return value;
@@ -146,6 +159,7 @@
             I18n._contentTranslations = localeMap;
             I18n._translationPromise = Promise.resolve(localeMap);
             I18n.applyPageTranslations();
+            document.getElementById("prof-intro").textContent = professionIntro[lang] || professionIntro.pt;
           }
         }
         if (allData.length) guestFreeProfId = allData[0].id;

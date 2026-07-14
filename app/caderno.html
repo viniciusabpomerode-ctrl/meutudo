@@ -50,6 +50,7 @@
 <button class="filter-chip" data-f="expression">🗣️ Gírias</button>
 <button class="filter-chip" data-f="profession">💼 Profissões</button>
 <button class="filter-chip" data-f="lyric">🎤 Letras</button>
+<button class="filter-chip" data-f="pronunciation_recording">🎙️ Gravações</button>
 </div>
 <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
 <select class="time-select" id="time-filters">
@@ -75,8 +76,8 @@
 <script>
 renderNav("caderno");
 const R2="https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
-const ICONS={dialog:"💬",phrase:"💬",word:"🔤",grammar:"📖",music:"🎵",lyric:"🎤",expression:"🗣️",profession:"💼",profession_phrase:"💼",verb:"🔤",verb_example:"🔤",vocabulario:"🔤"};
-const FILTER_TYPES={verb:["verb","verb_example"],phrase:["phrase","profession_phrase"],word:["word","vocabulario"],grammar:["grammar"],dialog:["dialog"],music:["music"],expression:["expression"],profession:["profession","profession_phrase"],lyric:["lyric"]};
+const ICONS={dialog:"💬",phrase:"💬",word:"🔤",grammar:"📖",music:"🎵",lyric:"🎤",expression:"🗣️",profession:"💼",profession_phrase:"💼",verb:"🔤",verb_example:"🔤",vocabulario:"🔤",pronunciation_recording:"🎙️",creativity_recording:"🎙️"};
+const FILTER_TYPES={verb:["verb","verb_example"],phrase:["phrase","profession_phrase"],word:["word","vocabulario"],grammar:["grammar"],dialog:["dialog"],music:["music"],expression:["expression"],profession:["profession","profession_phrase"],lyric:["lyric"],pronunciation_recording:["pronunciation_recording","creativity_recording"]};
 let all=[],filter="all",timeFilter="all",query="",cache={},viewItems=[],sourcePromises={};
 function sourceData(key,loader){
   if(!sourcePromises[key])sourcePromises[key]=Promise.resolve().then(loader).catch(error=>{delete sourcePromises[key];throw error});
@@ -100,6 +101,10 @@ function playAudio(audioPath, btn){
   if(!audioPath)return;
   if(ad.src&&ad.src.includes(audioPath)&&!ad.paused){ad.pause();btn.textContent="▶";return}
   btn.textContent="⏳";
+  if(audioPath.startsWith("data:")||audioPath.startsWith("blob:")){
+    ad.src=audioPath;ad.play().catch(()=>{});btn.textContent="⏸";
+    ad.onended=()=>btn.textContent="▶";ad.onpause=()=>btn.textContent="▶";return;
+  }
   // Tenta Supabase + R2 em paralelo (quem cair primeiro toca)
   const r2url=audioPath.startsWith("http")?audioPath:(R2+audioPath);
   AFBData.signedAudioUrl(audioPath).then(url=>{
@@ -119,6 +124,39 @@ async function resolve(item){
   const same=(a,b)=>String(a)===String(b);
   const result=(title,sub,audio,link)=>({title:title||"",sub:sub||"",audio:audio||"",link:link||item.refUrl||"#"});
   try{
+    if(item.type==="pronunciation_recording"){
+      const recording=await sourceData(`pronunciation:${item.id}`,()=>new Promise((resolveRecording,rejectRecording)=>{
+        const request=indexedDB.open("afb_pron",1);
+        request.onerror=()=>rejectRecording(request.error);
+        request.onupgradeneeded=()=>{if(!request.result.objectStoreNames.contains("recs"))request.result.createObjectStore("recs",{keyPath:"id"})};
+        request.onsuccess=()=>{
+          const db=request.result,tx=db.transaction("recs","readonly"),get=tx.objectStore("recs").get(item.id);
+          get.onerror=()=>rejectRecording(get.error);
+          get.onsuccess=()=>resolveRecording(get.result||null);
+        };
+      }));
+      if(recording){
+        const mime=recording.mime||"audio/webm";
+        cache[ck]=result(recording.text,recording.translation||[recording.level,recording.source].filter(Boolean).join(" · "),recording.base64?`data:${mime};base64,${recording.base64}`:"","pronuncia.html");return cache[ck];
+      }
+      cache[ck]=result("Gravação de pronúncia","Disponível no aparelho em que foi gravada","","pronuncia.html");return cache[ck];
+    }
+
+    if(item.type==="creativity_recording"){
+      const recording=await sourceData(`creativity:${item.id}`,()=>new Promise((resolveRecording,rejectRecording)=>{
+        const request=indexedDB.open("afb_creativity_recs",1);
+        request.onerror=()=>rejectRecording(request.error);
+        request.onupgradeneeded=()=>{if(!request.result.objectStoreNames.contains("recs"))request.result.createObjectStore("recs",{keyPath:"id"})};
+        request.onsuccess=()=>{
+          const db=request.result,tx=db.transaction("recs","readonly"),get=tx.objectStore("recs").get(item.id);
+          get.onerror=()=>rejectRecording(get.error);
+          get.onsuccess=()=>resolveRecording(get.result||null);
+        };
+      }));
+      if(recording){cache[ck]=result(recording.prompt,recording.translation||recording.level,recording.base64||"","criatividade.html");return cache[ck]}
+      cache[ck]=result("Gravação do teste criativo","Disponível no aparelho em que foi gravada","","criatividade.html");return cache[ck];
+    }
+
     // Dialogos, frases, palavras e dicas: referencia ao nivel + IDs.
     if(["phrase","word","grammar","dialog"].includes(item.type)&&item.nivel){
       const data=await sourceData(`nivel:${item.nivel}`,()=>AFBData.nivel(item.nivel));
@@ -224,7 +262,7 @@ async function render(){
   viewItems=resolved;resolved.forEach((i,n)=>i._viewIndex=n);
   const groups=group(resolved);let h="";
   for(const[lbl,gi]of Object.entries(groups)){h+=`<div class="day-group"><div class="day-header">${lbl}</div>`;
-    for(const i of gi){h+=`<div class="saved-card"><div class="top" onclick="window.location='${i.link||"#"}'"><span class="icon">${ICONS[i.type]||"📌"}</span><div class="body"><div class="title">${i.title||"Sem título"}${i.reviewed_at?'<span class="review-tag">✅</span>':''}</div>${i.sub?`<div class="sub">${i.sub}</div>`:""}</div>${i.audio?`<button class="btn-sm" style="flex-shrink:0" onclick="event.stopPropagation();playAudio('${i.audio}',this)">▶</button>`:""}</div>${i.notes?`<div class="notes">📝 ${i.notes}</div>`:""}<div class="actions"><button class="btn-sm" onclick="editNotes('${i.type}',${i.id},'${(i.notes||"").replace(/'/g,"\\'")}')">✏️ ${i.notes?'Editar':'Anotar'}</button><button class="btn-sm" onclick="review('${i.type}',${i.id})">✅</button><button class="btn-sm report-btn" title="${notebookText('reportTitle')}" onclick="reportItem(${i._viewIndex})">❗ ${notebookText('report')}</button><button class="btn-sm" style="color:#f44;border-color:transparent" onclick="del('${i.type}',${i.id})">🗑️</button></div></div>`}h+="</div>"}
+    for(const i of gi){const typeArg=JSON.stringify(i.type),idArg=JSON.stringify(String(i.id));h+=`<div class="saved-card"><div class="top" onclick="window.location='${i.link||"#"}'"><span class="icon">${ICONS[i.type]||"📌"}</span><div class="body"><div class="title">${i.title||"Sem título"}${i.reviewed_at?'<span class="review-tag">✅</span>':''}</div>${i.sub?`<div class="sub">${i.sub}</div>`:""}</div>${i.audio?`<button class="btn-sm" style="flex-shrink:0" onclick="event.stopPropagation();playAudio('${i.audio}',this)">▶</button>`:""}</div>${i.notes?`<div class="notes">📝 ${i.notes}</div>`:""}<div class="actions"><button class="btn-sm" onclick="editNotes(${typeArg},${idArg},'${(i.notes||"").replace(/'/g,"\\'")}')">✏️ ${i.notes?'Editar':'Anotar'}</button><button class="btn-sm" onclick="review(${typeArg},${idArg})">✅</button><button class="btn-sm report-btn" title="${notebookText('reportTitle')}" onclick="reportItem(${i._viewIndex})">❗ ${notebookText('report')}</button><button class="btn-sm" style="color:#f44;border-color:transparent" onclick="del(${typeArg},${idArg})">🗑️</button></div></div>`}h+="</div>"}
   el.innerHTML=h;
 }
 async function load(){all=await SavedItems.getAll();render()}
