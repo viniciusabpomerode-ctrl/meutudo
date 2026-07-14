@@ -64,7 +64,7 @@
     <div id="combo-layer"></div>
   </div>
 
-<script src="../assets/js/i18n.js?v=20260714-ui5"></script>
+<script src="../assets/js/i18n.js?v=20260714-ui6"></script>
 <script src="../assets/js/theme.js"></script>
   <script src="../assets/js/sfx.js"></script>
   <script src="../assets/js/auth.js"></script>
@@ -214,8 +214,7 @@
         <div class="quiz-options">
           ${opts.map((o, i) => {
             const letter = o.charAt(0);
-            const audioKey = `opt${letter}_audio_url`;
-            const audioUrl = q[audioKey] || "";
+            const audioUrl = localizedOptionAudio(q, letter);
             return `<div class="quiz-opt" onclick="answer(this, '${letter}', '${answer}')">${o}${audioUrl ? ` <button class="q-audio-btn" style="padding:2px 8px;font-size:.7rem;margin-left:8px" onclick="event.stopPropagation();playQuizAudio('${audioUrl}')">▶</button>` : ""}</div>`;
           }).join("")}
         </div>
@@ -247,8 +246,15 @@
     }
 
     function playQuizAudio(url) {
-      audioPlayer.src = R2 + url;
+      audioPlayer.src = url.startsWith("http") ? url : R2 + url;
       audioPlayer.play().catch(()=>{});
+    }
+
+    function localizedOptionAudio(question, letter) {
+      const lang = (typeof I18n !== "undefined" && I18n.getCurrent) ? I18n.getCurrent() : "pt";
+      return (lang !== "pt" && question.option_audio_i18n?.[lang]?.[letter])
+        || question[`opt${letter}_audio_url`]
+        || "";
     }
 
     function answer(el, chosen, correct) {

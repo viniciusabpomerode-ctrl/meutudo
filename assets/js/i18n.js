@@ -206,7 +206,7 @@ const I18n = {
     // sao texto visivel e precisam continuar identicos em qualquer idioma.
     // Ex.: verbo.html agrupa exemplos por tense="passado|presente|futuro";
     // traduzir esses valores fazia todas as sentencas (e seus audios) sumirem.
-    const structuralField = /^(?:id|.*_id|tense|pronoun|verb_type|code|slug|status|audio_url|audio_path|image_url|image_path|url|href)$/i;
+    const structuralField = /^(?:id|.*_id|tense|pronoun|verb_type|code|slug|status|audio_url|audio_path|option_audio_i18n|image_url|image_path|url|href)$/i;
     const visit = (item, key = "") => {
       if (typeof item === "string") return map["" + item.replace(/\s+/g, " ").trim()] || item;
       if (Array.isArray(item)) return item.map(child => visit(child, key));

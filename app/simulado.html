@@ -87,7 +87,7 @@
     <div id="simulado-area"></div>
   </div>
 
-<script src="../assets/js/i18n.js?v=20260714-ui5"></script>
+<script src="../assets/js/i18n.js?v=20260714-ui6"></script>
 <script src="../assets/js/theme.js"></script>
   <script src="../assets/js/sfx.js"></script>
   <script src="../assets/js/auth.js"></script>
@@ -120,6 +120,13 @@
       if (audioEl.src && audioEl.src.includes(path) && !audioEl.paused) { audioEl.pause(); return; }
       audioEl.src = path.startsWith("http") ? path : R2 + path;
       audioEl.play().catch(() => {});
+    }
+
+    function localizedOptionAudio(question, letter) {
+      const lang = (typeof I18n !== "undefined" && I18n.getCurrent) ? I18n.getCurrent() : "pt";
+      return (lang !== "pt" && question.option_audio_i18n?.[lang]?.[letter])
+        || question[`opt${letter}_audio_url`]
+        || "";
     }
 
     async function startSimulado(nivel) {
@@ -224,8 +231,7 @@
               if (l === q.resposta) cls = "correct";
               else if (l === r) cls = "incorrect";
             } else if (l === r) cls = "selected";
-            const audioKey = `opt${l}_audio_url`;
-            const au = q[audioKey] || "";
+            const au = localizedOptionAudio(q, l);
             html += `<div class="q-option ${cls}" onclick="${revealed?'':`responder(${q.id},'${l}')`}">${opt}${au ? ` <button class="q-audio-btn" style="padding:2px 8px;font-size:.7rem;margin-left:8px" onclick="event.stopPropagation();playAudioUrl('${au}')">▶</button>` : ""}</div>`;
           });
           html += `</div>`;
