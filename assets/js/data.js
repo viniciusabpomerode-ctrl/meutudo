@@ -127,8 +127,10 @@ function afbGetSpeed() {
 }
 function afbSetSpeed(speed) {
   localStorage.setItem(AFB_SPEED_KEY, String(speed));
-  const player = document.getElementById("afb-audio-player");
-  if (player) player.playbackRate = speed;
+  document.querySelectorAll("#afb-audio-player,[data-afb-speed-player]").forEach((player) => {
+    player.defaultPlaybackRate = speed;
+    player.playbackRate = speed;
+  });
   document.querySelectorAll("[data-afb-speed]").forEach((b) => {
     b.classList.toggle("active", parseFloat(b.dataset.afbSpeed) === speed);
   });
@@ -164,17 +166,25 @@ async function afbPlayAudio(path, btn) {
   if (!player) {
     player = document.createElement("audio");
     player.id = "afb-audio-player";
+    player.dataset.afbSpeedPlayer = "true";
     player.style.display = "none";
     document.body.appendChild(player);
   }
-  player.playbackRate = afbGetSpeed();
+  const applyCurrentSpeed = () => {
+    const speed = afbGetSpeed();
+    player.defaultPlaybackRate = speed;
+    player.playbackRate = speed;
+  };
+  applyCurrentSpeed();
+  player.onloadedmetadata = applyCurrentSpeed;
+  player.oncanplay = applyCurrentSpeed;
   async function trySupabase() {
     if (switchedToSupabase) return;
     switchedToSupabase = true;
     const supabaseUrl = await supabasePromise;
     if (supabaseUrl) {
       player.src = supabaseUrl;
-      player.playbackRate = afbGetSpeed();
+      applyCurrentSpeed();
       try { await player.play(); return; } catch {}
     }
     if (btn) {
@@ -184,6 +194,7 @@ async function afbPlayAudio(path, btn) {
   }
   player.onerror = trySupabase;
   player.src = r2Url;
+  applyCurrentSpeed();
   if (btn) btn.textContent = originalLabel;
   player.play().catch(trySupabase);
 }

@@ -1,4 +1,4 @@
-name = "deutschbloom-creativity"
+name = "creativity-ai"
 main = "workers/creativity-ai.js"
 compatibility_date = "2026-07-01"
 

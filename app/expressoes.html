@@ -149,6 +149,7 @@
   <div id="app-nav"></div>
 
   <div class="container" style="padding-top:28px; max-width:900px;">
+    <div class="afb-speed-row"><span class="afb-speed-label">Velocidade do áudio:</span><span id="speed-control"></span></div>
     <div id="main-view">
       <h2 class="mt-0">🗣️ Expressões & Gírias</h2>
       <p class="muted">+1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas.</p>
@@ -184,8 +185,8 @@
   <script src="../assets/js/sfx.js"></script>
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/nav.js"></script>
-  <script src="../assets/js/data.js"></script>
-  <script src="../assets/js/i18n.js?v=20260714-ui4"></script>
+  <script src="../assets/js/data.js?v=20260714-audio1"></script>
+  <script src="../assets/js/i18n.js?v=20260714-ui5"></script>
   <script src="../assets/js/saved_r2.js"></script>
   <script src="../assets/js/guest.js"></script>
   <script>
@@ -197,12 +198,13 @@
     const guestFreeIds = new Set();
 
     const audioEl = document.getElementById("expr-audio");
+    audioEl.dataset.afbSpeedPlayer = "true";
     let allData = [];
     let activeCat = null;
     let activeLevel = "todos";
     let searchMain = "";
     let searchCat = "";
-    let currentSpeed = afbGetSpeed();
+    let currentSpeed = 0.75;
     let sortMode = "level";
     let audioBaseUrl = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
     
@@ -339,17 +341,18 @@
                 ${(e.tags||[]).slice(0,3).map(t=>`<span class="tag">${t}</span>`).join("")}
               </div>
             </div>
-            ${e.audio_url?`<button class="btn-audio" onclick="event.stopPropagation(); playAudio('${e.audio_url}')">▶</button>`:""}
+            ${e.audio_url?`<button class="btn-audio" onclick="event.stopPropagation(); playAudio('${e.audio_url}', this)">▶</button>`:""}
             <span class="expr-save-btn" data-idx="${i}"></span>
           </div>
           <div class="examples">
-            ${e.example_de_1?`<div class="example-de" style="display:flex;align-items:center;gap:8px;"><span style="flex:1">💬 ${e.example_de_1}</span>${e.audio_ex1_url?`<button class="btn-audio btn-audio-sm" onclick="event.stopPropagation(); playAudio('${e.audio_ex1_url}')">▶</button>`:""}</div>`:""}
+            ${e.example_de_1?`<div class="example-de" style="display:flex;align-items:center;gap:8px;"><span style="flex:1">💬 ${e.example_de_1}</span>${e.audio_ex1_url?`<button class="btn-audio btn-audio-sm" onclick="event.stopPropagation(); playAudio('${e.audio_ex1_url}', this)">▶</button>`:""}</div>`:""}
             ${e.example_pt_1?`<div class="example-pt">   ${e.example_pt_1}</div>`:""}
-            ${e.example_de_2?`<div class="example-de" style="display:flex;align-items:center;gap:8px;margin-top:8px;"><span style="flex:1">💬 ${e.example_de_2}</span>${e.audio_ex2_url?`<button class="btn-audio btn-audio-sm" onclick="event.stopPropagation(); playAudio('${e.audio_ex2_url}')">▶</button>`:""}</div>`:""}
+            ${e.example_de_2?`<div class="example-de" style="display:flex;align-items:center;gap:8px;margin-top:8px;"><span style="flex:1">💬 ${e.example_de_2}</span>${e.audio_ex2_url?`<button class="btn-audio btn-audio-sm" onclick="event.stopPropagation(); playAudio('${e.audio_ex2_url}', this)">▶</button>`:""}</div>`:""}
             ${e.example_pt_2?`<div class="example-pt">   ${e.example_pt_2}</div>`:""}
             <div style="margin-top:8px;">
-              <button class="btn-speed ${currentSpeed===0.75?'active':''}" onclick="event.stopPropagation(); setSpeed(0.75)">0.75x</button>
-              <button class="btn-speed ${currentSpeed===1.0?'active':''}" onclick="event.stopPropagation(); setSpeed(1.0)">1x</button>
+              <button class="btn-speed ${currentSpeed===0.5?'active':''}" data-expression-speed="0.5" onclick="event.stopPropagation(); setSpeed(0.5)">0.5x</button>
+              <button class="btn-speed ${currentSpeed===0.75?'active':''}" data-expression-speed="0.75" onclick="event.stopPropagation(); setSpeed(0.75)">0.75x</button>
+              <button class="btn-speed ${currentSpeed===1.0?'active':''}" data-expression-speed="1.0" onclick="event.stopPropagation(); setSpeed(1.0)">1x</button>
             </div>
           </div>
         </div>`;
@@ -367,18 +370,42 @@
       return c[lv]||"#888";
     }
 
-    async function playAudio(filename) {
+    async function playAudio(filename, button) {
       if(!filename) return;
       const url = audioBaseUrl + filename;
       if(audioEl.src===url && !audioEl.paused){audioEl.pause();return;}
-      audioEl.src=url; audioEl.playbackRate=currentSpeed; audioEl.play().catch(()=>{});
+      audioEl.src=url;
+      updateExpressionSpeeds(currentSpeed);
+      audioEl.onloadedmetadata=()=>updateExpressionSpeeds(currentSpeed);
+      audioEl.oncanplay=()=>updateExpressionSpeeds(currentSpeed);
+      audioEl.onplay=()=>{updateExpressionSpeeds(currentSpeed);if(button)button.textContent="⏸";};
+      audioEl.onpause=()=>{if(button)button.textContent="▶";};
+      audioEl.onended=()=>{if(button)button.textContent="▶";};
+      audioEl.play().catch(()=>{if(button)button.textContent="⚠️";});
     }
 
-    function setSpeed(s) {
-      currentSpeed=s; audioEl.playbackRate=s;
-      afbSetSpeed(s);
-      document.querySelectorAll(".btn-speed").forEach(b=>b.classList.toggle("active",parseFloat(b.textContent)===s));
+    function updateExpressionSpeeds(speed) {
+      currentSpeed=speed;
+      audioEl.defaultPlaybackRate=speed;
+      audioEl.playbackRate=speed;
+      document.querySelectorAll("[data-expression-speed]").forEach((button)=>{
+        button.classList.toggle("active",parseFloat(button.dataset.expressionSpeed)===speed);
+      });
     }
+
+    function setSpeed(speed) {
+      updateExpressionSpeeds(speed);
+      afbSetSpeed(speed);
+    }
+
+    function renderExpressionSpeedControl() {
+      const container=document.getElementById("speed-control");
+      if(!container)return;
+      container.innerHTML=[0.5,0.75,1.0].map((speed)=>`<button type="button" class="btn-speed${speed===currentSpeed?' active':''}" data-expression-speed="${speed}" onclick="setSpeed(${speed})">${speed}x</button>`).join("");
+      updateExpressionSpeeds(currentSpeed);
+    }
+
+    renderExpressionSpeedControl();
 
     // Init save buttons after render
     function initSaveButtons(lista) {

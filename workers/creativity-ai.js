@@ -1,4 +1,5 @@
 const SUPABASE_URL = "https://zqrdpmrwnprtelgloawb.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_CVFm1nLMf9GCPr-RKKU6Rw_AFixWd5z";
 const MODEL = "@cf/meta/llama-3.2-3b-instruct";
 const DAILY_LIMIT = 3;
 const COOLDOWN_SECONDS = 30;
@@ -7,7 +8,7 @@ function json(data, status = 200, origin = "*") {
   return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": origin, "Vary": "Origin" } });
 }
 function allowedOrigin(request, env) { const origin=request.headers.get("Origin")||"";const list=(env.ALLOWED_ORIGINS||"").split(",").map(x=>x.trim()).filter(Boolean);return !list.length||list.includes(origin)?origin||"*":""; }
-async function authenticatedUser(request, env) { const authorization=request.headers.get("Authorization")||"";if(!authorization.startsWith("Bearer "))return null;const r=await fetch(`${SUPABASE_URL}/auth/v1/user`,{headers:{Authorization:authorization,apikey:env.SUPABASE_ANON_KEY}});if(!r.ok)return null;const user=await r.json();return user&&user.id?user:null; }
+async function authenticatedUser(request, env) { const authorization=request.headers.get("Authorization")||"";if(!authorization.startsWith("Bearer "))return null;const r=await fetch(`${SUPABASE_URL}/auth/v1/user`,{headers:{Authorization:authorization,apikey:SUPABASE_ANON_KEY}});if(!r.ok)return null;const user=await r.json();return user&&user.id?user:null; }
 async function takeAttempt(env,userId,scope="analysis"){if(!env.LIMITS)throw new Error("LIMITS_KV_NOT_CONFIGURED");const day=new Date().toISOString().slice(0,10),key=`creativity:${scope}:${day}:${userId}`,now=Math.floor(Date.now()/1000),saved=await env.LIMITS.get(key,"json")||{count:0,last:0};if(saved.count>=DAILY_LIMIT)return{ok:false,reason:"daily",remaining:0};if(now-saved.last<COOLDOWN_SECONDS)return{ok:false,reason:"cooldown",retryAfter:COOLDOWN_SECONDS-(now-saved.last),remaining:DAILY_LIMIT-saved.count};const next={count:saved.count+1,last:now};await env.LIMITS.put(key,JSON.stringify(next),{expirationTtl:172800});return{ok:true,remaining:DAILY_LIMIT-next.count};}
 function clean(value,max){return typeof value==="string"?value.trim().slice(0,max):""}
 function extractJson(output){const text=typeof output==="string"?output:(output&&output.response)||"",match=text.match(/\{[\s\S]*\}/);if(!match)throw new Error("INVALID_AI_RESPONSE");const d=JSON.parse(match[0]);return{score:Math.max(0,Math.min(100,Number(d.score)||0)),summary:clean(d.summary,240),corrected:clean(d.corrected,1800),grammar:Array.isArray(d.grammar)?d.grammar.slice(0,4).map(x=>clean(x,240)):[],vocabulary:Array.isArray(d.vocabulary)?d.vocabulary.slice(0,5).map(x=>clean(x,100)):[],structure:clean(d.structure,360),modelAnswer:clean(d.modelAnswer,1800),mode:"ai"};}

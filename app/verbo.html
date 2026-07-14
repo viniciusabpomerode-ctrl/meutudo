@@ -23,8 +23,8 @@
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/xp.js"></script>
   <script src="../assets/js/nav.js"></script>
-  <script src="../assets/js/i18n.js?v=20260714-ui4"></script>
-  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/i18n.js?v=20260714-ui5"></script>
+  <script src="../assets/js/data.js?v=20260714-audio1"></script>
   <script src="../assets/js/saved_r2.js"></script>
   <script>
     // Visitante pode ver (bloqueio acontece nas listagens)
@@ -37,6 +37,76 @@
     const TENSE_LABEL = { passado: "Passado", presente: "Presente", futuro: "Futuro" };
     const PRONOUN_LABEL = { ich: "ich", du: "du", er_sie_es: "er/sie/es", wir: "wir", ihr: "ihr", sie: "sie" };
     const PRONOUN_ORDER = ["ich", "du", "er_sie_es", "wir", "ihr", "sie"];
+
+    // Mesmo modelo dos diálogos: um único contexto controla o áudio do verbo
+    // e todas as frases, reaplicando a velocidade depois de cada troca de URL.
+    const verbAudioCtx = { player: new Audio(), speed: 0.75, path: "", button: null };
+    verbAudioCtx.player.dataset.afbSpeedPlayer = "true";
+
+    function updateVerbSpeeds(speed) {
+      verbAudioCtx.speed = speed;
+      verbAudioCtx.player.defaultPlaybackRate = speed;
+      verbAudioCtx.player.playbackRate = speed;
+      document.querySelectorAll("[data-verb-speed]").forEach((button) => {
+        button.classList.toggle("active", parseFloat(button.dataset.verbSpeed) === speed);
+      });
+    }
+
+    function renderVerbSpeedControl(level) {
+      const container = document.getElementById("speed-control");
+      if (!container) return;
+      const initial = (level === "A1" || level === "A2") ? 0.75 : 1.0;
+      container.innerHTML = [0.5, 0.75, 1.0].map((speed) =>
+        `<button type="button" class="btn-speed${speed === initial ? " active" : ""}" data-verb-speed="${speed}" onclick="updateVerbSpeeds(${speed})">${speed}x</button>`
+      ).join("");
+      updateVerbSpeeds(initial);
+    }
+
+    async function resolveVerbAudioUrl(path) {
+      if (!path) return null;
+      if (/^https?:\/\//i.test(path)) return path;
+      // O verbo avulso usa o nome correto no R2; a tabela antiga do Supabase
+      // pode apontar para outro arquivo. Preserve R2 como fonte principal.
+      return `${AFB_R2_PUBLIC_URL}/${String(path).replace(/^\/+/, "")}`;
+    }
+
+    async function playVerbAudio(path, button) {
+      if (!path) return;
+      const player = verbAudioCtx.player;
+      if (verbAudioCtx.path === path && !player.paused) {
+        player.pause();
+        player.currentTime = 0;
+        return;
+      }
+      if (verbAudioCtx.button && verbAudioCtx.button !== button) verbAudioCtx.button.textContent = "▶";
+      button.textContent = "⏳";
+      const url = await resolveVerbAudioUrl(path);
+      if (!url) { button.textContent = "⚠️"; return; }
+      verbAudioCtx.path = path;
+      verbAudioCtx.button = button;
+      let triedSupabase = false;
+      player.src = url;
+      updateVerbSpeeds(verbAudioCtx.speed);
+      player.onloadedmetadata = () => updateVerbSpeeds(verbAudioCtx.speed);
+      player.oncanplay = () => { updateVerbSpeeds(verbAudioCtx.speed); button.textContent = "⏸"; };
+      player.onplay = () => { updateVerbSpeeds(verbAudioCtx.speed); button.textContent = "⏸"; };
+      player.onpause = () => { button.textContent = "▶"; };
+      player.onended = () => { button.textContent = "▶"; verbAudioCtx.button = null; };
+      player.onerror = async () => {
+        if (!triedSupabase && !/^https?:\/\//i.test(path)) {
+          triedSupabase = true;
+          const signed = await AFBData.signedAudioUrl(path).catch(() => null);
+          if (signed) {
+            player.src = signed;
+            updateVerbSpeeds(verbAudioCtx.speed);
+            try { await player.play(); return; } catch {}
+          }
+        }
+        button.textContent = "⚠️";
+        verbAudioCtx.button = null;
+      };
+      try { await player.play(); } catch { button.textContent = "⚠️"; }
+    }
 
     // Atualiza ao vivo somente os audios das frases. O audio do verbo avulso
     // permanece no JSON/R2: o valor antigo de cursos_verbs.audio_url no
@@ -92,7 +162,7 @@
                 <td>${PRONOUN_LABEL[r.pronoun]}</td>
                 <td><b>${r.conjugated_verb}</b></td>
                 <td>${r.example_sentence_german}<br><span class="muted" style="font-size:.82rem;">${I18n.field(r, 'example_sentence_portuguese')}</span></td>
-                <td>${r.audio_url ? `<button class="btn btn-ghost btn-sm" onclick="afbPlayAudio('${r.audio_url}', this)">▶</button>` : ""}</td>
+                <td>${r.audio_url ? `<button class="btn btn-ghost btn-sm" onclick="playVerbAudio('${r.audio_url}', this)">▶</button>` : ""}</td>
                 <td id="save-ex-${r.id}"></td>
               </tr>`).join("")}
           </table>`;
@@ -102,7 +172,7 @@
         <div class="flex-between" style="align-items:center;">
           <div style="display:flex;align-items:center;gap:10px;">
             <h2 style="margin:0;">${verb.base_verb}</h2>
-            ${verb.audio_url ? `<button class="btn btn-ghost btn-sm" onclick="afbPlayAudio('${verb.audio_url}', this)" title="Ouvir pronúncia">▶</button>` : ""}
+            ${verb.audio_url ? `<button class="btn btn-ghost btn-sm" onclick="playVerbAudio('${verb.audio_url}', this)" title="Ouvir pronúncia">▶</button>` : ""}
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
             <span id="verb-save-btn"></span>
@@ -122,7 +192,7 @@
           </button>` : ""}
       `;
 
-      afbRenderSpeedControl("speed-control");
+      renderVerbSpeedControl(nivelFound);
 
       // Botão de salvar o verbo
       const verbSaveContainer = document.getElementById("verb-save-btn");

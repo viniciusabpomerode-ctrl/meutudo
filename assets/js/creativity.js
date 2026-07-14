@@ -90,7 +90,7 @@
     if(cooldown)return;cooldown=true;const btn=$("analyze");btn.disabled=true;btn.textContent="Analisando...";
     try{
       let feedback=null,token=await Auth.accessToken();
-      if(window.AFB_CREATIVITY_API){const r=await fetch(window.AFB_CREATIVITY_API+"/analyze",{method:"POST",headers:{"Content-Type":"application/json",...(token?{Authorization:`Bearer ${token}`}:{})},body:JSON.stringify({questionId:current.id,level:current.level,prompt:current.prompt,answer,modelAnswer:current.modelAnswer,vocabulary:current.vocabulary})});if(r.ok)feedback=await r.json();else if(r.status===429)throw new Error("Limite diário alcançado")}
+      if(window.AFB_CREATIVITY_API){const r=await fetch(window.AFB_CREATIVITY_API+"/analyze",{method:"POST",headers:{"Content-Type":"application/json",...(token?{Authorization:`Bearer ${token}`}:{})},body:JSON.stringify({questionId:current.id,level:current.level,prompt:current.prompt,answer,modelAnswer:current.modelAnswer,vocabulary:current.vocabulary})});const d=await r.json().catch(()=>({}));if(r.ok)feedback=d;else if(r.status===429)throw new Error("Limite diário alcançado");else if(r.status===401)throw new Error("Entre na sua conta para receber a correção por IA.");else throw new Error(d.error||"O serviço de correção por IA está indisponível agora.")}
       if(!feedback)feedback=localFeedback(answer,words);
       localStorage.setItem(usageKey(),JSON.stringify({count:u.count+1,last:Date.now()}));renderResult(feedback);updateAttempts();if(window.SFX)SFX.correct();
     }catch(e){showMessage(e.message||"Não foi possível analisar agora. Tente novamente.")}finally{cooldown=false;btn.disabled=false;btn.textContent="Analisar resposta"}

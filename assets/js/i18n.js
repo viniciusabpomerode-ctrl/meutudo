@@ -30,55 +30,55 @@ const UI_REPAIRS = {
     "Passado":"Past","Presente":"Present","Futuro":"Future","Velocidade do áudio:":"Audio speed:",
     "📖 Verbos":"📖 Verbs","📚 Vocabulário":"📚 Vocabulary","63.000 itens de estudo":"63,000 study items","2 horas":"2 hours",
     "Chave Pix":"Pix key","Marcar como pago":"Mark as paid","Mensal":"Monthly","Anual":"Yearly",
-    "regular":"regular verb","irregular":"irregular verb","modal":"modal verb","reflexive":"reflexive verb"
+    "regular":"regular verb","irregular":"irregular verb","modal":"modal verb","reflexive":"reflexive verb","🎧 Ouvir":"🎧 Listen"
   },
   es: {
     "Passado":"Pasado","Presente":"Presente","Futuro":"Futuro","Velocidade do áudio:":"Velocidad del audio:",
     "📖 Verbos":"📖 Verbos","📚 Vocabulário":"📚 Vocabulario","63.000 itens de estudo":"63.000 contenidos de estudio","2 horas":"2 horas",
     "Chave Pix":"Clave Pix","Marcar como pago":"Marcar como pagado","Mensal":"Mensual","Anual":"Anual",
-    "regular":"verbo regular","irregular":"verbo irregular","modal":"verbo modal","reflexive":"verbo reflexivo"
+    "regular":"verbo regular","irregular":"verbo irregular","modal":"verbo modal","reflexive":"verbo reflexivo","🎧 Ouvir":"🎧 Escuchar"
   },
   fr: {
     "Passado":"Passé","Presente":"Présent","Futuro":"Futur","Velocidade do áudio:":"Vitesse audio :",
     "📖 Verbos":"📖 Verbes","📚 Vocabulário":"📚 Vocabulaire","63.000 itens de estudo":"63 000 contenus d'étude","2 horas":"2 heures",
     "Chave Pix":"Clé Pix","Marcar como pago":"Marquer comme payé","Mensal":"Mensuel","Anual":"Annuel",
-    "regular":"verbe régulier","irregular":"verbe irrégulier","modal":"verbe modal","reflexive":"verbe pronominal"
+    "regular":"verbe régulier","irregular":"verbe irrégulier","modal":"verbe modal","reflexive":"verbe pronominal","🎧 Ouvir":"🎧 Écouter"
   },
   it: {
     "Passado":"Passato","Presente":"Presente","Futuro":"Futuro","Velocidade do áudio:":"Velocità audio:",
     "📖 Verbos":"📖 Verbi","📚 Vocabulário":"📚 Vocabolario","63.000 itens de estudo":"63.000 contenuti di studio","2 horas":"2 ore",
     "Chave Pix":"Chiave Pix","Marcar como pago":"Segna come pagato","Mensal":"Mensile","Anual":"Annuale",
-    "regular":"verbo regolare","irregular":"verbo irregolare","modal":"verbo modale","reflexive":"verbo riflessivo"
+    "regular":"verbo regolare","irregular":"verbo irregolare","modal":"verbo modale","reflexive":"verbo riflessivo","🎧 Ouvir":"🎧 Ascolta"
   },
   tr: {
     "Passado":"Geçmiş","Presente":"Şimdiki zaman","Futuro":"Gelecek","Velocidade do áudio:":"Ses hızı:",
     "📖 Verbos":"📖 Fiiller","📚 Vocabulário":"📚 Kelime bilgisi","63.000 itens de estudo":"63.000 çalışma içeriği","2 horas":"2 saat",
     "Chave Pix":"Pix anahtarı","Marcar como pago":"Ödendi olarak işaretle","Mensal":"Aylık","Anual":"Yıllık",
-    "regular":"düzenli fiil","irregular":"düzensiz fiil","modal":"kip fiili","reflexive":"dönüşlü fiil"
+    "regular":"düzenli fiil","irregular":"düzensiz fiil","modal":"kip fiili","reflexive":"dönüşlü fiil","🎧 Ouvir":"🎧 Dinle"
   },
   ar: {
     "Passado":"الماضي","Presente":"المضارع","Futuro":"المستقبل","Velocidade do áudio:":"سرعة الصوت:",
     "📖 Verbos":"📖 الأفعال","📚 Vocabulário":"📚 المفردات","63.000 itens de estudo":"63,000 مادة تعليمية","2 horas":"ساعتان",
     "Chave Pix":"مفتاح Pix","Marcar como pago":"وضع علامة كمدفوع","Mensal":"شهري","Anual":"سنوي",
-    "regular":"فعل منتظم","irregular":"فعل غير منتظم","modal":"فعل ناقص","reflexive":"فعل انعكاسي"
+    "regular":"فعل منتظم","irregular":"فعل غير منتظم","modal":"فعل ناقص","reflexive":"فعل انعكاسي","🎧 Ouvir":"🎧 استمع"
   },
   he: {
     "Passado":"עבר","Presente":"הווה","Futuro":"עתיד","Velocidade do áudio:":"מהירות השמע:",
     "📖 Verbos":"📖 פעלים","📚 Vocabulário":"📚 אוצר מילים","63.000 itens de estudo":"63,000 פריטי לימוד","2 horas":"שעתיים",
     "Chave Pix":"מפתח Pix","Marcar como pago":"סמן כשולם","Mensal":"חודשי","Anual":"שנתי",
-    "regular":"פועל רגיל","irregular":"פועל חריג","modal":"פועל מודאלי","reflexive":"פועל חוזר"
+    "regular":"פועל רגיל","irregular":"פועל חריג","modal":"פועל מודאלי","reflexive":"פועל חוזר","🎧 Ouvir":"🎧 האזן"
   },
   hi: {
     "Passado":"भूतकाल","Presente":"वर्तमान काल","Futuro":"भविष्य काल","Velocidade do áudio:":"ऑडियो की गति:",
     "📖 Verbos":"📖 क्रियाएँ","📚 Vocabulário":"📚 शब्दावली","63.000 itens de estudo":"63,000 अध्ययन सामग्री","2 horas":"2 घंटे",
     "Chave Pix":"Pix कुंजी","Marcar como pago":"भुगतान किया हुआ चिह्नित करें","Mensal":"मासिक","Anual":"वार्षिक",
-    "regular":"नियमित क्रिया","irregular":"अनियमित क्रिया","modal":"मोडल क्रिया","reflexive":"आत्मवाचक क्रिया"
+    "regular":"नियमित क्रिया","irregular":"अनियमित क्रिया","modal":"मोडल क्रिया","reflexive":"आत्मवाचक क्रिया","🎧 Ouvir":"🎧 सुनें"
   },
   pl: {
     "Passado":"Przeszłość","Presente":"Teraźniejszość","Futuro":"Przyszłość","Velocidade do áudio:":"Prędkość audio:",
     "📖 Verbos":"📖 Czasowniki","📚 Vocabulário":"📚 Słownictwo","63.000 itens de estudo":"63 000 materiałów do nauki","2 horas":"2 godziny",
     "Chave Pix":"Klucz Pix","Marcar como pago":"Oznacz jako opłacone","Mensal":"Miesięczny","Anual":"Roczny",
-    "regular":"czasownik regularny","irregular":"czasownik nieregularny","modal":"czasownik modalny","reflexive":"czasownik zwrotny"
+    "regular":"czasownik regularny","irregular":"czasownik nieregularny","modal":"czasownik modalny","reflexive":"czasownik zwrotny","🎧 Ouvir":"🎧 Słuchaj"
   }
 };
 
@@ -870,6 +870,13 @@ const I18n = {
         // encontra-lo como chave e aplicar a traducao integral.
         if (!this._contentTranslations) return reformatNumbers(text);
         translated = compact;
+        // Rótulos dinâmicos como "🏆 Recorde: 120 pts" incluem um valor
+        // depois da chave traduzida. Traduz o prefixo completo antes dos
+        // fragmentos menores, preservando números e pontuação.
+        Object.entries(activeUi)
+          .filter(([source]) => /:$/.test(source) && translated.includes(source))
+          .sort((a, b) => b[0].length - a[0].length)
+          .forEach(([source, target]) => { translated = translated.replace(source, target); });
         Object.entries(activeFragments)
           .sort((a, b) => b[0].length - a[0].length)
           .forEach(([source, target]) => { translated = translated.replace(source, target); });
@@ -886,11 +893,14 @@ const I18n = {
         node.nodeValue = translateText(node.nodeValue || "");
       }
       if (node.nodeType !== 1) return;
-      if (["SCRIPT", "STYLE", "CODE", "TEXTAREA"].includes(node.tagName)) return;
+      if (["SCRIPT", "STYLE", "CODE"].includes(node.tagName)) return;
       ["placeholder", "title", "aria-label"].forEach(attr => {
         const value = node.getAttribute?.(attr);
         if (value) node.setAttribute(attr, translateText(value));
       });
+      // Traduz atributos do textarea (principalmente placeholder), mas nunca
+      // toca no texto digitado pelo aluno.
+      if (node.tagName === "TEXTAREA") return;
       node.childNodes.forEach(apply);
     };
     apply(root);
