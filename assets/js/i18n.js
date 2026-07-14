@@ -181,19 +181,6 @@ const I18n = {
       ,"Oferta de fundador · vagas limitadas":"Founder offer · limited spots"
       ,"Garantir vaga — R$ 297":"Claim your spot — R$ 297"
       ,"Pagamento processado com segurança via Stripe · Garantia de 7 dias: não gostou, devolvemos.":"Secure payment via Stripe · 7-day guarantee: not satisfied? We'll refund you."
-      ,"Biblioteca completa liberada":"Full library unlocked"
-      ,"Ver progresso completo":"View full progress"
-      ,"Vocabulario":"Vocabulary","planos":"plans"
-      ,"📚 Vocabulário em Alemão":"📚 German Vocabulary"
-      ,"2.500 palavras do dia a dia, organizadas em 25 categorias — com plural e frase de exemplo em áudio.":"2,500 everyday words, organized into 25 categories — with plural and audio example sentences."
-      ,"🔍 Buscar em todas as categorias...":"🔍 Search all categories..."
-      ,"← Voltar para categorias":"← Back to categories"
-      ,"🔍 Buscar nesta categoria...":"🔍 Search this category..."
-      ,"Todos":"All","palavras":"words","palavra":"word"
-      ,"Nenhuma encontrada.":"None found."
-      ,"Plural:":"Plural:","Sem plural (substantivo abstrato)":"No plural (abstract noun)"
-      ,"▶ Palavra":"▶ Word","▶ Plural":"▶ Plural","▶ Frase":"▶ Sentence"
-      ,"Ouvir exemplo":"Listen to example"
     };
     const uiFallbacks = {
       en: {
@@ -658,8 +645,6 @@ const I18n = {
       }
     };
     const activeUi = uiFallbacks[this._current] || {};
-    // Fallback: se o idioma atual não tiver a tradução, usa o inglês (base ui)
-    const baseUi = ui;
     const fragments = {
       " frases":" sentences"," verbos":" verbs"," por dia":" per day"," dias por semana":" days per week"," nível ":" level ",
       " de 60 min":" of 60 min"," da sua meta pessoal — sem comparar com toda a biblioteca.":" of your personal goal — without comparing yourself to the whole library.",
@@ -764,7 +749,7 @@ const I18n = {
     const translateText = text => {
       const compact = text.replace(/\s+/g, " ").trim();
       if (!compact) return text;
-      let translated = map[compact] || activeUi[compact] || baseUi[compact];
+      let translated = map[compact] || activeUi[compact];
       if (!translated) {
         translated = compact;
         Object.entries(activeFragments)
