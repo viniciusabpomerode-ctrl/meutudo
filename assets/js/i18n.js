@@ -35,48 +35,71 @@ const DYNAMIC_UI_REPAIRS = {
   en: {
     "Aprenda Alemão do A1 ao C2 | DeutschBloom":"Learn German from A1 to C2 | DeutschBloom",
     "Bom dia, ":"Good morning, ", "Boa tarde, ":"Good afternoon, ", "Boa noite, ":"Good evening, ",
-    "30 dias":"30 days", "25 categorias temáticas":"25 thematic categories", "63.000+ conteúdos":"63,000+ learning items"
+    "30 dias":"30 days", "25 categorias temáticas":"25 thematic categories", "63.000+ conteúdos":"63,000+ learning items",
+    "+1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas.":"1,500+ colloquial expressions from real German — from street slang to idioms."
   },
   es: {
     "Aprenda Alemão do A1 ao C2 | DeutschBloom":"Aprende alemán de A1 a C2 | DeutschBloom",
     "Bom dia, ":"¡Buenos días, ", "Boa tarde, ":"¡Buenas tardes, ", "Boa noite, ":"¡Buenas noches, ",
-    "30 dias":"30 días", "25 categorias temáticas":"25 categorías temáticas", "63.000+ conteúdos":"Más de 63.000 contenidos"
+    "30 dias":"30 días", "25 categorias temáticas":"25 categorías temáticas", "63.000+ conteúdos":"Más de 63.000 contenidos",
+    "+1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas.":"Más de 1.500 expresiones coloquiales del alemán real — desde jerga callejera hasta expresiones idiomáticas."
   },
   fr: {
     "Aprenda Alemão do A1 ao C2 | DeutschBloom":"Apprenez l’allemand du niveau A1 au C2 | DeutschBloom",
     "Bom dia, ":"Bonjour, ", "Boa tarde, ":"Bonjour, ", "Boa noite, ":"Bonsoir, ",
-    "30 dias":"30 jours", "25 categorias temáticas":"25 catégories thématiques", "63.000+ conteúdos":"Plus de 63 000 contenus"
+    "30 dias":"30 jours", "25 categorias temáticas":"25 catégories thématiques", "63.000+ conteúdos":"Plus de 63 000 contenus",
+    "+1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas.":"Plus de 1 500 expressions familières de l’allemand authentique — de l’argot de rue aux expressions idiomatiques."
   },
   it: {
     "Aprenda Alemão do A1 ao C2 | DeutschBloom":"Impara il tedesco dal livello A1 al C2 | DeutschBloom",
     "Bom dia, ":"Buongiorno, ", "Boa tarde, ":"Buon pomeriggio, ", "Boa noite, ":"Buonasera, ",
-    "30 dias":"30 giorni", "25 categorias temáticas":"25 categorie tematiche", "63.000+ conteúdos":"Oltre 63.000 contenuti"
+    "30 dias":"30 giorni", "25 categorias temáticas":"25 categorie tematiche", "63.000+ conteúdos":"Oltre 63.000 contenuti",
+    "+1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas.":"Oltre 1.500 espressioni colloquiali del tedesco reale — dallo slang di strada ai modi di dire."
   },
   tr: {
     "Aprenda Alemão do A1 ao C2 | DeutschBloom":"A1’den C2’ye Almanca Öğrenin | DeutschBloom",
     "Bom dia, ":"Günaydın, ", "Boa tarde, ":"İyi günler, ", "Boa noite, ":"İyi akşamlar, ",
-    "30 dias":"30 gün", "25 categorias temáticas":"25 tematik kategori", "63.000+ conteúdos":"63.000’den fazla içerik"
+    "30 dias":"30 gün", "25 categorias temáticas":"25 tematik kategori", "63.000+ conteúdos":"63.000’den fazla içerik",
+    "+1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas.":"Gerçek Almancadan 1.500’den fazla günlük ifade — sokak argosundan deyimlere."
   },
   ar: {
     "Aprenda Alemão do A1 ao C2 | DeutschBloom":"تعلّم الألمانية من A1 إلى C2 | DeutschBloom",
     "Bom dia, ":"صباح الخير، ", "Boa tarde, ":"مساء الخير، ", "Boa noite, ":"مساء الخير، ",
-    "30 dias":"30 يومًا", "25 categorias temáticas":"25 فئة موضوعية", "63.000+ conteúdos":"أكثر من 63,000 محتوى"
+    "30 dias":"30 يومًا", "25 categorias temáticas":"25 فئة موضوعية", "63.000+ conteúdos":"أكثر من 63,000 محتوى",
+    "+1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas.":"أكثر من 1,500 تعبير عامي من الألمانية الحقيقية — من لغة الشارع إلى التعابير الاصطلاحية."
   },
   he: {
     "Aprenda Alemão do A1 ao C2 | DeutschBloom":"לימוד גרמנית מרמה A1 עד C2 | DeutschBloom",
     "Bom dia, ":"בוקר טוב, ", "Boa tarde, ":"צהריים טובים, ", "Boa noite, ":"ערב טוב, ",
-    "30 dias":"30 ימים", "25 categorias temáticas":"25 קטגוריות נושאיות", "63.000+ conteúdos":"יותר מ־63,000 תכנים"
+    "30 dias":"30 ימים", "25 categorias temáticas":"25 קטגוריות נושאיות", "63.000+ conteúdos":"יותר מ־63,000 תכנים",
+    "+1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas.":"יותר מ־1,500 ביטויים מדוברים מגרמנית אמיתית — מסלנג רחוב ועד ניבים."
   },
   hi: {
     "Aprenda Alemão do A1 ao C2 | DeutschBloom":"A1 से C2 तक जर्मन सीखें | DeutschBloom",
     "Bom dia, ":"सुप्रभात, ", "Boa tarde, ":"नमस्कार, ", "Boa noite, ":"शुभ संध्या, ",
-    "30 dias":"30 दिन", "25 categorias temáticas":"25 विषयगत श्रेणियाँ", "63.000+ conteúdos":"63,000 से अधिक शिक्षण सामग्री"
+    "30 dias":"30 दिन", "25 categorias temáticas":"25 विषयगत श्रेणियाँ", "63.000+ conteúdos":"63,000 से अधिक शिक्षण सामग्री",
+    "+1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas.":"वास्तविक जर्मन के 1,500 से अधिक बोलचाल के भाव — सड़क की स्लैंग से लेकर मुहावरों तक।"
   },
   pl: {
     "Aprenda Alemão do A1 ao C2 | DeutschBloom":"Ucz się niemieckiego od A1 do C2 | DeutschBloom",
     "Bom dia, ":"Dzień dobry, ", "Boa tarde, ":"Dzień dobry, ", "Boa noite, ":"Dobry wieczór, ",
-    "30 dias":"30 dni", "25 categorias temáticas":"25 kategorii tematycznych", "63.000+ conteúdos":"Ponad 63 000 materiałów"
+    "30 dias":"30 dni", "25 categorias temáticas":"25 kategorii tematycznych", "63.000+ conteúdos":"Ponad 63 000 materiałów",
+    "+1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas.":"Ponad 1500 potocznych wyrażeń z prawdziwego niemieckiego — od slangu ulicznego po idiomy."
   }
+};
+
+// Textos montados depois do carregamento nas Expressoes, gravacao e bandeja.
+// Entram tanto no mapa exato quanto no reparo por fragmentos com contadores.
+const EXPRESSION_AND_RECORDING_REPAIRS = {
+  en:{" expressões":" expressions"," expressão":" expression"," categorias":" categories"," categoria":" category","Todos":"All","Lit:":"Lit:","■ Parar":"■ Stop","⏹ Parar":"⏹ Stop","tentativas gratuitas restantes":"free attempts remaining","Salvos":"Saved"},
+  es:{" expressões":" expresiones"," expressão":" expresión"," categorias":" categorías"," categoria":" categoría","Todos":"Todos","Lit:":"Lit.:","■ Parar":"■ Detener","⏹ Parar":"⏹ Detener","tentativas gratuitas restantes":"intentos gratuitos restantes","Salvos":"Guardados"},
+  fr:{" expressões":" expressions"," expressão":" expression"," categorias":" catégories"," categoria":" catégorie","Todos":"Tous","Lit:":"Litt. :","■ Parar":"■ Arrêter","⏹ Parar":"⏹ Arrêter","tentativas gratuitas restantes":"essais gratuits restants","Salvos":"Enregistrés"},
+  it:{" expressões":" espressioni"," expressão":" espressione"," categorias":" categorie"," categoria":" categoria","Todos":"Tutti","Lit:":"Lett.:","■ Parar":"■ Interrompi","⏹ Parar":"⏹ Interrompi","tentativas gratuitas restantes":"tentativi gratuiti rimasti","Salvos":"Salvati"},
+  tr:{" expressões":" ifade"," expressão":" ifade"," categorias":" kategori"," categoria":" kategori","Todos":"Tümü","Lit:":"Kelimesi kelimesine:","■ Parar":"■ Durdur","⏹ Parar":"⏹ Durdur","tentativas gratuitas restantes":"ücretsiz deneme kaldı","Salvos":"Kaydedilenler"},
+  ar:{" expressões":" تعبيرًا"," expressão":" تعبير"," categorias":" فئات"," categoria":" فئة","Todos":"الكل","Lit:":"حرفيًا:","■ Parar":"■ إيقاف","⏹ Parar":"⏹ إيقاف","tentativas gratuitas restantes":"محاولات مجانية متبقية","Salvos":"المحفوظات"},
+  he:{" expressões":" ביטויים"," expressão":" ביטוי"," categorias":" קטגוריות"," categoria":" קטגוריה","Todos":"הכול","Lit:":"מילולית:","■ Parar":"■ עצור","⏹ Parar":"⏹ עצור","tentativas gratuitas restantes":"ניסיונות חינם שנותרו","Salvos":"שמורים"},
+  hi:{" expressões":" अभिव्यक्तियाँ"," expressão":" अभिव्यक्ति"," categorias":" श्रेणियाँ"," categoria":" श्रेणी","Todos":"सभी","Lit:":"शाब्दिक अर्थ:","■ Parar":"■ रोकें","⏹ Parar":"⏹ रोकें","tentativas gratuitas restantes":"निःशुल्क प्रयास शेष","Salvos":"सहेजे गए"},
+  pl:{" expressões":" wyrażeń"," expressão":" wyrażenie"," categorias":" kategorii"," categoria":" kategoria","Todos":"Wszystkie","Lit:":"Dosł.:","■ Parar":"■ Zatrzymaj","⏹ Parar":"⏹ Zatrzymaj","tentativas gratuitas restantes":"pozostałych bezpłatnych prób","Salvos":"Zapisane"}
 };
 
 // Textos curtos de interface que surgem dinamicamente ou ficam divididos por
@@ -822,7 +845,8 @@ const I18n = {
       ...(uiFallbacks[this._current] || {}),
       ...(DEEP_TRANSLATIONS[this._current] || {}),
       ...(UI_REPAIRS[this._current] || {}),
-      ...(DYNAMIC_UI_REPAIRS[this._current] || {})
+      ...(DYNAMIC_UI_REPAIRS[this._current] || {}),
+      ...(EXPRESSION_AND_RECORDING_REPAIRS[this._current] || {})
     };
     const fragments = {
       " frases":" sentences"," verbos":" verbs"," por dia":" per day"," dias por semana":" days per week"," nível ":" level ",
@@ -920,7 +944,8 @@ const I18n = {
     const activeFragments = {
       ...(fragmentFallbacks[this._current] || {}),
       ...(UI_FRAGMENT_REPAIRS[this._current] || {}),
-      ...(DYNAMIC_UI_REPAIRS[this._current] || {})
+      ...(DYNAMIC_UI_REPAIRS[this._current] || {}),
+      ...(EXPRESSION_AND_RECORDING_REPAIRS[this._current] || {})
     };
     // Numeros como "1.312" ou "38.802" usam ponto de milhar (padrao BR).
     // Fora do portugues, a convencao mais comum e virgula ("1,312"), entao
