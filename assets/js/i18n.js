@@ -156,6 +156,18 @@ const NAV_LABEL_REPAIRS = {
   pl:{"Início":"Strona główna","Suporte":"Pomoc","Complete:":"Uzupełnij:"}
 };
 
+const DYNAMIC_PATH_REPAIRS = {
+  en:{"Talvez você goste de começar pelo":"You might want to start with","Libera os 63.000 itens quando quiser.":"Unlock all 63,000 items whenever you want.","Nova conquista":"New achievement","Primeira missão concluída":"First mission completed","10 missões concluídas":"10 missions completed","Primeira hora de estudo":"First hour of study","5 horas de alemão":"5 hours of German","Seu progresso vem das pequenas práticas que você mantém.":"Your progress comes from the small practices you maintain."},
+  es:{"Talvez você goste de começar pelo":"Quizás te apetezca empezar por","Libera os 63.000 itens quando quiser.":"Desbloquea los 63.000 contenidos cuando quieras.","Nova conquista":"Nuevo logro","Primeira missão concluída":"Primera misión completada","10 missões concluídas":"10 misiones completadas","Primeira hora de estudo":"Primera hora de estudio","5 horas de alemão":"5 horas de alemán","Seu progresso vem das pequenas práticas que você mantém.":"Tu progreso nace de las pequeñas prácticas que mantienes."},
+  fr:{"Talvez você goste de começar pelo":"Vous aimeriez peut-être commencer par","Libera os 63.000 itens quando quiser.":"Débloquez les 63 000 contenus quand vous le souhaitez.","Nova conquista":"Nouvelle réussite","Primeira missão concluída":"Première mission terminée","10 missões concluídas":"10 missions terminées","Primeira hora de estudo":"Première heure d’étude","5 horas de alemão":"5 heures d’allemand","Seu progresso vem das pequenas práticas que você mantém.":"Vos progrès viennent des petites pratiques que vous maintenez."},
+  it:{"Talvez você goste de começar pelo":"Forse ti piacerebbe iniziare da","Libera os 63.000 itens quando quiser.":"Sblocca tutti i 63.000 contenuti quando vuoi.","Nova conquista":"Nuovo traguardo","Primeira missão concluída":"Prima missione completata","10 missões concluídas":"10 missioni completate","Primeira hora de estudo":"Prima ora di studio","5 horas de alemão":"5 ore di tedesco","Seu progresso vem das pequenas práticas que você mantém.":"I tuoi progressi nascono dalle piccole attività che mantieni."},
+  tr:{"Talvez você goste de começar pelo":"Şu seviyeden başlamak isteyebilirsiniz:","Libera os 63.000 itens quando quiser.":"İstediğiniz zaman 63.000 içeriğin tamamının kilidini açın.","Nova conquista":"Yeni başarı","Primeira missão concluída":"İlk görev tamamlandı","10 missões concluídas":"10 görev tamamlandı","Primeira hora de estudo":"İlk çalışma saati","5 horas de alemão":"5 saat Almanca","Seu progresso vem das pequenas práticas que você mantém.":"İlerlemeniz sürdürdüğünüz küçük çalışmalardan gelir."},
+  ar:{"Talvez você goste de começar pelo":"قد ترغب في البدء بالمستوى","Libera os 63.000 itens quando quiser.":"افتح جميع المحتويات البالغ عددها 63,000 متى شئت.","Nova conquista":"إنجاز جديد","Primeira missão concluída":"اكتملت المهمة الأولى","10 missões concluídas":"اكتملت 10 مهام","Primeira hora de estudo":"ساعة الدراسة الأولى","5 horas de alemão":"5 ساعات من الألمانية","Seu progresso vem das pequenas práticas que você mantém.":"تقدّمك يأتي من الممارسات الصغيرة التي تحافظ عليها."},
+  he:{"Talvez você goste de começar pelo":"אולי כדאי להתחיל ברמה","Libera os 63.000 itens quando quiser.":"אפשר לפתוח את כל 63,000 פריטי התוכן בכל עת.","Nova conquista":"הישג חדש","Primeira missão concluída":"המשימה הראשונה הושלמה","10 missões concluídas":"10 משימות הושלמו","Primeira hora de estudo":"שעת הלימוד הראשונה","5 horas de alemão":"5 שעות גרמנית","Seu progresso vem das pequenas práticas que você mantém.":"ההתקדמות שלך נבנית מהתרגולים הקטנים שנשמרים לאורך זמן."},
+  hi:{"Talvez você goste de começar pelo":"शायद आप इस स्तर से शुरू करना चाहें:","Libera os 63.000 itens quando quiser.":"जब चाहें सभी 63,000 सामग्रियाँ अनलॉक करें।","Nova conquista":"नई उपलब्धि","Primeira missão concluída":"पहला मिशन पूरा हुआ","10 missões concluídas":"10 मिशन पूरे हुए","Primeira hora de estudo":"अध्ययन का पहला घंटा","5 horas de alemão":"जर्मन के 5 घंटे","Seu progresso vem das pequenas práticas que você mantém.":"आपकी प्रगति उन छोटी आदतों से बनती है जिन्हें आप बनाए रखते हैं।"},
+  pl:{"Talvez você goste de começar pelo":"Być może zechcesz zacząć od poziomu","Libera os 63.000 itens quando quiser.":"Odblokuj wszystkie 63 000 materiałów, kiedy tylko chcesz.","Nova conquista":"Nowe osiągnięcie","Primeira missão concluída":"Pierwsza misja ukończona","10 missões concluídas":"Ukończono 10 misji","Primeira hora de estudo":"Pierwsza godzina nauki","5 horas de alemão":"5 godzin niemieckiego","Seu progresso vem das pequenas práticas que você mantém.":"Postęp wynika z małych ćwiczeń, które regularnie wykonujesz."}
+};
+
 // Textos curtos de interface que surgem dinamicamente ou ficam divididos por
 // tags HTML. Eles nao faziam parte dos lotes originais do DeepL e, por isso,
 // escapavam dos mapas grandes de conteudo em todos os idiomas.
@@ -902,7 +914,8 @@ const I18n = {
       ...(DYNAMIC_UI_REPAIRS[this._current] || {}),
       ...(EXPRESSION_AND_RECORDING_REPAIRS[this._current] || {}),
       ...(LEARNING_PATH_REPAIRS[this._current] || {}),
-      ...(NAV_LABEL_REPAIRS[this._current] || {})
+      ...(NAV_LABEL_REPAIRS[this._current] || {}),
+      ...(DYNAMIC_PATH_REPAIRS[this._current] || {})
     };
     const fragments = {
       " frases":" sentences"," verbos":" verbs"," por dia":" per day"," dias por semana":" days per week"," nível ":" level ",
@@ -1003,7 +1016,8 @@ const I18n = {
       ...(DYNAMIC_UI_REPAIRS[this._current] || {}),
       ...(EXPRESSION_AND_RECORDING_REPAIRS[this._current] || {}),
       ...(LEARNING_PATH_REPAIRS[this._current] || {}),
-      ...(NAV_LABEL_REPAIRS[this._current] || {})
+      ...(NAV_LABEL_REPAIRS[this._current] || {}),
+      ...(DYNAMIC_PATH_REPAIRS[this._current] || {})
     };
     // Numeros como "1.312" ou "38.802" usam ponto de milhar (padrao BR).
     // Fora do portugues, a convencao mais comum e virgula ("1,312"), entao

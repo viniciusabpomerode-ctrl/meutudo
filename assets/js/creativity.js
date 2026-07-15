@@ -94,7 +94,8 @@
   // pergunta ou página e ignora callbacks de uma gravação já descartada.
   function startSpeechRecognition(session){
     const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-    if(!SR||recognitionBlocked||session!==recordingSession||!mediaRecorder||mediaRecorder.state!=="recording")return;
+    if(!SR){recognitionBlocked=true;return}
+    if(recognitionBlocked||session!==recordingSession||!mediaRecorder||mediaRecorder.state!=="recording")return;
     const activeRecognition=new SR();recognition=activeRecognition;activeRecognition.lang="de-DE";activeRecognition.continuous=true;activeRecognition.interimResults=true;
     activeRecognition.onresult=e=>{let finalText="",partialText="";for(let i=e.resultIndex;i<e.results.length;i++){const text=e.results[i][0].transcript;if(e.results[i].isFinal)finalText+=text+" ";else partialText+=text}if(finalText)recognitionBase=(recognitionBase+" "+finalText).trim();$("answer").value=(recognitionBase+" "+partialText).trim();countWords()};
     activeRecognition.onerror=e=>{if(["not-allowed","service-not-allowed","audio-capture"].includes(e.error))recognitionBlocked=true};
@@ -115,11 +116,13 @@
         cleanupCapture();
         if(session!==recordingSession)return;
         recordedBlob=new Blob(chunks,{type:mime});if(recordUrl)URL.revokeObjectURL(recordUrl);recordUrl=URL.createObjectURL(recordedBlob);$("record-playback").src=recordUrl;$("record-panel").classList.add("show");
-        if($("answer").value.trim()===answerBeforeRecording)await transcribeRecording();else $("record-status").textContent="Gravação e transcrição prontas. Confira o texto antes de analisar.";
+        // A legenda do navegador pode parar no meio. O Whisper confere
+        // sempre o audio completo quando a pessoa encerra a gravacao.
+        await transcribeRecording();
       };
       recorder.start();
       startSpeechRecognition(session);
-      recordStarted=Date.now();recordPausedAt=0;recordPausedTotal=0;recordTimer=setInterval(()=>{if(!mediaRecorder)return;if(mediaRecorder.state==="paused")return;const sec=Math.floor((Date.now()-recordStarted-recordPausedTotal)/1000);$("record-status").innerHTML=`<span class="record-dot"></span> Gravando ${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`;if(sec>=180)stopRecording()},500);
+      recordStarted=Date.now();recordPausedAt=0;recordPausedTotal=0;recordTimer=setInterval(()=>{if(!mediaRecorder)return;if(mediaRecorder.state==="paused")return;const sec=Math.floor((Date.now()-recordStarted-recordPausedTotal)/1000),fallbackNote=recognitionBlocked?" · texto completo ao parar":"";$("record-status").innerHTML=`<span class="record-dot"></span> Gravando ${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}${fallbackNote}`;if(sec>=180)stopRecording()},500);
       $("record").hidden=true;$("pause").hidden=false;$("stop").hidden=false;$("record-status").className="recording";
     }catch(e){cleanupCapture();$("record-status").className="muted";$("record-status").textContent="Permita o acesso ao microfone para gravar sua resposta."}
   }
