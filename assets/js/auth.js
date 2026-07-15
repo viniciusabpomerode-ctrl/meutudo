@@ -7,6 +7,16 @@ const SUPABASE_URL = "https://zqrdpmrwnprtelgloawb.supabase.co";
 const SUPABASE_KEY = "sb_publishable_CVFm1nLMf9GCPr-RKKU6Rw_AFixWd5z";
 const AFB_BASE = location.pathname.includes("/alemao-facil-brasil/") || location.pathname.startsWith("/alemao-facil-brasil") ? "/alemao-facil-brasil" : "";
 
+// Guarda o codigo mesmo se a pessoa navegar, usar login Google ou precisar
+// confirmar o e-mail antes de receber o teste promocional.
+(function capturePromoCode(){
+  try{
+    var code=new URLSearchParams(location.search).get("promo");
+    code=String(code||"").trim().toUpperCase();
+    if(/^[A-Z0-9_-]{3,40}$/.test(code))localStorage.setItem("afb_pending_promo",code);
+  }catch(e){}
+})();
+
 // Carrega Supabase JS dinamicamente
 (function(){
   var s=document.createElement("script");
@@ -24,6 +34,40 @@ function getSupabase(){
 var _afbSessionCache = null;
 var _afbAuthReadyPromise = null;
 async function syncPendingReferral(session){const code=localStorage.getItem('afb_pending_referral');if(!code||!session?.access_token)return;try{const r=await fetch('/.netlify/functions/referrals',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({code})});if(r.ok)localStorage.removeItem('afb_pending_referral')}catch(e){}}
+function showPromoActivated(days){
+  const lang=localStorage.getItem('afb_language')||'pt';
+  const messages={
+    pt:`Seu teste de ${days} dias foi ativado. Aproveite a biblioteca completa!`,
+    en:`Your ${days}-day trial is active. Enjoy the complete library!`,
+    es:`Tu prueba de ${days} días está activa. ¡Disfruta de la biblioteca completa!`,
+    fr:`Votre essai de ${days} jours est activé. Profitez de toute la bibliothèque !`,
+    it:`La tua prova di ${days} giorni è attiva. Goditi la biblioteca completa!`,
+    tr:`${days} günlük deneme süreniz etkinleştirildi. Tüm kütüphanenin keyfini çıkarın!`,
+    ar:`تم تفعيل تجربتك لمدة ${days} أيام. استمتع بالمكتبة الكاملة!`,
+    he:`תקופת הניסיון שלך ל-${days} ימים הופעלה. כל הספרייה פתוחה עבורך!`,
+    hi:`आपका ${days} दिन का ट्रायल सक्रिय हो गया है। पूरी लाइब्रेरी का आनंद लें!`,
+    pl:`Twój ${days}-dniowy okres próbny jest aktywny. Korzystaj z całej biblioteki!`
+  };
+  const render=()=>{if(document.getElementById('afb-promo-notice'))return;const el=document.createElement('div');el.id='afb-promo-notice';el.setAttribute('role','status');el.textContent=messages[lang]||messages.pt;el.style.cssText='position:fixed;z-index:100000;left:50%;top:18px;transform:translateX(-50%);max-width:min(92vw,560px);padding:13px 18px;border-radius:12px;background:#216e4e;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.25);font-weight:700;text-align:center';document.body.appendChild(el);setTimeout(()=>el.remove(),7000)};
+  if(document.body)render();else document.addEventListener('DOMContentLoaded',render,{once:true});
+}
+async function syncPendingPromo(session){
+  const code=localStorage.getItem('afb_pending_promo');
+  if(!code||!session?.access_token)return;
+  try{
+    const r=await fetch('/.netlify/functions/promo-links',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({code})});
+    const data=await r.json().catch(()=>({}));
+    if(r.ok){
+      localStorage.removeItem('afb_pending_promo');
+      localStorage.setItem('afb_promo_result',JSON.stringify({ok:true,days:data.trial_days,expires_at:data.expires_at,at:Date.now()}));
+      showPromoActivated(data.trial_days||3);
+    }else if(r.status===404||r.status===409){
+      localStorage.removeItem('afb_pending_promo');
+      localStorage.setItem('afb_promo_result',JSON.stringify({ok:false,reason:data.reason||data.error,at:Date.now()}));
+    }
+  }catch(e){}
+}
+function syncPendingBenefits(session){syncPendingReferral(session);syncPendingPromo(session)}
 
 function getUserId(){
   var sb=getSupabase();
@@ -44,8 +88,8 @@ const Auth = {
           var sb=getSupabase();
           if(!sb){r(false);return}
           if(sb.auth.getSession){
-            sb.auth.getSession().then(function(x){_afbSessionCache=x&&x.data?x.data.session:null;syncPendingReferral(_afbSessionCache);r(true)}).catch(function(){r(true)});
-            if(sb.auth.onAuthStateChange)sb.auth.onAuthStateChange(function(_event,session){_afbSessionCache=session||null});
+            sb.auth.getSession().then(function(x){_afbSessionCache=x&&x.data?x.data.session:null;syncPendingBenefits(_afbSessionCache);r(true)}).catch(function(){r(true)});
+            if(sb.auth.onAuthStateChange)sb.auth.onAuthStateChange(function(_event,session){_afbSessionCache=session||null;syncPendingBenefits(_afbSessionCache)});
           }else{
             try{_afbSessionCache=sb.auth.session?sb.auth.session():null}catch(e){}
             r(true);
@@ -66,6 +110,7 @@ const Auth = {
       if(r.error)return {ok:false,error:r.error.message};
       localStorage.setItem("afb_fallback_uid",r.data.user.id);
       _afbSessionCache=r.data.session||_afbSessionCache;
+      syncPendingBenefits(_afbSessionCache);
       return {ok:true, session:!!r.data.session};
     }catch(e){return {ok:false,error:e.message}}
   },
@@ -79,6 +124,7 @@ const Auth = {
       if(r.error)return {ok:false,error:r.error.message};
       localStorage.setItem("afb_fallback_uid",r.data.user.id);
       _afbSessionCache=r.data.session||_afbSessionCache;
+      syncPendingBenefits(_afbSessionCache);
       return {ok:true};
     }catch(e){return {ok:false,error:e.message}}
   },

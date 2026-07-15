@@ -53,7 +53,7 @@ exports.handler = async (event) => {
     const row = rows[0];
     const expired = row?.expires_at && new Date(row.expires_at) < new Date();
     const premium = !!row && row.active && !expired;
-    return { statusCode: 200, headers, body: JSON.stringify({ premium, plan: premium ? row.plan : null }) };
+    return { statusCode: 200, headers, body: JSON.stringify({ premium, plan: premium ? row.plan : null, expires_at: premium ? row.expires_at : null }) };
   } catch (e) {
     return { statusCode: 200, headers, body: JSON.stringify({ premium: false, plan: null, error: e.message }) };
   }

@@ -1,5 +1,6 @@
 const A=require('./_auth');
 const AWS=require('aws-sdk');
+const crypto=require('crypto');
 const s3=new AWS.S3({endpoint:`https://${process.env.R2_ID}.r2.cloudflarestorage.com`,accessKeyId:process.env.R2_KEY,secretAccessKey:process.env.R2_SECRET,region:'auto',signatureVersion:'v4'});
 const H={"Content-Type":"application/json","Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"Authorization,Content-Type","Access-Control-Allow-Methods":"GET,POST,OPTIONS","Cache-Control":"no-store"};
 const out=(statusCode,data)=>({statusCode,headers:H,body:JSON.stringify(data)});
@@ -14,10 +15,36 @@ exports.handler=async event=>{if(event.httpMethod==='OPTIONS')return{statusCode:
    if(action==='pix_requests')return out(200,{requests:await rest('pix_requests?status=eq.pending&select=id,email,name,payer_name,plan,message,created_at&order=created_at.asc')});
    if(action==='pix_history')return out(200,{requests:await rest('pix_requests?status=neq.pending&select=id,email,name,payer_name,plan,message,status,created_at,resolved_at&order=resolved_at.desc&limit=100')});
    if(action==='content_reports'){const listed=await s3.listObjectsV2({Bucket:'edicao',Prefix:'content_reports/open/',MaxKeys:200}).promise(),tickets=await Promise.all((listed.Contents||[]).map(async o=>{try{return JSON.parse((await s3.getObject({Bucket:'edicao',Key:o.Key}).promise()).Body.toString())}catch{return null}}));return out(200,{tickets:tickets.filter(Boolean).sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)))})}
+   if(action==='promo_links'){
+    const [links,redemptions]=await Promise.all([
+     rest('promo_links?select=id,code,label,trial_days,max_redemptions,ip_limit,expires_at,active,created_at&order=created_at.desc'),
+     rest('promo_redemptions?select=promo_id,created_at')
+    ]);
+    const counts={};(redemptions||[]).forEach(x=>{counts[x.promo_id]=(counts[x.promo_id]||0)+1});
+    return out(200,{links:(links||[]).map(x=>({...x,redemptions:counts[x.id]||0}))});
+   }
    const [admins,plans,credits,refs]=await Promise.all([rest('app_admins?select=user_id'),rest('user_premium?select=email,plan,active,expires_at'),rest('credit_ledger?select=amount_cents,reversed_at'),rest('referrals?select=status')]);
    return out(200,{admins:admins.length,plans:plans.length,activePlans:plans.filter(x=>x.active).length,creditsCents:credits.filter(x=>!x.reversed_at).reduce((s,x)=>s+x.amount_cents,0),referrals:refs.length});
   }
   if(event.httpMethod!=='POST')return out(405,{error:'method_not_allowed'});const b=JSON.parse(event.body||'{}');
+  if(action==='create_promo_link'){
+   const label=String(b.label||'').trim().slice(0,100);if(!label)return out(400,{error:'invalid_label'});
+   const requested=String(b.code||'').trim().toUpperCase().replace(/[^A-Z0-9_-]/g,'').slice(0,40);
+   const code=requested||crypto.randomBytes(5).toString('base64url').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);
+   if(code.length<3)return out(400,{error:'invalid_code'});
+   const trialDays=Math.min(30,Math.max(1,Math.trunc(Number(b.trial_days)||3)));
+   const ipLimit=Math.min(20,Math.max(1,Math.trunc(Number(b.ip_limit)||2)));
+   const maxRaw=Math.trunc(Number(b.max_redemptions)||0),maxRedemptions=maxRaw>0?Math.min(1000000,maxRaw):null;
+   const expires=b.expires_at?new Date(b.expires_at):null;if(expires&&Number.isNaN(expires.getTime()))return out(400,{error:'invalid_expiration'});
+   const [created]=await rest('promo_links',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({code,label,trial_days:trialDays,ip_limit:ipLimit,max_redemptions:maxRedemptions,expires_at:expires?expires.toISOString():null,created_by:adm.user.id})});
+   await audit(adm,action,null,{promo_id:created.id,code,trial_days:trialDays,ip_limit:ipLimit,max_redemptions:maxRedemptions});
+   return out(200,{ok:true,link:created});
+  }
+  if(action==='set_promo_link_active'){
+   const id=String(b.id||'');if(!/^[0-9a-f-]{36}$/i.test(id))return out(400,{error:'invalid_id'});
+   await rest(`promo_links?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({active:!!b.active,updated_at:new Date().toISOString()})});
+   await audit(adm,action,null,{promo_id:id,active:!!b.active});return out(200,{ok:true});
+  }
   if(action==='grant_plan'){const email=String(b.email||'').toLowerCase();const expires=b.plan==='indeterminado'||b.plan==='fundador'?null:b.expires_at||null;await rest('user_premium?on_conflict=email',{method:'POST',headers:{Prefer:'resolution=merge-duplicates'},body:JSON.stringify({email,plan:b.plan||'indeterminado',active:b.active!==false,expires_at:expires,updated_at:new Date().toISOString()})});await audit(adm,action,null,{email,plan:b.plan});return out(200,{ok:true})}
   if(action==='add_admin'){if(adm.role!=='super_admin')return out(403,{error:'super_admin_required'});const users=await fetch(`${A.SUPABASE_URL}/auth/v1/admin/users`,{headers:A.serviceHeaders()}).then(r=>r.json());const u=(users.users||[]).find(x=>x.email?.toLowerCase()===String(b.email||'').toLowerCase());if(!u)return out(404,{error:'user_not_found'});await rest('app_admins?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates'},body:JSON.stringify({user_id:u.id,role:b.role==='super_admin'?'super_admin':'admin',created_by:adm.user.id})});await audit(adm,action,u.id,{role:b.role});return out(200,{ok:true})}
   if(action==='resolve_pix_request'){

@@ -218,7 +218,7 @@
     }
 
     // ── Assinatura ──
-    const PLAN_LABEL = { mensal: "Premium Mensal", anual: "Premium Anual", fundador: "Premium Vitalício (Fundador)" };
+    const PLAN_LABEL = { mensal: "Premium Mensal", anual: "Premium Anual", fundador: "Premium Vitalício (Fundador)", promocional: "Teste promocional" };
     const checkoutStatus = new URLSearchParams(location.search).get("checkout");
     if (checkoutStatus === "sucesso") {
       history.replaceState(null, "", location.pathname);
@@ -243,11 +243,13 @@
         const data = checkoutStatus === "sucesso" ? await fetchWithRetry(5) : await fetch(`/.netlify/functions/check-premium`, {headers:{Authorization:`Bearer ${await Auth.accessToken()}`}}).then(r => r.json());
         if (data.premium) {
           statusEl.textContent = `✨ ${PLAN_LABEL[data.plan] || "Premium"} ativo`;
-          noteEl.textContent = "Biblioteca completa liberada.";
+          noteEl.textContent = data.plan === "promocional" && data.expires_at
+            ? `Biblioteca completa liberada até ${new Date(data.expires_at).toLocaleString("pt-BR")}.`
+            : "Biblioteca completa liberada.";
           if (checkoutStatus === "sucesso") {
             alert("🎉 Pagamento confirmado! Seu plano Premium está ativo.");
           }
-          if (data.plan !== "fundador") {
+          if (data.plan === "mensal" || data.plan === "anual") {
             actionsEl.innerHTML = `<button class="btn btn-outline btn-sm" id="manage-sub-btn">Gerenciar assinatura</button>`;
             document.getElementById("manage-sub-btn").addEventListener("click", async (e) => {
               const btn = e.target;
@@ -265,6 +267,8 @@
                 btn.disabled = false; btn.textContent = "Gerenciar assinatura";
               }
             });
+          } else if (data.plan === "promocional") {
+            actionsEl.innerHTML = `<a class="btn btn-primary btn-sm" href="planos.html">Ver planos</a>`;
           }
         } else {
           if (checkoutStatus === "sucesso") {
