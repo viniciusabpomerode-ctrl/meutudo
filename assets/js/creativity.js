@@ -66,9 +66,12 @@
           questions.forEach((q,i)=>{q.category=support[i]?.category||q.category;q.guide=support[i]?.guide||q.guide});
         }
         try{
-          const mapResponse=await fetch(`../locale_maps/criatividade.json?v=20260715-1`);
+          const mapResponse=await fetch(`../locale_maps/criatividade.json?v=20260715-2`);
           const promptMap=mapResponse.ok?await mapResponse.json():{};
-          if(Array.isArray(promptMap[lang]))questions.forEach((q,i)=>{if(promptMap[lang][i])q.promptPt=promptMap[lang][i]});
+          const languageMap=promptMap[lang]||{};
+          // O R2 pode devolver um subconjunto ou uma ordem diferente. O id
+          // estavel (a1-01, a2-03...) garante que texto e traducao sejam o par certo.
+          questions.forEach(q=>{const translated=languageMap[q.id]||languageMap[q.prompt];if(translated)q.promptPt=translated});
         }catch(e){}
       }
     }catch(e){$("practice").hidden=false;$("practice").innerHTML='<div class="card" style="padding:25px">Não foi possível carregar as perguntas.</div>'}
