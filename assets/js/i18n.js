@@ -257,6 +257,16 @@ const I18n = {
         // Mantém o reparo local até o próximo lote completo de traduções.
         if (this._current === "en") translations["A) Boa tarde"] = "A) Good afternoon";
         if (this._current === "hi") translations["A) Boa tarde"] = "A) शुभ दोपहर";
+        // Alternativa do simulado A1 que ficou fora do lote do DeepL.
+        const age20 = {
+          en: "I am 20 years old", es: "Tengo 20 años", fr: "J’ai 20 ans",
+          it: "Ho 20 anni", tr: "20 yaşındayım", pl: "Mam 20 lat",
+          hi: "मैं 20 साल का/की हूँ", he: "אני בן/בת 20", ar: "عمري 20 عامًا"
+        }[this._current];
+        if (age20) {
+          translations["Eu tenho 20 anos"] = age20;
+          translations["A) Eu tenho 20 anos"] = `A) ${age20}`;
+        }
         return (this._contentTranslations = translations);
       })
       .catch(() => (this._contentTranslations = {}));

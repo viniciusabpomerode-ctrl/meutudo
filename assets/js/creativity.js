@@ -57,6 +57,20 @@
       if(!r.ok)r=await fetch("../data/criatividade.json");
       if(!r.ok)throw new Error("questions_unavailable");
       questions=(await r.json()).questions||[];
+      const lang=(typeof I18n!=="undefined"&&I18n.getCurrent)?I18n.getCurrent():"pt";
+      if(lang!=="pt"){
+        // Categoria e roteiro usam o mapa geral do R2. As 30 perguntas usam
+        // este mapa pequeno e revisado para nao depender de traducao parcial.
+        if(typeof I18n!=="undefined"&&I18n.translateData){
+          const support=await I18n.translateData(questions.map(q=>({category:q.category||"",guide:Array.isArray(q.guide)?q.guide:[]})));
+          questions.forEach((q,i)=>{q.category=support[i]?.category||q.category;q.guide=support[i]?.guide||q.guide});
+        }
+        try{
+          const mapResponse=await fetch(`../locale_maps/criatividade.json?v=20260715-1`);
+          const promptMap=mapResponse.ok?await mapResponse.json():{};
+          if(Array.isArray(promptMap[lang]))questions.forEach((q,i)=>{if(promptMap[lang][i])q.promptPt=promptMap[lang][i]});
+        }catch(e){}
+      }
     }catch(e){$("practice").hidden=false;$("practice").innerHTML='<div class="card" style="padding:25px">Não foi possível carregar as perguntas.</div>'}
     await Auth._ready();updateAttempts();
   }
