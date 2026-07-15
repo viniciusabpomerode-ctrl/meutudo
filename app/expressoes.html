@@ -207,6 +207,17 @@
     let searchCat = "";
     let currentSpeed = 0.75;
     let localizedCategories = {};
+    const categoryNameRepairs = {
+      en:{festa_role:"Partying & Nightlife",internet_jovem:"Youth Internet",musica_cultura:"Music & Culture"},
+      es:{festa_role:"Fiesta y vida nocturna",internet_jovem:"Internet juvenil",musica_cultura:"Música y cultura"},
+      fr:{festa_role:"Fêtes et sorties",internet_jovem:"Internet des jeunes",musica_cultura:"Musique et culture"},
+      it:{festa_role:"Feste e vita notturna",internet_jovem:"Internet giovanile",musica_cultura:"Musica e cultura"},
+      tr:{festa_role:"Parti ve eğlence",internet_jovem:"Gençlerin internet dili",musica_cultura:"Müzik ve kültür"},
+      ar:{festa_role:"الحفلات والسهرات",internet_jovem:"إنترنت الشباب",musica_cultura:"الموسيقى والثقافة"},
+      he:{festa_role:"מסיבות ובילויים",internet_jovem:"אינטרנט לצעירים",musica_cultura:"מוזיקה ותרבות"},
+      hi:{festa_role:"पार्टी और नाइटलाइफ़",internet_jovem:"युवा इंटरनेट",musica_cultura:"संगीत और संस्कृति"},
+      pl:{festa_role:"Imprezy i wyjścia",internet_jovem:"Internet młodzieżowy",musica_cultura:"Muzyka i kultura"}
+    };
     let sortMode = "level";
     let audioBaseUrl = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/";
     
@@ -234,7 +245,8 @@
             I18n.translateData(visibleRows), I18n.translateData(categoryCodes.slice())
           ]);
           allData.forEach((e, i) => Object.assign(e, translatedRows[i] || {}));
-          categoryCodes.forEach((code, i) => { localizedCategories[code] = translatedCategoryNames[i] || code; });
+          const lang=I18n.getCurrent();
+          categoryCodes.forEach((code, i) => { localizedCategories[code] = categoryNameRepairs[lang]?.[code] || translatedCategoryNames[i] || code; });
         }
         const perCategory = {};
         allData.forEach((e,i) => { e._guestKey=e.id||`${e.category}_${i}`;const c=e.category||"outras";perCategory[c]=perCategory[c]||0;if(perCategory[c]++<AFB_FREE_LIMIT_STRICT)guestFreeIds.add(e._guestKey); });

@@ -57,6 +57,7 @@
   <div id="app-nav"></div>
 
   <div class="container" style="padding-top:28px; max-width:900px;">
+    <div class="afb-speed-row"><span class="afb-speed-label">Velocidade do áudio:</span><span id="speed-control"></span></div>
     <div id="main-view">
       <h2 class="mt-0">💼 Profissões em Alemão</h2>
       <p class="muted" id="prof-intro">Aprenda alemão no contexto do trabalho — 4.500 frases reais de 90 profissões, do A1 ao C2.</p>
@@ -96,6 +97,7 @@
   <script src="../assets/js/content-freshness.js?v=20260714-1"></script>
   <script>
     renderNav("profissoes");
+    afbRenderSpeedControl("speed-control");
 
     // Modo visitante: todas as profissões podem ser conhecidas; 10 frases em cada.
     let isGuest = true;
@@ -365,7 +367,6 @@
 
     async function playAudio(filename, btn) {
       if(!filename) return;
-      if(!audioEl.paused){audioEl.pause();return;}
       afbPlayAudio(filename, btn);
     }
 

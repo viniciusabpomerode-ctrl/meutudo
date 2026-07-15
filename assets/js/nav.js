@@ -31,19 +31,32 @@ function renderNav(active) {
 function _renderNavNow(active) {
   const user = Auth.currentUser();
   const isContentPage = AFB_CONTENT_PAGES.some((l) => l.key === active);
+  const navLang = localStorage.getItem("afb_language") || "pt";
+  const navCopy = {
+    pt:{home:"Início",plans:"Planos",support:"Suporte"},
+    en:{home:"Home",plans:"Plans",support:"Support"},
+    es:{home:"Inicio",plans:"Planes",support:"Soporte"},
+    fr:{home:"Accueil",plans:"Forfaits",support:"Assistance"},
+    it:{home:"Home",plans:"Piani",support:"Assistenza"},
+    tr:{home:"Ana Sayfa",plans:"Planlar",support:"Destek"},
+    ar:{home:"الرئيسية",plans:"الخطط",support:"الدعم"},
+    he:{home:"דף הבית",plans:"תוכניות",support:"תמיכה"},
+    hi:{home:"होम",plans:"योजनाएँ",support:"सहायता"},
+    pl:{home:"Strona główna",plans:"Plany",support:"Pomoc"}
+  }[navLang] || {home:"Início",plans:"Planos",support:"Suporte"};
 
   const dropdownItems = AFB_CONTENT_PAGES
     .map((l) => `<a href="${l.href}" class="nav-dd-item ${l.key === active ? "active" : ""}">${l.label}</a>`)
     .join("");
 
   const linksHtml = `
-    <a href="../index.html" class="${active === "dashboard" ? "active" : ""}">Início</a>
+    <a href="../index.html" class="${active === "dashboard" ? "active" : ""}">${navCopy.home}</a>
     <div class="nav-dropdown">
       <a href="cursos.html" class="nav-dd-trigger ${isContentPage ? "active" : ""}">Conteúdo ▾</a>
       <div class="nav-dd-menu">${dropdownItems}</div>
     </div>
-    <a href="planos.html" class="${active === "planos" ? "active" : ""}">Planos</a>
-    <a href="suporte.html" class="${active === "suporte" ? "active" : ""}">Suporte</a>
+    <a href="planos.html" class="${active === "planos" ? "active" : ""}">${navCopy.plans}</a>
+    <a href="suporte.html" class="${active === "suporte" ? "active" : ""}">${navCopy.support}</a>
   `;
 
   const el = document.getElementById("app-nav");
@@ -142,7 +155,10 @@ document.head.appendChild(S);
 
 const arrow=document.createElement("button");arrow.className="ext-arrow";arrow.id="ext-arrow";arrow.textContent="^";arrow.title="Ferramentas";
 const tray=document.createElement("div");tray.className="ext-tray hidden";tray.id="ext-tray";
-tray.innerHTML='<div class="ext-item" id="tray-lofi"><span class="dot" id="tl-dot"></span><span id="tl-name">🎵 LoFi</span><span class="tray-play" id="tl-play" style="margin-left:auto;font-size:.8rem;padding:2px 8px;border-radius:8px;background:#444;color:#999">▶</span></div><div class="ext-item" id="tray-pomo"><span class="dot" id="tp-dot"></span>🍅 Pomodoro</div><div class="ext-item" id="tray-saved"><span class="dot" id="ts-dot"></span><span id="tray-saved-icon">❤️</span> Salvos</div>';
+const trayLanguage=localStorage.getItem("afb_language")||"pt";
+const traySavedLabels={pt:"Salvos",en:"Saved",es:"Guardados",fr:"Enregistrés",it:"Salvati",tr:"Kaydedilenler",ar:"المحفوظات",he:"שמורים",hi:"सहेजे गए",pl:"Zapisane"};
+const traySavedLabel=traySavedLabels[trayLanguage]||traySavedLabels.pt;
+tray.innerHTML='<div class="ext-item" id="tray-lofi"><span class="dot" id="tl-dot"></span><span id="tl-name">🎵 LoFi</span><span class="tray-play" id="tl-play" style="margin-left:auto;font-size:.8rem;padding:2px 8px;border-radius:8px;background:#444;color:#999">▶</span></div><div class="ext-item" id="tray-pomo"><span class="dot" id="tp-dot"></span>🍅 Pomodoro</div><div class="ext-item" id="tray-saved"><span class="dot" id="ts-dot"></span><span id="tray-saved-icon">❤️</span> '+traySavedLabel+'</div>';
 const initialMusic=musicGet();const lofiFrame=document.createElement("iframe");lofiFrame.id="lofi-frame";lofiFrame.setAttribute("width","360");lofiFrame.setAttribute("height","80");lofiFrame.setAttribute("frameborder","0");lofiFrame.setAttribute("allow","autoplay");lofiFrame.style.cssText="position:fixed;bottom:-9999px;right:-9999px;border-radius:10px";
 
 const lofi=document.createElement("div");lofi.className="lofi-player hidden";lofi.id="lofi-player";

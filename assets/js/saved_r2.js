@@ -11,9 +11,19 @@ const SavedItems = (() => {
   }
   function normalizeItem(item) {
     item = item || {};
+    const rawType = item.type || item.item_type || "";
+    const typeAliases = {
+      sentence:"phrase", dialog_phrase:"phrase", dialogue_phrase:"phrase",
+      dialogue:"dialog", dialogo:"dialog",
+      vocabulary:"word", vocab:"word",
+      grammar_tip:"grammar", grammarTip:"grammar",
+      giria:"expression", slang:"expression",
+      profissao:"profession", profession_sentence:"profession_phrase",
+      pronunciation:"pronunciation_recording", recording:"pronunciation_recording"
+    };
     const normalized = {
       ...item,
-      type: item.type || item.item_type || "",
+      type: typeAliases[rawType] || rawType,
       id: item.id ?? item.item_id ?? "",
       parentId: item.parentId ?? item.parent_id ?? null,
       nivel: item.nivel || item.level || "",
