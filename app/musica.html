@@ -21,6 +21,7 @@
   <script src="../assets/js/nav.js"></script>
   <script src="../assets/js/i18n.js?v=20260714-ui8"></script>
   <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/music-data.js?v=20260715-clean1"></script>
   <script src="../assets/js/saved_r2.js?v=20260714-ref2"></script>
   <script src="../assets/js/guest.js"></script>
   <script>
@@ -39,7 +40,9 @@
       let totalTracks = 0;
       let lockedTotal = 0;
       el.innerHTML = data.levels.map((lvl) => {
-        const tracks = (data.tracks_by_level[lvl.id] || []).filter(t => Array.isArray(t.lyrics) && t.lyrics.length > 0);
+        const tracks = (data.tracks_by_level[lvl.id] || [])
+          .filter(MusicData.isUsable)
+          .map(MusicData.prepareTrack);
         totalTracks += tracks.length;
         lockedTotal += Math.max(0, tracks.length - 10);
         const name = isVikings ? lvl.vikings_name : lvl.guardians_name;
@@ -59,6 +62,7 @@
                 </div>
                 <b style="display:block; margin-top:8px;">${t.title_german}</b>
                 <span class="muted" style="font-size:.82rem;">${I18n.field(t, 'title_portuguese')} · ${t.artist}</span>
+                ${MusicData.isLikelyShort(t) ? `<span class="badge" style="display:block;width:max-content;margin-top:8px;">${MusicData.shortLabel()}</span>` : ""}
                 <span class="music-save-btn" data-id="${t.id}" style="display:block;margin-top:10px;width:max-content;" onclick="event.preventDefault();event.stopPropagation();"></span>
               </a>`;
             }).join("")}
@@ -69,7 +73,7 @@
       // O mesmo botao dos dialogos aparece em todo card liberado. Se a
       // pessoa ainda nao entrou, o proprio botao encaminha para o login.
       Object.entries(data.tracks_by_level).forEach(([lvlId, tracks]) => {
-          tracks.filter(t => Array.isArray(t.lyrics) && t.lyrics.length > 0).forEach(t => {
+          tracks.filter(MusicData.isUsable).map(MusicData.prepareTrack).forEach(t => {
             const span = document.querySelector(`.music-save-btn[data-id="${t.id}"]`);
             if (!span) return;
             const btn = SavedItems.createSaveButton({

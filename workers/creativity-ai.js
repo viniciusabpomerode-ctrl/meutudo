@@ -9,7 +9,8 @@ function json(data, status = 200, origin = "*") {
 }
 function allowedOrigin(request, env) { const origin=request.headers.get("Origin")||"";const list=(env.ALLOWED_ORIGINS||"").split(",").map(x=>x.trim()).filter(Boolean);return !list.length||list.includes(origin)?origin||"*":""; }
 async function authenticatedUser(request, env) { const authorization=request.headers.get("Authorization")||"";if(!authorization.startsWith("Bearer "))return null;const r=await fetch(`${SUPABASE_URL}/auth/v1/user`,{headers:{Authorization:authorization,apikey:SUPABASE_ANON_KEY}});if(!r.ok)return null;const user=await r.json();return user&&user.id?user:null; }
-async function takeAttempt(env,userId,scope="analysis"){if(!env.LIMITS)throw new Error("LIMITS_KV_NOT_CONFIGURED");const day=new Date().toISOString().slice(0,10),key=`creativity:${scope}:${day}:${userId}`,now=Math.floor(Date.now()/1000),saved=await env.LIMITS.get(key,"json")||{count:0,last:0};if(saved.count>=DAILY_LIMIT)return{ok:false,reason:"daily",remaining:0};if(now-saved.last<COOLDOWN_SECONDS)return{ok:false,reason:"cooldown",retryAfter:COOLDOWN_SECONDS-(now-saved.last),remaining:DAILY_LIMIT-saved.count};const next={count:saved.count+1,last:now};await env.LIMITS.put(key,JSON.stringify(next),{expirationTtl:172800});return{ok:true,remaining:DAILY_LIMIT-next.count};}
+async function takeAttempt(env,userId,scope="analysis",dailyLimit=DAILY_LIMIT,cooldownSeconds=COOLDOWN_SECONDS){if(!env.LIMITS)throw new Error("LIMITS_KV_NOT_CONFIGURED");const day=new Date().toISOString().slice(0,10),key=`creativity:${scope}:${day}:${userId}`,now=Math.floor(Date.now()/1000),saved=await env.LIMITS.get(key,"json")||{count:0,last:0};if(saved.count>=dailyLimit)return{ok:false,reason:"daily",remaining:0};if(now-saved.last<cooldownSeconds)return{ok:false,reason:"cooldown",retryAfter:cooldownSeconds-(now-saved.last),remaining:dailyLimit-saved.count};const next={count:saved.count+1,last:now};await env.LIMITS.put(key,JSON.stringify(next),{expirationTtl:172800});return{ok:true,remaining:dailyLimit-next.count};}
+function audioBase64(buffer){const bytes=new Uint8Array(buffer);let binary="";for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return btoa(binary);}
 function clean(value,max){return typeof value==="string"?value.trim().slice(0,max):""}
 function extractJson(output){const text=typeof output==="string"?output:(output&&output.response)||"",match=text.match(/\{[\s\S]*\}/);if(!match)throw new Error("INVALID_AI_RESPONSE");const d=JSON.parse(match[0]);return{score:Math.max(0,Math.min(100,Number(d.score)||0)),summary:clean(d.summary,240),corrected:clean(d.corrected,1800),grammar:Array.isArray(d.grammar)?d.grammar.slice(0,4).map(x=>clean(x,240)):[],vocabulary:Array.isArray(d.vocabulary)?d.vocabulary.slice(0,5).map(x=>clean(x,100)):[],structure:clean(d.structure,360),modelAnswer:clean(d.modelAnswer,1800),mode:"ai"};}
 
@@ -22,12 +23,16 @@ export default {async fetch(request,env){
     if(url.pathname==="/transcribe"){
       const length=Number(request.headers.get("Content-Length")||0);
       if(length>5_000_000)return json({error:"Audio too large"},413,origin);
-      const attempt=await takeAttempt(env,user.id,"transcription");
+      // Transcrever não consome as três análises pedagógicas. Quando o KV
+      // ainda não estiver ligado, a autenticação e o limite de tamanho
+      // continuam protegendo a rota e a transcrição segue funcionando.
+      const attempt=env.LIMITS?await takeAttempt(env,user.id,"transcription",20,2):{ok:true,remaining:null};
       if(!attempt.ok)return json({error:attempt.reason,retryAfter:attempt.retryAfter||0,remaining:attempt.remaining},429,origin);
       const audio=await request.arrayBuffer();
       if(!audio.byteLength||audio.byteLength>5_000_000)return json({error:"Invalid audio"},400,origin);
-      const result=await env.AI.run("@cf/openai/whisper",{audio:[...new Uint8Array(audio)]});
-      return json({text:clean(result&&result.text,3000),remaining:attempt.remaining},200,origin);
+      const result=await env.AI.run("@cf/openai/whisper-large-v3-turbo",{audio:audioBase64(audio),language:"de",task:"transcribe",vad_filter:true,condition_on_previous_text:false});
+      const text=clean(result&&result.text,3000);if(!text)return json({error:"No speech detected"},422,origin);
+      return json({text,remaining:attempt.remaining},200,origin);
     }
     const body=await request.json(),answer=clean(body.answer,1500),prompt=clean(body.prompt,600),level=clean(body.level,2);
     if(!answer||answer.split(/\s+/).length<5||!/^(A1|A2|B1|B2|C1|C2)$/.test(level))return json({error:"Invalid answer"},400,origin);

@@ -33,7 +33,7 @@
         <div class="record-panel" id="record-panel"><div class="record-head"><b>🎧 Sua gravação</b><button class="btn btn-ghost btn-sm" id="discard-record">Descartar e regravar</button></div><audio id="record-playback" controls preload="metadata"></audio><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px;flex-wrap:wrap"><p class="muted" style="margin:0;font-size:.78rem">O áudio fica só neste aparelho, não é enviado com a análise.</p><button class="btn btn-outline btn-sm" id="save-record">💾 Salvar gravação</button></div></div>
         <div class="card" id="saved-recs-card" style="margin-top:14px;display:none;padding:16px"><div class="flex-between"><h3 style="margin:0;font-size:.92rem">🎙️ Gravações salvas neste aparelho</h3><button class="btn btn-ghost btn-sm" id="clear-recs">Excluir todas</button></div><div id="saved-recs-list" style="margin-top:10px"></div></div>
         <div class="action-row"><div><button class="btn btn-outline" id="record">🎙️ Gravar resposta</button> <button class="btn btn-ghost" id="pause" hidden>⏸ Pausar</button> <button class="btn btn-ghost" id="stop" hidden>■ Parar</button></div><div><button class="btn btn-ghost" id="next">Outra pergunta</button> <button class="btn btn-primary" id="analyze">Analisar resposta</button></div></div>
-        <div class="notice" id="speech-note">A transcrição usa o recurso de voz do navegador. Confira o texto antes de enviar para análise.</div>
+        <div class="notice" id="speech-note">Enquanto você fala, o navegador tenta mostrar o texto ao vivo. Ao parar, a transcrição final do áudio é adicionada à caixa de texto.</div>
       </article>
       <aside class="side-stack">
         <div class="card helper-card"><h3>Estrutura sugerida</h3><ul id="guide"></ul></div>
@@ -47,6 +47,6 @@
   <script src="../assets/js/data.js"></script>
   <script src="../assets/js/saved_r2.js?v=20260714-ref3"></script>
   <script>window.AFB_CREATIVITY_API="https://creativity-ai.quesaco93.workers.dev";</script>
-  <script src="../assets/js/creativity.js?v=20260715-speech4"></script>
+  <script src="../assets/js/creativity.js?v=20260715-speech5"></script>
 </body>
 </html>

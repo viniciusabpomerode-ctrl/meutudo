@@ -2,7 +2,7 @@
   "use strict";
   renderNav("criatividade");
   const LEVELS=["A1","A2","B1","B2","C1","C2"], FREE_DAILY=3, GUEST_DAILY=1, COOLDOWN=30000;
-  const $=id=>document.getElementById(id);let questions=[],level=null,current=null,recognition=null,recognitionRestartTimer=null,recognitionBase="",recognitionBlocked=false,mediaRecorder=null,mediaStream=null,recordedBlob=null,recordUrl=null,recordStarted=0,recordTimer=null,recordPausedAt=0,recordPausedTotal=0,recordingSession=0,cooldown=false,answerBeforeRecording="";
+  const $=id=>document.getElementById(id);let questions=[],level=null,current=null,recognition=null,recognitionRestartTimer=null,recognitionBase="",recognitionBlocked=false,recognitionActive=false,mediaRecorder=null,mediaStream=null,recordedBlob=null,recordUrl=null,recordStarted=0,recordTimer=null,recordPausedAt=0,recordPausedTotal=0,recordingSession=0,cooldown=false,answerBeforeRecording="";
   const usageKey=()=>`afb_creativity_${new Date().toISOString().slice(0,10)}`;
   function usage(){try{return JSON.parse(localStorage.getItem(usageKey()))||{count:0,last:0}}catch(e){return {count:0,last:0}}}
 
@@ -88,7 +88,7 @@
     if(!window.AFB_CREATIVITY_API){$("record-status").textContent="Gravação pronta. Este navegador não gerou texto; digite a resposta ou ative o Worker de transcrição.";return}
     const token=await Auth.accessToken();if(!token){$("record-status").textContent="Gravação pronta. Entre na conta para gerar a transcrição.";return}
     $("record-status").textContent="Transcrevendo sua resposta em alemão...";
-    try{const r=await fetch(window.AFB_CREATIVITY_API+"/transcribe",{method:"POST",headers:{Authorization:`Bearer ${token}`,"Content-Type":recordedBlob.type||"audio/webm"},body:recordedBlob});const d=await r.json();if(!r.ok||!d.text)throw new Error(d.error||"transcription_failed");$("answer").value=(answerBeforeRecording+" "+d.text).trim();countWords();$("record-status").textContent="Transcrição pronta. Confira o texto antes de analisar."}catch(e){$("record-status").textContent="Não foi possível transcrever agora. A gravação continua disponível para ouvir."}
+    try{const r=await fetch(window.AFB_CREATIVITY_API+"/transcribe",{method:"POST",headers:{Authorization:`Bearer ${token}`,"Content-Type":recordedBlob.type||"audio/webm"},body:recordedBlob});const d=await r.json().catch(()=>({}));if(!r.ok||!d.text){const messages={daily:"Limite de transcrições alcançado hoje.",cooldown:"Aguarde alguns segundos e tente novamente.","Login required":"Entre novamente na conta para gerar a transcrição.","No speech detected":"Não foi possível identificar fala em alemão nessa gravação."};throw new Error(messages[d.error]||d.error||"transcription_failed")}$("answer").value=(answerBeforeRecording+" "+d.text).trim();countWords();$("record-status").textContent="Transcrição pronta e adicionada à caixa de texto.";return true}catch(e){$("record-status").textContent=e.message||"Não foi possível transcrever agora. A gravação continua disponível para ouvir.";return false}
   }
   // Controle robusto do microfone: pausa/retoma, encerra ao trocar de
   // pergunta ou página e ignora callbacks de uma gravação já descartada.
@@ -96,13 +96,14 @@
     const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
     if(!SR){recognitionBlocked=true;return}
     if(recognitionBlocked||session!==recordingSession||!mediaRecorder||mediaRecorder.state!=="recording")return;
-    const activeRecognition=new SR();recognition=activeRecognition;activeRecognition.lang="de-DE";activeRecognition.continuous=true;activeRecognition.interimResults=true;
+    const activeRecognition=new SR();recognition=activeRecognition;activeRecognition.lang="de-DE";activeRecognition.continuous=true;activeRecognition.interimResults=true;activeRecognition.maxAlternatives=1;
+    activeRecognition.onstart=()=>{recognitionActive=true};
     activeRecognition.onresult=e=>{let finalText="",partialText="";for(let i=e.resultIndex;i<e.results.length;i++){const text=e.results[i][0].transcript;if(e.results[i].isFinal)finalText+=text+" ";else partialText+=text}if(finalText)recognitionBase=(recognitionBase+" "+finalText).trim();$("answer").value=(recognitionBase+" "+partialText).trim();countWords()};
-    activeRecognition.onerror=e=>{if(["not-allowed","service-not-allowed","audio-capture"].includes(e.error))recognitionBlocked=true};
-    activeRecognition.onend=()=>{if(recognition===activeRecognition)recognition=null;if(!recognitionBlocked&&session===recordingSession&&mediaRecorder&&mediaRecorder.state==="recording"){clearTimeout(recognitionRestartTimer);recognitionRestartTimer=setTimeout(()=>startSpeechRecognition(session),250)}};
+    activeRecognition.onerror=e=>{recognitionActive=false;if(["not-allowed","service-not-allowed","audio-capture","language-not-supported","network"].includes(e.error))recognitionBlocked=true};
+    activeRecognition.onend=()=>{recognitionActive=false;if(recognition===activeRecognition)recognition=null;if(!recognitionBlocked&&session===recordingSession&&mediaRecorder&&mediaRecorder.state==="recording"){clearTimeout(recognitionRestartTimer);recognitionRestartTimer=setTimeout(()=>startSpeechRecognition(session),250)}};
     try{activeRecognition.start()}catch(e){recognition=null;recognitionRestartTimer=setTimeout(()=>startSpeechRecognition(session),400)}
   }
-  function stopSpeechRecognition(){clearTimeout(recognitionRestartTimer);recognitionRestartTimer=null;const activeRecognition=recognition;recognition=null;if(activeRecognition)try{activeRecognition.stop()}catch(e){}}
+  function stopSpeechRecognition(){clearTimeout(recognitionRestartTimer);recognitionRestartTimer=null;recognitionActive=false;const activeRecognition=recognition;recognition=null;if(activeRecognition)try{activeRecognition.stop()}catch(e){}}
   async function startRecording(){
     if(!navigator.mediaDevices||!window.MediaRecorder){$("record-status").textContent="Seu navegador não oferece gravação. Você pode digitar normalmente.";return}
     const session=++recordingSession;
@@ -122,7 +123,7 @@
       };
       recorder.start();
       startSpeechRecognition(session);
-      recordStarted=Date.now();recordPausedAt=0;recordPausedTotal=0;recordTimer=setInterval(()=>{if(!mediaRecorder)return;if(mediaRecorder.state==="paused")return;const sec=Math.floor((Date.now()-recordStarted-recordPausedTotal)/1000),fallbackNote=recognitionBlocked?" · texto completo ao parar":"";$("record-status").innerHTML=`<span class="record-dot"></span> Gravando ${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}${fallbackNote}`;if(sec>=180)stopRecording()},500);
+      recordStarted=Date.now();recordPausedAt=0;recordPausedTotal=0;recordTimer=setInterval(()=>{if(!mediaRecorder)return;if(mediaRecorder.state==="paused")return;const sec=Math.floor((Date.now()-recordStarted-recordPausedTotal)/1000),transcriptNote=recognitionActive?" · transcrevendo ao vivo":" · texto final ao parar";$("record-status").innerHTML=`<span class="record-dot"></span> Gravando ${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}${transcriptNote}`;if(sec>=180)stopRecording()},500);
       $("record").hidden=true;$("pause").hidden=false;$("stop").hidden=false;$("record-status").className="recording";
     }catch(e){cleanupCapture();$("record-status").className="muted";$("record-status").textContent="Permita o acesso ao microfone para gravar sua resposta."}
   }
