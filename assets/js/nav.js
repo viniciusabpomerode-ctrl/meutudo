@@ -15,6 +15,7 @@ const AFB_CONTENT_PAGES = [
   { href: "criatividade.html", label: "💡 Teste de Criatividade", key: "criatividade" },
   { href: "jogo.html", label: "🎮 Jogo", key: "jogo" },
   { href: "caderno.html", label: "📝 Caderno", key: "caderno" },
+  { href: "../blog/index.html", label: "📰 Blog", key: "blog" },
 ];
 
 function renderNav(active) {
