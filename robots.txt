@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /app/admin.html
+Disallow: /app/dashboard.html
+Disallow: /app/perfil.html
+Disallow: /netlify/functions/
+
+Sitemap: https://deutschbloom.com/sitemap.xml

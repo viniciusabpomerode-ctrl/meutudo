@@ -1,0 +1,57 @@
+/* Blog — tipografia de artigo, pensado pra leitura longa e SEO (HTML
+   estático, sem depender de JS pra mostrar o texto). */
+.blog-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px; border-bottom: 1px solid var(--border-light);
+  max-width: 900px; margin: 0 auto;
+}
+.blog-header .brand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.1rem; text-decoration: none; color: var(--text-primary); }
+.blog-header nav a { color: var(--text-secondary); text-decoration: none; font-size: .9rem; font-weight: 600; margin-left: 18px; }
+.blog-header nav a:hover { color: var(--color-primary); }
+.blog-header .btn-primary { color: #fff !important; }
+
+.blog-wrap { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+.blog-eyebrow { color: var(--color-primary); font-weight: 700; font-size: .82rem; text-transform: uppercase; letter-spacing: .04em; }
+.blog-title { font-size: 2rem; line-height: 1.2; margin: 10px 0 14px; }
+.blog-meta { color: var(--text-secondary); font-size: .85rem; margin-bottom: 30px; }
+.blog-article p { font-size: 1.05rem; line-height: 1.75; margin: 0 0 20px; color: var(--text-primary); }
+.blog-article h2 { font-size: 1.35rem; margin: 38px 0 14px; }
+.blog-article h3 { font-size: 1.1rem; margin: 28px 0 10px; }
+.blog-article ul, .blog-article ol { margin: 0 0 20px; padding-left: 22px; line-height: 1.75; }
+.blog-article li { margin-bottom: 8px; }
+.blog-article blockquote {
+  border-left: 3px solid var(--color-primary); margin: 24px 0; padding: 4px 20px;
+  font-style: italic; color: var(--text-secondary);
+}
+.blog-phrase {
+  background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 14px;
+  padding: 16px 20px; margin: 24px 0; display: flex; align-items: center; gap: 14px;
+}
+.blog-phrase .de { font-weight: 700; font-size: 1.05rem; }
+.blog-phrase .pt { color: var(--text-secondary); font-size: .92rem; margin-top: 2px; }
+.blog-cta {
+  background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: 16px;
+  padding: 26px 24px; margin: 40px 0 20px; text-align: center;
+}
+.blog-cta h3 { margin: 0 0 8px; }
+.blog-cta p { margin: 0 0 18px; color: var(--text-secondary); font-size: .95rem; }
+.blog-tags { display: flex; gap: 8px; flex-wrap: wrap; margin: 30px 0 0; }
+.blog-tags span { background: var(--bg-secondary); color: var(--text-secondary); font-size: .78rem; padding: 4px 12px; border-radius: 999px; }
+.blog-back { display: inline-block; margin-bottom: 20px; color: var(--text-secondary); text-decoration: none; font-size: .88rem; }
+.blog-back:hover { color: var(--color-primary); }
+
+.blog-index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 24px; }
+.blog-index-card {
+  background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 14px;
+  padding: 18px; text-decoration: none; color: inherit; transition: .2s;
+}
+.blog-index-card:hover { border-color: var(--color-primary); transform: translateY(-2px); }
+.blog-index-card .cat { color: var(--color-primary); font-size: .75rem; font-weight: 700; text-transform: uppercase; }
+.blog-index-card h3 { margin: 8px 0 6px; font-size: 1rem; }
+.blog-index-card p { margin: 0; color: var(--text-secondary); font-size: .85rem; line-height: 1.5; }
+.blog-filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0; }
+.blog-filters button {
+  border: 2px solid var(--border-light); background: var(--card-bg); color: var(--text-primary);
+  border-radius: 999px; padding: 7px 16px; font-size: .82rem; font-weight: 600; cursor: pointer;
+}
+.blog-filters button.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }

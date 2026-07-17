@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Cultura alemã, dicas de aprendizado e expressões | DeutschBloom</title>
+<meta name="description" content="Textos sobre cultura alemã, dicas práticas de aprendizado e expressões do dia a dia — pra quem quer aprender alemão de verdade, não só decorar lista de palavras.">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/blog.css">
+</head>
+<body>
+  <header class="blog-header">
+    <a href="../index.html" class="brand">◆ DeutschBloom</a>
+    <nav>
+      <a href="index.html">Blog</a>
+      <a href="../app/planos.html" class="btn btn-primary btn-sm">Ver planos</a>
+    </nav>
+  </header>
+
+  <div class="blog-wrap" style="max-width:960px;">
+    <span class="blog-eyebrow">Blog do DeutschBloom</span>
+    <h1 class="blog-title">Cultura alemã, dicas de aprendizado e expressões do dia a dia</h1>
+    <p class="muted" style="max-width:600px;">Textos pra quem quer entender a Alemanha de verdade — sem clichê de Oktoberfest e chucrute — e aprender alemão no ritmo certo.</p>
+
+    <div class="blog-filters" id="blog-filters">
+      <button class="active" data-cat="todos">Todos</button>
+      <button data-cat="Cultura alemã">Cultura alemã</button>
+      <button data-cat="Dicas de aprendizado">Dicas de aprendizado</button>
+      <button data-cat="Expressões e vocabulário">Expressões e vocabulário</button>
+      <button data-cat="Curiosidades linguísticas">Curiosidades linguísticas</button>
+    </div>
+
+    <div class="blog-index-grid" id="blog-grid"></div>
+  </div>
+
+  <script>
+    // Lista mantida à mão (sem build step, igual o resto do site) --
+    // cada post novo entra aqui conforme é publicado.
+    const POSTS = [
+      { slug: "por-que-o-alemao-tem-3-generos", title: "Por que o alemão tem 3 gêneros (e como parar de errar der/die/das)", cat: "Dicas de aprendizado", desc: "Der, die, das trava todo iniciante. Entenda a lógica por trás e como parar de decorar sem sentido." },
+      { slug: "acusativo-e-dativo-sem-trauma", title: "Acusativo e Dativo sem trauma: entenda de vez", cat: "Dicas de aprendizado", desc: "Um jeito simples de entender quando usar cada caso, sem decorar tabela." },
+      { slug: "por-que-o-verbo-vai-pro-final-da-frase", title: "Por que o verbo alemão vai pro final da frase", cat: "Dicas de aprendizado", desc: "Entenda por que isso acontece e como treinar o ouvido pra não se perder." },
+      { slug: "sein-haben-werden-os-tres-verbos-que-decidem-tudo", title: "Sein, haben, werden: os 3 verbos que decidem tudo", cat: "Dicas de aprendizado", desc: "Esses três verbos formam outros tempos verbais inteiros. Domine eles primeiro." },
+      { slug: "como-pronunciar-u-o-a-e-ch-em-alemao", title: "Como pronunciar Ü, Ö, Ä e o \"ch\" em alemão", cat: "Expressões e vocabulário", desc: "Um guia prático de como posicionar a boca pra falar os sons que não existem em português." },
+      { slug: "verbos-separaveis-em-alemao", title: "Verbos separáveis: por que \"aufstehen\" vira \"steht...auf\"", cat: "Dicas de aprendizado", desc: "Entenda como funcionam e por que o prefixo some da frente do verbo." },
+      { slug: "quando-usar-sie-ou-du", title: "Quando usar Sie ou du sem cometer gafe", cat: "Cultura alemã", desc: "Errar entre Sie e du pode soar rude. As regras reais de tratamento formal e informal." },
+      { slug: "como-decorar-o-artigo-certo-sem-decoreba", title: "Como decorar o artigo certo sem virar decoreba sem sentido", cat: "Dicas de aprendizado", desc: "Técnicas reais que funcionam de verdade pra fixar der/die/das." },
+      { slug: "preterito-x-perfekt-quando-usar-cada-um", title: "Präteritum x Perfekt: quando usar cada um", cat: "Dicas de aprendizado", desc: "O alemão tem dois passados diferentes. Entenda quando usar cada um." },
+      { slug: "como-montar-uma-frase-em-alemao-do-zero", title: "Como montar uma frase em alemão do zero", cat: "Dicas de aprendizado", desc: "Um roteiro simples pra organizar qualquer frase alemã antes de falar." },
+      { slug: "quanto-tempo-leva-para-falar-alemao-de-verdade", title: "Quanto tempo leva pra falar alemão de verdade", cat: "Dicas de aprendizado", desc: "Uma resposta honesta, com números reais, sobre quanto tempo leva pra ficar fluente." },
+      { slug: "alemao-e-o-idioma-mais-dificil-do-mundo", title: "Alemão é o idioma mais difícil do mundo? O que a ciência diz", cat: "Dicas de aprendizado", desc: "Difícil comparado a quê? Veja a classificação oficial de dificuldade de idiomas." },
+      { slug: "duolingo-e-suficiente-para-aprender-alemao", title: "Duolingo é suficiente pra aprender alemão?", cat: "Dicas de aprendizado", desc: "O que o Duolingo resolve bem e onde ele deixa buracos reais." },
+      { slug: "vale-a-pena-decorar-listas-de-vocabulario", title: "Vale a pena decorar listas de vocabulário?", cat: "Dicas de aprendizado", desc: "Decorar lista solta não funciona. Veja o que a ciência da memória recomenda." },
+      { slug: "como-saber-se-voce-ja-esta-no-nivel-a2-b1", title: "Como saber se você já está no nível A2, B1...", cat: "Dicas de aprendizado", desc: "O que cada nível do Quadro Europeu realmente significa na prática." },
+      { slug: "e-tarde-para-aprender-alemao-depois-dos-30", title: "É tarde pra aprender alemão depois dos 30?", cat: "Dicas de aprendizado", desc: "A ciência sobre aquisição de idiomas em adultos mostra que \"tarde demais\" é mito." },
+      { slug: "da-para-aprender-alemao-sem-morar-na-alemanha", title: "Dá pra aprender alemão sem morar na Alemanha?", cat: "Dicas de aprendizado", desc: "Como recriar os benefícios da imersão sem sair do Brasil." },
+      { slug: "por-que-trava-na-hora-de-falar-mesmo-sabendo-gramatica", title: "Por que trava na hora de falar mesmo sabendo gramática", cat: "Dicas de aprendizado", desc: "É comum entender tudo escrito e travar numa conversa real. Entenda por quê." },
+      { slug: "quanto-tempo-de-estudo-por-dia-faz-diferenca", title: "Quanto tempo de estudo por dia realmente faz diferença", cat: "Dicas de aprendizado", desc: "15 minutos por dia batem 3 horas no fim de semana. Veja o que a ciência diz." },
+      { slug: "preciso-saber-alemao-para-estudar-ou-trabalhar-na-alemanha", title: "Preciso saber alemão pra estudar ou trabalhar na Alemanha?", cat: "Dicas de aprendizado", desc: "Depende muito da área e da cidade. Veja quando é obrigatório e quando não é." },
+      { slug: "por-que-o-alemao-falado-parece-mais-rapido", title: "Por que o alemão falado parece muito mais rápido que nos livros", cat: "Dicas de aprendizado", desc: "Contrações e ligações entre palavras que nenhum livro didático prepara." },
+      { slug: "como-treinar-o-ouvido-com-podcast-e-musica-em-alemao", title: "Como treinar o ouvido com podcast e música em alemão", cat: "Dicas de aprendizado", desc: "Podcast e música só funcionam bem se usados do jeito certo. Veja como." },
+      { slug: "palavras-que-todo-iniciante-pronuncia-errado-em-alemao", title: "As palavras que todo iniciante pronuncia errado em alemão", cat: "Expressões e vocabulário", desc: "As combinações de letras mais comuns que enganam quem vem do português." },
+      { slug: "r-alemao-x-r-do-portugues", title: "R alemão x R do português: como fazer o som certo", cat: "Expressões e vocabulário", desc: "As variações regionais do R alemão e como treinar até sair naturalmente." },
+      { slug: "sotaque-em-alemao-precisa-perder-ou-nao", title: "Sotaque em alemão: precisa perder ou não?", cat: "Dicas de aprendizado", desc: "O que realmente importa: inteligibilidade, não sotaque perfeito." },
+      { slug: "como-funciona-a-escola-na-alemanha", title: "Como funciona a escola na Alemanha", cat: "Cultura alemã", desc: "O sistema escolar alemão divide os alunos cedo demais pro padrão brasileiro." },
+      { slug: "feriados-alemaes-que-todo-aluno-deveria-conhecer", title: "Feriados alemães que todo aluno deveria conhecer", cat: "Cultura alemã", desc: "Feriados que variam de estado pra estado e revelam a história do país." },
+      { slug: "comida-alema-alem-do-estereotipo", title: "Comida alemã além do estereótipo", cat: "Cultura alemã", desc: "Muito mais que salsicha e chucrute — pratos reais e regionais da Alemanha." },
+      { slug: "alemao-austriaco-e-suico-diferencas", title: "Alemão, austríaco e suíço: mesmo idioma, sotaques diferentes", cat: "Cultura alemã", desc: "Por que nem sempre alemães, austríacos e suíços se entendem fácil entre si." },
+      { slug: "cidades-alemas-alem-de-berlim", title: "Cidades alemãs além de Berlim que valem conhecer", cat: "Cultura alemã", desc: "Munique, Hamburgo, Colônia, Dresden — a diversidade regional da Alemanha." },
+      { slug: "como-e-o-oktoberfest-de-verdade", title: "Como é o Oktoberfest de verdade (além do estereótipo)", cat: "Cultura alemã", desc: "Chope, chucrute e cerveja de 1 litro é só a superfície. Entenda como a festa realmente funciona." },
+      { slug: "como-os-alemaes-tratam-pontualidade", title: "Como os alemães tratam pontualidade", cat: "Cultura alemã", desc: "Pontualidade na Alemanha vai muito além de \"chegar na hora\"." },
+      { slug: "regras-de-convivencia-que-surpreendem-estrangeiros", title: "Regras de convivência que surpreendem estrangeiros", cat: "Cultura alemã", desc: "Reciclagem detalhada, silêncio de domingo e outras regras não escritas." },
+      { slug: "etiqueta-alema-o-que-nao-fazer", title: "Etiqueta alemã: o que não fazer", cat: "Cultura alemã", desc: "Pequenos deslizes de etiqueta que passam despercebidos no Brasil, mas chamam atenção na Alemanha." },
+      { slug: "curiosidades-historicas-que-explicam-o-jeito-alemao", title: "Curiosidades históricas que explicam o \"jeito alemão\" de ser", cat: "Cultura alemã", desc: "Traços culturais que parecem aleatórios têm raízes históricas específicas." },
+      { slug: "girias-que-so-quem-mora-la-conhece", title: "Gírias que só quem mora na Alemanha conhece", cat: "Expressões e vocabulário", desc: "Vocabulário do dia a dia que revela bastante sobre a cultura jovem alemã." },
+      { slug: "expressoes-idiomaticas-traducao-literal-vs-sentido-real", title: "Expressões idiomáticas: tradução literal vs. sentido real", cat: "Expressões e vocabulário", desc: "Expressões alemãs traduzidas ao pé da letra soam completamente absurdas." },
+      { slug: "como-pedir-comida-e-bebida-como-nativo", title: "Como pedir comida e bebida como nativo", cat: "Expressões e vocabulário", desc: "As frases de restaurante que os livros ensinam soam formais demais." },
+      { slug: "vocabulario-de-viagem-essencial-em-alemao", title: "Vocabulário de viagem essencial em alemão", cat: "Expressões e vocabulário", desc: "As palavras e frases que realmente resolvem uma viagem." },
+      { slug: "palavras-alemas-sem-traducao-direta", title: "Palavras alemãs sem tradução direta pro português", cat: "Expressões e vocabulário", desc: "Palavras que capturam sentimentos tão específicos que não existe equivalente único." },
+      { slug: "como-se-desculpar-e-agradecer-do-jeito-certo", title: "Como se desculpar e agradecer do jeito certo", cat: "Expressões e vocabulário", desc: "Existem vários níveis de \"desculpa\" e \"obrigado\", cada um pro contexto certo." },
+      { slug: "vocabulario-de-emergencia-para-quem-viaja", title: "Vocabulário de emergência em alemão pra quem viaja", cat: "Expressões e vocabulário", desc: "As frases que fazem toda diferença numa emergência real de viagem." },
+      { slug: "palavras-compostas-mais-uteis-do-dia-a-dia", title: "Palavras compostas alemãs mais úteis do dia a dia", cat: "Expressões e vocabulário", desc: "O alemão constrói palavras juntando conceitos menores. Entenda a lógica." },
+      { slug: "como-falar-de-sentimentos-em-alemao", title: "Como falar de sentimentos e emoções em alemão", cat: "Expressões e vocabulário", desc: "Expressar emoção de verdade exige mais que traduzir palavra por palavra." },
+      { slug: "como-perguntar-e-dar-direcoes-em-alemao", title: "Como perguntar e dar direções em alemão", cat: "Expressões e vocabulário", desc: "Vocabulário e frases pra entender direções sem depender de mapa o tempo todo." },
+      { slug: "alemao-para-quem-vai-morar-na-alemanha", title: "Alemão pra quem vai morar na Alemanha", cat: "Dicas de aprendizado", desc: "O vocabulário que resolve o dia a dia — burocracia, moradia e banco." },
+      { slug: "alemao-para-prova-goethe-zertifikat-por-onde-comecar", title: "Alemão pra prova Goethe-Zertifikat: por onde começar", cat: "Dicas de aprendizado", desc: "A prova exige preparo específico, diferente de estudar alemão pra conversar." },
+      { slug: "alemao-para-quem-so-quer-viajar", title: "Alemão pra quem só quer viajar", cat: "Dicas de aprendizado", desc: "Você não precisa de fluência pra aproveitar uma viagem tranquila." },
+      { slug: "alemao-para-trabalho-remoto-com-empresa-alema", title: "Alemão pra quem trabalha remoto com empresa alemã", cat: "Dicas de aprendizado", desc: "Trabalhar em inglês é comum, mas alemão faz diferença real na integração." },
+      { slug: "alemao-para-imigracao-quais-certificados-pedem-o-que", title: "Alemão pra imigração: quais certificados pedem o quê", cat: "Dicas de aprendizado", desc: "Diferentes vistos e processos exigem níveis e certificados diferentes." },
+      { slug: "erros-mais-comuns-de-quem-aprende-alemao-sozinho", title: "Os erros mais comuns de quem aprende alemão sozinho", cat: "Dicas de aprendizado", desc: "Estudar sozinho tem armadilhas específicas que atrasam o progresso." },
+      { slug: "mitos-sobre-o-alemao-que-atrapalham-quem-ta-comecando", title: "Mitos sobre o alemão que atrapalham quem tá começando", cat: "Dicas de aprendizado", desc: "Alguns mitos populares desmotivam gente antes mesmo de começar." },
+      { slug: "por-que-alemao-soa-agressivo-e-um-mito", title: "Por que \"alemão soa agressivo\" é um mito", cat: "Cultura alemã", desc: "Isso tem mais a ver com estereótipo histórico do que com o som real do idioma." },
+      { slug: "falsos-cognatos-entre-portugues-e-alemao", title: "Falsos cognatos entre português e alemão que confundem", cat: "Expressões e vocabulário", desc: "Palavras que parecem familiares mas significam algo completamente diferente." },
+      { slug: "erros-de-vocabulario-que-entregam-que-voce-e-iniciante", title: "Erros de vocabulário que entregam que você é iniciante", cat: "Dicas de aprendizado", desc: "Alguns erros de escolha de palavra soam mais \"estrangeiro\" que erros de gramática." },
+      { slug: "alemao-x-ingles-o-que-ajuda-e-o-que-atrapalha", title: "Alemão x inglês: o que ajuda e o que atrapalha", cat: "Curiosidades linguísticas", desc: "Saber inglês ajuda a aprender alemão, mas não do jeito que a maioria imagina." },
+      { slug: "por-que-o-alemao-tem-palavras-gigantes", title: "Por que o alemão tem palavras gigantes (e como isso ajuda)", cat: "Curiosidades linguísticas", desc: "Palavras gigantescas viralizam na internet, mas existe lógica real por trás." },
+      { slug: "quantas-palavras-voce-precisa-saber-para-se-virar", title: "Quantas palavras você precisa saber pra se virar", cat: "Curiosidades linguísticas", desc: "Você precisa de muito menos vocabulário do que imagina." },
+      { slug: "como-o-alemao-influenciou-o-ingles", title: "Como o alemão influenciou o inglês (e vice-versa)", cat: "Curiosidades linguísticas", desc: "Os dois idiomas trocaram palavras ao longo da história de formas curiosas." },
+      { slug: "numeros-e-como-os-alemaes-falam-horas-e-precos", title: "Números e como os alemães falam horas e preços", cat: "Curiosidades linguísticas", desc: "A forma alemã de organizar números e falar horas confunde muita gente no início." },
+    ];
+
+    function render(cat) {
+      const grid = document.getElementById("blog-grid");
+      const filtered = cat === "todos" ? POSTS : POSTS.filter(p => p.cat === cat);
+      grid.innerHTML = filtered.map(p => `
+        <a class="blog-index-card" href="${p.slug}.html">
+          <span class="cat">${p.cat}</span>
+          <h3>${p.title}</h3>
+          <p>${p.desc}</p>
+        </a>`).join("") || `<p class="muted">Mais textos chegando em breve.</p>`;
+    }
+    document.querySelectorAll("#blog-filters button").forEach(b => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("#blog-filters button").forEach(x => x.classList.remove("active"));
+        b.classList.add("active");
+        render(b.dataset.cat);
+      });
+    });
+    render("todos");
+  </script>
+</body>
+</html>
