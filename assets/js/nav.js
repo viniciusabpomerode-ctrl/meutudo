@@ -5,6 +5,7 @@ const AFB_CONTENT_PAGES = [
   { href: "cursos.html", label: "💬 Diálogos", key: "cursos" },
   { href: "cursos.html?tab=verbos", label: "📖 Verbos", key: "verbos" },
   { href: "musica.html", label: "🎵 Música", key: "musica" },
+  { href: "podcasts.html", label: "🎧 Podcasts", key: "podcasts" },
   { href: "expressoes.html", label: "🗣️ Gírias", key: "expressoes" },
   { href: "vocabulario.html", label: "📚 Vocabulário", key: "vocabulario" },
   { href: "profissoes.html", label: "💼 Profissões", key: "profissoes" },

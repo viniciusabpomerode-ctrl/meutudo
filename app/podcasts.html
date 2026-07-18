@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Podcasts — DeutschBloom</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    .pod-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; align-items: center; }
+    .pod-chip-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pod-chip {
+      padding: 8px 16px; border-radius: 999px; border: 2px solid var(--border-light);
+      background: var(--card-bg); cursor: pointer; font-size: .85rem; font-weight: 600;
+      transition: .2s; white-space: nowrap;
+    }
+    .pod-chip:hover { border-color: var(--color-primary); }
+    .pod-chip.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+    .pod-lang-select {
+      padding: 8px 14px; border-radius: 999px; border: 2px solid var(--border-light);
+      background: var(--card-bg); font-size: .85rem; font-weight: 600; cursor: pointer;
+      color: var(--text-primary);
+    }
+    .pod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .pod-card {
+      background: var(--card-bg); border-radius: var(--radius); padding: 0 0 18px;
+      border: 1px solid var(--border-light); transition: .2s; text-decoration: none; color: inherit;
+      display: flex; flex-direction: column; gap: 8px; position: relative; overflow: hidden;
+    }
+    .pod-card > :not(.pod-cover) { margin-left: 18px; margin-right: 18px; }
+    .pod-card .pod-cover { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: var(--bg-secondary); }
+    .pod-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.1); border-color: var(--color-primary); }
+    .pod-card .pod-genre-icon { font-size: 1.8rem; }
+    .pod-card h3 { margin: 0; font-size: 1.02rem; }
+    .pod-card .pod-german { font-size: .82rem; color: var(--text-secondary); font-style: italic; }
+    .pod-card .pod-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+    .pod-card .level-badge { padding: 2px 10px; border-radius: 999px; font-size: .7rem; font-weight: 800; color: #fff; }
+    .pod-card .pod-duration { font-size: .78rem; color: var(--text-secondary); }
+    .pod-progress-bar { height: 5px; border-radius: 3px; background: var(--bg-secondary); margin-top: 6px; overflow: hidden; }
+    .pod-progress-bar > i { display: block; height: 100%; background: var(--color-primary); }
+    .pod-status-pill { font-size: .72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; align-self: flex-start; }
+    .pod-status-pill.done { background: rgba(60,180,100,.15); color: #2e9e5b; }
+    .pod-status-pill.progress { background: rgba(255,180,0,.15); color: #b8860b; }
+    .pod-status-pill.new { background: var(--bg-secondary); color: var(--text-secondary); }
+    .pod-coming-soon { opacity: .55; pointer-events: none; }
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+  <div id="app-nav"></div>
+
+  <div class="container" style="padding-top:28px; max-width:1000px;">
+    <h2 class="mt-0" id="pg-title">🎧 Podcasts em Alemão</h2>
+    <p class="muted" id="pg-subtitle">Histórias bilíngues para ouvir com fone: alemão seguido da tradução, frase por frase.</p>
+
+    <div class="pod-filters">
+      <div class="pod-chip-group" id="genre-filters">
+        <button class="pod-chip active" data-genre="todos" id="lbl-genre-all">Todos</button>
+        <button class="pod-chip" data-genre="acao" id="lbl-genre-acao">⚔️ Ação</button>
+        <button class="pod-chip" data-genre="aventura" id="lbl-genre-aventura">🧭 Aventura</button>
+        <button class="pod-chip" data-genre="suspense" id="lbl-genre-suspense">🕵️ Suspense</button>
+      </div>
+      <div class="pod-chip-group" id="level-filters">
+        <button class="pod-chip active" data-level="todos" id="lbl-level-all">Todos</button>
+        <button class="pod-chip" data-level="A1/A2">A1–A2</button>
+        <button class="pod-chip" data-level="B1/B2">B1–B2</button>
+      </div>
+      <select class="pod-lang-select" id="lang-select"></select>
+    </div>
+
+    <div class="counter" id="counter" style="margin-bottom:14px;color:var(--text-secondary);font-size:.85rem;"></div>
+    <div class="pod-grid" id="pod-grid"><p class="muted">Carregando...</p></div>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/sfx.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/xp.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/guest.js"></script>
+  <script>
+    renderNav("podcasts");
+
+    const POD_UI = {
+      pt:{title:"🎧 Podcasts em Alemão",subtitle:"Histórias bilíngues para ouvir com fone: alemão seguido da tradução, frase por frase.",all:"Todos",action:"⚔️ Ação",adventure:"🧭 Aventura",suspense:"🕵️ Suspense",stories:"história(s)",done:"✅ Concluído",fresh:"Novo",none:"Nenhuma história encontrada com esse filtro.",soon:"em breve neste idioma",error:"Não deu pra carregar os podcasts agora. Tenta de novo em instantes."},
+      en:{title:"🎧 German Podcasts",subtitle:"Bilingual stories for headphone learning: German followed by the translation, sentence by sentence.",all:"All",action:"⚔️ Action",adventure:"🧭 Adventure",suspense:"🕵️ Suspense",stories:"story/stories",done:"✅ Completed",fresh:"New",none:"No stories match this filter.",soon:"coming soon in this language",error:"The podcasts could not be loaded. Please try again shortly."},
+      es:{title:"🎧 Podcasts en alemán",subtitle:"Historias bilingües para aprender con auriculares: alemán seguido de la traducción, frase por frase.",all:"Todos",action:"⚔️ Acción",adventure:"🧭 Aventura",suspense:"🕵️ Suspenso",stories:"historia(s)",done:"✅ Completado",fresh:"Nuevo",none:"No hay historias con este filtro.",soon:"próximamente en este idioma",error:"No se pudieron cargar los podcasts. Inténtalo de nuevo en unos instantes."},
+      fr:{title:"🎧 Podcasts en allemand",subtitle:"Des histoires bilingues à écouter au casque : l’allemand suivi de la traduction, phrase par phrase.",all:"Tous",action:"⚔️ Action",adventure:"🧭 Aventure",suspense:"🕵️ Suspense",stories:"histoire(s)",done:"✅ Terminé",fresh:"Nouveau",none:"Aucune histoire ne correspond à ce filtre.",soon:"bientôt dans cette langue",error:"Impossible de charger les podcasts. Réessayez dans quelques instants."},
+      it:{title:"🎧 Podcast in tedesco",subtitle:"Storie bilingui da ascoltare in cuffia: tedesco seguito dalla traduzione, frase per frase.",all:"Tutti",action:"⚔️ Azione",adventure:"🧭 Avventura",suspense:"🕵️ Suspense",stories:"storia/e",done:"✅ Completato",fresh:"Nuovo",none:"Nessuna storia corrisponde a questo filtro.",soon:"prossimamente in questa lingua",error:"Impossibile caricare i podcast. Riprova tra poco."},
+      tr:{title:"🎧 Almanca Podcast'ler",subtitle:"Kulaklıkla öğrenmek için iki dilli hikâyeler: cümle cümle Almanca ve ardından çeviri.",all:"Tümü",action:"⚔️ Aksiyon",adventure:"🧭 Macera",suspense:"🕵️ Gerilim",stories:"hikâye",done:"✅ Tamamlandı",fresh:"Yeni",none:"Bu filtreye uygun hikâye yok.",soon:"bu dilde yakında",error:"Podcast'ler yüklenemedi. Lütfen kısa süre sonra tekrar deneyin."},
+      ar:{title:"🎧 بودكاست بالألمانية",subtitle:"قصص ثنائية اللغة للتعلم بالسماعات: الألمانية ثم الترجمة، جملةً بعد جملة.",all:"الكل",action:"⚔️ أكشن",adventure:"🧭 مغامرة",suspense:"🕵️ تشويق",stories:"قصة",done:"✅ مكتمل",fresh:"جديد",none:"لا توجد قصص مطابقة لهذا الفلتر.",soon:"قريبًا بهذه اللغة",error:"تعذر تحميل البودكاست. حاول مرة أخرى بعد قليل."},
+      he:{title:"🎧 פודקאסטים בגרמנית",subtitle:"סיפורים דו־לשוניים ללמידה באוזניות: גרמנית ואחריה התרגום, משפט אחר משפט.",all:"הכול",action:"⚔️ פעולה",adventure:"🧭 הרפתקה",suspense:"🕵️ מתח",stories:"סיפורים",done:"✅ הושלם",fresh:"חדש",none:"לא נמצאו סיפורים לפי הסינון.",soon:"בקרוב בשפה זו",error:"לא ניתן לטעון את הפודקאסטים. נסו שוב בעוד רגע."},
+      hi:{title:"🎧 जर्मन पॉडकास्ट",subtitle:"हेडफ़ोन से सीखने के लिए द्विभाषी कहानियाँ: हर वाक्य में पहले जर्मन, फिर अनुवाद।",all:"सभी",action:"⚔️ एक्शन",adventure:"🧭 रोमांच",suspense:"🕵️ रहस्य",stories:"कहानी/कहानियाँ",done:"✅ पूर्ण",fresh:"नया",none:"इस फ़िल्टर से कोई कहानी नहीं मिली।",soon:"इस भाषा में जल्द उपलब्ध",error:"पॉडकास्ट लोड नहीं हो सके। थोड़ी देर बाद फिर प्रयास करें।"},
+      pl:{title:"🎧 Podcasty po niemiecku",subtitle:"Dwujęzyczne historie do nauki w słuchawkach: niemiecki, a potem tłumaczenie, zdanie po zdaniu.",all:"Wszystkie",action:"⚔️ Akcja",adventure:"🧭 Przygoda",suspense:"🕵️ Napięcie",stories:"historie",done:"✅ Ukończono",fresh:"Nowe",none:"Brak historii pasujących do filtra.",soon:"wkrótce w tym języku",error:"Nie udało się załadować podcastów. Spróbuj ponownie za chwilę."}
+    };
+    const ui = () => POD_UI[activeLang] || POD_UI.pt;
+    const GENRE_ICON = { acao: "⚔️", aventura: "🧭", suspense: "🕵️" };
+    const LEVEL_COLOR = { "A1/A2": "#4CAF50", "B1/B2": "#9C27B0" };
+
+    let allStories = [];
+    let activeGenre = "todos";
+    let activeLevel = "todos";
+    let activeLang = (typeof I18n !== "undefined" ? I18n.getCurrent() : "pt");
+
+    function fmtDuration(seconds) {
+      if (!seconds) return "";
+      const min = Math.round(seconds / 60);
+      const h = Math.floor(min / 60), m = min % 60;
+      return h > 0 ? `${h}h${m > 0 ? m + "min" : ""}` : `${m}min`;
+    }
+
+    function statusFor(story) {
+      const pos = Progress.getPodcastPosition(story.slug, activeLang);
+      if (Progress.isCompleted("podcast-" + story.slug)) return { key: "done", label: ui().done, pct: 100 };
+      if (pos && pos.percent > 1) return { key: "progress", label: `▶ ${Math.round(pos.percent)}%`, pct: pos.percent };
+      return { key: "new", label: ui().fresh, pct: 0 };
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById("pod-grid");
+      let filtered = allStories.filter(s =>
+        (activeGenre === "todos" || s.genre === activeGenre) &&
+        (activeLevel === "todos" || s.level === activeLevel)
+      );
+
+      document.getElementById("pg-title").textContent = ui().title;
+      document.getElementById("pg-subtitle").textContent = ui().subtitle;
+      document.getElementById("lbl-genre-all").textContent = ui().all;
+      document.getElementById("lbl-genre-acao").textContent = ui().action;
+      document.getElementById("lbl-genre-aventura").textContent = ui().adventure;
+      document.getElementById("lbl-genre-suspense").textContent = ui().suspense;
+      document.getElementById("lbl-level-all").textContent = ui().all;
+      document.getElementById("counter").textContent = `${filtered.length} ${ui().stories}`;
+
+      if (!filtered.length) {
+        grid.innerHTML = `<div class="empty-state"><div style="font-size:2.5rem;">🎧</div><p>${ui().none}</p></div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map((s, idx) => {
+        const langOk = s.languages_available.includes(activeLang);
+        const duration = s.duration_seconds[activeLang] || s.duration_seconds.pt;
+        const status = statusFor(s);
+        const comingSoon = s.status === "coming_soon" || !langOk;
+
+        return `
+          <a class="pod-card ${comingSoon ? 'pod-coming-soon' : ''}" href="podcast.html?slug=${s.slug}&lang=${activeLang}">
+            <img class="pod-cover" src="../assets/images/podcasts/${s.slug}.png" alt="${s.german_title}" loading="lazy">
+            <span class="pod-status-pill ${status.key}">${status.label}</span>
+            <div class="pod-genre-icon">${GENRE_ICON[s.genre] || "🎧"}</div>
+            <h3>${s.german_title}</h3>
+            <div class="pod-german">${s.premise || ""}</div>
+            <div class="pod-meta">
+              <span class="level-badge" style="background:${LEVEL_COLOR[s.level] || '#888'}">${s.level}</span>
+              <span class="pod-duration">${fmtDuration(duration)}</span>
+              ${comingSoon ? `<span class="tag">${ui().soon}</span>` : ''}
+            </div>
+            ${status.pct > 0 ? `<div class="pod-progress-bar"><i style="width:${status.pct}%"></i></div>` : ""}
+          </a>`;
+      }).join("");
+    }
+
+    function buildLangSelect() {
+      const sel = document.getElementById("lang-select");
+      sel.innerHTML = Object.values(AppLanguage).map(l =>
+        `<option value="${l.code}" ${l.code === activeLang ? "selected" : ""}>${l.flag} ${l.name}</option>`
+      ).join("");
+      sel.addEventListener("change", () => {
+        activeLang = sel.value;
+        try { localStorage.setItem("afb_language", activeLang); } catch {}
+        renderGrid();
+      });
+    }
+
+    document.querySelectorAll("#genre-filters .pod-chip").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#genre-filters .pod-chip").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeGenre = btn.dataset.genre;
+        renderGrid();
+      });
+    });
+    document.querySelectorAll("#level-filters .pod-chip").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#level-filters .pod-chip").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeLevel = btn.dataset.level;
+        renderGrid();
+      });
+    });
+
+    (async () => {
+      buildLangSelect();
+      try {
+        const catalog = await AFBData.podcastCatalog();
+        allStories = catalog.stories || [];
+      } catch (e) {
+        document.getElementById("pod-grid").innerHTML = `<div class="empty-state"><p>${ui().error}</p></div>`;
+        return;
+      }
+      renderGrid();
+    })();
+  </script>
+</body>
+</html>

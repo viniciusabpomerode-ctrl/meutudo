@@ -10,6 +10,10 @@ const AFB_AUDIO_BUCKET = "podcast"; // mesmo bucket usado pelo app Flutter (buck
 // de emergencia/debug).
 const AFB_R2_PUBLIC_URL = (typeof window !== "undefined" && window.AFB_CONTENT_GATEWAY_URL)
   || "https://deutschbloom-content-gateway.quesaco93.workers.dev";
+// Os podcasts estão liberados gratuitamente nesta fase. JSONs e áudios são
+// lidos diretamente do bucket público para não aplicar o recorte Premium do
+// restante da biblioteca.
+const AFB_PODCAST_PUBLIC_URL = "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev";
 
 const AFBData = {
   _cache: {},
@@ -63,6 +67,39 @@ const AFBData = {
   verbos(code) { return AFBData.load(`cursos/${code}_verbs`); },
   musica() { return AFBData.load("musica"); },
   jogoVocabulario() { return AFBData.load("jogo_vocabulario"); },
+
+  // ── Podcasts (histórias bilíngues) ──
+  // Diferente de load(): cada episódio já vem pronto no idioma pedido (o
+  // pipeline de produção gera um JSON por idioma), então NÃO passa pelo
+  // I18n.translateData -- isso corromperia o german_text/translation, que
+  // já são exatamente o par certo de idiomas.
+  async _fetchPodcastJson(relPath, cacheKey) {
+    if (AFBData._cache[cacheKey]) return AFBData._cache[cacheKey];
+    const urls = [`${AFB_PODCAST_PUBLIC_URL}/data/${relPath}`, `../data/${relPath}`];
+    for (const url of urls) {
+      try {
+        const r = await fetch(url, { cache: "default" });
+        if (r.ok) {
+          const json = await r.json();
+          AFBData._cache[cacheKey] = json;
+          return json;
+        }
+      } catch {}
+    }
+    throw new Error(`Falha ao carregar ${relPath}`);
+  },
+  podcastCatalog() {
+    return AFBData._fetchPodcastJson("podcasts/catalog.json", "podcasts/catalog");
+  },
+  podcast(slug, language) {
+    const lang = language || (typeof I18n !== "undefined" ? I18n.getCurrent() : "pt");
+    return AFBData._fetchPodcastJson(`podcasts/${slug}/${lang}.json`, `podcasts/${slug}/${lang}`);
+  },
+  // Áudio dos podcasts fica só no R2 (bucket "edicao", não no Supabase
+  // Storage) -- resolve direto pelo gateway, sem tentar assinar Supabase.
+  podcastAudioUrl(storagePath) {
+    return `${AFB_PODCAST_PUBLIC_URL}/${String(storagePath || "").replace(/^\/+/, "")}`;
+  },
 
   // Busca em todos os niveis ate achar o item com o id dado (usado quando a
   // pagina so recebe o id pela URL, sem saber o nivel de antemao)

@@ -75,13 +75,30 @@ function syncProgressToR2(progress){
   }); } catch(e) {}
 }
 
+// Mescla posicoes de podcast local x remoto escolhendo, por chave
+// "slug:idioma", o registro com updatedAt mais recente.
+function mergePodcasts(local, remote){
+  var out = Object.assign({}, local||{});
+  var r = remote||{};
+  for (var key in r) {
+    if (!out[key] || new Date(r[key].updatedAt||0) > new Date(out[key].updatedAt||0)) {
+      out[key] = r[key];
+    }
+  }
+  return out;
+}
+
 function loadProgress(){
   var key = progressKey();
   try {
     var raw = localStorage.getItem(key);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      var p = JSON.parse(raw);
+      if (!p.podcasts) p.podcasts = {};
+      return p;
+    }
   } catch(e) {}
-  return { xp: 0, completed: [], streak: 0, lastActivity: null };
+  return { xp: 0, completed: [], streak: 0, lastActivity: null, podcasts: {} };
 }
 
 const Progress = {
@@ -95,7 +112,7 @@ const Progress = {
     try{
       var r=await fetch(PROGRESS_WORKER,{headers:{"Authorization":"Bearer "+token}});if(!r.ok)return Progress.load();
       var remote=await r.json(),local=Progress.load();
-      var merged={xp:Math.max(Number(local.xp)||0,Number(remote.xp)||0),completed:Array.from(new Set([].concat(local.completed||[],remote.completed||[]))),streak:Math.max(Number(local.streak)||0,Number(remote.streak)||0),lastActivity:[local.lastActivity,remote.lastActivity].filter(Boolean).sort().pop()||null};
+      var merged={xp:Math.max(Number(local.xp)||0,Number(remote.xp)||0),completed:Array.from(new Set([].concat(local.completed||[],remote.completed||[]))),streak:Math.max(Number(local.streak)||0,Number(remote.streak)||0),lastActivity:[local.lastActivity,remote.lastActivity].filter(Boolean).sort().pop()||null,podcasts:mergePodcasts(local.podcasts,remote.podcasts)};
       localStorage.setItem(progressKey(),JSON.stringify(merged));return merged;
     }catch(e){return Progress.load()}
   },
@@ -137,5 +154,44 @@ const Progress = {
 
   isCompleted(itemKey) {
     return Progress.load().completed.includes(itemKey);
+  },
+
+  // ---------------- Posição de reprodução dos podcasts ----------------
+  // Grava só no aparelho (rápido, sem rede) -- quem chama decide a
+  // cadência (o player chama isso a cada poucos segundos).
+  savePodcastPosition(slug, language, info) {
+    const progress = Progress.load();
+    if (!progress.podcasts) progress.podcasts = {};
+    const key = slug + ":" + language;
+    progress.podcasts[key] = {
+      position: info.position,
+      duration: info.duration,
+      percent: info.duration > 0 ? (info.position / info.duration) * 100 : 0,
+      chapterId: info.chapterId || null,
+      sentenceId: info.sentenceId || null,
+      updatedAt: new Date().toISOString(),
+      completed: !!info.completed,
+    };
+    localStorage.setItem(progressKey(), JSON.stringify(progress));
+    return progress.podcasts[key];
+  },
+
+  getPodcastPosition(slug, language) {
+    const progress = Progress.load();
+    return (progress.podcasts && progress.podcasts[slug + ":" + language]) || null;
+  },
+
+  // Sincroniza o progresso (incluindo podcasts) com o R2 agora mesmo --
+  // usado no pause, ao trocar de página e em visibilitychange, não em
+  // todo timeupdate.
+  syncPodcastNow() {
+    Progress.save(Progress.load());
+  },
+
+  // Chegou a 90%+ pela primeira vez nesse episódio: concede XP uma única
+  // vez (independente do idioma -- ouvir de novo ou trocar de idioma não
+  // duplica), usando a mesma chave de conclusão dos outros conteúdos.
+  completePodcast(slug, xpAmount) {
+    return Progress.complete("podcast-" + slug, xpAmount);
   },
 };
