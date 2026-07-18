@@ -7,6 +7,7 @@
 <meta name="description" content="Acusativo e Dativo travam qualquer pessoa que aprende alemão. Um jeito simples de entender quando usar cada um, sem decorar tabela.">
 <link rel="stylesheet" href="../assets/css/style.css">
 <link rel="stylesheet" href="../assets/css/blog.css">
+  <script src="../assets/js/theme.js"></script>
 <link rel="alternate" hreflang="pt" href="https://deutschbloom.com/blog/acusativo-e-dativo-sem-trauma.html">
 <link rel="alternate" hreflang="en" href="https://deutschbloom.com/blog/en/acusativo-e-dativo-sem-trauma.html">
 <link rel="alternate" hreflang="es" href="https://deutschbloom.com/blog/es/acusativo-e-dativo-sem-trauma.html">
@@ -40,7 +41,7 @@
 <body>
   <header class="blog-header">
     <a href="../index.html" class="brand">◆ DeutschBloom</a>
-    <nav><a href="index.html">Blog</a><a href="../app/planos.html" class="btn btn-primary btn-sm">Ver planos</a><label class="blog-language"><span>Idioma</span><select aria-label="Idioma" data-blog-language><option value="https://deutschbloom.com/blog/acusativo-e-dativo-sem-trauma.html" data-lang="pt" selected>Português</option><option value="https://deutschbloom.com/blog/en/acusativo-e-dativo-sem-trauma.html" data-lang="en">English</option><option value="https://deutschbloom.com/blog/es/acusativo-e-dativo-sem-trauma.html" data-lang="es">Español</option><option value="https://deutschbloom.com/blog/fr/acusativo-e-dativo-sem-trauma.html" data-lang="fr">Français</option><option value="https://deutschbloom.com/blog/it/acusativo-e-dativo-sem-trauma.html" data-lang="it">Italiano</option><option value="https://deutschbloom.com/blog/tr/acusativo-e-dativo-sem-trauma.html" data-lang="tr">Türkçe</option><option value="https://deutschbloom.com/blog/ar/acusativo-e-dativo-sem-trauma.html" data-lang="ar">العربية</option><option value="https://deutschbloom.com/blog/he/acusativo-e-dativo-sem-trauma.html" data-lang="he">עברית</option><option value="https://deutschbloom.com/blog/hi/acusativo-e-dativo-sem-trauma.html" data-lang="hi">हिन्दी</option><option value="https://deutschbloom.com/blog/pl/acusativo-e-dativo-sem-trauma.html" data-lang="pl">Polski</option></select></label></nav>
+    <nav><a href="../index.html" class="back-home">← Início</a><a href="index.html">Blog</a><a href="../app/planos.html" class="btn btn-primary btn-sm">Ver planos</a><label class="blog-language"><span>Idioma</span><select aria-label="Idioma" data-blog-language><option value="https://deutschbloom.com/blog/acusativo-e-dativo-sem-trauma.html" data-lang="pt" selected>Português</option><option value="https://deutschbloom.com/blog/en/acusativo-e-dativo-sem-trauma.html" data-lang="en">English</option><option value="https://deutschbloom.com/blog/es/acusativo-e-dativo-sem-trauma.html" data-lang="es">Español</option><option value="https://deutschbloom.com/blog/fr/acusativo-e-dativo-sem-trauma.html" data-lang="fr">Français</option><option value="https://deutschbloom.com/blog/it/acusativo-e-dativo-sem-trauma.html" data-lang="it">Italiano</option><option value="https://deutschbloom.com/blog/tr/acusativo-e-dativo-sem-trauma.html" data-lang="tr">Türkçe</option><option value="https://deutschbloom.com/blog/ar/acusativo-e-dativo-sem-trauma.html" data-lang="ar">العربية</option><option value="https://deutschbloom.com/blog/he/acusativo-e-dativo-sem-trauma.html" data-lang="he">עברית</option><option value="https://deutschbloom.com/blog/hi/acusativo-e-dativo-sem-trauma.html" data-lang="hi">हिन्दी</option><option value="https://deutschbloom.com/blog/pl/acusativo-e-dativo-sem-trauma.html" data-lang="pl">Polski</option></select></label></nav>
   </header>
   <div class="blog-layout">
     <div class="blog-main">
@@ -85,10 +86,40 @@
   </div>
 <script>
 (function(){
+  var CUR_LANG='pt';
   var select=document.querySelector('[data-blog-language]');
+  function urlFor(lang){
+    if(!select) return null;
+    var opts=select.options;
+    for(var i=0;i<opts.length;i++){ if(opts[i].dataset.lang===lang) return opts[i].value; }
+    return null;
+  }
+  function goTo(lang){
+    var url=urlFor(lang);
+    if(url && lang!==CUR_LANG){ location.href=url; }
+  }
+  try{
+    var saved=localStorage.getItem('afb_language');
+    if(saved){
+      if(saved!==CUR_LANG) goTo(saved);
+    } else {
+      var isLocal=location.hostname==='localhost'||location.hostname==='127.0.0.1';
+      if(!isLocal){
+        fetch('/.netlify/functions/geo',{cache:'no-store'}).then(function(r){return r.json();}).then(function(data){
+          var lang=data.country==='BR' ? 'pt' : 'en';
+          try{localStorage.setItem('afb_language',lang);}catch(e){}
+          if(lang!==CUR_LANG) goTo(lang);
+        }).catch(function(){});
+      }
+    }
+  }catch(e){}
   if(select) select.addEventListener('change',function(){
     var option=this.options[this.selectedIndex];
-    try{localStorage.setItem('afb_lang',option.dataset.lang);localStorage.setItem('afb_lang_source','user')}catch(e){}
+    try{
+      localStorage.setItem('afb_lang',option.dataset.lang);
+      localStorage.setItem('afb_lang_source','user');
+      localStorage.setItem('afb_language',option.dataset.lang);
+    }catch(e){}
     location.href=option.value;
   });
 })();
