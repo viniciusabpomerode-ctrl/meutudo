@@ -51,6 +51,7 @@
 }
 .blog-eyebrow { color: var(--color-primary); font-weight: 700; font-size: .82rem; text-transform: uppercase; letter-spacing: .04em; }
 .blog-title { font-size: 2rem; line-height: 1.2; margin: 10px 0 14px; }
+.blog-cover { display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; border-radius:18px; border:1px solid var(--border-light); margin:18px 0 28px; box-shadow:0 14px 36px rgba(0,0,0,.16); }
 .blog-meta { color: var(--text-secondary); font-size: .85rem; margin-bottom: 30px; }
 .blog-article p { font-size: 1.05rem; line-height: 1.75; margin: 0 0 20px; color: var(--text-primary); }
 .blog-article h2 { font-size: 1.35rem; margin: 38px 0 14px; }
@@ -81,8 +82,9 @@
 .blog-index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 24px; }
 .blog-index-card {
   background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 14px;
-  padding: 18px; text-decoration: none; color: inherit; transition: .2s;
+  padding: 0 18px 18px; overflow:hidden; text-decoration: none; color: inherit; transition: .2s;
 }
+.blog-card-cover { display:block; width:calc(100% + 36px); height:auto; aspect-ratio:16/9; object-fit:cover; margin:0 -18px 16px; background:var(--bg-secondary); }
 .blog-index-card:hover { border-color: var(--color-primary); transform: translateY(-2px); }
 .blog-index-card .cat { color: var(--color-primary); font-size: .75rem; font-weight: 700; text-transform: uppercase; }
 .blog-index-card h3 { margin: 8px 0 6px; font-size: 1rem; }
