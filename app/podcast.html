@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <script src="../assets/js/analytics.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Podcast — DeutschBloom</title>
@@ -49,6 +50,13 @@
       border-radius: 999px; padding: 5px 12px; font-size: .74rem; cursor: pointer; color: var(--text-primary);
     }
     .pcast-chapters button.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+    .pod-chip {
+      padding: 8px 16px; border-radius: 999px; border: 2px solid var(--border-light);
+      background: var(--card-bg); color: var(--text-primary); cursor: pointer; font-size: .85rem; font-weight: 600;
+      transition: .2s; white-space: nowrap;
+    }
+    .pod-chip:hover { border-color: var(--color-primary); }
+    .pod-chip.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
     .sentence-row {
       display: flex; justify-content: space-between; align-items: center;
       padding: 14px 16px; border-radius: 12px; margin-bottom: 6px; transition: .3s;
@@ -86,7 +94,7 @@
   <script src="../assets/js/xp.js?v=20260718-pod2"></script>
   <script src="../assets/js/nav.js?v=20260718-pod2"></script>
   <script src="../assets/js/data.js?v=20260718-pod2"></script>
-  <script src="../assets/js/i18n.js?v=20260718-pod2"></script>
+  <script src="../assets/js/i18n.js?v=20260720a"></script>
   <script>
     renderNav("podcasts");
 
@@ -407,7 +415,7 @@
             <button class="btn-icon" id="pcast-next-chapter" title="${pui().nextChapter}">${pui().chapter} ⏭</button>
           </div>
           <div class="pcast-chapters" id="pcast-chapters">
-            ${(PC.episode.chapters || []).map((c, i) => `<button data-idx="${i}">${c.label}</button>`).join("")}
+            ${(PC.episode.chapters || []).map((c, i) => `<button data-idx="${i}">${pui().chapter} ${i + 1}</button>`).join("")}
           </div>
         </div>`;
     }

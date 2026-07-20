@@ -3,6 +3,13 @@ Allow: /
 Disallow: /app/admin.html
 Disallow: /app/dashboard.html
 Disallow: /app/perfil.html
+Disallow: /app/caderno.html
+Disallow: /app/login.html
+Disallow: /app/cadastro.html
+Disallow: /app/dialogo.html
+Disallow: /app/verbo.html
+Disallow: /app/musica-player.html
+Disallow: /app/podcast.html
 Disallow: /netlify/functions/
 
 Sitemap: https://deutschbloom.com/sitemap.xml
