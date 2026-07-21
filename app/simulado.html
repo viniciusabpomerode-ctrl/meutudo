@@ -128,11 +128,11 @@
 
     <div class="level-select" id="level-select">
       <div class="level-btn active" id="level-btn-a1" onclick="startSimulado('a1')">🟢 A1<br><span class="desc">Iniciante</span></div>
-      <div class="level-btn" onclick="startSimulado('a2')">🔵 A2<br><span class="desc">Básico</span></div>
-      <div class="level-btn" onclick="startSimulado('b1')">🟠 B1<br><span class="desc">Intermediário</span></div>
-      <div class="level-btn" onclick="startSimulado('b2')">🟣 B2<br><span class="desc">Avançado</span></div>
-      <div class="level-btn" onclick="startSimulado('c1')">🔴 C1<br><span class="desc">Proficiente</span></div>
-      <div class="level-btn" onclick="startSimulado('c2')">⚫ C2<br><span class="desc">Mestre</span></div>
+      <div class="level-btn" id="level-btn-a2" onclick="startSimulado('a2')">🔵 A2<br><span class="desc">Básico</span></div>
+      <div class="level-btn" id="level-btn-b1" onclick="startSimulado('b1')">🟠 B1<br><span class="desc">Intermediário</span></div>
+      <div class="level-btn" id="level-btn-b2" onclick="startSimulado('b2')">🟣 B2<br><span class="desc">Avançado</span></div>
+      <div class="level-btn" id="level-btn-c1" onclick="startSimulado('c1')">🔴 C1<br><span class="desc">Proficiente</span></div>
+      <div class="level-btn" id="level-btn-c2" onclick="startSimulado('c2')">⚫ C2<br><span class="desc">Mestre</span></div>
     </div>
 
     <div id="simulado-area"></div>
@@ -168,7 +168,10 @@
 
     async function startSimulado(nivel) {
       nivelAtual = nivel;
-      document.getElementById("level-select").style.display = "none";
+      // O seletor de nivel fica sempre visivel (nao esconde mais) pra dar
+      // pra trocar de nivel a qualquer momento, sem precisar voltar.
+      document.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(`level-btn-${nivel}`)?.classList.add("active");
       try {
         let authHeaders = {};
         try { if (typeof Auth !== "undefined" && Auth.accessToken) { const t = await Auth.accessToken(); if (t) authHeaders = { Authorization: `Bearer ${t}` }; } } catch {}
@@ -353,7 +356,7 @@
       }
       if (finalizado) {
         html += `<button class="btn-start" onclick="reiniciar()">🔄 Nova Prova</button>`;
-        html += `<button class="btn-start" style="background:var(--bg-secondary);color:var(--text-primary);" onclick="document.getElementById('level-select').style.display='';document.getElementById('simulado-area').innerHTML='';">⬅ Voltar</button>`;
+        html += `<button class="btn-start" style="background:var(--bg-secondary);color:var(--text-primary);" onclick="document.getElementById('simulado-area').innerHTML='';window.scrollTo(0,0);">⬅ Voltar</button>`;
       }
       html += `</div>`;
 
