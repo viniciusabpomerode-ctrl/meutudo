@@ -7,66 +7,94 @@
   <title>Simulados Goethe — DeutschBloom</title>
   <link rel="stylesheet" href="../assets/css/style.css">
   <style>
+    /* Cor de destaque suave a partir da cor primaria do tema ativo (Moderno/
+       Vikings/Aurora x dia/noite) -- nao existe --brand-light no site, e usar
+       uma variavel inexistente deixava esses elementos sem fundo nenhum. */
     .simulado-container { max-width: 800px; margin: 0 auto; }
-    .level-select { display: flex; gap: 16px; margin-bottom: 24px; }
+    .level-select { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
     .level-btn {
-      flex: 1; padding: 20px; border-radius: 16px; border: 3px solid var(--border-light);
+      flex: 1; min-width: 90px; padding: 20px; border-radius: 16px; border: 3px solid var(--border-light);
       background: var(--card-bg); cursor: pointer; text-align: center; font-size: 1.2rem; font-weight: 700; transition: .2s;
     }
-    .level-btn:hover { border-color: var(--color-primary); transform: translateY(-2px); }
-    .level-btn.active { border-color: var(--color-primary); background: var(--brand-light); }
+    .level-btn:hover { border-color: var(--color-primary); transform: translateY(-2px); box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 16%, transparent); }
+    .level-btn.active { border-color: var(--color-primary); background: color-mix(in srgb, var(--color-primary) 14%, var(--card-bg)); }
     .level-btn .desc { font-size: .8rem; font-weight: 400; color: var(--text-secondary); margin-top: 4px; }
     .question-card {
       background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 16px;
-      border-left: 4px solid var(--color-primary);
+      border-left: 4px solid var(--color-primary); border: 1px solid var(--border-light); border-left-width: 4px;
+      transition: border-color .15s;
     }
-    .question-card.answered { border-left-color: #4CAF50; }
-    .question-card.wrong { border-left-color: #f44336; }
+    .question-card.answered { border-left-color: var(--success); }
+    .question-card.wrong { border-left-color: var(--error); }
     .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .q-badge { padding: 4px 12px; border-radius: 20px; font-size: .72rem; font-weight: 700; }
-    .q-badge.lesen { background: #E3F2FD; color: #1565C0; }
-    .q-badge.grammatik { background: #FCE4EC; color: #C62828; }
-    .q-badge.wortschatz { background: #E8F5E9; color: #2E7D32; }
-    .q-badge.schreiben { background: #FFF3E0; color: #E65100; }
-    .q-context { background: #f8f9fa; color: #1a1a1a; padding: 12px 16px; border-radius: 8px; margin: 12px 0; font-size: 1.1rem; font-style: italic; }
+    .q-badge.lesen { background: color-mix(in srgb, #1565C0 22%, var(--card-bg)); color: color-mix(in srgb, #1565C0 70%, var(--text-primary)); }
+    .q-badge.schreiben { background: color-mix(in srgb, #E65100 22%, var(--card-bg)); color: color-mix(in srgb, #E65100 70%, var(--text-primary)); }
+    .q-badge.horen { background: color-mix(in srgb, #7B1FA2 22%, var(--card-bg)); color: color-mix(in srgb, #7B1FA2 70%, var(--text-primary)); }
+    .q-badge.sprechen { background: color-mix(in srgb, var(--success) 30%, var(--card-bg)); color: color-mix(in srgb, var(--success) 75%, var(--text-primary)); }
+    .q-context { background: var(--bg-secondary); color: var(--text-primary); padding: 12px 16px; border-radius: 8px; margin: 12px 0; font-size: 1.1rem; font-style: italic; }
     .q-options { display: flex; flex-direction: column; gap: 8px; }
     .q-option {
       padding: 12px 16px; border-radius: 8px; border: 2px solid var(--border-light);
-      cursor: pointer; transition: .15s; font-size: .95rem;
+      cursor: pointer; transition: .15s; font-size: .95rem; background: var(--card-bg); color: var(--text-primary);
     }
-    .q-option:hover { border-color: var(--color-primary); background: var(--brand-light); }
-    .q-option.selected { border-color: var(--color-primary); background: var(--brand-light); font-weight: 600; }
-    .q-option.correct { border-color: #4CAF50; background: #E8F5E9; color:#1B5E20; }
-    .q-option.incorrect { border-color: #f44336; background: #FFEBEE; color:#B71C1C; }
-    .q-explanation { display: none; margin-top: 12px; padding: 12px; border-radius: 8px; background: #FFF8E1; color: #5a4a1a; font-size: .85rem; }
+    .q-option:hover { border-color: var(--color-primary); background: color-mix(in srgb, var(--color-primary) 12%, var(--card-bg)); }
+    .q-option.selected { border-color: var(--color-primary); background: color-mix(in srgb, var(--color-primary) 14%, var(--card-bg)); font-weight: 600; }
+    .q-option.correct { border-color: var(--success); background: color-mix(in srgb, var(--success) 20%, var(--card-bg)); color: var(--text-primary); }
+    .q-option.incorrect { border-color: var(--error); background: color-mix(in srgb, var(--error) 20%, var(--card-bg)); color: var(--text-primary); }
+    .q-explanation { display: none; margin-top: 12px; padding: 12px; border-radius: 8px; background: color-mix(in srgb, var(--color-primary) 12%, var(--card-bg)); color: var(--text-primary); font-size: .85rem; border-left: 3px solid var(--color-primary); }
     .q-explanation.show { display: block; }
-    .progress-bar { height: 8px; border-radius: 4px; background: var(--border-light); margin-bottom: 24px; }
+    .progress-bar { height: 8px; border-radius: 4px; background: var(--border-light); margin-bottom: 24px; overflow: hidden; }
     .progress-fill { height: 100%; border-radius: 4px; background: var(--color-primary); transition: .3s; }
     .score-card {
-      text-align: center; padding: 40px 20px; background: var(--card-bg); border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,.1);
+      text-align: center; padding: 40px 20px; background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 16px;
+      box-shadow: 0 4px 20px color-mix(in srgb, var(--color-primary) 8%, transparent);
     }
     .score-number { font-size: 4rem; font-weight: 800; }
-    .score-pass { color: #4CAF50; }
-    .score-fail { color: #f44336; }
-    .btn-start { padding: 16px 40px; border-radius: 12px; border: none; background: var(--color-primary); color: #fff; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
-    .btn-start:hover { opacity: .9; }
+    .score-pass { color: var(--success); }
+    .score-fail { color: var(--error); }
+    .btn-start { padding: 16px 40px; border-radius: 12px; border: none; background: var(--color-primary); color: #fff; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: opacity .15s; }
+    .btn-start:hover { opacity: .88; }
     .stats { display: flex; gap: 16px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
     .stat { padding: 12px 20px; background: var(--bg-secondary); border-radius: 8px; text-align: center; }
-    .stat-val { font-size: 1.5rem; font-weight: 700; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
     .stat-label { font-size: .75rem; color: var(--text-secondary); }
     .q-audio-btn { padding: 8px 16px; border-radius: 20px; border: 1.5px solid var(--color-primary); background: transparent; color: var(--color-primary); cursor: pointer; font-weight: 600; }
-    .q-speech-btn { padding: 12px 24px; border-radius: 20px; border: none; background: #2E7D32; color: #fff; cursor: pointer; font-weight: 700; }
-    .q-speech-btn.recording { background: #f44336; animation: pulse .8s infinite; }
+    .q-audio-btn:hover { background: color-mix(in srgb, var(--color-primary) 12%, transparent); }
+    .q-speech-btn { padding: 12px 24px; border-radius: 20px; border: none; background: var(--success); color: #fff; cursor: pointer; font-weight: 700; }
+    .q-speech-btn.recording { background: var(--error); animation: pulse .8s infinite; }
     .q-speech-result { padding: 12px; border-radius: 8px; margin-top: 8px; font-size: 1.1rem; }
-    .q-input { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--border-light); font-size: 1rem; box-sizing: border-box; }
+    .q-input { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--border-light); font-size: 1rem; box-sizing: border-box; background: var(--card-bg); color: var(--text-primary); font-family: inherit; }
     .q-input:focus { border-color: var(--color-primary); outline: none; }
     .sections-nav { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-    .section-tab { padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border-light); cursor: pointer; font-weight: 700; font-size: .85rem; background: var(--card-bg); }
-    .section-tab.active { border-color: var(--color-primary); background: var(--brand-light); }
-    .section-tab.done { border-color: #4CAF50; background: #E8F5E9; color:#1B5E20; }
-    .q-badge.horen { background: #F3E5F5; color: #7B1FA2; }
-    .q-badge.sprechen { background: #E8F5E9; color: #2E7D32; }
+    .section-tab { padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border-light); cursor: pointer; font-weight: 700; font-size: .85rem; background: var(--card-bg); color: var(--text-primary); }
+    .section-tab.active { border-color: var(--color-primary); background: color-mix(in srgb, var(--color-primary) 14%, var(--card-bg)); }
+    .section-tab.done { border-color: var(--success); background: color-mix(in srgb, var(--success) 16%, var(--card-bg)); }
+    .sim-lang-cta {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      margin: 16px 0 24px; padding: 14px 18px; border-radius: 14px;
+      background: color-mix(in srgb, var(--color-primary) 10%, var(--card-bg)); border: 1px solid var(--border-light);
+    }
+    .sim-lang-cta span { font-weight: 600; font-size: .92rem; color: var(--text-primary); }
+    .sim-cta {
+      margin-top: 20px; padding: 28px 24px; border-radius: 16px; text-align: center;
+      background: color-mix(in srgb, var(--color-primary) 10%, var(--card-bg)); border: 1px solid var(--border-light);
+    }
+    .sim-cta h3 { margin: 0 0 8px; color: var(--text-primary); }
+    .sim-cta p { color: var(--text-secondary); margin: 0 0 18px; }
+    .sim-cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .sim-paid-cta { margin: 24px 0; padding: 24px; border-radius: 16px; background: var(--card-bg); border: 1px solid var(--border-light); }
+    .sim-paid-cta h3 { margin: 0 0 4px; color: var(--text-primary); }
+    .sim-paid-cta > p { color: var(--text-secondary); margin: 0 0 16px; font-size: .9rem; }
+    .sim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 18px; }
+    .sim-grid a {
+      display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 12px;
+      border: 2px solid var(--border-light); background: var(--bg-secondary); text-decoration: none; color: var(--text-primary);
+      transition: .15s;
+    }
+    .sim-grid a:hover { border-color: var(--color-primary); transform: translateY(-2px); box-shadow: 0 8px 20px color-mix(in srgb, var(--color-primary) 14%, transparent); }
+    .sim-grid a span { font-weight: 700; font-size: .9rem; }
+    .sim-grid a small { color: var(--text-secondary); font-size: .78rem; }
   </style>
 </head>
 <body>
@@ -76,8 +104,30 @@
     <h2>📝 Simulados Goethe-Zertifikat</h2>
     <p class="muted">Pratique com questões no estilo do exame oficial — baseado no conteúdo dos cursos.</p>
 
+    <div class="sim-lang-cta">
+      <span>🌍 Esse simulado completo também está disponível em mais 9 idiomas</span>
+      <a href="../simulado/index.html" class="btn btn-outline btn-sm">Ver em outros idiomas →</a>
+    </div>
+
+    <div class="sim-paid-cta">
+      <h3>O simulado é grátis. O curso completo é Premium.</h3>
+      <p>Milhares de frases com áudio nativo, além do que cai na prova:</p>
+      <div class="sim-grid">
+        <a href="cursos.html"><span>💬 Diálogos</span><small>1.225</small></a>
+        <a href="cursos.html?tab=verbos"><span>📖 Verbos</span><small>1.312</small></a>
+        <a href="musica.html"><span>🎵 Música</span><small>63</small></a>
+        <a href="podcasts.html"><span>🎧 Podcasts</span><small>23</small></a>
+        <a href="expressoes.html"><span>🗣️ Gírias</span><small>1.509</small></a>
+        <a href="vocabulario.html"><span>📚 Vocabulário</span><small>2.500</small></a>
+        <a href="profissoes.html"><span>💼 Profissões</span><small>90</small></a>
+        <a href="quiz.html"><span>⚡ Quiz</span><small>3.000</small></a>
+        <a href="criatividade.html"><span>✍️ Criatividade</span></a>
+      </div>
+      <a href="planos.html" class="btn btn-primary">Ver planos Premium</a>
+    </div>
+
     <div class="level-select" id="level-select">
-      <div class="level-btn" onclick="startSimulado('a1')">🟢 A1<br><span class="desc">Iniciante</span></div>
+      <div class="level-btn active" id="level-btn-a1" onclick="startSimulado('a1')">🟢 A1<br><span class="desc">Iniciante</span></div>
       <div class="level-btn" onclick="startSimulado('a2')">🔵 A2<br><span class="desc">Básico</span></div>
       <div class="level-btn" onclick="startSimulado('b1')">🟠 B1<br><span class="desc">Intermediário</span></div>
       <div class="level-btn" onclick="startSimulado('b2')">🟣 B2<br><span class="desc">Avançado</span></div>
@@ -88,29 +138,15 @@
     <div id="simulado-area"></div>
   </div>
 
-<script src="../assets/js/i18n.js?v=20260715-sim1"></script>
+<script src="../assets/js/i18n.js?v=20260721-sim2"></script>
 <script src="../assets/js/theme.js"></script>
   <script src="../assets/js/sfx.js"></script>
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/nav.js"></script>
-  <script src="../assets/js/guest.js"></script>
   <script>
     renderNav("simulado");
 
-    // Modo visitante: simulados sao conteudo Premium — mostra a vitrine bloqueada
-    let isGuest = true;
-    Guest.isFree().then((g) => {
-      isGuest = g;
-      if (!isGuest) return;
-      document.querySelectorAll(".level-btn").forEach((b) => {
-        b.classList.add("locked-item");
-        b.setAttribute("onclick", "location.href='planos.html'");
-        b.innerHTML = "🔒 " + b.innerHTML.replace(/🟢|🔵|🟠|🟣|🔴|⚫/, "").trim();
-      });
-      document.getElementById("simulado-area").innerHTML = Guest.banner(598, "questões de simulado Goethe (Lesen · Hören · Schreiben · Sprechen)");
-    });
-
-    let questoes = [], respostas = {}, reveladas = {};
+    let questoes = [], respostas = {}, reveladas = {}, aiGrades = {};
     let nivelAtual = "", secaoAtual = "todas";
     let finalizado = false;
     let audioEl = new Audio();
@@ -131,11 +167,6 @@
     }
 
     async function startSimulado(nivel) {
-      // Simulado e conteudo 100% Premium -- confere aqui tambem, nao so
-      // no clique do botao (alguem podia chamar essa funcao direto pelo
-      // console do navegador e pular a trava visual).
-      const free = (typeof Guest !== "undefined" && Guest.isFree) ? await Guest.isFree() : true;
-      if (free) { window.location.href = "planos.html"; return; }
       nivelAtual = nivel;
       document.getElementById("level-select").style.display = "none";
       try {
@@ -170,6 +201,23 @@
 
     function getCat(c) { return (c||"lesen").toLowerCase().replace("ä","a").replace("ö","o"); }
 
+    // Compara resposta livre (Schreiben/Sprechen) com o gabarito de forma
+    // tolerante -- pontuacao no final, espacos duplicados e a forma alema
+    // de digitar umlaut sem teclado alemao (ue/oe/ae/ss) nao devem marcar
+    // uma resposta certa como errada.
+    function normalizeAnswer(s) {
+      return String(s || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[.,!?;:]+$/g, "")
+        .replace(/\s+/g, " ")
+        .replace(/ß/g, "ss")
+        .replace(/ü/g, "ue").replace(/ö/g, "oe").replace(/ä/g, "ae");
+    }
+    function answerMatches(given, expected) {
+      return normalizeAnswer(given) === normalizeAnswer(expected);
+    }
+
     function render() {
       const answered = Object.keys(respostas).length;
       const pct = Math.round(answered * 100 / questoes.length);
@@ -195,12 +243,27 @@
         const r = respostas[q.id];
         const answered = r !== undefined;
         const revealed = reveladas[q.id] || finalizado;
-        const correct = answered && revealed && String(r) === String(q.resposta);
         const cat = getCat(q.categoria);
+        const hasOpcoes = q.opcoes && q.opcoes.length;
+        // Estado do card: multipla escolha compara letra; Sprechen sem
+        // opcoes (nao existe hoje, mas fica pronto) compara com o texto-
+        // modelo tolerando variacao; Schreiben sem opcoes (C2) nao tem
+        // gabarito unico -- o estado vem do que a IA respondeu.
+        let cardState = "";
+        if (revealed && answered) {
+          if (hasOpcoes) cardState = String(r) === String(q.resposta) ? "answered" : "wrong";
+          else if (cat === "sprechen") cardState = answerMatches(r, q.resposta) ? "answered" : "wrong";
+          else if (cat === "schreiben") {
+            const g = aiGrades[q.id];
+            cardState = g && g.ok === true ? "answered" : (g && g.ok === false ? "wrong" : "");
+          } else {
+            cardState = String(r) === String(q.resposta) ? "answered" : "wrong";
+          }
+        }
 
-        html += `<div class="question-card ${revealed && answered ? (correct?'answered':'wrong') : ''}" id="q-${q.id}">`;
+        html += `<div class="question-card ${cardState}" id="q-${q.id}">`;
         html += `<div class="q-header"><strong>${q.id}.</strong> <span class="q-badge ${cat==='hören'?'horen':cat}">${q.categoria||'Lesen'}</span>`;
-        if (answered && !revealed) html += ` <span style="font-size:.75rem;color:#4CAF50;">✓ Respondida</span>`;
+        if (answered && !revealed) html += ` <span style="font-size:.75rem;color:var(--success);">✓ Respondida</span>`;
         html += `</div>`;
         html += `<p>${q.pergunta_pt||''}</p>`;
 
@@ -220,21 +283,11 @@
           }
         }
 
-        // Schreiben - text input
-        if (cat === "schreiben") {
-          if (!answered) {
-            html += `<input class="q-input" id="inp-${q.id}" placeholder="Escreva em alemão..."><br>`;
-            html += `<button class="q-audio-btn" style="margin-top:6px" onclick="salvarTexto(${q.id})">✅ Enviar</button>`;
-          } else {
-            html += `<div style="padding:8px;border-radius:6px;background:var(--bg-secondary);"><strong>Sua resposta:</strong> ${r}</div>`;
-            if (revealed) {
-              const ok = String(r).toLowerCase().trim() === String(q.resposta).toLowerCase().trim();
-              html += `<div style="padding:8px;border-radius:6px;margin-top:4px;background:${ok?'#E8F5E9':'#FFEBEE'};color:${ok?'#1B5E20':'#B71C1C'}"><strong>Gabarito:</strong> ${q.resposta}</div>`;
-            }
-          }
-        }
-        // Multiple choice
-        else if (q.opcoes && q.opcoes.length) {
+        // Multiple escolha -- cobre praticamente tudo hoje: Lesen, Horen, e
+        // tambem Schreiben/Sprechen quando o JSON tem "opcoes" (a maioria
+        // das questoes dessas categorias e assim; ver normalizeAnswer/
+        // answerMatches so entra em jogo pros poucos casos sem opcoes).
+        if (q.opcoes && q.opcoes.length) {
           html += `<div class="q-options">`;
           q.opcoes.forEach((opt, oi) => {
             const l = String.fromCharCode(65+oi);
@@ -248,22 +301,44 @@
           });
           html += `</div>`;
         }
-        // Sprechen
-        if (cat === "sprechen") {
+        // Schreiben sem opcoes -- redacao livre de verdade (hoje so existe
+        // no C2), sem gabarito unico pra comparar por string. Corrigido por
+        // IA (DeepSeek) em vez de string match.
+        else if (cat === "schreiben") {
           if (!answered) {
-            html += `<button class="q-speech-btn" id="btn-sp-${q.id}" onclick="startSpeech(${q.id})">🎤 Falar em alemão</button>`;
-            html += `<div id="res-sp-${q.id}" style="display:none;margin-top:8px;"></div>`;
+            html += `<textarea class="q-input" id="inp-${q.id}" rows="4" placeholder="Escreva em alemão..."></textarea><br>`;
+            html += `<button class="q-audio-btn" style="margin-top:6px" onclick="salvarTexto(${q.id})">✅ Enviar</button>`;
+          } else {
+            html += `<div style="padding:8px;border-radius:6px;background:var(--bg-secondary);white-space:pre-wrap;"><strong>Sua resposta:</strong> ${r}</div>`;
+            if (revealed) {
+              const g = aiGrades[q.id];
+              if (g) {
+                const bg = g.ok === true ? 'color-mix(in srgb, var(--success) 20%, var(--card-bg))' : (g.ok === false ? 'color-mix(in srgb, var(--error) 20%, var(--card-bg))' : 'var(--bg-secondary)');
+                const color = 'var(--text-primary)';
+                const label = g.ok === true ? 'Muito bem!' : (g.ok === false ? 'Pode melhorar' : 'Correção');
+                html += `<div style="padding:8px;border-radius:6px;margin-top:4px;background:${bg};color:${color}"><strong>🤖 ${label}:</strong> ${g.feedback}</div>`;
+              }
+            }
+          }
+        }
+        // Sprechen sem opcoes -- fala livre (nao existe nos dados atuais,
+        // mas fica pronto pra quando existir): grava audio de verdade,
+        // com pausa/retomada, e transcreve via Whisper ao parar.
+        else if (cat === "sprechen") {
+          if (!answered) {
+            html += `<div class="sp-controls" id="sp-controls-${q.id}"><button class="q-speech-btn" onclick="startSpeechRecording(${q.id})">🎤 Gravar resposta</button></div>`;
+            html += `<div class="q-speech-status muted" id="status-sp-${q.id}" style="display:none;font-size:.85rem;margin-top:6px;"></div>`;
           } else {
             html += `<div style="padding:8px;border-radius:6px;background:var(--bg-secondary);">🗣️ Você disse: "${r}"</div>`;
             if (revealed && q.resposta) {
-              html += `<div style="padding:8px;border-radius:6px;background:#E8F5E9;color:#1B5E20;margin-top:4px;"><strong>📝 Modelo:</strong> ${q.resposta}</div>`;
+              html += `<div style="padding:8px;border-radius:6px;background:color-mix(in srgb, var(--success) 18%, var(--card-bg));color:var(--text-primary);margin-top:4px;"><strong>📝 Modelo:</strong> ${q.resposta}</div>`;
             }
           }
         }
 
         // Reveal button (only when answered and not yet revealed)
         if (answered && !revealed) {
-          html += `<button class="q-audio-btn" style="margin-top:8px;border-color:#FF9800;color:#FF9800;" onclick="revelar(${q.id})">✅ Conferir resposta</button>`;
+          html += `<button id="reveal-btn-${q.id}" class="q-audio-btn" style="margin-top:8px;" onclick="revelar(${q.id})">✅ Conferir resposta</button>`;
         }
         if (revealed && q.explicacao_pt) {
           html += `<div class="q-explanation show">💡 ${q.explicacao_pt}</div>`;
@@ -274,7 +349,7 @@
       // Bottom bar
       html += `<div style="text-align:center;margin:20px 0;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">`;
       if (!finalizado) {
-        html += `<button class="btn-start" style="background:#4CAF50;" onclick="finalizar()">📋 Finalizar Prova (${answered}/${questoes.length})</button>`;
+        html += `<button class="btn-start" style="background:var(--success);" onclick="finalizar()">📋 Finalizar Prova (${answered}/${questoes.length})</button>`;
       }
       if (finalizado) {
         html += `<button class="btn-start" onclick="reiniciar()">🔄 Nova Prova</button>`;
@@ -284,6 +359,12 @@
 
       if (finalizado) html += renderResultado();
       document.getElementById("simulado-area").innerHTML = html;
+      // O conteudo acima e gerado dinamicamente, entao a passada automatica
+      // de traducao (que roda uma vez, no carregamento da pagina) nunca o
+      // alcanca. Rechama aqui, mesmo padrao usado em profissoes.html/planos.html.
+      if (typeof I18n !== "undefined" && I18n.getCurrent && I18n.getCurrent() !== "pt") {
+        I18n.applyPageTranslations();
+      }
     }
 
     function playAudio(url) {
@@ -301,37 +382,205 @@
     }
     function revelar(qid) {
       if (respostas[qid] === undefined || reveladas[qid]) return;
-      reveladas[qid] = true;
       const q = questoes.find(item => item.id === qid);
-      const ok = q && String(respostas[qid]).toLowerCase().trim() === String(q.resposta).toLowerCase().trim();
+      if (!q) return;
+      const cat = getCat(q.categoria);
+      // Schreiben sem opcoes e sem gabarito (hoje so o C2) -- nao tem string
+      // pra comparar, manda pra correcao por IA em vez de marcar certo/errado.
+      if (!(q.opcoes && q.opcoes.length) && cat === "schreiben" && !q.resposta) {
+        const btn = document.getElementById(`reveal-btn-${qid}`);
+        if (btn) { btn.disabled = true; btn.textContent = "Corrigindo com IA..."; }
+        gradeWriting(q);
+        return;
+      }
+      reveladas[qid] = true;
+      const ok = (q.opcoes && q.opcoes.length) ? String(respostas[qid]) === String(q.resposta) : answerMatches(respostas[qid], q.resposta);
       if (typeof SFX !== 'undefined') ok ? SFX.correct() : SFX.wrong();
       render();
     }
-    function finalizar() {
+    async function gradeWriting(q) {
+      const qid = q.id;
+      try {
+        const r = await fetch(AFB_CREATIVITY_API + "/grade-writing", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pergunta: q.pergunta_pt, contexto: q.contexto_de, resposta: respostas[qid], nivel: (nivelAtual || "").toUpperCase() }),
+        });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(d.error || "Falha na correção.");
+        aiGrades[qid] = { ok: !!d.ok, feedback: d.feedback || "" };
+      } catch (e) {
+        aiGrades[qid] = { ok: null, feedback: e.message || "Não foi possível corrigir agora. Tente de novo." };
+      }
+      reveladas[qid] = true;
+      if (typeof SFX !== 'undefined' && aiGrades[qid].ok !== null) { aiGrades[qid].ok ? SFX.correct() : SFX.wrong(); }
+      render();
+    }
+    async function finalizar() {
       if (Object.keys(respostas).length < questoes.length) {
         if (!confirm(`Faltam ${questoes.length - Object.keys(respostas).length} questões. Finalizar mesmo assim?`)) return;
       }
+      // Se alguem respondeu Schreiben livre (C2) e foi direto pro "Finalizar"
+      // sem clicar em "Conferir resposta" em cada uma, essas nunca passaram
+      // pela IA -- corrige agora, antes de fechar a prova, senao entram
+      // como erradas no relatorio sem nunca terem sido avaliadas de fato.
+      const pendentes = questoes.filter(q => {
+        const cat = getCat(q.categoria);
+        return respostas[q.id] !== undefined && !(q.opcoes && q.opcoes.length) && cat === "schreiben" && !q.resposta && !aiGrades[q.id];
+      });
+      if (pendentes.length) await Promise.all(pendentes.map(q => gradeWriting(q)));
       finalizado = true; render();
       window.scrollTo(0, 0);
     }
     function reiniciar() { startSimulado(nivelAtual); }
 
-    function startSpeech(qid) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) { alert("Use Chrome para reconhecimento de voz."); return; }
-      const rec = new SpeechRecognition(); rec.lang = "de-DE"; rec.interimResults = false;
-      const btn = document.getElementById("btn-sp-"+qid);
-      btn.textContent = "🎤 Ouvindo..."; btn.classList.add("recording");
-      rec.start();
-      rec.onresult = (e) => {
-        const t = e.results[0][0].transcript;
-        document.getElementById("res-sp-"+qid).style.display = "";
-        document.getElementById("res-sp-"+qid).textContent = '🗣️ "'+t+'" ✅';
-        respostas[qid] = t; btn.style.display = "none";
-        setTimeout(()=>render(), 600);
-      };
-      rec.onerror = () => { btn.textContent = "🎤 Tentar de novo"; btn.classList.remove("recording"); };
+    // Gravacao real do Sprechen (mesmo padrao da pagina de Criatividade):
+    // MediaRecorder grava o audio inteiro com pausa/retomada, um
+    // reconhecimento de voz ao vivo (Chrome) mostra uma previa enquanto
+    // fala, e ao parar o audio completo vai pro Worker de IA (Whisper) pra
+    // gerar a transcricao final -- funciona em qualquer navegador com
+    // microfone, nao so no Chrome, e o resultado nao depende da legenda
+    // ao vivo ter parado no meio.
+    const AFB_CREATIVITY_API = window.AFB_CREATIVITY_API || "https://creativity-ai.quesaco93.workers.dev";
+    let spRecorder = null, spStream = null, spChunks = [], spQid = null, spSession = 0;
+    let spTimer = null, spStarted = 0, spPausedAt = 0, spPausedTotal = 0;
+    let spRecognition = null, spRecognitionRestartTimer = null, spRecognitionBase = "", spRecognitionBlocked = false, spRecognitionActive = false;
+
+    function spSetStatus(qid, text) {
+      const el = document.getElementById(`status-sp-${qid}`);
+      if (el) { el.style.display = ""; el.textContent = text; }
     }
+    function spSetControls(qid, html) {
+      const el = document.getElementById(`sp-controls-${qid}`);
+      if (el) el.innerHTML = html;
+    }
+    function spElapsedLabel() {
+      const sec = Math.floor((Date.now() - spStarted - spPausedTotal) / 1000);
+      return `${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`;
+    }
+    function spStartRecognition(session) {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) { spRecognitionBlocked = true; return; }
+      if (spRecognitionBlocked || session !== spSession || !spRecorder || spRecorder.state !== "recording") return;
+      const rec = new SR(); spRecognition = rec;
+      rec.lang = "de-DE"; rec.continuous = true; rec.interimResults = true; rec.maxAlternatives = 1;
+      rec.onstart = () => { spRecognitionActive = true; };
+      rec.onresult = (e) => {
+        let finalText = "", partialText = "";
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          const t = e.results[i][0].transcript;
+          if (e.results[i].isFinal) finalText += t + " "; else partialText += t;
+        }
+        if (finalText) spRecognitionBase = (spRecognitionBase + " " + finalText).trim();
+        spSetStatus(spQid, `🔴 Gravando ${spElapsedLabel()} · ao vivo: "${(spRecognitionBase + " " + partialText).trim()}"`);
+      };
+      rec.onerror = (e) => {
+        spRecognitionActive = false;
+        if (["not-allowed","service-not-allowed","audio-capture","language-not-supported","network"].includes(e.error)) spRecognitionBlocked = true;
+      };
+      rec.onend = () => {
+        spRecognitionActive = false;
+        if (spRecognition === rec) spRecognition = null;
+        if (!spRecognitionBlocked && session === spSession && spRecorder && spRecorder.state === "recording") {
+          clearTimeout(spRecognitionRestartTimer);
+          spRecognitionRestartTimer = setTimeout(() => spStartRecognition(session), 250);
+        }
+      };
+      try { rec.start(); } catch(e) { spRecognition = null; spRecognitionRestartTimer = setTimeout(() => spStartRecognition(session), 400); }
+    }
+    function spStopRecognition() {
+      clearTimeout(spRecognitionRestartTimer); spRecognitionRestartTimer = null; spRecognitionActive = false;
+      const rec = spRecognition; spRecognition = null;
+      if (rec) try { rec.stop(); } catch(e) {}
+    }
+    function spCleanup() {
+      if (spTimer) clearInterval(spTimer); spTimer = null;
+      spStopRecognition();
+      if (spStream) spStream.getTracks().forEach(t => t.stop());
+      spStream = null; spRecorder = null;
+    }
+
+    async function startSpeechRecording(qid) {
+      if (!navigator.mediaDevices || !window.MediaRecorder) { alert("Seu navegador não permite gravar áudio."); return; }
+      if (spRecorder && spRecorder.state !== "inactive") stopSpeechRecording(spQid);
+      const session = ++spSession;
+      spQid = qid;
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+        if (session !== spSession) { stream.getTracks().forEach(t => t.stop()); return; }
+        spStream = stream; spChunks = [];
+        const mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus") ? "audio/webm;codecs=opus" : "audio/webm";
+        const recorder = new MediaRecorder(stream, { mimeType: mime });
+        spRecorder = recorder;
+        spRecognitionBase = ""; spRecognitionBlocked = false;
+        recorder.ondataavailable = (e) => { if (e.data.size) spChunks.push(e.data); };
+        recorder.onstop = async () => {
+          const blob = new Blob(spChunks, { type: mime });
+          spCleanup();
+          if (session !== spSession) return;
+          await spTranscribe(qid, blob);
+        };
+        recorder.start();
+        spStartRecognition(session);
+        spStarted = Date.now(); spPausedAt = 0; spPausedTotal = 0;
+        spTimer = setInterval(() => {
+          if (!spRecorder || spRecorder.state === "paused") return;
+          spSetStatus(qid, `🔴 Gravando ${spElapsedLabel()}${spRecognitionActive ? " · transcrevendo ao vivo" : ""}`);
+          if (Math.floor((Date.now()-spStarted-spPausedTotal)/1000) >= 180) stopSpeechRecording(qid);
+        }, 500);
+        spSetControls(qid, `<button class="q-speech-btn" onclick="togglePauseSpeech(${qid})">⏸ Pausar</button>
+          <button class="q-speech-btn" style="background:var(--error)" onclick="stopSpeechRecording(${qid})">■ Parar</button>`);
+        spSetStatus(qid, "🔴 Gravando 00:00");
+      } catch (e) {
+        spCleanup();
+        spSetStatus(qid, "Permita o acesso ao microfone para gravar sua resposta.");
+      }
+    }
+
+    function togglePauseSpeech(qid) {
+      if (!spRecorder || qid !== spQid) return;
+      if (spRecorder.state === "recording") {
+        spRecorder.pause(); spStopRecognition(); spPausedAt = Date.now();
+        spSetStatus(qid, "⏸ Gravação pausada.");
+        spSetControls(qid, `<button class="q-speech-btn" onclick="togglePauseSpeech(${qid})">▶ Retomar</button>
+          <button class="q-speech-btn" style="background:var(--error)" onclick="stopSpeechRecording(${qid})">■ Parar</button>`);
+      } else if (spRecorder.state === "paused") {
+        spPausedTotal += Date.now() - spPausedAt; spPausedAt = 0;
+        spRecorder.resume(); spStartRecognition(spSession);
+        spSetControls(qid, `<button class="q-speech-btn" onclick="togglePauseSpeech(${qid})">⏸ Pausar</button>
+          <button class="q-speech-btn" style="background:var(--error)" onclick="stopSpeechRecording(${qid})">■ Parar</button>`);
+      }
+    }
+
+    function stopSpeechRecording(qid) {
+      if (!spRecorder || qid !== spQid) return;
+      if (spRecorder.state !== "inactive") spRecorder.stop();
+    }
+
+    async function spTranscribe(qid, blob) {
+      spSetStatus(qid, "Transcrevendo sua resposta em alemão...");
+      try {
+        const token = (typeof Auth !== "undefined" && Auth.accessToken) ? await Auth.accessToken() : null;
+        if (!token) { spSetStatus(qid, "Entre na conta para transcrever sua fala."); return; }
+        const r = await fetch(AFB_CREATIVITY_API + "/transcribe", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": blob.type || "audio/webm" },
+          body: blob,
+        });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok || !d.text) {
+          const messages = { daily: "Limite de transcrições alcançado hoje.", cooldown: "Aguarde alguns segundos e tente de novo.", "Login required": "Entre novamente na conta pra transcrever.", "No speech detected": "Não identifiquei fala em alemão nessa gravação." };
+          throw new Error(messages[d.error] || d.error || "Falha na transcrição.");
+        }
+        respostas[qid] = d.text.trim();
+        render();
+        if (typeof SFX !== "undefined") SFX.click();
+      } catch (e) {
+        spSetStatus(qid, e.message || "Não foi possível transcrever agora. Tente de novo.");
+        spSetControls(qid, `<button class="q-speech-btn" onclick="startSpeechRecording(${qid})">🎤 Tentar de novo</button>`);
+      }
+    }
+    window.addEventListener("pagehide", () => { if (spRecorder && spRecorder.state !== "inactive") { try { spRecorder.stop(); } catch(e){} } spCleanup(); });
 
     function renderResultado() {
       let corretas = 0;
@@ -341,9 +590,14 @@
         if (!cats[c]) cats[c] = {total:0, ok:0};
         cats[c].total++;
         const r = respostas[q.id];
-        if (r !== undefined && String(r).toLowerCase().trim() === String(q.resposta).toLowerCase().trim()) {
-          corretas++; cats[c].ok++;
+        const cat = getCat(q.categoria);
+        let ok = false;
+        if (r !== undefined) {
+          if (q.opcoes && q.opcoes.length) ok = String(r) === String(q.resposta);
+          else if (cat === "schreiben") ok = aiGrades[q.id] && aiGrades[q.id].ok === true;
+          else ok = answerMatches(r, q.resposta);
         }
+        if (ok) { corretas++; cats[c].ok++; }
       });
       const pct = Math.round(corretas * 100 / questoes.length);
       const passou = pct >= 60;
@@ -353,8 +607,29 @@
         <div class="score-number ${passou?'score-pass':'score-fail'}">${pct}%</div>
         <h3>${passou?'🎉 Você passaria!':'📚 Continue estudando!'}</h3>
         <p>${corretas}/${questoes.length} corretas · Nota de corte: 60%</p>
-        <div class="stats">${catHtml}</div></div>`;
+        <div class="stats">${catHtml}</div>
+        <div class="sim-cta">
+          <h3>${passou ? '🚀 Continue nessa pegada!' : '💪 Toda jornada começa assim!'}</h3>
+          <p>O simulado é só uma parte. O curso completo tem diálogos, verbos, música e muito mais — com áudio nativo, no seu ritmo.</p>
+          <div class="sim-grid" style="margin-top:16px;">
+            <a href="cursos.html"><span>💬 Diálogos</span><small>1.225</small></a>
+            <a href="cursos.html?tab=verbos"><span>📖 Verbos</span><small>1.312</small></a>
+            <a href="musica.html"><span>🎵 Música</span><small>63</small></a>
+            <a href="podcasts.html"><span>🎧 Podcasts</span><small>23</small></a>
+            <a href="expressoes.html"><span>🗣️ Gírias</span><small>1.509</small></a>
+            <a href="vocabulario.html"><span>📚 Vocabulário</span><small>2.500</small></a>
+            <a href="profissoes.html"><span>💼 Profissões</span><small>90</small></a>
+            <a href="quiz.html"><span>⚡ Quiz</span><small>3.000</small></a>
+          </div>
+          <a href="planos.html" class="btn btn-primary">Ver planos Premium</a>
+        </div>
+      </div>`;
     }
+
+    // Carrega A1 direto, sem exigir clique -- reduz friccao pra quem chega
+    // de busca organica querendo testar de graca (mesmo espirito do resto
+    // do simulado ser 100% aberto agora).
+    startSimulado('a1');
   </script>
 </body>
 </html>

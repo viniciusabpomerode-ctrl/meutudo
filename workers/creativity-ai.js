@@ -14,10 +14,51 @@ function audioBase64(buffer){const bytes=new Uint8Array(buffer);let binary="";fo
 function clean(value,max){return typeof value==="string"?value.trim().slice(0,max):""}
 function extractJson(output){const text=typeof output==="string"?output:(output&&output.response)||"",match=text.match(/\{[\s\S]*\}/);if(!match)throw new Error("INVALID_AI_RESPONSE");const d=JSON.parse(match[0]);return{score:Math.max(0,Math.min(100,Number(d.score)||0)),summary:clean(d.summary,240),corrected:clean(d.corrected,1800),grammar:Array.isArray(d.grammar)?d.grammar.slice(0,4).map(x=>clean(x,240)):[],vocabulary:Array.isArray(d.vocabulary)?d.vocabulary.slice(0,5).map(x=>clean(x,100)):[],structure:clean(d.structure,360),modelAnswer:clean(d.modelAnswer,1800),mode:"ai"};}
 
+// Rate limit por IP (sem exigir login) -- o simulado Goethe e gratuito de
+// proposito, entao a correcao do Schreiben livre (so o C2 hoje) nao pode
+// travar quem esta so testando de graca. O DeepSeek Flash custa uma fracao
+// de centavo por correcao, o limite por IP e so pra evitar abuso automatizado.
+async function checkIpRateLimit(env,request,scope,limit,windowSeconds){
+  if(!env.LIMITS)return true;
+  const ip=request.headers.get("CF-Connecting-IP")||"unknown",key=`iprl:${scope}:${ip}`,now=Math.floor(Date.now()/1000);
+  let saved=await env.LIMITS.get(key,"json")||{count:0,windowStart:now};
+  if(now-saved.windowStart>windowSeconds)saved={count:0,windowStart:now};
+  saved.count++;
+  await env.LIMITS.put(key,JSON.stringify(saved),{expirationTtl:windowSeconds*2});
+  return saved.count<=limit;
+}
+async function gradeWriting(env,{pergunta,contexto,resposta,nivel}){
+  const system=`Voce corrige uma questao de escrita (Schreiben) de um simulado Goethe-Zertifikat de alemao, nivel ${nivel||"B1"}. Avalie se a resposta do aluno atende ao que foi pedido: tamanho e estrutura razoaveis, faz sentido pro contexto, e o alemao esta compreensivel pro nivel (nao precisa ser perfeito). Responda SOMENTE em JSON valido: {"ok": true|false, "feedback": "..."}. "feedback" deve ser uma frase curta em portugues, encorajadora mesmo quando ok=false, apontando o que ajustar.`;
+  const userMsg=`PERGUNTA: ${pergunta}\nCONTEXTO: ${contexto}\nRESPOSTA DO ALUNO: ${resposta}`;
+  const r=await fetch("https://api.deepseek.com/chat/completions",{
+    method:"POST",
+    headers:{"Content-Type":"application/json",Authorization:`Bearer ${env.DEEPSEEK_API_KEY}`},
+    body:JSON.stringify({model:"deepseek-chat",messages:[{role:"system",content:system},{role:"user",content:userMsg}],max_tokens:220,temperature:.3,response_format:{type:"json_object"}}),
+  });
+  if(!r.ok)throw new Error("DEEPSEEK_ERROR");
+  const data=await r.json();
+  const parsed=JSON.parse(data.choices[0].message.content);
+  return{ok:!!parsed.ok,feedback:clean(parsed.feedback,300)};
+}
+
 export default {async fetch(request,env){
   const origin=allowedOrigin(request,env);if(!origin)return json({error:"Origin not allowed"},403);
   if(request.method==="OPTIONS")return new Response(null,{status:204,headers:{"Access-Control-Allow-Origin":origin,"Access-Control-Allow-Methods":"POST,OPTIONS","Access-Control-Allow-Headers":"Authorization,Content-Type","Access-Control-Max-Age":"86400"}});
-  const url=new URL(request.url);if(request.method!=="POST"||!["/analyze","/transcribe"].includes(url.pathname))return json({error:"Not found"},404,origin);
+  const url=new URL(request.url);if(request.method!=="POST"||!["/analyze","/transcribe","/grade-writing"].includes(url.pathname))return json({error:"Not found"},404,origin);
+  if(url.pathname==="/grade-writing"){
+    // Sem login de proposito -- o simulado Goethe e gratuito, so protegido
+    // por rate limit de IP (ver checkIpRateLimit acima).
+    const okRate=await checkIpRateLimit(env,request,"grade-writing",30,3600).catch(()=>true);
+    if(!okRate)return json({error:"Muitas correções em pouco tempo. Aguarde um pouco."},429,origin);
+    if(!env.DEEPSEEK_API_KEY)return json({error:"Correção por IA não configurada"},503,origin);
+    const body=await request.json().catch(()=>({}));
+    const resposta=clean(body.resposta,2500);
+    if(!resposta||resposta.split(/\s+/).filter(Boolean).length<2)return json({error:"Resposta muito curta para corrigir."},400,origin);
+    try{
+      const result=await gradeWriting(env,{pergunta:clean(body.pergunta,500),contexto:clean(body.contexto,800),resposta,nivel:clean(body.nivel,2)});
+      return json(result,200,origin);
+    }catch(e){return json({error:"Falha na correção. Tente de novo."},502,origin)}
+  }
   try{
     const user=await authenticatedUser(request,env);if(!user)return json({error:"Login required"},401,origin);
     if(url.pathname==="/transcribe"){
