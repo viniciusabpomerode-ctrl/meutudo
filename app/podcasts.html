@@ -78,7 +78,7 @@
   <script src="../assets/js/xp.js?v=20260718-pod2"></script>
   <script src="../assets/js/nav.js?v=20260718-pod2"></script>
   <script src="../assets/js/data.js?v=20260718-pod2"></script>
-  <script src="../assets/js/i18n.js?v=20260720a"></script>
+  <script src="../assets/js/i18n.js?v=20260724-seo3"></script>
   <script src="../assets/js/guest.js"></script>
   <script>
     renderNav("podcasts");
@@ -93,16 +93,28 @@
       ar:{title:"🎧 بودكاست بالألمانية",subtitle:"قصص ثنائية اللغة للتعلم بالسماعات: الألمانية ثم الترجمة، جملةً بعد جملة.",all:"الكل",action:"⚔️ أكشن",adventure:"🧭 مغامرة",suspense:"🕵️ تشويق",stories:"قصة",done:"✅ مكتمل",fresh:"جديد",none:"لا توجد قصص مطابقة لهذا الفلتر.",soon:"قريبًا بهذه اللغة",error:"تعذر تحميل البودكاست. حاول مرة أخرى بعد قليل."},
       he:{title:"🎧 פודקאסטים בגרמנית",subtitle:"סיפורים דו־לשוניים ללמידה באוזניות: גרמנית ואחריה התרגום, משפט אחר משפט.",all:"הכול",action:"⚔️ פעולה",adventure:"🧭 הרפתקה",suspense:"🕵️ מתח",stories:"סיפורים",done:"✅ הושלם",fresh:"חדש",none:"לא נמצאו סיפורים לפי הסינון.",soon:"בקרוב בשפה זו",error:"לא ניתן לטעון את הפודקאסטים. נסו שוב בעוד רגע."},
       hi:{title:"🎧 जर्मन पॉडकास्ट",subtitle:"हेडफ़ोन से सीखने के लिए द्विभाषी कहानियाँ: हर वाक्य में पहले जर्मन, फिर अनुवाद।",all:"सभी",action:"⚔️ एक्शन",adventure:"🧭 रोमांच",suspense:"🕵️ रहस्य",stories:"कहानी/कहानियाँ",done:"✅ पूर्ण",fresh:"नया",none:"इस फ़िल्टर से कोई कहानी नहीं मिली।",soon:"इस भाषा में जल्द उपलब्ध",error:"पॉडकास्ट लोड नहीं हो सके। थोड़ी देर बाद फिर प्रयास करें।"},
-      pl:{title:"🎧 Podcasty po niemiecku",subtitle:"Dwujęzyczne historie do nauki w słuchawkach: niemiecki, a potem tłumaczenie, zdanie po zdaniu.",all:"Wszystkie",action:"⚔️ Akcja",adventure:"🧭 Przygoda",suspense:"🕵️ Napięcie",stories:"historie",done:"✅ Ukończono",fresh:"Nowe",none:"Brak historii pasujących do filtra.",soon:"wkrótce w tym języku",error:"Nie udało się załadować podcastów. Spróbuj ponownie za chwilę."}
+      pl:{title:"🎧 Podcasty po niemiecku",subtitle:"Dwujęzyczne historie do nauki w słuchawkach: niemiecki, a potem tłumaczenie, zdanie po zdaniu.",all:"Wszystkie",action:"⚔️ Akcja",adventure:"🧭 Przygoda",suspense:"🕵️ Napięcie",stories:"historie",done:"✅ Ukończono",fresh:"Nowe",none:"Brak historii pasujących do filtra.",soon:"wkrótce w tym języku",error:"Nie udało się załadować podcastów. Spróbuj ponownie za chwilę."},
+      id:{title:"🎧 Podcast Bahasa Jerman",subtitle:"Cerita dwibahasa untuk belajar dengan headphone: bahasa Jerman diikuti terjemahan, kalimat demi kalimat.",all:"Semua",action:"⚔️ Aksi",adventure:"🧭 Petualangan",suspense:"🕵️ Suspense",stories:"cerita",done:"✅ Selesai",fresh:"Baru",none:"Tidak ada cerita yang cocok dengan filter ini.",soon:"segera hadir dalam bahasa ini",error:"Podcast tidak dapat dimuat. Coba lagi sebentar."}
     };
     const ui = () => POD_UI[activeLang] || POD_UI.pt;
     const GENRE_ICON = { acao: "⚔️", aventura: "🧭", suspense: "🕵️" };
     const LEVEL_COLOR = { "A1/A2": "#4CAF50", "B1/B2": "#9C27B0" };
 
+    // 10 historias abertas pro publico (uma amostra de cada genero, nivel
+    // A1/A2 -- mais acessivel pra quem esta so testando). As outras 13
+    // pedem Premium. Ver tambem app/podcast.html, que aplica o mesmo
+    // bloqueio no player (nao adianta só esconder aqui).
+    const FREE_SLUGS = [
+      "der-letzte-zug", "alarm-im-hafen", "die-rettung-im-tunnel", "feuer-im-hotel",
+      "die-insel-der-bunten-vogel", "der-weg-zum-silbersee", "die-reise-des-roten-ballons",
+      "die-schritte-im-schnee", "der-anruf-um-mitternacht", "das-flustern-im-radio",
+    ];
+
     let allStories = [];
     let activeGenre = "todos";
     let activeLevel = "todos";
     let activeLang = (typeof I18n !== "undefined" ? I18n.getCurrent() : "pt");
+    let isGuestFree = true;
 
     function fmtDuration(seconds) {
       if (!seconds) return "";
@@ -144,11 +156,13 @@
         const duration = s.duration_seconds[activeLang] || s.duration_seconds.pt;
         const status = statusFor(s);
         const comingSoon = s.status === "coming_soon" || !langOk;
+        const locked = isGuestFree && !FREE_SLUGS.includes(s.slug);
+        const href = locked ? "planos.html" : `podcast.html?slug=${s.slug}&lang=${activeLang}`;
 
         return `
-          <a class="pod-card ${comingSoon ? 'pod-coming-soon' : ''}" href="podcast.html?slug=${s.slug}&lang=${activeLang}">
+          <a class="pod-card ${comingSoon ? 'pod-coming-soon' : ''}" href="${href}">
             <img class="pod-cover" src="../assets/images/podcasts/${s.slug}.webp" alt="${s.german_title}" loading="lazy" decoding="async">
-            <span class="pod-status-pill ${status.key}">${status.label}</span>
+            <span class="pod-status-pill ${status.key}">${locked ? "🔒 Premium" : status.label}</span>
             <div class="pod-genre-icon">${GENRE_ICON[s.genre] || "🎧"}</div>
             <h3>${s.german_title}</h3>
             <div class="pod-german">${s.premise || ""}</div>
@@ -157,7 +171,7 @@
               <span class="pod-duration">${fmtDuration(duration)}</span>
               ${comingSoon ? `<span class="tag">${ui().soon}</span>` : ''}
             </div>
-            ${status.pct > 0 ? `<div class="pod-progress-bar"><i style="width:${status.pct}%"></i></div>` : ""}
+            ${status.pct > 0 && !locked ? `<div class="pod-progress-bar"><i style="width:${status.pct}%"></i></div>` : ""}
           </a>`;
       }).join("");
     }
@@ -193,6 +207,7 @@
 
     (async () => {
       buildLangSelect();
+      try { isGuestFree = (typeof Guest !== "undefined" && Guest.isFree) ? await Guest.isFree() : true; } catch {}
       try {
         const catalog = await AFBData.podcastCatalog();
         allStories = catalog.stories || [];

@@ -94,12 +94,45 @@
   <script src="../assets/js/xp.js?v=20260718-pod2"></script>
   <script src="../assets/js/nav.js?v=20260718-pod2"></script>
   <script src="../assets/js/data.js?v=20260718-pod2"></script>
-  <script src="../assets/js/i18n.js?v=20260720a"></script>
+  <script src="../assets/js/i18n.js?v=20260724-seo3"></script>
+  <script src="../assets/js/guest.js"></script>
   <script>
     renderNav("podcasts");
 
+    // Mesma lista de app/podcasts.html -- o bloqueio la e so visual (esconde
+    // o card), quem tenta acessar a URL do player direto com o slug de uma
+    // historia paga precisa ser barrado aqui tambem.
+    const FREE_SLUGS = [
+      "der-letzte-zug", "alarm-im-hafen", "die-rettung-im-tunnel", "feuer-im-hotel",
+      "die-insel-der-bunten-vogel", "der-weg-zum-silbersee", "die-reise-des-roten-ballons",
+      "die-schritte-im-schnee", "der-anruf-um-mitternacht", "das-flustern-im-radio",
+    ];
+
+    // Mitigacao contra "chutar a URL": os 13 podcasts PAGOS nao ficam mais
+    // salvos no R2 com o slug legivel (que aparece publico no catalog.json)
+    // -- os arquivos (json + audio) foram renomeados pra um hash aleatorio.
+    // So essa pagina, que ja validou que o visitante e Premium, sabe fazer
+    // essa troca. Gerado por scripts/ofuscar_podcasts_premium.py.
+    const PREMIUM_SLUG_HASH = {
+      "verfolgung-in-berlin": "85f85a5894a20040",
+      "der-gestohlene-rucksack": "20766cee69dcf80e",
+      "sturm-auf-der-autobahn": "31d86a959447b036",
+      "das-signal-vom-dach": "4b4b820bc91e8a28",
+      "die-nacht-im-flughafen": "086f4f38ac48f6f5",
+      "einsatz-am-fluss": "124e3da4126566a8",
+      "schatten-uber-hamburg": "2115c61604160e51",
+      "der-code-des-fahrers": "4e1ff3df0736f528",
+      "der-schlussel-im-garten": "dead2af667656f55",
+      "niemand-im-zug": "73f70b4bfcfc86aa",
+      "die-tur-im-keller": "0d13d489e21cfa76",
+      "sieben-minuten-stille": "aeda8ad5573ae563",
+      "der-beobachter-im-regen": "ef7b4be519206815",
+    };
     const params = new URLSearchParams(location.search);
     const slug = params.get("slug");
+    // slug continua sendo usado pra URL/progresso/exibicao; fetchId e o que
+    // de fato busca o json/audio no R2 -- so muda pros pagos (ver PREMIUM_SLUG_HASH acima).
+    const fetchId = PREMIUM_SLUG_HASH[slug] || slug;
     const langParam = params.get("lang") || (typeof I18n !== "undefined" ? I18n.getCurrent() : "pt");
     const COMPLETE_THRESHOLD = 0.90;
     const PODCAST_XP = (typeof ACTIVITY_REWARDS !== "undefined" && ACTIVITY_REWARDS.podcast_completed) || 25;
@@ -149,7 +182,7 @@
 
     // ---------------- Carregamento do episódio ----------------
     async function loadEpisode(lang) {
-      const episode = await AFBData.podcast(slug, lang);
+      const episode = await AFBData.podcast(fetchId, lang);
       PC.episode = episode;
       PC.language = lang;
       PC.sentences = flattenSentences(episode);
@@ -563,6 +596,10 @@
     (async () => {
       document.getElementById("pcast-back-link").textContent = pui().back;
       if (!slug) { document.getElementById("content").innerHTML = `<p>${pui().missing}</p>`; return; }
+      if (!FREE_SLUGS.includes(slug)) {
+        const free = (typeof Guest !== "undefined" && Guest.isFree) ? await Guest.isFree() : true;
+        if (free) { location.href = "planos.html"; return; }
+      }
       try {
         const catalog = await AFBData.podcastCatalog();
         PC.catalogEntry = (catalog.stories || []).find(s => s.slug === slug) || null;

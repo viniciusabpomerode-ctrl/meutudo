@@ -95,6 +95,13 @@
     .sim-grid a:hover { border-color: var(--color-primary); transform: translateY(-2px); box-shadow: 0 8px 20px color-mix(in srgb, var(--color-primary) 14%, transparent); }
     .sim-grid a span { font-weight: 700; font-size: .9rem; }
     .sim-grid a small { color: var(--text-secondary); font-size: .78rem; }
+    .sim-pick-btn {
+      flex: 1; min-width: 130px; padding: 14px; border-radius: 12px; border: 2px solid var(--border-light);
+      background: var(--card-bg); color: var(--text-primary); cursor: pointer; text-align: center; font-weight: 700; transition: .15s;
+    }
+    .sim-pick-btn:hover { border-color: var(--color-primary); }
+    .sim-pick-btn.active { border-color: var(--color-primary); background: color-mix(in srgb, var(--color-primary) 14%, var(--card-bg)); }
+    .sim-pick-btn .sim-pick-status { display: block; font-size: .72rem; font-weight: 400; color: var(--text-secondary); margin-top: 3px; }
   </style>
 </head>
 <body>
@@ -115,11 +122,11 @@
       <div class="sim-grid">
         <a href="cursos.html"><span>💬 Diálogos</span><small>1.225</small></a>
         <a href="cursos.html?tab=verbos"><span>📖 Verbos</span><small>1.312</small></a>
-        <a href="musica.html"><span>🎵 Música</span><small>63</small></a>
+        <a href="musica.html"><span>🎵 Música</span><small>89</small></a>
         <a href="podcasts.html"><span>🎧 Podcasts</span><small>23</small></a>
         <a href="expressoes.html"><span>🗣️ Gírias</span><small>1.509</small></a>
         <a href="vocabulario.html"><span>📚 Vocabulário</span><small>2.500</small></a>
-        <a href="profissoes.html"><span>💼 Profissões</span><small>90</small></a>
+        <a href="profissoes.html"><span>💼 Profissões</span><small>4.500</small></a>
         <a href="quiz.html"><span>⚡ Quiz</span><small>3.000</small></a>
         <a href="criatividade.html"><span>✍️ Criatividade</span></a>
       </div>
@@ -127,18 +134,20 @@
     </div>
 
     <div class="level-select" id="level-select">
-      <div class="level-btn active" id="level-btn-a1" onclick="startSimulado('a1')">🟢 A1<br><span class="desc">Iniciante</span></div>
-      <div class="level-btn" id="level-btn-a2" onclick="startSimulado('a2')">🔵 A2<br><span class="desc">Básico</span></div>
-      <div class="level-btn" id="level-btn-b1" onclick="startSimulado('b1')">🟠 B1<br><span class="desc">Intermediário</span></div>
-      <div class="level-btn" id="level-btn-b2" onclick="startSimulado('b2')">🟣 B2<br><span class="desc">Avançado</span></div>
-      <div class="level-btn" id="level-btn-c1" onclick="startSimulado('c1')">🔴 C1<br><span class="desc">Proficiente</span></div>
-      <div class="level-btn" id="level-btn-c2" onclick="startSimulado('c2')">⚫ C2<br><span class="desc">Mestre</span></div>
+      <div class="level-btn active" id="level-btn-a1" onclick="selectLevel('a1')">🟢 A1<br><span class="desc">Iniciante</span></div>
+      <div class="level-btn" id="level-btn-a2" onclick="selectLevel('a2')">🔵 A2<br><span class="desc">Básico</span></div>
+      <div class="level-btn" id="level-btn-b1" onclick="selectLevel('b1')">🟠 B1<br><span class="desc">Intermediário</span></div>
+      <div class="level-btn" id="level-btn-b2" onclick="selectLevel('b2')">🟣 B2<br><span class="desc">Avançado</span></div>
+      <div class="level-btn" id="level-btn-c1" onclick="selectLevel('c1')">🔴 C1<br><span class="desc">Proficiente</span></div>
+      <div class="level-btn" id="level-btn-c2" onclick="selectLevel('c2')">⚫ C2<br><span class="desc">Mestre</span></div>
     </div>
+
+    <div class="sim-picker" id="sim-picker" style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;"></div>
 
     <div id="simulado-area"></div>
   </div>
 
-<script src="../assets/js/i18n.js?v=20260721-sim2"></script>
+<script src="../assets/js/i18n.js?v=20260724-seo3"></script>
 <script src="../assets/js/theme.js"></script>
   <script src="../assets/js/sfx.js"></script>
   <script src="../assets/js/auth.js"></script>
@@ -159,43 +168,64 @@
       audioEl.play().catch(() => {});
     }
 
+    // As alternativas hoje sao sempre em alemao (fiel ao exame oficial Goethe
+    // -- ver scripts/gerar_simulado_goethe.py), entao o audio de cada opcao e
+    // sempre em alemao tambem, sem versao traduzida por idioma da interface.
     function localizedOptionAudio(question, letter) {
-      const lang = (typeof I18n !== "undefined" && I18n.getCurrent) ? I18n.getCurrent() : "pt";
-      return (lang !== "pt" && question.option_audio_i18n?.[lang]?.[letter])
-        || question[`opt${letter}_audio_url`]
-        || "";
+      return question[`opt${letter}_audio_url`] || "";
     }
 
-    async function startSimulado(nivel) {
+    // Feito de propos­ito (nao mais aleatorio): 3 provas fixas por nivel,
+    // sem questao repetida entre elas -- ver scripts/gerar_simulado_goethe.py.
+    const SIMULADOS_POR_NIVEL = 3;
+    let indiceAtual = 1;
+
+    function selectLevel(nivel) {
       nivelAtual = nivel;
-      // O seletor de nivel fica sempre visivel (nao esconde mais) pra dar
-      // pra trocar de nivel a qualquer momento, sem precisar voltar.
       document.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
       document.getElementById(`level-btn-${nivel}`)?.classList.add("active");
+      renderSimPicker();
+      startSimulado(nivel, 1);
+    }
+
+    function renderSimPicker() {
+      let html = "";
+      for (let i = 1; i <= SIMULADOS_POR_NIVEL; i++) {
+        html += `<button class="sim-pick-btn ${i===indiceAtual?'active':''}" onclick="startSimulado('${nivelAtual}',${i})">
+          📝 Simulado ${i}<span class="sim-pick-status">40 questões</span></button>`;
+      }
+      document.getElementById("sim-picker").innerHTML = html;
+      if (typeof I18n !== "undefined" && I18n.getCurrent && I18n.getCurrent() !== "pt") I18n.applyPageTranslations();
+    }
+
+    async function startSimulado(nivel, indice) {
+      nivelAtual = nivel;
+      indiceAtual = indice || indiceAtual || 1;
+      document.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(`level-btn-${nivel}`)?.classList.add("active");
+      renderSimPicker();
+      document.getElementById("simulado-area").innerHTML = '<p style="text-align:center;padding:40px;">Carregando…</p>';
       try {
         let authHeaders = {};
         try { if (typeof Auth !== "undefined" && Auth.accessToken) { const t = await Auth.accessToken(); if (t) authHeaders = { Authorization: `Bearer ${t}` }; } } catch {}
-        let r = await fetch(`${R2}data/simulado_${nivel}.json`, { headers: authHeaders }).catch(() => null);
-        if (!r || !r.ok) r = await fetch(`../data/simulado_${nivel}.json`);
+        let r = await fetch(`${R2}data/simulado_${nivel}_${indiceAtual}.json`, { headers: authHeaders }).catch(() => null);
+        if (!r || !r.ok) r = await fetch(`../data/simulado_${nivel}_${indiceAtual}.json`);
         const data = await r.json();
-        const all = data.questoes || [];
-        // Traduz somente os textos visiveis. Categoria, resposta, caminhos de
-        // audio e demais campos estruturais precisam permanecer intactos.
+        questoes = data.questoes || [];
+        // As alternativas (opcoes) e o contexto (contexto_de) sao alemao
+        // autentico -- nunca traduz. So o enunciado (pergunta_pt) e a
+        // explicacao (explicacao_pt) sao andaimes pedagogicos em portugues,
+        // traduzidos pro idioma da interface em tempo real.
         if (typeof I18n !== "undefined" && I18n.getCurrent() !== "pt" && I18n.translateData) {
-          const visible = all.map(q => ({
+          const visible = questoes.map(q => ({
             pergunta_pt: q.pergunta_pt || "",
-            opcoes: Array.isArray(q.opcoes) ? q.opcoes : [],
             explicacao_pt: q.explicacao_pt || ""
           }));
           const translated = await I18n.translateData(visible);
-          all.forEach((q, i) => Object.assign(q, translated[i] || {}));
+          questoes.forEach((q, i) => Object.assign(q, translated[i] || {}));
         }
-        const pick = (cat, n) => all.filter(q => (q.categoria||"").toLowerCase() === cat).sort(()=>Math.random()-.5).slice(0, n);
-        questoes = [...pick("lesen",15), ...pick("hören",15), ...pick("schreiben",5), ...pick("sprechen",5)]
-          .sort(()=>Math.random()-.5);
-        questoes.forEach((q,i) => q.id = i+1);
       } catch(e) {
-        document.getElementById("simulado-area").innerHTML = '<p style="text-align:center;padding:40px;">📭 Gere primeiro:<br><code>python Cursoweb\\scripts\\gerar_testes.py --workers 6</code></p>';
+        document.getElementById("simulado-area").innerHTML = '<p style="text-align:center;padding:40px;">📭 Gere primeiro:<br><code>python scripts\\gerar_simulado_goethe.py --all</code></p>';
         return;
       }
       respostas = {}; reveladas = {}; finalizado = false; secaoAtual = "todas";
@@ -280,9 +310,9 @@
         // fantasma duplicada em cima do campo de resposta).
         if (q.contexto_de && cat !== "schreiben") {
           if (cat === "horen" && !revealed) {
-            html += `<div class="q-context" style="filter:blur(6px);cursor:pointer;user-select:none" onclick="if(!reveladas[${q.id}]){reveladas[${q.id}]=true;render();}" title="Clique para revelar">${q.contexto_de}</div>`;
+            html += `<div class="q-context" lang="de" style="filter:blur(6px);cursor:pointer;user-select:none" onclick="if(!reveladas[${q.id}]){reveladas[${q.id}]=true;render();}" title="Clique para revelar">${q.contexto_de}</div>`;
           } else {
-            html += `<div class="q-context">${q.contexto_de}</div>`;
+            html += `<div class="q-context" lang="de">${q.contexto_de}</div>`;
           }
         }
 
@@ -300,7 +330,7 @@
               else if (l === r) cls = "incorrect";
             } else if (l === r) cls = "selected";
             const au = localizedOptionAudio(q, l);
-            html += `<div class="q-option ${cls}" onclick="${revealed?'':`responder(${q.id},'${l}')`}">${opt}${au ? ` <button class="q-audio-btn" style="padding:2px 8px;font-size:.7rem;margin-left:8px" onclick="event.stopPropagation();playAudioUrl('${au}')">▶</button>` : ""}</div>`;
+            html += `<div class="q-option ${cls}" onclick="${revealed?'':`responder(${q.id},'${l}')`}"><span lang="de">${opt}</span>${au ? ` <button class="q-audio-btn" style="padding:2px 8px;font-size:.7rem;margin-left:8px" onclick="event.stopPropagation();playAudioUrl('${au}')">▶</button>` : ""}</div>`;
           });
           html += `</div>`;
         }
@@ -435,7 +465,7 @@
       finalizado = true; render();
       window.scrollTo(0, 0);
     }
-    function reiniciar() { startSimulado(nivelAtual); }
+    function reiniciar() { startSimulado(nivelAtual, indiceAtual); }
 
     // Gravacao real do Sprechen (mesmo padrao da pagina de Criatividade):
     // MediaRecorder grava o audio inteiro com pausa/retomada, um
@@ -617,11 +647,11 @@
           <div class="sim-grid" style="margin-top:16px;">
             <a href="cursos.html"><span>💬 Diálogos</span><small>1.225</small></a>
             <a href="cursos.html?tab=verbos"><span>📖 Verbos</span><small>1.312</small></a>
-            <a href="musica.html"><span>🎵 Música</span><small>63</small></a>
+            <a href="musica.html"><span>🎵 Música</span><small>89</small></a>
             <a href="podcasts.html"><span>🎧 Podcasts</span><small>23</small></a>
             <a href="expressoes.html"><span>🗣️ Gírias</span><small>1.509</small></a>
             <a href="vocabulario.html"><span>📚 Vocabulário</span><small>2.500</small></a>
-            <a href="profissoes.html"><span>💼 Profissões</span><small>90</small></a>
+            <a href="profissoes.html"><span>💼 Profissões</span><small>4.500</small></a>
             <a href="quiz.html"><span>⚡ Quiz</span><small>3.000</small></a>
           </div>
           <a href="planos.html" class="btn btn-primary">Ver planos Premium</a>
@@ -632,7 +662,7 @@
     // Carrega A1 direto, sem exigir clique -- reduz friccao pra quem chega
     // de busca organica querendo testar de graca (mesmo espirito do resto
     // do simulado ser 100% aberto agora).
-    startSimulado('a1');
+    selectLevel('a1');
   </script>
 </body>
 </html>
