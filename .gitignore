@@ -41,3 +41,4 @@ _regravar_*.py
 
 # Claude
 .claude/
+scripts/premium_podcast_slug_map.json
