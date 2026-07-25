@@ -29,7 +29,7 @@
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/xp.js"></script>
   <script src="../assets/js/nav.js"></script>
-  <script src="../assets/js/i18n.js?v=20260724-seo3"></script>
+  <script src="../assets/js/i18n.js?v=20260725-ru"></script>
   <script src="../assets/js/data.js"></script>
   <script src="../assets/js/guest.js"></script>
   <script src="../assets/js/content-freshness.js?v=20260714-1"></script>
@@ -44,6 +44,12 @@
     let verbsData = null;   // verbos do nivel atual (carregado so quando precisa)
     let isGuest = true;     // visitante: 20 de cada liberados, resto com cadeado
     const progress = Guest.safeProgress();
+
+    // O Worker (content-gateway) so manda uma amostra pra quem nao e Premium,
+    // entao verbsData.length / dIdx nao refletem o acervo real. Totais fixos
+    // por nivel, conferidos direto na fonte (data/cursos/*.json no R2).
+    const REAL_DIALOGS = { A1:176, A2:150, B1:300, B2:249, C1:200, C2:150 };
+    const REAL_VERBS   = { A1:52,  A2:93,  B1:494, B2:564, C1:62,  C2:50  };
 
     function renderLevelTabs() {
       const wrap = document.getElementById("level-tabs");
@@ -103,7 +109,7 @@
             <p class="muted" style="margin:4px 0; font-size:.85rem;">${I18n.field(v, 'portuguese_translation')}</p>
             ${progress.completed.includes("verb-" + v.id) ? '<span class="badge">✅</span>' : `<span class="xp-pill">+${v.xp_reward} XP</span>`}
           </a>`;
-        }).join("")}</div>${isGuest && verbsData.length > (currentLevel === "A2" ? AFB_FREE_A2_LESSONS : AFB_FREE_LIMIT_STRICT) ? Guest.banner(verbsData.length - (currentLevel === "A2" ? AFB_FREE_A2_LESSONS : AFB_FREE_LIMIT_STRICT), "verbos deste nível") : ""}`;
+        }).join("")}</div>${isGuest ? Guest.banner((REAL_VERBS[currentLevel] || verbsData.length) - (currentLevel === "A2" ? AFB_FREE_A2_LESSONS : AFB_FREE_LIMIT_STRICT), "verbos deste nível") : ""}`;
         return;
       }
 
@@ -132,7 +138,7 @@
               </a>`;
             }).join("")}
           </div>
-        `).join("") + (isGuest && dIdx > (currentLevel === "A2" ? AFB_FREE_A2_LESSONS : AFB_FREE_LIMIT) ? Guest.banner(dIdx - (currentLevel === "A2" ? AFB_FREE_A2_LESSONS : AFB_FREE_LIMIT), "diálogos deste nível") : "");
+        `).join("") + (isGuest ? Guest.banner((REAL_DIALOGS[currentLevel] || dIdx) - (currentLevel === "A2" ? AFB_FREE_A2_LESSONS : AFB_FREE_LIMIT), "diálogos deste nível") : "");
       }
     }
 

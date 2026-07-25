@@ -187,7 +187,7 @@
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/nav.js"></script>
   <script src="../assets/js/data.js?v=20260714-audio1"></script>
-  <script src="../assets/js/i18n.js?v=20260724-seo3"></script>
+  <script src="../assets/js/i18n.js?v=20260725-ru"></script>
   <script src="../assets/js/saved_r2.js?v=20260714-ref2"></script>
   <script src="../assets/js/guest.js"></script>
   <script src="../assets/js/content-freshness.js?v=20260714-1"></script>
@@ -198,6 +198,18 @@
     let isGuest = true;
     let isLoggedIn = false;
     const guestFreeIds = new Set();
+
+    // O Worker (content-gateway) so manda uma amostra pra quem nao e Premium
+    // -- allData nunca reflete o acervo real pra visitante. Totais fixos,
+    // conferidos direto na fonte (data/girias.json no R2).
+    const REAL_TOTAL = 1509;
+    const REAL_CATEGORIES = 20;
+    const REAL_CATEGORY_COUNTS = {
+      amor:71, bebida:38, comida:110, cotidiano:183, despedida:21, dinheiro:31,
+      esportes:38, exclamacoes:21, festa_role:28, frustracao:38, idiomaticas:239,
+      insultos:67, internet_jovem:148, maneiro:149, musica_cultura:28, preguica:27,
+      regionais:66, saudacoes:128, tecnologia:38, trabalho:40,
+    };
 
     const audioEl = document.getElementById("expr-audio");
     audioEl.dataset.afbSpeedPlayer = "true";
@@ -273,22 +285,26 @@
       const counts = {};
       for (const c of cats) counts[c] = allData.filter(e => e.category === c).length;
 
-      document.getElementById("cat-grid").innerHTML = [...cats].sort().map(c => `
+      document.getElementById("cat-grid").innerHTML = [...cats].sort().map(c => {
+        const real = REAL_CATEGORY_COUNTS[c] || counts[c];
+        const free = isGuest ? Math.min(AFB_FREE_LIMIT_STRICT, counts[c]) : counts[c];
+        const locked = isGuest && real > free;
+        return `
         <div class="cat-folder" onclick="abrirCat('${c}')">
           <div class="folder-icon">${catIcons[c] || "📁"}</div>
           <div class="folder-name">${categoryLabel(c)} ${ContentFreshness.badgeAny(allData.filter(e=>e.category===c))}</div>
-          <div class="folder-count">${counts[c]} expressões</div>
-        </div>
-      `).join("");
+          <div class="folder-count">${locked ? `${free} grátis de ${real} 🔒` : `${real} expressões`}</div>
+        </div>`;
+      }).join("");
 
       // Busca global
       let filtradas = allData;
       if (searchMain) {
         filtradas = filtrar(filtradas, searchMain);
       }
-      document.getElementById("counter-main").innerHTML = searchMain 
-        ? `${filtradas.length} resultado(s)` 
-        : `<span style="background:var(--brand-light);color:var(--brand);padding:4px 12px;border-radius:20px;font-weight:700;">📚 ${allData.length} expressões · ${cats.size} categorias</span>`;
+      document.getElementById("counter-main").innerHTML = searchMain
+        ? `${filtradas.length} resultado(s)`
+        : `<span style="background:var(--brand-light);color:var(--brand);padding:4px 12px;border-radius:20px;font-weight:700;">📚 ${REAL_TOTAL} gírias e expressões · ${REAL_CATEGORIES} categorias</span>`;
       document.getElementById("list-main").innerHTML = searchMain ? renderCards(filtradas) : "";
     }
 
@@ -330,10 +346,13 @@
       if (sortMode === "az") filtradas.sort((a,b) => (a.german||"").localeCompare(b.german||"","de"));
       else if (sortMode === "level") filtradas.sort((a,b) => (levelOrder[a.level]??9)-(levelOrder[b.level]??9) || (a.german||"").localeCompare(b.german||""));
 
-      document.getElementById("counter-cat").textContent = `${filtradas.length} ${filtradas.length!==1?'expressões':'expressão'}`;
-      const lockedHere = isGuest ? filtradas.filter(e => !guestFreeIds.has(e._guestKey)).length : 0;
+      const realHere = REAL_CATEGORY_COUNTS[activeCat] || dados.length;
+      const lockedHere = isGuest && activeLevel === "todos" && !searchCat && realHere > dados.length;
+      document.getElementById("counter-cat").innerHTML = lockedHere
+        ? `<span style="background:var(--brand-light);color:var(--brand);padding:4px 12px;border-radius:20px;font-weight:700;">🔓 ${dados.length} de ${realHere} liberadas</span>`
+        : `${filtradas.length} ${filtradas.length!==1?'expressões':'expressão'}`;
       document.getElementById("list-cat").innerHTML = (filtradas.length ? renderCards(filtradas) : '<div class="empty-state"><p>Nenhuma encontrada.</p></div>')
-        + (lockedHere > 0 ? Guest.banner(1509 - AFB_FREE_LIMIT_STRICT, "gírias e expressões") : "");
+        + (isGuest ? Guest.banner(REAL_TOTAL - (REAL_CATEGORIES * AFB_FREE_LIMIT_STRICT), "gírias e expressões") : "");
     }
 
     function setLevel(lv) { activeLevel = lv; searchCat = ""; document.getElementById("search-cat").value = ""; renderCat(); }

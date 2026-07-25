@@ -61,3 +61,9 @@ const Theme = {
 };
 
 Theme.apply();
+
+// Campanha paga global (desativada por padrão no servidor).
+(function loadPaidPromotion(){
+  if(document.querySelector('script[data-paid-promotion]'))return;
+  const s=document.createElement("script");s.src="/assets/js/promo-banner.js?v=20260725";s.dataset.paidPromotion="1";s.defer=true;document.head.appendChild(s);
+})();

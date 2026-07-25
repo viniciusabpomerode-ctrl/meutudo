@@ -82,7 +82,7 @@
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/nav.js"></script>
   <script src="../assets/js/data.js"></script>
-  <script src="../assets/js/i18n.js?v=20260724-seo3"></script>
+  <script src="../assets/js/i18n.js?v=20260725-ru"></script>
   <script src="../assets/js/saved_r2.js?v=20260714-ref2"></script>
   <script src="../assets/js/guest.js"></script>
   <script src="../assets/js/content-freshness.js?v=20260714-1"></script>
@@ -113,6 +113,13 @@
     };
     const levelOrder = {A1:0, A2:1, B1:2, B2:3, C1:4, C2:5};
     const AFB_FREE_PER_CATEGORY = 20;
+    // O Worker (content-gateway) so manda uma amostra de 500 (20/categoria)
+    // pra quem nao e Premium -- o array que chega aqui NUNCA revela o
+    // tamanho real do acervo pra visitante. Por isso os totais abaixo sao
+    // fixos (conferidos direto na fonte), nao derivados de allData.length.
+    const REAL_TOTAL_WORDS = 2500;
+    const REAL_CATEGORIES = 25;
+    const REAL_PER_CATEGORY = 100;
 
     async function load() {
       try {
@@ -148,19 +155,23 @@
       const counts = {};
       for (const c of cats) counts[c] = allData.filter(e => e.category === c).length;
 
-      document.getElementById("cat-grid").innerHTML = [...cats].sort().map(c => `
+      document.getElementById("cat-grid").innerHTML = [...cats].sort().map(c => {
+        const total = REAL_PER_CATEGORY;
+        const free = isGuest ? Math.min(AFB_FREE_PER_CATEGORY, counts[c]) : counts[c];
+        const locked = isGuest ? total - free : 0;
+        return `
         <div class="cat-folder" onclick="abrirCat('${c.replace(/'/g, "\\'")}')">
           <div class="folder-icon">${catIcons[c] || "📁"}</div>
           <div class="folder-name">${c} ${ContentFreshness.badgeAny(allData.filter(e=>e.category===c))}</div>
-          <div class="folder-count">${counts[c]} palavras</div>
-        </div>
-      `).join("");
+          <div class="folder-count">${locked > 0 ? `${free} grátis de ${total} 🔒` : `${total} palavras`}</div>
+        </div>`;
+      }).join("");
 
       let filtradas = allData;
       if (searchMain) filtradas = filtrar(filtradas, searchMain);
       document.getElementById("counter-main").innerHTML = searchMain
         ? `${filtradas.length} resultado(s)`
-        : `<span style="background:var(--brand-light);color:var(--brand);padding:4px 12px;border-radius:20px;font-weight:700;">📚 ${allData.length} palavras · ${cats.size} categorias</span>`;
+        : `<span style="background:var(--brand-light);color:var(--brand);padding:4px 12px;border-radius:20px;font-weight:700;">📚 ${REAL_TOTAL_WORDS} palavras · ${REAL_CATEGORIES} categorias</span>`;
       document.getElementById("list-main").innerHTML = searchMain ? renderCards(filtradas) : "";
     }
 
@@ -192,8 +203,15 @@
       let filtradas = activeLevel === "todos" ? dados : dados.filter(e => e.level === activeLevel);
       if (searchCat) filtradas = filtrar(filtradas, searchCat);
 
-      document.getElementById("counter-cat").textContent = `${filtradas.length} ${filtradas.length!==1?'palavras':'palavra'}`;
-      document.getElementById("list-cat").innerHTML = filtradas.length ? renderCards(filtradas) : '<div class="empty-state"><p>Nenhuma encontrada.</p></div>';
+      // O servidor ja manda so a amostra gratis (visitante nunca recebe as
+      // palavras travadas) -- filtradas.length aqui e sempre <= 20, entao
+      // o total real da categoria (100) vem da constante fixa, nao do array.
+      const showingFreeCount = isGuest && activeLevel === "todos" && !searchCat;
+      document.getElementById("counter-cat").innerHTML = showingFreeCount
+        ? `<span style="background:var(--brand-light);color:var(--brand);padding:4px 12px;border-radius:20px;font-weight:700;">🔓 ${filtradas.length} de ${REAL_PER_CATEGORY} liberadas</span>`
+        : `${filtradas.length} ${filtradas.length!==1?'palavras':'palavra'}`;
+      document.getElementById("list-cat").innerHTML = (filtradas.length ? renderCards(filtradas) : '<div class="empty-state"><p>Nenhuma encontrada.</p></div>')
+        + (isGuest ? Guest.banner(REAL_TOTAL_WORDS - (REAL_CATEGORIES * AFB_FREE_PER_CATEGORY), "palavras de vocabulário") : "");
     }
 
     document.getElementById("search-cat").addEventListener("input", (e) => {

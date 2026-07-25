@@ -1,3 +1,4 @@
+const PaidPromotion = require('./_paid-promotion');
 // Netlify Function — cria uma sessao de Checkout do Stripe e devolve a URL
 // pra onde o navegador deve redirecionar. Usa a API REST do Stripe direto
 // via fetch (sem precisar instalar o pacote "stripe", sem build step).
@@ -10,14 +11,17 @@
 // price ID so, multi-moeda (configurado direto no Stripe com "paridades"
 // por moeda), entao nao precisa de variavel separada por moeda.
 const PRICE_BY_PLAN_CURRENCY = {
-  mensal: { brl: process.env.STRIPE_PRICE_MENSAL, eur: process.env.STRIPE_PRICE_MENSAL_EUR, usd: process.env.STRIPE_PRICE_MENSAL_USD },
-  anual: { brl: process.env.STRIPE_PRICE_ANUAL, eur: process.env.STRIPE_PRICE_ANUAL_EUR, usd: process.env.STRIPE_PRICE_ANUAL_USD },
-  fundador: { brl: process.env.STRIPE_PRICE_FUNDADOR, eur: process.env.STRIPE_PRICE_FUNDADOR, usd: process.env.STRIPE_PRICE_FUNDADOR },
+  mensal: { brl: process.env.STRIPE_PRICE_MENSAL, eur: process.env.STRIPE_PRICE_MENSAL_EUR, usd: process.env.STRIPE_PRICE_MENSAL_USD, idr: process.env.STRIPE_PRICE_MENSAL_IDR },
+  anual: { brl: process.env.STRIPE_PRICE_ANUAL, eur: process.env.STRIPE_PRICE_ANUAL_EUR, usd: process.env.STRIPE_PRICE_ANUAL_USD, idr: process.env.STRIPE_PRICE_ANUAL_IDR },
+  fundador: { brl: process.env.STRIPE_PRICE_FUNDADOR, eur: process.env.STRIPE_PRICE_FUNDADOR, usd: process.env.STRIPE_PRICE_FUNDADOR, idr: process.env.STRIPE_PRICE_VITALICIO_IDR },
+  mensal_promocao: { brl: process.env.STRIPE_PRICE_MENSAL_PROMOCAODOLAR, eur: process.env.STRIPE_PRICE_MENSAL_PROMOCAODOLAR, usd: process.env.STRIPE_PRICE_MENSAL_PROMOCAODOLAR, idr: process.env.STRIPE_PRICE_MENSAL_PROMOCAODOLAR },
+  fundador_promocao: { brl: process.env.PROBRVITALICIO, eur: process.env.PROBRVITALICIO, usd: process.env.PROBRVITALICIO, idr: process.env.PROBRVITALICIO },
 };
 function resolvePriceId(plan, currency) {
   const byPlan = PRICE_BY_PLAN_CURRENCY[plan];
   if (!byPlan) return null;
-  return byPlan[currency] || byPlan.brl;
+  // Nunca cobra BRL silenciosamente quando um preço regional estiver ausente.
+  return byPlan[currency] || null;
 }
 
 // "fundador" e pagamento unico (vitalicio); os outros dois sao assinatura recorrente
@@ -25,6 +29,8 @@ const MODE_BY_PLAN = {
   mensal: "subscription",
   anual: "subscription",
   fundador: "payment",
+  mensal_promocao: "subscription",
+  fundador_promocao: "payment",
 };
 const SUPABASE_URL = "https://zqrdpmrwnprtelgloawb.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_CVFm1nLMf9GCPr-RKKU6Rw_AFixWd5z";
@@ -57,8 +63,12 @@ exports.handler = async (event) => {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "invalid json" }) };
   }
 
-  const { plan } = body;
-  const currency = ["eur", "usd"].includes(body.currency) ? body.currency : "brl";
+  let { plan } = body;
+  if (plan === "mensal_promocao" || plan === "fundador_promocao") {
+    const promotion = await PaidPromotion.read();
+    if (!promotion.active) return { statusCode: 409, headers, body: JSON.stringify({ error: "promocao encerrada" }) };
+  }
+  const currency = ["brl", "eur", "usd", "idr"].includes(body.currency) ? body.currency : "brl";
   const user = await authenticatedUser(event);
   if (!user) return { statusCode: 401, headers, body: JSON.stringify({ error: "login obrigatorio" }) };
   const email = user.email;
@@ -82,6 +92,9 @@ exports.handler = async (event) => {
   params.append("payment_method_types[0]", "card");
   params.append("line_items[0][price]", priceId);
   params.append("line_items[0][quantity]", "1");
+  // Os dois Prices promocionais são multimoeda. Força a mesma moeda
+  // exibida na página para não haver divergência no Stripe.
+  if (plan.endsWith("_promocao")) params.append("currency", currency);
   params.append("customer_email", email);
   params.append("client_reference_id", email);
   if (embedded) {
@@ -91,7 +104,8 @@ exports.handler = async (event) => {
     params.append("success_url", `${origin}/app/perfil.html?checkout=sucesso`);
     params.append("cancel_url", `${origin}/app/planos.html?checkout=cancelado`);
   }
-  params.append("metadata[plan]", plan);
+  params.append("metadata[plan]", plan === "mensal_promocao" ? "mensal" : plan === "fundador_promocao" ? "fundador" : plan);
+  params.append("metadata[promotion]", plan.endsWith("_promocao") ? "paid" : "none");
   params.append("metadata[email]", email);
   params.append("metadata[user_id]", user.id);
   params.append("metadata[currency]", currency);

@@ -132,7 +132,7 @@
 
   <footer class="footer"><p>DeutschBloom © 2026 — um espaço tranquilo para aprender de verdade.</p></footer>
 
-<script src="../assets/js/i18n.js?v=20260724-seo3"></script>
+<script src="../assets/js/i18n.js?v=20260725-ru"></script>
 <script src="../assets/js/theme.js"></script>
   <script src="../assets/js/sfx.js"></script>
   <script src="../assets/js/auth.js"></script>
@@ -182,6 +182,7 @@
       const geoRes = await fetch("/.netlify/functions/geo", { cache: "no-store" });
       const geoData = await geoRes.json();
       if (geoData.country === "BR") currency = "brl";
+      else if (geoData.country === "ID") currency = "idr";
       else if (EU_COUNTRIES.has(geoData.country)) currency = "eur";
       else if (geoData.country) currency = "usd";
       else currency = I18n.getCurrent() === "en" ? "usd" : "brl";
@@ -196,8 +197,15 @@
     // Casa "R$ 297" e "297 R$" (traduções antigas às vezes invertem a ordem).
     if (currency !== "brl") {
       if (typeof I18n !== "undefined") await I18n.applyPageTranslations();
-      const sign = currency === "usd" ? "US$" : "€";
-      const amounts = [
+      const sign = currency === "usd" ? "US$" : currency === "idr" ? "Rp" : "€";
+      const isIDR = currency === "idr";
+      const amounts = isIDR ? [
+        [/R\$\s*149|149\s*R\$/g, "Rp690.000"],
+        [/R\$\s*14,99|14,99\s*R\$/g, "Rp69.000"],
+        [/R\$\s*297|297\s*R\$/g, "Rp1.390.000"],
+        [/R\$\s*12,42|12,42\s*R\$/g, "Rp57.500"],
+        [/R\$\s*0\b|\b0\s*R\$/g, "Rp0"],
+      ] : [
         [/R\$\s*149|149\s*R\$/g, `${sign} 30`],
         [/R\$\s*14,99|14,99\s*R\$/g, `${sign} 8`],
         [/R\$\s*297|297\s*R\$/g, `${sign} 60`],
@@ -219,6 +227,42 @@
     if (user && isBR) {
       document.getElementById("pix-card").style.display = "block";
     }
+
+
+    // Promoção paga: o servidor é a fonte de verdade. Sem configuração ou
+    // com active=false, a página permanece exatamente com os preços normais.
+    try {
+      const promoRes=await fetch("/.netlify/functions/paid-promotion",{cache:"no-store"});
+      const promo=await promoRes.json();
+      window.AFB_PLAN_PROMO_SIGNATURE=JSON.stringify([!!promo.active,promo.updated_at,promo.monthly,promo.lifetime]);
+      if(promo.active){
+        const fmt=(value)=>currency==="brl"?`R$ ${Number(value).toLocaleString("pt-BR",{minimumFractionDigits:0,maximumFractionDigits:2})}`:currency==="eur"?`€${Number(value).toLocaleString("de-DE",{maximumFractionDigits:2})}`:currency==="idr"?`Rp${Math.round(value).toLocaleString("id-ID")}`:`US$ ${Number(value).toLocaleString("en-US",{maximumFractionDigits:2})}`;
+        const lang=(I18n?.getCurrent?.()||"pt").split("-")[0];
+        const copy={
+          pt:{month:"/mês",monthly:"Assinar promoção — ",life:"Garantir promoção — "},en:{month:"/month",monthly:"Get monthly offer — ",life:"Get lifetime offer — "},
+          es:{month:"/mes",monthly:"Obtener oferta mensual — ",life:"Obtener oferta vitalicia — "},fr:{month:"/mois",monthly:"Profiter de l’offre mensuelle — ",life:"Profiter de l’offre à vie — "},
+          it:{month:"/mese",monthly:"Ottieni l’offerta mensile — ",life:"Ottieni l’offerta a vita — "},tr:{month:"/ay",monthly:"Aylık fırsatı al — ",life:"Ömür boyu fırsatı al — "},
+          ar:{month:"/شهر",monthly:"احصل على العرض الشهري — ",life:"احصل على العرض مدى الحياة — "},he:{month:"/חודש",monthly:"קבלת המבצע החודשי — ",life:"קבלת המבצע לכל החיים — "},
+          hi:{month:"/माह",monthly:"मासिक ऑफ़र लें — ",life:"लाइफ़टाइम ऑफ़र लें — "},pl:{month:"/miesiąc",monthly:"Wybierz ofertę miesięczną — ",life:"Wybierz ofertę dożywotnią — "},
+          id:{month:"/bulan",monthly:"Ambil promo bulanan — ",life:"Ambil promo seumur hidup — "},ru:{month:"/месяц",monthly:"Получить месячную скидку — ",life:"Получить пожизненную скидку — "}
+        }[lang]||null,c=copy||{month:"/mês",monthly:"Assinar promoção — ",life:"Garantir promoção — "};
+        const decorate=(button,group,promoPlan)=>{
+          const card=button.closest(".price-card")||button.closest(".card");
+          const price=card?.querySelector(".price-tag")||(button.dataset.plan==="fundador"?document.getElementById("founder-title"):null);
+          if(!price)return;
+          const old=price.innerHTML;
+          price.innerHTML=`<span style="display:block;font-size:.55em;opacity:.65;text-decoration:line-through">${old}</span><span style="display:block;color:var(--color-primary-dark)">${fmt(promo[group][currency])}${group==="monthly"?`<small>${c.month}</small>`:""}</span>`;
+          button.dataset.checkoutPlan=promoPlan;
+          button.innerHTML=(group==="monthly"?c.monthly:c.life)+fmt(promo[group][currency]);
+        };
+        decorate(document.querySelector('.subscribe-btn[data-plan="mensal"]'),"monthly","mensal_promocao");
+        decorate(document.querySelector('.subscribe-btn[data-plan="fundador"]'),"lifetime","fundador_promocao");
+      }
+    } catch(e) {}
+
+    window.addEventListener("afb:paid-promotion",event=>{
+      const signature=JSON.stringify([!!event.detail?.active,event.detail?.updated_at,event.detail?.monthly,event.detail?.lifetime]);if(window.AFB_PLAN_PROMO_SIGNATURE&&window.AFB_PLAN_PROMO_SIGNATURE!==signature)location.reload();
+    });
 
     // Auto-checkout: veio do cadastro com ?auto=mensal|anual|fundador
     const autoPlan = new URLSearchParams(location.search).get("auto");
@@ -272,7 +316,7 @@
           const res = await fetch("/.netlify/functions/create-checkout", {
             method: "POST",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-            body: JSON.stringify({ plan: btn.dataset.plan, currency }),
+            body: JSON.stringify({ plan: btn.dataset.checkoutPlan || btn.dataset.plan, currency }),
           });
           const data = await res.json();
           if (!res.ok || !data.clientSecret) throw new Error(data.error || "erro ao iniciar pagamento");

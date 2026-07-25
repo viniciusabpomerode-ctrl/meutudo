@@ -1,6 +1,7 @@
 const A=require('./_auth');
 const AWS=require('aws-sdk');
 const crypto=require('crypto');
+const PaidPromotion=require('./_paid-promotion');
 const s3=new AWS.S3({endpoint:`https://${process.env.R2_ID}.r2.cloudflarestorage.com`,accessKeyId:process.env.R2_KEY,secretAccessKey:process.env.R2_SECRET,region:'auto',signatureVersion:'v4'});
 const H={"Content-Type":"application/json","Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"Authorization,Content-Type","Access-Control-Allow-Methods":"GET,POST,OPTIONS","Cache-Control":"no-store"};
 const out=(statusCode,data)=>({statusCode,headers:H,body:JSON.stringify(data)});
@@ -15,6 +16,7 @@ exports.handler=async event=>{if(event.httpMethod==='OPTIONS')return{statusCode:
    if(action==='pix_requests')return out(200,{requests:await rest('pix_requests?status=eq.pending&select=id,email,name,payer_name,plan,message,created_at&order=created_at.asc')});
    if(action==='pix_history')return out(200,{requests:await rest('pix_requests?status=neq.pending&select=id,email,name,payer_name,plan,message,status,created_at,resolved_at&order=resolved_at.desc&limit=100')});
    if(action==='content_reports'){const listed=await s3.listObjectsV2({Bucket:'edicao',Prefix:'content_reports/open/',MaxKeys:200}).promise(),tickets=await Promise.all((listed.Contents||[]).map(async o=>{try{return JSON.parse((await s3.getObject({Bucket:'edicao',Key:o.Key}).promise()).Body.toString())}catch{return null}}));return out(200,{tickets:tickets.filter(Boolean).sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)))})}
+   if(action==='paid_promotion')return out(200,{promotion:await PaidPromotion.read()});
    if(action==='promo_links'){
     const [links,redemptions]=await Promise.all([
      rest('promo_links?select=id,code,label,trial_days,max_redemptions,ip_limit,expires_at,active,created_at&order=created_at.desc'),
@@ -27,6 +29,16 @@ exports.handler=async event=>{if(event.httpMethod==='OPTIONS')return{statusCode:
    return out(200,{admins:admins.length,plans:plans.length,activePlans:plans.filter(x=>x.active).length,creditsCents:credits.filter(x=>!x.reversed_at).reduce((s,x)=>s+x.amount_cents,0),referrals:refs.length});
   }
   if(event.httpMethod!=='POST')return out(405,{error:'method_not_allowed'});const b=JSON.parse(event.body||'{}');
+  if(action==='set_paid_promotion'){
+   const current=await PaidPromotion.read();
+   const config=await PaidPromotion.write({
+    ...current,active:b.active===true,headline:String(b.headline||current.headline),
+    monthly:{brl:b.monthly?.brl,usd:b.monthly?.usd,eur:b.monthly?.eur,idr:b.monthly?.idr},
+    lifetime:{brl:b.lifetime?.brl,usd:b.lifetime?.usd,eur:b.lifetime?.eur,idr:b.lifetime?.idr}
+   });
+   await audit(adm,action,null,{active:config.active,monthly:config.monthly,lifetime:config.lifetime});
+   return out(200,{ok:true,promotion:config});
+  }
   if(action==='create_promo_link'){
    const label=String(b.label||'').trim().slice(0,100);if(!label)return out(400,{error:'invalid_label'});
    const requested=String(b.code||'').trim().toUpperCase().replace(/[^A-Z0-9_-]/g,'').slice(0,40);

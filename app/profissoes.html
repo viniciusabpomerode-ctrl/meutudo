@@ -92,7 +92,7 @@
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/nav.js"></script>
   <script src="../assets/js/data.js"></script>
-  <script src="../assets/js/i18n.js?v=20260724-seo3"></script>
+  <script src="../assets/js/i18n.js?v=20260725-ru"></script>
   <script src="../assets/js/saved_r2.js?v=20260714-ref2"></script>
   <script src="../assets/js/guest.js"></script>
   <script src="../assets/js/content-freshness.js?v=20260714-1"></script>
@@ -118,6 +118,19 @@
       "Saúde": "🏥", "Transporte": "🚌"
     };
     const levelOrder = {A1:0, A2:1, B1:2, B2:3, C1:4, C2:5};
+    // O Worker (content-gateway) so manda uma amostra pra quem nao e
+    // Premium (10 profissoes de 90, 20 frases de cada uma em vez de ~50) --
+    // allData nunca reflete o tamanho real do acervo pra visitante. Os
+    // totais abaixo sao fixos, conferidos direto na fonte.
+    const REAL_TOTAL_PROFESSIONS = 90;
+    const REAL_TOTAL_PHRASES = 4500;
+    const REAL_PHRASES_PER_PROFESSION = 50;
+    const REAL_CATEGORY_COUNTS = {
+      "Agropecuária": 3, "Alimentação": 6, "Artes e Mídia": 7, "Ciências e Pesquisa": 7,
+      "Comércio e Vendas": 6, "Construção e Indústria": 7, "Direito e Administração": 4,
+      "Educação": 6, "Hotelaria e Turismo": 6, "Moda e Estética": 6, "Saúde": 10,
+      "Segurança Pública": 5, "Serviços Gerais": 4, "Tecnologia": 6, "Transporte": 7,
+    };
     const professionIntro = {
       pt:"Aprenda alemão no contexto do trabalho — 4.500 frases reais de 90 profissões, do A1 ao C2.",
       en:"Learn German in a work context — 4,500 real-life sentences from 90 professions, from A1 to C2.",
@@ -198,13 +211,16 @@
       const counts = {};
       for (const c of cats) counts[c] = allData.filter(e => e.category === c).length;
 
-      document.getElementById("cat-grid").innerHTML = [...cats].sort().map(c => `
+      document.getElementById("cat-grid").innerHTML = [...cats].sort().map(c => {
+        const real = REAL_CATEGORY_COUNTS[c] || counts[c];
+        const locked = isGuest && real > counts[c];
+        return `
         <div class="cat-folder" onclick="abrirCat('${c}')">
           <div class="folder-icon">${catIcons[c] || "📁"}</div>
           <div class="folder-name">${c} ${ContentFreshness.badgeAny(allData.filter(e=>e.category===c))}</div>
-          <div class="folder-count">${counts[c]} profissões</div>
-        </div>
-      `).join("");
+          <div class="folder-count">${locked ? `${counts[c]} de ${real} 🔒` : `${real} profissões`}</div>
+        </div>`;
+      }).join("");
 
       let filtradas = allData;
       if (searchMain) {
@@ -212,8 +228,9 @@
       }
       document.getElementById("counter-main").innerHTML = searchMain
         ? `${filtradas.length} resultado(s)`
-        : `<span style="background:var(--brand-light);color:var(--brand);padding:4px 12px;border-radius:20px;font-weight:700;">📚 ${allData.length} profissões · ${cats.size} categorias · ${allData.reduce((total, item) => total + (item.phrases || []).length, 0)} frases</span>`;
-      document.getElementById("list-main").innerHTML = searchMain ? renderCards(filtradas) : "";
+        : `<span style="background:var(--brand-light);color:var(--brand);padding:4px 12px;border-radius:20px;font-weight:700;">📚 ${REAL_TOTAL_PROFESSIONS} profissões · ${Object.keys(REAL_CATEGORY_COUNTS).length} categorias · ${REAL_TOTAL_PHRASES} frases</span>`;
+      document.getElementById("list-main").innerHTML = (searchMain ? renderCards(filtradas) : "")
+        + (isGuest && !searchMain ? Guest.banner(REAL_TOTAL_PROFESSIONS - allData.length, "profissões, com frases prontas pro seu trabalho") : "");
     }
 
     document.getElementById("search-main").addEventListener("input", (e) => {
@@ -235,8 +252,13 @@
       let filtradas = dados;
       if (searchCat) filtradas = filtrar(filtradas, searchCat);
 
-      document.getElementById("counter-cat").textContent = `${filtradas.length} ${filtradas.length!==1?'profissões':'profissão'}`;
-      document.getElementById("list-cat").innerHTML = filtradas.length ? renderCards(filtradas) : '<div class="empty-state"><p>Nenhuma encontrada.</p></div>';
+      const realHere = REAL_CATEGORY_COUNTS[activeCat] || dados.length;
+      const lockedHere = isGuest && realHere > dados.length;
+      document.getElementById("counter-cat").innerHTML = lockedHere
+        ? `<span style="background:var(--brand-light);color:var(--brand);padding:4px 12px;border-radius:20px;font-weight:700;">🔓 ${dados.length} de ${realHere} liberadas</span>`
+        : `${filtradas.length} ${filtradas.length!==1?'profissões':'profissão'}`;
+      document.getElementById("list-cat").innerHTML = (filtradas.length ? renderCards(filtradas) : '<div class="empty-state"><p>Nenhuma encontrada.</p></div>')
+        + (lockedHere ? Guest.banner(REAL_TOTAL_PROFESSIONS - allData.length, "profissões, com frases prontas pro seu trabalho") : "");
     }
 
     document.getElementById("search-cat").addEventListener("input", (e) => {
@@ -306,11 +328,12 @@
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;">
           <div>
             <h2 style="margin:0;">👤 ${e.profession} ${ContentFreshness.badge(e)}</h2>
-            <p class="muted" style="margin:4px 0;">${e.category} · ${(e.phrases||[]).length} frases · ${e.levels.sort().join(' → ')}</p>
+            <p class="muted" style="margin:4px 0;">${e.category} · ${isGuest ? REAL_PHRASES_PER_PROFESSION : (e.phrases||[]).length} frases · ${e.levels.sort().join(' → ')}</p>
           </div>
           <span id="prof-detail-save"></span>
         </div>
         ${phrasesHtml}
+        ${isGuest ? Guest.banner(REAL_PHRASES_PER_PROFESSION - AFB_FREE_PROF_PHRASES, "frases prontas dessa profissão (e mais " + (REAL_TOTAL_PROFESSIONS - allData.length) + " profissões)") : ""}
       `;
 
       // Save button for profession
