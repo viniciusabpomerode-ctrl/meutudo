@@ -40,12 +40,12 @@
 
   const dialogue = [...document.querySelectorAll(".dialogue-line")];
   const slowDialogue = [
-    ["Anna", "Hallo! Guten Morgen!", "Olá! Bom dia!", "../assets/curso-a1-piloto/audio/014_de_f.mp3"],
-    ["Lukas", "Guten Morgen! Wie geht es dir?", "Bom dia! Como você está?", "../assets/curso-a1-piloto/audio/015_de_m.mp3"],
-    ["Anna", "Mir geht es gut, danke. Und dir?", "Estou bem, obrigada. E você?", "../assets/curso-a1-piloto/audio/016_de_f.mp3"],
-    ["Lukas", "Sehr gut, danke.", "Muito bem, obrigado.", "../assets/curso-a1-piloto/audio/017_de_m.mp3"],
-    ["Anna", "Dann bis bald!", "Então, até breve!", "../assets/curso-a1-piloto/audio/018_de_f.mp3"],
-    ["Lukas", "Tschüss!", "Tchau!", "../assets/curso-a1-piloto/audio/019_de_m.mp3"]
+    ["Anna", "Hallo! Guten Morgen!", "Olá! Bom dia!", "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/assets/curso-a1-piloto/audio/014_de_f.mp3"],
+    ["Lukas", "Guten Morgen! Wie geht es dir?", "Bom dia! Como você está?", "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/assets/curso-a1-piloto/audio/015_de_m.mp3"],
+    ["Anna", "Mir geht es gut, danke. Und dir?", "Estou bem, obrigada. E você?", "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/assets/curso-a1-piloto/audio/016_de_f.mp3"],
+    ["Lukas", "Sehr gut, danke.", "Muito bem, obrigado.", "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/assets/curso-a1-piloto/audio/017_de_m.mp3"],
+    ["Anna", "Dann bis bald!", "Então, até breve!", "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/assets/curso-a1-piloto/audio/018_de_f.mp3"],
+    ["Lukas", "Tschüss!", "Tchau!", "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/assets/curso-a1-piloto/audio/019_de_m.mp3"]
   ];
 
   const quizzes = [

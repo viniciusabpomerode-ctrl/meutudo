@@ -44,37 +44,37 @@
     "Anna",
     "Hallo! Guten Morgen!",
     "Hello! Good morning!",
-    "/assets/curso-a1-piloto/audio/014_de_f.mp3"
+    "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/assets/curso-a1-piloto/audio/014_de_f.mp3"
   ],
   [
     "Lukas",
     "Guten Morgen! Wie geht es dir?",
     "Good morning! How are you?",
-    "/assets/curso-a1-piloto/audio/015_de_m.mp3"
+    "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/assets/curso-a1-piloto/audio/015_de_m.mp3"
   ],
   [
     "Anna",
     "Mir geht es gut, danke. Und dir?",
     "I'm fine, thank you. And you?",
-    "/assets/curso-a1-piloto/audio/016_de_f.mp3"
+    "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/assets/curso-a1-piloto/audio/016_de_f.mp3"
   ],
   [
     "Lukas",
     "Sehr gut, danke.",
     "Very well, thank you.",
-    "/assets/curso-a1-piloto/audio/017_de_m.mp3"
+    "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/assets/curso-a1-piloto/audio/017_de_m.mp3"
   ],
   [
     "Anna",
     "Dann bis bald!",
     "See you soon, then!",
-    "/assets/curso-a1-piloto/audio/018_de_f.mp3"
+    "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/assets/curso-a1-piloto/audio/018_de_f.mp3"
   ],
   [
     "Lukas",
     "Tschüss!",
     "Bye!",
-    "/assets/curso-a1-piloto/audio/019_de_m.mp3"
+    "https://pub-d856fe7eb96043c3a93a4d72cd8317cc.r2.dev/assets/curso-a1-piloto/audio/019_de_m.mp3"
   ]
 ];
 
