@@ -1,5 +1,8 @@
 [build]
   publish = "."
+[build.processing.html]
+  pretty_urls = false
+
 
 [functions]
   directory = "netlify/functions"
@@ -40,3 +43,16 @@
   for = "/*.html"
   [headers.values]
     Cache-Control = "public, max-age=300, must-revalidate"
+
+# SEO: redirecionamento permanente da amostra
+[[redirects]]
+  from = "/app/amostra.html"
+  to = "/app/cursos.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/app/amostra"
+  to = "/app/cursos.html"
+  status = 301
+  force = true

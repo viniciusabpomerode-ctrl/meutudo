@@ -1,0 +1,56 @@
+.a1-stage .a1-character {
+  position: absolute;
+  z-index: 2;
+  top: 45%;
+  bottom: auto;
+  width: 152px;
+  height: 152px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #f5e7cc, #e4cc9d);
+  border: 6px solid rgba(255, 255, 255, .95);
+  border-radius: 50%;
+  box-shadow: 0 18px 38px rgba(10, 23, 49, .28);
+  filter: none;
+  transform: translateY(-50%);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.a1-stage .a1-character.anna { left: 9%; }
+.a1-stage .a1-character.lukas { right: 9%; }
+
+.a1-stage .a1-character img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  height: auto;
+}
+
+.a1-stage .a1-character.anna img {
+  width: 245%;
+  left: -73%;
+  top: -22%;
+}
+
+.a1-stage .a1-character.lukas img {
+  width: 315%;
+  left: -108%;
+  top: -13%;
+}
+
+.a1-stage.speaking-anna .a1-character.anna,
+.a1-stage.speaking-lukas .a1-character.lukas {
+  border-color: #9eb0f4;
+  box-shadow: 0 0 0 8px rgba(49, 87, 213, .18), 0 18px 38px rgba(10, 23, 49, .28);
+}
+
+@media (max-width: 640px) {
+  .a1-stage .a1-character {
+    top: 42%;
+    width: 108px;
+    height: 108px;
+    border-width: 4px;
+  }
+
+  .a1-stage .a1-character.anna { left: 5%; }
+  .a1-stage .a1-character.lukas { right: 5%; }
+}

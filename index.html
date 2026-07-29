@@ -8,8 +8,9 @@
   <meta name="google-site-verification" content="ko0efWIPSRrPmBYxARuKERVPx-kiRMnem3Pbv4n83j4" />
   <meta name="description" content="Aprenda alemão do A1 ao C2 em um ambiente completo: mais de 63 mil conteúdos, diálogos, verbos, áudios, quiz e simulados Goethe. Comece grátis.">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
-  <link rel="canonical" href="https://deutschbloom.com/">
+
   <meta name="author" content="DeutschBloom">
+<link rel="canonical" href="https://deutschbloom.com/">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://deutschbloom.com/">
@@ -73,6 +74,9 @@
     .sidebar a { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:9px 10px; border-radius:9px; color:var(--text-secondary); font-size:.9rem; line-height:1.35; text-decoration:none; margin-bottom:1px; transition:background .2s,color .2s,transform .2s; }
     .sidebar a:hover { background:var(--card-hover); color:var(--text-primary); transform:translateX(2px); }
     .sidebar a small { color:var(--text-secondary); font-size:.72rem; opacity:.7; }
+    .sidebar .sidebar-path-card { align-items:center; margin:2px 0 7px; padding:11px 10px; border:1px solid color-mix(in srgb,var(--color-primary) 28%,var(--border-light)); background:color-mix(in srgb,var(--color-primary) 8%,var(--card-bg)); }
+    .sidebar .sidebar-path-card > span:first-child { display:grid; gap:2px; }
+    .sidebar .sidebar-path-card small { display:block; font-size:.62rem; font-weight:600; }
 
     /* ── Main content area ── */
     .main { padding:20px 24px 70px; min-width:0; overflow:hidden; }
@@ -174,6 +178,18 @@
     .home-faq h2 { font-size:clamp(1.35rem,2vw,1.9rem); margin:0 0 13px; }
     .home-faq details { border-bottom:1px solid var(--border-light); }
     .home-faq summary { cursor:pointer; list-style:none; padding:15px 2px; font-size:.94rem; font-weight:600; display:flex; justify-content:space-between; gap:18px; }
+    .home-course-a1{margin:20px 0 22px;padding:clamp(20px,3vw,30px);display:grid;grid-template-columns:1.35fr .65fr;gap:22px;align-items:center;position:relative;overflow:hidden}
+    .home-course-a1::after{content:"";position:absolute;width:260px;height:260px;right:-135px;top:-150px;border-radius:50%;background:var(--color-primary);opacity:.1;pointer-events:none}
+    .home-course-copy,.home-course-points{position:relative;z-index:1}.home-course-copy h2{font-size:clamp(1.45rem,2.7vw,2.25rem);margin:6px 0 8px}.home-course-copy p{color:var(--text-secondary);line-height:1.65;margin:0;max-width:720px}.home-course-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+    .home-course-points{display:grid;gap:8px}.home-course-points div{display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:center;padding:11px;border:1px solid var(--border-light);border-radius:12px;background:rgba(var(--overlay-tint),.22)}.home-course-points b{font-size:1.25rem;text-align:center}.home-course-points span{font-size:.78rem;color:var(--text-secondary)}
+    @media(max-width:760px){.home-course-a1{grid-template-columns:1fr}.home-course-points{grid-template-columns:repeat(3,1fr)}.home-course-points div{grid-template-columns:1fr;text-align:center}}
+    @media(max-width:520px){.home-course-points{grid-template-columns:1fr}.home-course-points div{grid-template-columns:42px 1fr;text-align:left}}
+    .home-course-a1{margin:20px 0 22px;padding:clamp(20px,3vw,30px);display:grid;grid-template-columns:1.35fr .65fr;gap:22px;align-items:center;position:relative;overflow:hidden}
+    .home-course-a1::after{content:"";position:absolute;width:260px;height:260px;right:-135px;top:-150px;border-radius:50%;background:var(--color-primary);opacity:.1;pointer-events:none}
+    .home-course-copy,.home-course-points{position:relative;z-index:1}.home-course-copy h2{font-size:clamp(1.45rem,2.7vw,2.25rem);margin:6px 0 8px}.home-course-copy p{color:var(--text-secondary);line-height:1.65;margin:0;max-width:720px}.home-course-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+    .home-course-points{display:grid;gap:8px}.home-course-points div{display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:center;padding:11px;border:1px solid var(--border-light);border-radius:12px;background:rgba(var(--overlay-tint),.22)}.home-course-points b{font-size:1.25rem;text-align:center}.home-course-points span{font-size:.78rem;color:var(--text-secondary)}
+    @media(max-width:760px){.home-course-a1{grid-template-columns:1fr}.home-course-points{grid-template-columns:repeat(3,1fr)}.home-course-points div{grid-template-columns:1fr;text-align:center}}
+    @media(max-width:520px){.home-course-points{grid-template-columns:1fr}.home-course-points div{grid-template-columns:42px 1fr;text-align:left}}
     .home-faq summary::after { content:"+"; color:var(--color-primary-dark); font-size:1.25rem; }
     .home-faq details[open] summary::after { content:"−"; }
     .home-faq details p { margin:0 0 16px; color:var(--text-secondary); font-size:.9rem; max-width:850px; }
@@ -293,15 +309,14 @@
     <aside class="sidebar" id="sidebar">
       <div class="brand2"><span id="brand-icon">◆</span> DeutschBloom</div>
 
-      <h4>Estudar</h4>
-      <a href="app/cursos.html">💬 Diálogos <small>1.225</small></a>
-      <a href="app/cursos.html?tab=verbos"><span>📖 Verbos</span><small>1.312 verbos<br>(38.802) frases</small></a>
+<h4>Estudar</h4>
+      <a href="app/cursos.html">💬 Diálogos <small>1.225 · A1–C2</small></a>
+      <a href="app/cursos.html?tab=verbos"><span>📖 Verbos</span><small>1.312 verbos<br>38.802 frases</small></a>
       <a href="app/musica.html">🎵 Música <small>89</small></a>
       <a href="app/podcasts.html">🎧 Podcasts <small>23 histórias bilíngues</small></a>
       <a href="app/expressoes.html">🗣️ Gírias <small>1.509</small></a>
       <a href="app/vocabulario.html">📚 Vocabulário <small>2.500</small></a>
       <a href="app/profissoes.html">💼 Profissões <small>90 · 4.500 frases</small></a>
-      <a href="blog/index.html">📰 Blog <small>dicas e cultura alemã</small></a>
 
       <h4>Treinar</h4>
       <a href="app/quiz.html">⚡ Quiz <small>3.000</small></a>
@@ -309,7 +324,11 @@
       <a href="app/escrita.html">✍️ Escrita <small>609</small></a>
       <a href="app/pronuncia.html">🎤 Pronúncia</a>
       <a href="app/criatividade.html">💡 Teste de Criatividade</a>
-      <a href="app/simulado.html">📝 Simulado Goethe <small>720</small></a>
+
+      <h4>Grátis</h4>
+      <a href="app/curso-a1.html"><span>🎓 Curso Guiado A1</span><small><span class="free-label">Grátis</span></small></a>
+      <a href="blog/index.html"><span>📰 Blog</span><small><span class="free-label">Grátis</span></small></a>
+      <a href="app/simulado.html"><span>📝 Simulado Goethe</span><small><span class="free-label">Grátis</span></small></a>
 
       <h4>Acompanhar</h4>
       <a href="app/perfil.html">📊 Progresso</a>
@@ -413,6 +432,23 @@
         </div>
       </div>
 
+      <section class="card home-course-a1 mi-stagger" aria-labelledby="home-course-title">
+        <div class="home-course-copy">
+          <span class="eyebrow">Um curso adicional · Grátis</span>
+          <h2 id="home-course-title">Curso Guiado A1: do zero aos fundamentos</h2>
+          <p>Como complemento da biblioteca completa, você pode seguir uma sequência de 30 aulas com diálogo, áudio, explicação e exercícios. É um caminho organizado para quem prefere estudar passo a passo.</p>
+          <div class="home-course-actions">
+            <a class="btn btn-primary" href="app/curso-a1-aula-01.html">▶ Começar o curso</a>
+            <a class="btn btn-outline" href="app/curso-a1.html">Ver as 30 aulas</a>
+          </div>
+        </div>
+        <div class="home-course-points" aria-label="Recursos do Curso Guiado A1">
+          <div><b>30</b><span>aulas guiadas</span></div>
+          <div><b>🔊</b><span>áudio e exercícios</span></div>
+          <div><b>✓</b><span>progresso passo a passo</span></div>
+        </div>
+      </section>
+
       <h3 class="section-title mi-stagger" id="conteudos" style="margin:0 0 14px;font-size:clamp(1rem,1.5vw,1.15rem);">O que você quer estudar hoje?</h3>
       <div class="study-grid">
         <a href="app/cursos.html?tab=verbos" class="card mi-card mi-stagger stat-tile"><div class="ico">📖</div><b class="mi-num" data-target="1312">0</b><span>1.312 verbos</span><small style="display:block;font-size:.6rem;color:var(--text-secondary);margin-top:1px;">38.802 frases conjugadas</small></a>
@@ -477,7 +513,7 @@
     </main>
   </div>
 
-<script defer src="assets/js/i18n.js?v=20260725-ru"></script>
+<script defer src="assets/js/i18n.js?v=20260729-core-ui"></script>
   <script defer src="assets/js/theme.js"></script>
   <script defer src="assets/js/sfx.js"></script>
   <script defer src="assets/js/auth.js"></script>

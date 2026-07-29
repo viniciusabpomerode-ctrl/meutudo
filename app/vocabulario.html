@@ -49,6 +49,7 @@
     .cat-folder .folder-name { font-weight: 700; font-size: .9rem; }
     .cat-folder .folder-count { font-size: .78rem; color: var(--text-secondary); margin-top: 4px; }
   </style>
+<link rel="canonical" href="https://deutschbloom.com/app/vocabulario.html">
 </head>
 <body>
   <div id="app-nav"></div>
@@ -82,7 +83,7 @@
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/nav.js"></script>
   <script src="../assets/js/data.js"></script>
-  <script src="../assets/js/i18n.js?v=20260725-ru"></script>
+  <script src="../assets/js/i18n.js?v=20260729-core-ui"></script>
   <script src="../assets/js/saved_r2.js?v=20260714-ref2"></script>
   <script src="../assets/js/guest.js"></script>
   <script src="../assets/js/content-freshness.js?v=20260714-1"></script>
@@ -102,7 +103,7 @@
     let searchCat = "";
     let guestFreeIds = new Set();
 
-    const catIcons = {
+    let catIcons = {
       "Casa e Cômodos": "🏠", "Cozinha": "🍳", "Banheiro": "🚿", "Roupas e Acessórios": "👕",
       "Comida e Bebida": "🍽️", "Corpo Humano": "🧍", "Família e Pessoas": "👨‍👩‍👧", "Profissões": "💼",
       "Escola e Educação": "🏫", "Árvores, Plantas e Flores": "🌳", "Trabalho e Escritório": "🗄️",
@@ -128,6 +129,25 @@
         let r = await fetch(`${R2}data/vocabulario.json`, { headers: authHeaders }).catch(() => null);
         if (!r || !r.ok) r = await fetch("../data/vocabulario.json");
         allData = (await r.json()).words || [];
+        const lang = I18n.getCurrent();
+        if (lang !== "pt") {
+          const localeMap = await I18n.loadContentTranslations();
+          if (Object.keys(localeMap).length) {
+            const translate = value => {
+              if (typeof value !== "string") return value;
+              return localeMap[value.replace(/\s+/g, " ").trim()] || value;
+            };
+            catIcons = Object.fromEntries(Object.entries(catIcons).map(([name, icon]) => [translate(name), icon]));
+            allData.forEach(item => {
+              item.portuguese = translate(item.portuguese);
+              item.category = translate(item.category);
+              if (item.example) item.example.pt = translate(item.example.pt);
+            });
+            I18n._contentTranslations = localeMap;
+            I18n._translationPromise = Promise.resolve(localeMap);
+            I18n.applyPageTranslations();
+          }
+        }
         if (isGuest) {
           const perCategory = {};
           allData.forEach((w) => {

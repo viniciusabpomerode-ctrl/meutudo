@@ -1,0 +1,27 @@
+{
+  "locale": "en",
+  "lesson": 1,
+  "voice": "en-US-GuyNeural",
+  "files": [
+    {
+      "file": "introduction.mp3",
+      "status": "generated"
+    },
+    {
+      "file": "explanation-01.mp3",
+      "status": "generated"
+    },
+    {
+      "file": "explanation-02.mp3",
+      "status": "generated"
+    },
+    {
+      "file": "explanation-03.mp3",
+      "status": "generated"
+    },
+    {
+      "file": "culture.mp3",
+      "status": "generated"
+    }
+  ]
+}

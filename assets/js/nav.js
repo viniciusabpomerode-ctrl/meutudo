@@ -10,15 +10,20 @@ const AFB_CONTENT_PAGES = [
   { href: "vocabulario.html", label: "📚 Vocabulário", key: "vocabulario" },
   { href: "profissoes.html", label: "💼 Profissões", key: "profissoes" },
   { href: "quiz.html", label: "⚡ Quiz", key: "quiz" },
-  { href: "simulado.html", label: "📝 Simulado Goethe", key: "simulado" },
   { href: "escrita.html", label: "✍️ Escrita", key: "escrita" },
   { href: "pronuncia.html", label: "🎤 Pronúncia", key: "pronuncia" },
   { href: "criatividade.html", label: "💡 Teste de Criatividade", key: "criatividade" },
   { href: "jogo.html", label: "🎮 Jogo", key: "jogo" },
   { href: "caderno.html", label: "📝 Caderno", key: "caderno" },
-  { href: "../blog/index.html", label: "📰 Blog", key: "blog" },
+  { href: "curso-a1.html", label: "🎓 Curso Guiado A1", key: "curso-a1", free: true },
+  { href: "../blog/index.html", label: "📰 Blog", key: "blog", free: true },
+  { href: "simulado.html", label: "📝 Simulado Goethe", key: "simulado", free: true },
 ];
 
+function afbLocalizedBlogHref(prefix = "../blog") {
+  const lang = localStorage.getItem("afb_language") || "pt";
+  return lang === "pt" ? `${prefix}/index.html` : `${prefix}/${lang}/index.html`;
+}
 function renderNav(active) {
   _renderNavNow(active);
   // Auth.currentUser() pode nao estar pronto ainda no primeiro desenho
@@ -35,26 +40,28 @@ function _renderNavNow(active) {
   const isContentPage = AFB_CONTENT_PAGES.some((l) => l.key === active);
   const navLang = localStorage.getItem("afb_language") || "pt";
   const navCopy = {
-    pt:{home:"Início",plans:"Planos",support:"Suporte"},
-    en:{home:"Home",plans:"Plans",support:"Support"},
-    es:{home:"Inicio",plans:"Planes",support:"Soporte"},
-    fr:{home:"Accueil",plans:"Forfaits",support:"Assistance"},
-    it:{home:"Home",plans:"Piani",support:"Assistenza"},
-    tr:{home:"Ana Sayfa",plans:"Planlar",support:"Destek"},
-    ar:{home:"الرئيسية",plans:"الخطط",support:"الدعم"},
-    he:{home:"דף הבית",plans:"תוכניות",support:"תמיכה"},
-    hi:{home:"होम",plans:"योजनाएँ",support:"सहायता"},
-    pl:{home:"Strona główna",plans:"Plany",support:"Pomoc"}
-  }[navLang] || {home:"Início",plans:"Planos",support:"Suporte"};
+    pt:{home:"Início",content:"Conteúdo",plans:"Planos",support:"Suporte",profile:"Perfil",logout:"Sair",login:"Entrar",create:"Criar conta",free:"Grátis"},
+    en:{home:"Home",content:"Content",plans:"Plans",support:"Support",profile:"Profile",logout:"Log out",login:"Sign in",create:"Create account",free:"Free"},
+    es:{home:"Inicio",content:"Contenido",plans:"Planes",support:"Soporte",profile:"Perfil",logout:"Salir",login:"Entrar",create:"Crear cuenta",free:"Gratis"},
+    fr:{home:"Accueil",content:"Contenu",plans:"Forfaits",support:"Assistance",profile:"Profil",logout:"Déconnexion",login:"Connexion",create:"Créer un compte",free:"Gratuit"},
+    it:{home:"Home",content:"Contenuti",plans:"Piani",support:"Assistenza",profile:"Profilo",logout:"Esci",login:"Accedi",create:"Crea account",free:"Gratis"},
+    tr:{home:"Ana Sayfa",content:"İçerik",plans:"Planlar",support:"Destek",profile:"Profil",logout:"Çıkış",login:"Giriş",create:"Hesap oluştur",free:"Ücretsiz"},
+    ar:{home:"الرئيسية",content:"المحتوى",plans:"الخطط",support:"الدعم",profile:"الملف الشخصي",logout:"تسجيل الخروج",login:"تسجيل الدخول",create:"إنشاء حساب",free:"مجاني"},
+    he:{home:"דף הבית",content:"תוכן",plans:"תוכניות",support:"תמיכה",profile:"פרופיל",logout:"התנתקות",login:"כניסה",create:"יצירת חשבון",free:"חינם"},
+    hi:{home:"होम",content:"सामग्री",plans:"योजनाएँ",support:"सहायता",profile:"प्रोफ़ाइल",logout:"लॉग आउट",login:"साइन इन",create:"खाता बनाएँ",free:"मुफ़्त"},
+    pl:{home:"Strona główna",content:"Materiały",plans:"Plany",support:"Pomoc",profile:"Profil",logout:"Wyloguj",login:"Zaloguj",create:"Utwórz konto",free:"Bezpłatnie"},
+    id:{home:"Beranda",content:"Konten",plans:"Paket",support:"Dukungan",profile:"Profil",logout:"Keluar",login:"Masuk",create:"Buat akun",free:"Gratis"},
+    ru:{home:"Главная",content:"Материалы",plans:"Тарифы",support:"Поддержка",profile:"Профиль",logout:"Выйти",login:"Войти",create:"Создать аккаунт",free:"Бесплатно"}
+  }[navLang] || {home:"Início",content:"Conteúdo",plans:"Planos",support:"Suporte",profile:"Perfil",logout:"Sair",login:"Entrar",create:"Criar conta",free:"Grátis"};
 
   const dropdownItems = AFB_CONTENT_PAGES
-    .map((l) => `<a href="${l.href}" class="nav-dd-item ${l.key === active ? "active" : ""}">${l.label}</a>`)
+    .map((l) => { const href = l.key === "blog" ? afbLocalizedBlogHref("../blog") : l.href; return `<a href="${href}" class="nav-dd-item ${l.key === active ? "active" : ""}"><span>${l.label}</span>${l.free ? `<small class="nav-free-label">${navCopy.free}</small>` : ""}</a>`; })
     .join("");
 
   const linksHtml = `
     <a href="../index.html" class="${active === "dashboard" ? "active" : ""}">${navCopy.home}</a>
     <div class="nav-dropdown">
-      <a href="cursos.html" class="nav-dd-trigger ${isContentPage ? "active" : ""}">Conteúdo ▾</a>
+      <a href="cursos.html" class="nav-dd-trigger ${isContentPage ? "active" : ""}">${navCopy.content} ▾</a>
       <div class="nav-dd-menu">${dropdownItems}</div>
     </div>
     <a href="planos.html" class="${active === "planos" ? "active" : ""}">${navCopy.plans}</a>
@@ -64,10 +71,10 @@ function _renderNavNow(active) {
   const el = document.getElementById("app-nav");
   if (!el) return;
   const navRight = user
-    ? `<a class="btn btn-ghost btn-sm" href="perfil.html">Perfil</a>
-       <button class="btn btn-ghost btn-sm" onclick="Auth.logout()">Sair</button>`
-    : `<a class="btn btn-ghost btn-sm" href="login.html">Entrar</a>
-       <a class="btn btn-primary btn-sm" href="cadastro.html">Criar conta</a>`;
+    ? `<a class="btn btn-ghost btn-sm" href="perfil.html">${navCopy.profile}</a>
+       <button class="btn btn-ghost btn-sm" onclick="Auth.logout()">${navCopy.logout}</button>`
+    : `<a class="btn btn-ghost btn-sm" href="login.html">${navCopy.login}</a>
+       <a class="btn btn-primary btn-sm" href="cadastro.html">${navCopy.create}</a>`;
   el.outerHTML = `
     <header class="navbar" id="app-nav">
       <a class="brand" href="../index.html">
@@ -96,6 +103,16 @@ function _renderNavNow(active) {
   }
 }
 
+// Corrige tambem o link fixo da pagina inicial. O texto pode ser traduzido
+// pelo i18n, mas o destino precisa apontar explicitamente para /blog/<idioma>/.
+(function localizeStaticBlogLinks(){
+  const apply = () => document.querySelectorAll('a[href="blog/index.html"],a[href="../blog/index.html"]').forEach(link => {
+    const prefix = link.getAttribute("href").startsWith("../") ? "../blog" : "blog";
+    link.setAttribute("href", afbLocalizedBlogHref(prefix));
+  });
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply);
+  else apply();
+})();
 // ── Bandeja de ferramentas (LoFi + Pomodoro) ──
 // Presente em todas as paginas (Inicio incluso), arrastavel e redimensionavel,
 // com posicao/tamanho salvos por elemento (localStorage) pra manter onde o

@@ -10,6 +10,21 @@ const AFB_THEME_META = {
   aurora: { icon: "🌌", label: "Aurora", tag: "Leveza, inspiração e equilíbrio" },
 };
 
+const AFB_THEME_LOCALE_LABELS = {
+  pt:{moderno:"Moderno",vikings:"Vikings",aurora:"Aurora"},
+  en:{moderno:"Modern",vikings:"Vikings",aurora:"Aurora"},
+  es:{moderno:"Moderno",vikings:"Vikingos",aurora:"Aurora"},
+  fr:{moderno:"Moderne",vikings:"Vikings",aurora:"Aurore"},
+  it:{moderno:"Moderno",vikings:"Vichinghi",aurora:"Aurora"},
+  tr:{moderno:"Modern",vikings:"Vikingler",aurora:"Aurora"},
+  ar:{moderno:"عصري",vikings:"الفايكنغ",aurora:"الشفق"},
+  he:{moderno:"מודרני",vikings:"ויקינגים",aurora:"זוהר"},
+  hi:{moderno:"आधुनिक",vikings:"वाइकिंग",aurora:"ऑरोरा"},
+  pl:{moderno:"Nowoczesny",vikings:"Wikingowie",aurora:"Zorza"},
+  id:{moderno:"Modern",vikings:"Viking",aurora:"Aurora"},
+  ru:{moderno:"Современная",vikings:"Викинги",aurora:"Аврора"}
+};
+
 const Theme = {
   get() {
     const t = localStorage.getItem(AFB_THEME_KEY);
@@ -67,3 +82,14 @@ Theme.apply();
   if(document.querySelector('script[data-paid-promotion]'))return;
   const s=document.createElement("script");s.src="/assets/js/promo-banner.js?v=20260725";s.dataset.paidPromotion="1";s.defer=true;document.head.appendChild(s);
 })();
+
+
+// global-sfx-loader: som discreto e coerente com o tema em toda a interface.
+document.addEventListener("DOMContentLoaded", function () {
+  if (document.querySelector('script[src*="/sfx.js"],script[src*="../assets/js/sfx.js"],script[src*="assets/js/sfx.js"]')) return;
+  const script = document.createElement("script");
+  script.src = new URL("/assets/js/sfx.js", window.location.origin).href;
+  script.defer = true;
+  script.dataset.globalSfx = "1";
+  document.head.appendChild(script);
+});

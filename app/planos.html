@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Escolha seu plano no DeutschBloom e libere mais de 63 mil conteúdos, áudios, quiz e simulados Goethe para estudar do A1 ao C2.">
   <meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://deutschbloom.com/app/planos.html">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:title" content="Planos para aprender alemão | DeutschBloom">
@@ -132,7 +133,7 @@
 
   <footer class="footer"><p>DeutschBloom © 2026 — um espaço tranquilo para aprender de verdade.</p></footer>
 
-<script src="../assets/js/i18n.js?v=20260725-ru"></script>
+<script src="../assets/js/i18n.js?v=20260729-core-ui"></script>
 <script src="../assets/js/theme.js"></script>
   <script src="../assets/js/sfx.js"></script>
   <script src="../assets/js/auth.js"></script>
@@ -158,7 +159,7 @@
     // Nesta pagina o usuario pode nao estar logado (acessivel pela landing)
     let user = null;
     document.getElementById("nav-slot").innerHTML = `<header class="navbar">
-          <a class="brand" href="../index.html"><span aria-hidden="true">D</span> DeutschBloom</a>
+          <a class="brand" href="/"><span aria-hidden="true">D</span> DeutschBloom</a>
           <nav><a href="cursos.html">Conteúdo</a><a href="planos.html" class="active">Planos</a><a href="suporte.html">Suporte</a><a href="login.html">Entrar</a></nav>
           <div class="nav-right"><a class="btn btn-primary btn-sm" href="cadastro.html">Criar conta grátis</a></div>
         </header>`;
@@ -227,7 +228,6 @@
     if (user && isBR) {
       document.getElementById("pix-card").style.display = "block";
     }
-
 
     // Promoção paga: o servidor é a fonte de verdade. Sem configuração ou
     // com active=false, a página permanece exatamente com os preços normais.

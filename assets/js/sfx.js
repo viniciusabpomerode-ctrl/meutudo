@@ -89,12 +89,28 @@ var SFX = (function() {
     isReady: function() { return ready && !!ctx; },
 
     cardFlip: function() {
-      tone(600, 'sine', .06, .18);
-      setTimeout(function() { tone(900, 'sine', .04, .14); }, 25);
+      var theme = document.documentElement.getAttribute('data-theme') || 'moderno';
+      if (theme === 'vikings') {
+        tone(175, 'triangle', .075, .13);
+        setTimeout(function() { tone(245, 'triangle', .055, .08); }, 34);
+      } else if (theme === 'aurora') {
+        tone(660, 'sine', .075, .11);
+        setTimeout(function() { tone(990, 'sine', .09, .075); }, 38);
+      } else {
+        tone(510, 'sine', .045, .1);
+        setTimeout(function() { tone(720, 'sine', .035, .065); }, 24);
+      }
     },
     hover: function() {
-      tone(520, 'sine', .055, .12);
-      setTimeout(function() { tone(680, 'sine', .035, .075); }, 24);
+      var theme = document.documentElement.getAttribute('data-theme') || 'moderno';
+      if (theme === 'vikings') {
+        tone(150, 'triangle', .05, .07);
+      } else if (theme === 'aurora') {
+        tone(740, 'sine', .06, .065);
+        setTimeout(function() { tone(880, 'sine', .035, .04); }, 28);
+      } else {
+        tone(480, 'sine', .04, .06);
+      }
     },
     correct: function() {
       tone(880, 'sine', .1, .2);
@@ -121,7 +137,8 @@ var SFX = (function() {
       o.start(t); o.stop(t + .32);
     },
     click: function() {
-      tone(500, 'sine', .03, .12);
+      var theme = document.documentElement.getAttribute('data-theme') || 'moderno';
+      tone(theme === 'vikings' ? 190 : theme === 'aurora' ? 820 : 500, theme === 'vikings' ? 'triangle' : 'sine', .035, .09);
     },
     ambientChime: function() {
       var c = getCtx();

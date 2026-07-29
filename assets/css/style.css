@@ -596,3 +596,12 @@ input::placeholder,textarea::placeholder { color:var(--text-secondary);opacity:.
 .btn-speed:hover{border-color:var(--color-primary)}
 .btn-speed.active{background:var(--color-primary);color:#fff;border-color:var(--color-primary)}
 .content-new-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;background:#ff4f87;color:#fff;font-size:.65rem;font-weight:900;letter-spacing:.04em;line-height:1;vertical-align:middle;box-shadow:0 0 0 3px rgba(255,79,135,.12)}
+
+/* DeutschBloom free labels */
+.free-label,.nav-free-label{display:inline-flex;align-items:center;justify-content:center;width:max-content;padding:3px 7px;border-radius:999px;background:color-mix(in srgb,var(--success,#35a56b) 16%,transparent);border:1px solid color-mix(in srgb,var(--success,#35a56b) 34%,transparent);color:var(--success,#258454);font-size:.62rem;font-weight:850;line-height:1.15;letter-spacing:.02em;text-transform:uppercase}
+.nav-dd-item .nav-free-label{margin-inline-start:auto}
+.sidebar a small .free-label,.sidebar a>.free-label{font-size:.56rem}
+[data-theme="vikings"] .free-label,[data-theme="vikings"] .nav-free-label{border-radius:4px;letter-spacing:.07em}
+[data-theme="aurora"] .free-label,[data-theme="aurora"] .nav-free-label{box-shadow:0 0 16px color-mix(in srgb,var(--color-primary) 18%,transparent)}
+
+.nav-dd-item{display:flex;align-items:center;gap:8px}
