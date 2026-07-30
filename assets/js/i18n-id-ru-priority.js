@@ -2,6 +2,7 @@
 // This file intentionally contains UI only; teaching content stays in R2.
 window.AFB_ID_RU_PRIORITY = {
   id: {
+    "profissões, com frases prontas pro seu trabalho te esperando aqui dentro": "profesi dengan kalimat siap pakai untuk pekerjaan Anda, menanti di sini",
     "itens de estudo": "item studi",
     "itens": "item",
     "/ano": "/tahun",
@@ -82,6 +83,7 @@ window.AFB_ID_RU_PRIORITY = {
     "📚 Vocabulário em Alemão": "📚 Kosakata bahasa Jerman"
   },
   ru: {
+    "profissões, com frases prontas pro seu trabalho te esperando aqui dentro": "профессий с готовыми фразами для вашей работы ждут вас здесь",
     "itens de estudo": "материалов для изучения",
     "itens": "материалов",
     "/ano": "/год",
