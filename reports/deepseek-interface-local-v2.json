@@ -1,0 +1,9899 @@
+{
+  "task": "Translate the missing Portuguese UI strings. Preserve DeutschBloom, German teaching examples, URLs, numbers, prices, placeholders and emojis. Return strict JSON keyed by locale and exact Portuguese source text.",
+  "items": [
+    {
+      "id": 1,
+      "source_pt": "../assets/css/curso-a1-piloto.css",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 2,
+      "source_pt": "../assets/curso-a1-piloto/images/professor.webp",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 3,
+      "source_pt": "../assets/curso-a1/pdf/Aula_01_Cumprimentos_e_despedidas.pdf",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 4,
+      "source_pt": "../assets/js/curso-a1-piloto.js",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 5,
+      "source_pt": "../blog",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 6,
+      "source_pt": "../blog/index.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 7,
+      "source_pt": "../simulado/index.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 8,
+      "source_pt": "· não muito bem",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 9,
+      "source_pt": ") cardState = answerMatches(r, q.resposta) ?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 10,
+      "source_pt": ")[0]:u.email.split(",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 11,
+      "source_pt": "// sem clicar em",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 12,
+      "source_pt": "← Aula anterior",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 13,
+      "source_pt": "← Back to Podcasts",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 14,
+      "source_pt": "← Retour aux Podcasts",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 15,
+      "source_pt": "← Voltar ao piloto da Aula 1",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 16,
+      "source_pt": "← Volver a Podcasts",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 17,
+      "source_pt": "← Wróć do Podcastów",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 18,
+      "source_pt": ">Mais ' + Number(lockedCount).toLocaleString(",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 19,
+      "source_pt": "⏸ Gravação pausada.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 20,
+      "source_pt": "▶ Ouvir conversa",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 21,
+      "source_pt": "▶ Ouvir diálogo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 22,
+      "source_pt": "▶ Ouvir explicação",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 23,
+      "source_pt": "⚔️ Acción",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 24,
+      "source_pt": "✅ Terminé",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 25,
+      "source_pt": "🎓 Curso adicional · Grátis",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 26,
+      "source_pt": "🎧 German Podcasts",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 27,
+      "source_pt": "🎧 Podcasts en alemán",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 28,
+      "source_pt": "🎧 Podcasts en allemand",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 29,
+      "source_pt": "🗣 Gírias",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 30,
+      "source_pt": "🧭 Teste rápido",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 31,
+      "source_pt": "🛟 Suporte",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 32,
+      "source_pt": "02 · Frases essenciais",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 33,
+      "source_pt": "03 · Seu vocabulário",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 34,
+      "source_pt": "04 · Entenda o padrão",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 35,
+      "source_pt": "05 · Fixação",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 36,
+      "source_pt": "12 itens para hoje",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 37,
+      "source_pt": "A Aula 1 já está disponível gratuitamente, com áudio e exercícios.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 38,
+      "source_pt": "A correção detalhada por IA será ativada quando o Worker for publicado.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 39,
+      "source_pt": "A ideia está clara, mas você pode desenvolvê-la um pouco mais.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 40,
+      "source_pt": "A1 · Aula 2",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 41,
+      "source_pt": "Abrir aula",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 42,
+      "source_pt": "Abrir menu",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 43,
+      "source_pt": "Abrir PDF da aula",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 44,
+      "source_pt": "Acusativo básico",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 45,
+      "source_pt": "Agora mais devagar",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 46,
+      "source_pt": "Agora, uma conversa à noite",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 47,
+      "source_pt": "Agropecuária",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 48,
+      "source_pt": "Águia do Conhecimento",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 49,
+      "source_pt": "Alemão",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 50,
+      "source_pt": "Alemão A1",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 51,
+      "source_pt": "Alemão A1: cumprimentos e despedidas",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 52,
+      "source_pt": "Alemão A1: cumprimentos e despedidas com áudio",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 53,
+      "source_pt": "Alemão A1: Cumprimentos e Despedidas com Áudio | DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 54,
+      "source_pt": "Alemão do zero",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 55,
+      "source_pt": "Alfabeto e soletração",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 56,
+      "source_pt": "Alimentação",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 57,
+      "source_pt": "anual",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 58,
+      "source_pt": "Anual — R$ 149",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 59,
+      "source_pt": "app/caderno.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 60,
+      "source_pt": "app/curso-a1.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 61,
+      "source_pt": "app/cursos.html?tab=verbos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 62,
+      "source_pt": "app/escrita.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 63,
+      "source_pt": "app/perfil.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 64,
+      "source_pt": "app/planos.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 65,
+      "source_pt": "app/podcasts.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 66,
+      "source_pt": "app/quiz.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 67,
+      "source_pt": "app/simulado.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 68,
+      "source_pt": "app/suporte.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 69,
+      "source_pt": "Aprenda a iniciar uma conversa, perguntar como alguém está e se despedir com naturalidade.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 70,
+      "source_pt": "Aprenda alemão desde o zero em 30 aulas com áudio, diálogos, vocabulário e exercícios.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 71,
+      "source_pt": "Aprenda alemão do A1 ao C2 em um ambiente completo: mais de 63 mil conteúdos, diálogos, verbos, áudios, quiz e simulados Goethe. Comece grátis.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 72,
+      "source_pt": "Aprenda cumprimentos e despedidas em alemão com áudio, diálogo, tradução, vocabulário e exercícios gratuitos para iniciantes A1.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 73,
+      "source_pt": "Aprende alemán en el contexto laboral — 4500 frases reales de 90 profesiones, del A1 al C2.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 74,
+      "source_pt": "aprender todo dia",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 75,
+      "source_pt": "Apresentações Básicas 01",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 76,
+      "source_pt": "Artes e Mídia",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 77,
+      "source_pt": "As 30 aulas do Curso Guiado A1",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 78,
+      "source_pt": "Assinar anual — R$ 149",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 79,
+      "source_pt": "Assinar mensal — R$ 14,99",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 80,
+      "source_pt": "Até amanhã!",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 81,
+      "source_pt": "Até breve!",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 82,
+      "source_pt": "Aula",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 83,
+      "source_pt": "Aula gratuita de alemão para iniciantes com áudio, diálogo, tradução, vocabulário e exercícios.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 84,
+      "source_pt": "Aula gratuita para iniciantes com diálogo, tradução, vocabulário e exercícios de fixação.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 85,
+      "source_pt": "B1 - Intermediário",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 86,
+      "source_pt": "B2 - Intermediário Experiente",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 87,
+      "source_pt": "Baixe os slides com as frases, traduções e exemplos essenciais da aula.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 88,
+      "source_pt": "Biblioteca completa de alemão do A1 ao C2, com áudio de alta qualidade, exercícios e progresso sincronizado.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 89,
+      "source_pt": "bientôt dans cette langue",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 90,
+      "source_pt": "blog",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 91,
+      "source_pt": "blog/index.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 92,
+      "source_pt": "Boa extensão e resposta relacionada ao tema.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 93,
+      "source_pt": "Bom dia! Como você está?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 94,
+      "source_pt": "Bu filtreye uygun hikâye yok.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 95,
+      "source_pt": "C1 - Avançado",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 96,
+      "source_pt": "Caçar palavras",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 97,
+      "source_pt": "cadastro.html?plano=mensal",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 98,
+      "source_pt": "caderno",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 99,
+      "source_pt": "caderno.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 100,
+      "source_pt": "Capítulo anterior",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 101,
+      "source_pt": "Capítulo siguiente",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 102,
+      "source_pt": "Casa, cômodos e móveis",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 103,
+      "source_pt": "Çeviriyi gizle",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 104,
+      "source_pt": "Çeviriyi göster",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 105,
+      "source_pt": "Chapitre précédent",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 106,
+      "source_pt": "Ciências e Pesquisa",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 107,
+      "source_pt": "Cinco questões rápidas. Você pode tentar novamente quantas vezes quiser.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 108,
+      "source_pt": "Çıkış",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 109,
+      "source_pt": "Clima e estações",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 110,
+      "source_pt": "Clique em “Ouvir diálogo”",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 111,
+      "source_pt": "Combinar os conteúdos do A1 em situações completas",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 112,
+      "source_pt": "Começar a aula",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 113,
+      "source_pt": "Começar agora →",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 114,
+      "source_pt": "começar agora mesmo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 115,
+      "source_pt": "Começar agora por R$ 14,99/mês",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 116,
+      "source_pt": "Comércio e Vendas",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 117,
+      "source_pt": "Como cancelo minha assinatura?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 118,
+      "source_pt": "Como você está?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 119,
+      "source_pt": "Como você vai aprender",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 120,
+      "source_pt": "Comparar todos os planos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 121,
+      "source_pt": "Complete o final conforme estiver se sentindo. Você não precisa montar a frase desde o português.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 122,
+      "source_pt": "Comprar bilhetes e usar trem, ônibus e metrô",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 123,
+      "source_pt": "Compras e preços",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 124,
+      "source_pt": "Construção e Indústria",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 125,
+      "source_pt": "container caderno-wrap",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 126,
+      "source_pt": "container quiz-container",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 127,
+      "source_pt": "container simulado-container",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 128,
+      "source_pt": "Contar ações simples que já aconteceram",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 129,
+      "source_pt": "contar uma história",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 130,
+      "source_pt": "contato@alemaofacilbrasil.com.br",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 131,
+      "source_pt": "Conteúdo desta aula",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 132,
+      "source_pt": "Convidar, aceitar, recusar e combinar horários",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 133,
+      "source_pt": "Convites e planos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 134,
+      "source_pt": "Corrigindo com IA...",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 135,
+      "source_pt": "Coruja em Extinção",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 136,
+      "source_pt": "costuma aparecer quando alguém vai dormir ou se despedir no fim da noite.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 137,
+      "source_pt": "Créer un compte",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 138,
+      "source_pt": "Cumprimentar alguém em alemão",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 139,
+      "source_pt": "Cumprimentar, perguntar como alguém está e se despedir",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 140,
+      "source_pt": "Cumprimentos para cada momento",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 141,
+      "source_pt": "Curso de alemão A1 grátis para iniciantes",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 142,
+      "source_pt": "Curso de Alemão A1 Grátis para Iniciantes",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 143,
+      "source_pt": "Curso de Alemão A1 Grátis para Iniciantes | DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 144,
+      "source_pt": "Curso de alemão A1 grátis para iniciantes: 30 aulas com áudio em alemão, explicações em português, diálogos, vocabulário e exercícios.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 145,
+      "source_pt": "Curso gratuito",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 146,
+      "source_pt": "Curso gratuito de alemão A1",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 147,
+      "source_pt": "Curso gratuito de alemão A1 em 30 aulas, com áudio em alemão, explicações em português, diálogos, vocabulário e exercícios.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 148,
+      "source_pt": "Curso Guiado A1: aprenda passo a passo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 149,
+      "source_pt": "curso-a1",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 150,
+      "source_pt": "curso-a1-aula-01.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 151,
+      "source_pt": "curso-a1-aula-02.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 152,
+      "source_pt": "curso-a1-aula-03.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 153,
+      "source_pt": "curso-a1-aula-04.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 154,
+      "source_pt": "curso-a1-aula-05.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 155,
+      "source_pt": "curso-a1-aula-06.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 156,
+      "source_pt": "curso-a1-aula-07.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 157,
+      "source_pt": "curso-a1-aula-08.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 158,
+      "source_pt": "curso-a1-aula-09.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 159,
+      "source_pt": "curso-a1-aula-10.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 160,
+      "source_pt": "curso-a1-aula-11.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 161,
+      "source_pt": "curso-a1-aula-12.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 162,
+      "source_pt": "curso-a1-aula-13.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 163,
+      "source_pt": "curso-a1-aula-14.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 164,
+      "source_pt": "curso-a1-aula-15.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 165,
+      "source_pt": "curso-a1-aula-16.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 166,
+      "source_pt": "curso-a1-aula-17.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 167,
+      "source_pt": "curso-a1-aula-18.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 168,
+      "source_pt": "curso-a1-aula-19.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 169,
+      "source_pt": "curso-a1-aula-20.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 170,
+      "source_pt": "curso-a1-aula-21.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 171,
+      "source_pt": "curso-a1-aula-22.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 172,
+      "source_pt": "curso-a1-aula-23.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 173,
+      "source_pt": "curso-a1-aula-24.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 174,
+      "source_pt": "curso-a1-aula-25.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 175,
+      "source_pt": "curso-a1-aula-26.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 176,
+      "source_pt": "curso-a1-aula-27.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 177,
+      "source_pt": "curso-a1-aula-28.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 178,
+      "source_pt": "curso-a1-aula-29.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 179,
+      "source_pt": "curso-a1-aula-30.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 180,
+      "source_pt": "curso-a1.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 181,
+      "source_pt": "cursos.html?tab=verbos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 182,
+      "source_pt": "data/escrita/",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 183,
+      "source_pt": "Déconnexion",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 184,
+      "source_pt": "depois de confirmar o recebimento.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 185,
+      "source_pt": "Des histoires bilingues à écouter au casque : l’allemand suivi de la traduction, phrase par phrase.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 186,
+      "source_pt": "Descobrir por onde começar",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 187,
+      "source_pt": "Descrever ações do dia a dia",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 188,
+      "source_pt": "Descrever roupas, cores e preferências",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 189,
+      "source_pt": "Descubra seu nível de alemão em 2 minutos com nosso teste online gratuito. Resultado imediato do A1 ao C2, sem cadastro. Ideal pra estudos, trabalho e imigração.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 190,
+      "source_pt": "Descubra seu nível de alemão em 2 minutos. Resultado imediato do A1 ao C2, sem cadastro.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 191,
+      "source_pt": "DeutschBloom — página inicial",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 192,
+      "source_pt": "deutschbloom.com",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 193,
+      "source_pt": "diálogo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 194,
+      "source_pt": "Diálogo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 195,
+      "source_pt": "Diálogo A1 · 3 min",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 196,
+      "source_pt": "diálogos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 197,
+      "source_pt": "Dias, meses e datas",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 198,
+      "source_pt": "Dica de memória",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 199,
+      "source_pt": "Direito e Administração",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 200,
+      "source_pt": "Disponível no aparelho em que foi gravada",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 201,
+      "source_pt": "Dizer seu nome, sua origem e onde mora",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 202,
+      "source_pt": "Dizer sua profissão e seu local de trabalho",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 203,
+      "source_pt": "do primeiro contato à revisão A1",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 204,
+      "source_pt": "É uma forma informal de perguntar como alguém está. Use com amigos, colegas próximos e pessoas com quem você fala por",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 205,
+      "source_pt": "é usado ao chegar à noite.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 206,
+      "source_pt": "E você?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 207,
+      "source_pt": "Educação",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 208,
+      "source_pt": "em breve neste idioma",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 209,
+      "source_pt": "Em vários cumprimentos, você encontra",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 210,
+      "source_pt": "email",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 211,
+      "source_pt": "Então, até breve!",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 212,
+      "source_pt": "Entender instruções e pedir ajuda",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 213,
+      "source_pt": "Entender instruções simples de caminho",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 214,
+      "source_pt": "entender rápido",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 215,
+      "source_pt": "Entre na conta para transcrever sua fala.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 216,
+      "source_pt": "Entre na sua conta para receber a correção por IA.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 217,
+      "source_pt": "Entre novamente na conta para gerar a transcrição.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 218,
+      "source_pt": "Entre novamente na conta pra transcrever.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 219,
+      "source_pt": "erro",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 220,
+      "source_pt": "Escolha seu plano no DeutschBloom e libere mais de 63 mil conteúdos, áudios, quiz e simulados Goethe para estudar do A1 ao C2.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 221,
+      "source_pt": "Escolha um nível e uma pergunta antes de analisar.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 222,
+      "source_pt": "Escreva ou grave uma resposta um pouco maior antes de analisar.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 223,
+      "source_pt": "Escreva suas anotações... (opcional)",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 224,
+      "source_pt": "escrita",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 225,
+      "source_pt": "escrita.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 226,
+      "source_pt": "Escute o diálogo completo. Depois, clique em cada fala para praticar separadamente.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 227,
+      "source_pt": "Esta conta foi aberta em outro dispositivo. Para sua segurança, esta sessão foi encerrada.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 228,
+      "source_pt": "Este curso guiado organiza os fundamentos em uma sequência clara de 30 aulas. Ela complementa a biblioteca DeutschBloom com diálogos, áudio, explicações em português e exercícios para quem prefere avançar passo a passo.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 229,
+      "source_pt": "Estou bem, obrigada. E você?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 230,
+      "source_pt": "Estude alemão no seu ritmo com diálogos, verbos, músicas, quiz, áudio e simulados Goethe.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 231,
+      "source_pt": "exercícios",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 232,
+      "source_pt": "Exercícios",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 233,
+      "source_pt": "Explicação",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 234,
+      "source_pt": "Expressar capacidade, obrigação e desejo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 235,
+      "source_pt": "expressões",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 236,
+      "source_pt": "Expressões",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 237,
+      "source_pt": "Faça uma sessão rápida de alemão por nível com frases, quiz e verbos reais do A1 ao C2.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 238,
+      "source_pt": "Falar de calendário e aniversário",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 239,
+      "source_pt": "Falar de países, idiomas e nacionalidades",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 240,
+      "source_pt": "Falha na transcrição.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 241,
+      "source_pt": "Família e pessoas",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 242,
+      "source_pt": "Fazer check-in e pedir informações no hotel",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 243,
+      "source_pt": "Fechar menu",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 244,
+      "source_pt": "Félicitations ! Vous avez atteint le niveau",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 245,
+      "source_pt": "funciona muito bem com pessoas que você ainda não conhece ou em contextos mais formais.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 246,
+      "source_pt": "gírias",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 247,
+      "source_pt": "grátis",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 248,
+      "source_pt": "Gravação de pronúncia",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 249,
+      "source_pt": "Gravação do teste criativo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 250,
+      "source_pt": "Gravação pausada.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 251,
+      "source_pt": "Hallo! Vamos começar?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 252,
+      "source_pt": "hikâye",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 253,
+      "source_pt": "história(s)",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 254,
+      "source_pt": "Historias bilingües para aprender con auriculares: alemán seguido de la traducción, frase por frase.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 255,
+      "source_pt": "Horas e horários",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 256,
+      "source_pt": "İçerik",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 257,
+      "source_pt": "Identificar e usar objetos diretos nas frases",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 258,
+      "source_pt": "Impossible de charger ce podcast. Réessayez dans quelques instants.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 259,
+      "source_pt": "Impossible de charger les podcasts. Réessayez dans quelques instants.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 260,
+      "source_pt": "Informações da aula",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 261,
+      "source_pt": "Inicio",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 262,
+      "source_pt": "İş bağlamında Almanca öğrenin — A1'den C2'ye 90 meslekten 4.500 gerçek cümle.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 263,
+      "source_pt": "Kulaklıkla öğrenmek için iki dilli hikâyeler: cümle cümle Almanca ve ardından çeviri.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 264,
+      "source_pt": "Leia a tradução e veja cada expressão explicada em português.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 265,
+      "source_pt": "lesson-section quiz-section",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 266,
+      "source_pt": "Leve o alemão para situações reais com todo o acervo do DeutschBloom.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 267,
+      "source_pt": "Limite de transcrições alcançado hoje.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 268,
+      "source_pt": "Limite diário alcançado",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 269,
+      "source_pt": "mailto:contato@alemaofacilbrasil.com.br",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 270,
+      "source_pt": "Material gratuito",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 271,
+      "source_pt": "mensal",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 272,
+      "source_pt": "Mensal — R$ 14,99",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 273,
+      "source_pt": "mês",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 274,
+      "source_pt": "Moda e Estética",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 275,
+      "source_pt": "Modo dia · clique para noturno",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 276,
+      "source_pt": "Modo noturno · clique para dia",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 277,
+      "source_pt": "Mostrar tradução",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 278,
+      "source_pt": "Mostrar traducción",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 279,
+      "source_pt": "Na escola e na sala de aula",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 280,
+      "source_pt": "Não deu pra carregar este podcast agora. Tenta de novo em instantes.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 281,
+      "source_pt": "Não deu pra carregar os podcasts agora. Tenta de novo em instantes.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 282,
+      "source_pt": "Não foi possível analisar agora. Tente novamente.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 283,
+      "source_pt": "Não foi possível identificar fala em alemão nessa gravação.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 284,
+      "source_pt": "Não foi possível transcrever agora. Tente de novo.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 285,
+      "source_pt": "Não identifiquei fala em alemão nessa gravação.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 286,
+      "source_pt": "Não traduza palavra por palavra. Aprenda cada expressão como uma unidade.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 287,
+      "source_pt": "Navegação entre aulas",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 288,
+      "source_pt": "Nenhuma história encontrada com esse filtro.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 289,
+      "source_pt": "Nesta aula",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 290,
+      "source_pt": "Nie udało się załadować podcastów. Spróbuj ponownie za chwilę.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 291,
+      "source_pt": "Nie udało się załadować podcastu. Spróbuj ponownie za chwilę.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 292,
+      "source_pt": "No café",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 293,
+      "source_pt": "No curso completo, este botão abre a próxima aula mantendo o progresso, a velocidade de áudio e as respostas do aluno.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 294,
+      "source_pt": "No hay historias con este filtro.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 295,
+      "source_pt": "No se pudieron cargar los podcasts. Inténtalo de nuevo en unos instantes.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 296,
+      "source_pt": "No se pudo cargar este podcast. Inténtalo de nuevo en unos instantes.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 297,
+      "source_pt": "Números, idade e telefone",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 298,
+      "source_pt": "O DeutschBloom reúne diálogos, verbos, vocabulário e exercícios conectados ao seu nível.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 299,
+      "source_pt": "O serviço de correção por IA está indisponível agora.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 300,
+      "source_pt": "Ocultar tradução",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 301,
+      "source_pt": "Ocultar traducción",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 302,
+      "source_pt": "olá",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 303,
+      "source_pt": "Olá! Bom dia!",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 304,
+      "source_pt": "Ouça novamente a mesma situação com mais tempo entre as palavras.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 305,
+      "source_pt": "Ouvir a 0,75×",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 306,
+      "source_pt": "Ouvir Danke",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 307,
+      "source_pt": "Ouvir Gute Nacht",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 308,
+      "source_pt": "Ouvir Guten Abend",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 309,
+      "source_pt": "Ouvir Guten Tag",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 310,
+      "source_pt": "Ouvir Hallo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 311,
+      "source_pt": "Ouvir Tschüss",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 312,
+      "source_pt": "Pagamento seguro · Garantia de 7 dias · Cancele quando quiser",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 313,
+      "source_pt": "Países, idiomas e nacionalidades",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 314,
+      "source_pt": "Parabéns! Você subiu para o nível",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 315,
+      "source_pt": "Parar áudio",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 316,
+      "source_pt": "Passado com Perfekt",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 317,
+      "source_pt": "Pausar ou continuar áudio",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 318,
+      "source_pt": "Pedindo e dando direções",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 319,
+      "source_pt": "Pedir comida, solicitar a conta e pagar",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 320,
+      "source_pt": "pela manhã",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 321,
+      "source_pt": "perfil",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 322,
+      "source_pt": "perfil.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 323,
+      "source_pt": "Perguntar como alguém está",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 324,
+      "source_pt": "Perguntar preço, tamanho e escolher produtos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 325,
+      "source_pt": "Permita o acesso ao microfone para gravar sua resposta.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 326,
+      "source_pt": "Plano Grátis",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 327,
+      "source_pt": "Planos para aprender alemão | DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 328,
+      "source_pt": "planos-teaser",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 329,
+      "source_pt": "planos.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 330,
+      "source_pt": "Plataforma de estudos de alemão do A1 ao C2 com diálogos, verbos, áudios, músicas, quiz e simulados Goethe.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 331,
+      "source_pt": "podcasts",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 332,
+      "source_pt": "podcasts.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 333,
+      "source_pt": "Português",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 334,
+      "source_pt": "Prática",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 335,
+      "source_pt": "Praticar faz você entrar.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 336,
+      "source_pt": "Pratique respostas em alemão do A1 ao C2, grave sua voz e receba orientação de gramática, estrutura e vocabulário.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 337,
+      "source_pt": "Primeiro você entende a situação por meio de um diálogo em alemão.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 338,
+      "source_pt": "Professor capivara do curso de alemão A1",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 339,
+      "source_pt": "Profissões e trabalho",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 340,
+      "source_pt": "Progresso do curso",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 341,
+      "source_pt": "Pronto para sua primeira conversa?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 342,
+      "source_pt": "Próxima aula →",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 343,
+      "source_pt": "próximamente en este idioma",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 344,
+      "source_pt": "Próximo capítulo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 345,
+      "source_pt": "Qual é o seu principal objetivo com o alemão?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 346,
+      "source_pt": "Qual frase está gramaticalmente correta?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 347,
+      "source_pt": "Quanto você já consegue compreender?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 348,
+      "source_pt": "Quatro blocos para memorizar",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 349,
+      "source_pt": "Quer praticar além desta aula?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 350,
+      "source_pt": "quiz",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 351,
+      "source_pt": "quiz-result",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 352,
+      "source_pt": "quiz-root",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 353,
+      "source_pt": "quiz-score",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 354,
+      "source_pt": "quiz-view",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 355,
+      "source_pt": "quiz.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 356,
+      "source_pt": "Removido aqui, mas não deu pra confirmar com o servidor — confira sua internet.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 357,
+      "source_pt": "Reproduzindo áudio",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 358,
+      "source_pt": "Responda exercícios rápidos e confira imediatamente o que aprendeu.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 359,
+      "source_pt": "Responder e se despedir em alemão",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 360,
+      "source_pt": "Revisão final A1",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 361,
+      "source_pt": "Revisão inteligente",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 362,
+      "source_pt": "Revise esta aula em PDF",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 363,
+      "source_pt": "Rotina diária",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 364,
+      "source_pt": "Salvo só neste aparelho — não deu pra sincronizar com sua conta agora. Tenta de novo com internet.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 365,
+      "source_pt": "Saúde",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 366,
+      "source_pt": "Saúde e farmácia",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 367,
+      "source_pt": "Segurança Pública",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 368,
+      "source_pt": "Ser Místico",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 369,
+      "source_pt": "Serviços Gerais",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 370,
+      "source_pt": "Seu ambiente de estudos de alemão com mais de 63 mil conteúdos, áudio de alta qualidade, progresso e simulados Goethe.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 371,
+      "source_pt": "Seu navegador não oferece gravação. Você pode digitar normalmente.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 372,
+      "source_pt": "Seu navegador não permite gravar áudio.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 373,
+      "source_pt": "Seu professor",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 374,
+      "source_pt": "Seu progresso",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 375,
+      "source_pt": "Seu próximo passo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 376,
+      "source_pt": "Sim, obrigada. Até amanhã!",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 377,
+      "source_pt": "simulado",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 378,
+      "source_pt": "simulado-area",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 379,
+      "source_pt": "simulado.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 380,
+      "source_pt": "slug:idioma",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 381,
+      "source_pt": "Só este mês: Premium em promoção",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 382,
+      "source_pt": "Soletrar nomes e pedir repetição",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 383,
+      "source_pt": "Solo este mes: Premium en oferta",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 384,
+      "source_pt": "Strona główna",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 385,
+      "source_pt": "Sua demonstração foi usada. Entre para receber três análises por dia.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 386,
+      "source_pt": "suporte",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 387,
+      "source_pt": "Suporte — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 388,
+      "source_pt": "suporte.html",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 389,
+      "source_pt": "Tema Aurora",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 390,
+      "source_pt": "Tema Moderno",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 391,
+      "source_pt": "Tema Vikings",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 392,
+      "source_pt": "tentar de novo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 393,
+      "source_pt": "Teste de Alemão Online Gratuito",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 394,
+      "source_pt": "Teste de Alemão Online Gratuito — Nível em 2 Minutos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 395,
+      "source_pt": "Teste de nivelamento de alemão em 2 minutos, com resultado imediato do A1 ao C2 e recomendação de estudo personalizada.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 396,
+      "source_pt": "Teste o que você aprendeu",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 397,
+      "source_pt": "The podcasts could not be loaded. Please try again shortly.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 398,
+      "source_pt": "tocar só esta frase",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 399,
+      "source_pt": "todas",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 400,
+      "source_pt": "Todo o acervo por R$ 14,99/mês.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 401,
+      "source_pt": "todos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 402,
+      "source_pt": "Transcrevendo sua resposta em alemão...",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 403,
+      "source_pt": "Transporte público",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 404,
+      "source_pt": "Ucz się niemieckiego w kontekście zawodowym — 4500 autentycznych zdań z 90 zawodów, od A1 do C2.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 405,
+      "source_pt": "Uma aula abre a porta.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 406,
+      "source_pt": "Uma aula curta e completa, sempre seguindo a mesma lógica.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 407,
+      "source_pt": "Uma conversa pela manhã",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 408,
+      "source_pt": "Uma escolha segura em situações formais",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 409,
+      "source_pt": "Usar números e trocar informações pessoais",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 410,
+      "source_pt": "Usar verbos separáveis em rotinas e planos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 411,
+      "source_pt": "Use o curso como roteiro e continue praticando na biblioteca do A1 ao C2.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 412,
+      "source_pt": "Utwórz konto",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 413,
+      "source_pt": "Vamos começar?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 414,
+      "source_pt": "Velocidade do áudio",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 415,
+      "source_pt": "verbos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 416,
+      "source_pt": "Verbos modais",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 417,
+      "source_pt": "Verbos separáveis",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 418,
+      "source_pt": "Visitantes recebem uma análise demonstrativa.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 419,
+      "source_pt": "vocabulário",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 420,
+      "source_pt": "Você concluiu as análises de hoje. Continue treinando e volte amanhã.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 421,
+      "source_pt": "Você está no começo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 422,
+      "source_pt": "voltar()",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 423,
+      "source_pt": "wkrótce w tym języku",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 424,
+      "source_pt": "Email",
+      "targets_needed": [
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 425,
+      "source_pt": ", sem burocracia — cancele quando quiser.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 426,
+      "source_pt": "(R$ 100 mais barato que no cartão) — só pros primeiros 100 assinantes.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 427,
+      "source_pt": "← Voltar",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 428,
+      "source_pt": "⏳ Processando pagamento...",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 429,
+      "source_pt": "▶ Continuar",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 430,
+      "source_pt": "▶ Iniciar sessão de estudo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 431,
+      "source_pt": "⚡ Quiz",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 432,
+      "source_pt": "⚡ Sessão rápida",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 433,
+      "source_pt": "🇧🇷 Português",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 434,
+      "source_pt": "🎉 Pagamento confirmado! Seu plano Premium está ativo.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 435,
+      "source_pt": "🎙️ Gravações salvas neste aparelho",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 436,
+      "source_pt": "🎙️ Gravar resposta",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 437,
+      "source_pt": "🎤 Pronúncia",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 438,
+      "source_pt": "🎧 Sua gravação",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 439,
+      "source_pt": "🎮 Caçando Vocabulário",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 440,
+      "source_pt": "🎵 Música",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 441,
+      "source_pt": "💎 Planos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 442,
+      "source_pt": "💬 Diálogos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 443,
+      "source_pt": "💼 Profissões em Alemão",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 444,
+      "source_pt": "💾 Salvar gravação",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 445,
+      "source_pt": "📅 Último ano",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 446,
+      "source_pt": "📆 Últimos 7 dias",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 447,
+      "source_pt": "📊 Progresso",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 448,
+      "source_pt": "📓 Caderno",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 449,
+      "source_pt": "📚 Todos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 450,
+      "source_pt": "📝 Caderno",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 451,
+      "source_pt": "📝 Simulado Goethe",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 452,
+      "source_pt": "🔍 Buscar em todas as profissões...",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 453,
+      "source_pt": "🔍 Buscar...",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 454,
+      "source_pt": "🗓️ Últimos 30 dias",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 455,
+      "source_pt": "🧭 Descobrir por onde começar",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 456,
+      "source_pt": "20 itens liberados por categoria.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 457,
+      "source_pt": "A partir de R$ 14,99/mês",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 458,
+      "source_pt": "Acesso vitalício por R$ 297",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 459,
+      "source_pt": "alemão do dia a dia",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 460,
+      "source_pt": "Antes de começar",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 461,
+      "source_pt": "Aponte a câmera do seu banco pro QR code — já vem com o valor certinho",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 462,
+      "source_pt": "Aprenda alemão no contexto do trabalho — 4.500 frases reais de 90 profissões, do A1 ao C2.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 463,
+      "source_pt": "Áudio de alta qualidade",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 464,
+      "source_pt": "Áudio em alemão",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 465,
+      "source_pt": "Bem-vindo ao DeutschBloom. Aprenda do seu jeito.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 466,
+      "source_pt": "Benefícios Premium",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 467,
+      "source_pt": "Blog",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 468,
+      "source_pt": "Caçando Vocabulário — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 469,
+      "source_pt": "Caderno",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 470,
+      "source_pt": "Caderno — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 471,
+      "source_pt": "Carregando seu progresso...",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 472,
+      "source_pt": "Clique para revelar",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 473,
+      "source_pt": "com letras traduzidas",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 474,
+      "source_pt": "Comece sem pressão",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 475,
+      "source_pt": "concluídos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 476,
+      "source_pt": "Confirmar senha",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 477,
+      "source_pt": "Consigo estudar mesmo começando do zero?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 478,
+      "source_pt": "Criar conta — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 479,
+      "source_pt": "Criar sua conta",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 480,
+      "source_pt": "DeutschBloom © 2026 — um espaço tranquilo para aprender de verdade.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 481,
+      "source_pt": "Diálogo — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 482,
+      "source_pt": "Direto na página de",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 483,
+      "source_pt": "do A1 ao C2 — por menos que um lanche por mês.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 484,
+      "source_pt": "Do básico A1 ao avançado C2, com uma trilha que acompanha você.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 485,
+      "source_pt": "Do nível A1 ao C2",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 486,
+      "source_pt": "Dúvida, sugestão, problema técnico ou quer conversar sobre parceria? Fala com a gente.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 487,
+      "source_pt": "Enquanto o Pix automático não fica pronto, você pode pagar direto e a gente libera seu acesso em até",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 488,
+      "source_pt": "Entrando, seu limite fica protegido.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 489,
+      "source_pt": "Entrar — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 490,
+      "source_pt": "Entrar com Google",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 491,
+      "source_pt": "equivale a R$ 12,42/mês · pagamento único anual",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 492,
+      "source_pt": "Escolha seu nível. A cada rodada você encontra uma frase curta, responde um quiz e revisa um verbo do nosso acervo.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 493,
+      "source_pt": "Escolha um nível para começar.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 494,
+      "source_pt": "Escuta e pronúncia claras",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 495,
+      "source_pt": "Estude no seu ritmo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 496,
+      "source_pt": "Experiência completa",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 497,
+      "source_pt": "Explore conteúdos gratuitos antes de escolher um plano.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 498,
+      "source_pt": "Expressões — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 499,
+      "source_pt": "Filtrar por data específica",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 500,
+      "source_pt": "frases",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 501,
+      "source_pt": "frases com audio",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 502,
+      "source_pt": "Grátis, leva menos de 1 minuto.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 503,
+      "source_pt": "Igual apareceu pra você no pagamento",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 504,
+      "source_pt": "Já tem conta?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 505,
+      "source_pt": "Libere a biblioteca completa, simulados Goethe, áudio de alta qualidade e sincronização do seu progresso.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 506,
+      "source_pt": "Mais de",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 507,
+      "source_pt": "Mensagem pra gente (opcional — horário do pagamento, etc.)",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 508,
+      "source_pt": "Meu progresso fica salvo?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 509,
+      "source_pt": "Música — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 510,
+      "source_pt": "Músicas",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 511,
+      "source_pt": "Não deu pra abrir agora:",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 512,
+      "source_pt": "Não foi possível atualizar:",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 513,
+      "source_pt": "Nome que aparece no comprovante do Pix",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 514,
+      "source_pt": "O áudio fica só neste aparelho, não é enviado com a análise.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 515,
+      "source_pt": "o conteúdo",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 516,
+      "source_pt": "O Premium libera a biblioteca completa, os simulados Goethe, o áudio de alta qualidade e a sincronização do progresso entre dispositivos.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 517,
+      "source_pt": "O que está incluído no plano Premium?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 518,
+      "source_pt": "O que você quer estudar hoje?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 519,
+      "source_pt": "O Vitalício sai por R$ 197 pagando no Pix",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 520,
+      "source_pt": "Ouça, leia, escreva e teste seu conhecimento em um só lugar.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 521,
+      "source_pt": "Ouvir",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 522,
+      "source_pt": "palavras · mínimo sugerido:",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 523,
+      "source_pt": "Perfil — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 524,
+      "source_pt": "Pesquisar qualquer palavra, verbo, diálogo...",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 525,
+      "source_pt": "Planos para Aprender Alemão | DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 526,
+      "source_pt": "Por que estudar no DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 527,
+      "source_pt": "Pratique alemão de verdade",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 528,
+      "source_pt": "Pratique com questões no estilo do exame oficial — baseado no conteúdo dos cursos.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 529,
+      "source_pt": "Preparação completa",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 530,
+      "source_pt": "Preparando sua missão de hoje...",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 531,
+      "source_pt": "profissão",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 532,
+      "source_pt": "Profissões — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 533,
+      "source_pt": "Progresso na nuvem",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 534,
+      "source_pt": "Pronúncia — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 535,
+      "source_pt": "Qual plano você pagou?",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 536,
+      "source_pt": "Quiz",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 537,
+      "source_pt": "Quiz Rápido — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 538,
+      "source_pt": "R$ 14,99/mês",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 539,
+      "source_pt": "Redirecionando para",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 540,
+      "source_pt": "Responda situações reais, pratique sua espontaneidade e descubra como deixar seu alemão mais claro e natural.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 541,
+      "source_pt": "Resposta rápida em horário comercial",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 542,
+      "source_pt": "Senha (mín. 6 caracteres)",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 543,
+      "source_pt": "Sessão Rápida de Alemão | DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 544,
+      "source_pt": "Seu pagamento está sendo confirmado. Atualize a página em alguns instantes.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 545,
+      "source_pt": "Sim, para contas com login o progresso é sincronizado na nuvem. Sem login, fica salvo só neste navegador.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 546,
+      "source_pt": "Sim. O conteúdo está organizado do A1 ao C2, permitindo começar pelo básico e avançar gradualmente com diálogos, vocabulário, áudio e exercícios.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 547,
+      "source_pt": "Sim. O plano gratuito permite conhecer o ambiente e estudar uma seleção de conteúdos sem informar cartão.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 548,
+      "source_pt": "Simulado",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 549,
+      "source_pt": "Simulado Goethe",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 550,
+      "source_pt": "Só para os primeiros 100 assinantes: pague uma vez, use para sempre — incluindo tudo que ainda vamos lançar.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 551,
+      "source_pt": "Sua resposta em alemão",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 552,
+      "source_pt": "Tenta atualizar a página em instantes.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 553,
+      "source_pt": "Teste de Criatividade em Alemão | DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 554,
+      "source_pt": "Teste seus reflexos no alemão — rápido, divertido, viciante.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 555,
+      "source_pt": "Todo o alemão, sem interromper seu ritmo.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 556,
+      "source_pt": "Um espaço completo para aprender alemão",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 557,
+      "source_pt": "Use as setas do teclado (ou os botões) para levar a cobra até a palavra em alemão certa.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 558,
+      "source_pt": "Vitalício",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 559,
+      "source_pt": "Vitalício (Fundador) — R$ 197 no Pix",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 560,
+      "source_pt": "Você também pode responder falando.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 561,
+      "source_pt": "← Voltar para Podcasts",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 562,
+      "source_pt": "▶ Começar o curso",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 563,
+      "source_pt": "⚔️ Ação",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 564,
+      "source_pt": "🌍 Esse simulado completo também está disponível em mais 9 idiomas",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 565,
+      "source_pt": "🎓 Curso Guiado A1",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 566,
+      "source_pt": "🎙️ Gravações",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 567,
+      "source_pt": "🎧 Podcasts",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 568,
+      "source_pt": "🎧 Podcasts em Alemão",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 569,
+      "source_pt": "📰 Blog",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 570,
+      "source_pt": "1.312 verbos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 571,
+      "source_pt": "23 histórias bilíngues",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 572,
+      "source_pt": "38.802 frases",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 573,
+      "source_pt": "38.802 frases conjugadas",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 574,
+      "source_pt": "4.500 frases profissionais",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 575,
+      "source_pt": "90 · 4.500 frases",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 576,
+      "source_pt": "Como complemento da biblioteca completa, você pode seguir uma sequência de 30 aulas com diálogo, áudio, explicação e exercícios. É um caminho organizado para quem prefere estudar passo a passo.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 577,
+      "source_pt": "Enquanto você fala, o navegador tenta mostrar o texto ao vivo. Ao parar, a transcrição final do áudio é adicionada à caixa de texto.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 578,
+      "source_pt": "Escrita — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 579,
+      "source_pt": "Histórias bilíngues para ouvir com fone: alemão seguido da tradução, frase por frase.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 580,
+      "source_pt": "Mês",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 581,
+      "source_pt": "Não! Você pode explorar diálogos, verbos, gírias, quiz e muito mais sem cadastro nenhum. O Premium libera a biblioteca inteira (mais de 59.000 itens) quando você quiser ir além.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 582,
+      "source_pt": "Podcasts — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 583,
+      "source_pt": "Pronúncia",
+      "targets_needed": [
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 584,
+      "source_pt": "Recursos do Curso Guiado A1",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 585,
+      "source_pt": "Selecione o idioma do aplicativo",
+      "targets_needed": [
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 586,
+      "source_pt": "Semana",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 587,
+      "source_pt": "Senha",
+      "targets_needed": [
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 588,
+      "source_pt": "Vocabulário — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi"
+      ]
+    },
+    {
+      "id": 589,
+      "source_pt": "Ainda não tem conta?",
+      "targets_needed": [
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 590,
+      "source_pt": "Criar conta",
+      "targets_needed": [
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 591,
+      "source_pt": "Criar conta grátis",
+      "targets_needed": [
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 592,
+      "source_pt": "Entrar",
+      "targets_needed": [
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 593,
+      "source_pt": "Perfil",
+      "targets_needed": [
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 594,
+      "source_pt": "Progresso",
+      "targets_needed": [
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 595,
+      "source_pt": "Sair",
+      "targets_needed": [
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 596,
+      "source_pt": "Voltar",
+      "targets_needed": [
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 597,
+      "source_pt": "✅ Concluído",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 598,
+      "source_pt": "10 missões concluídas",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 599,
+      "source_pt": "5 horas de alemão",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 600,
+      "source_pt": "Eu gostaria de um café",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 601,
+      "source_pt": "Eu já tomei café",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 602,
+      "source_pt": "Eu preparo um café",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 603,
+      "source_pt": "expressão",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 604,
+      "source_pt": "Frases",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 605,
+      "source_pt": "Meu objetivo",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 606,
+      "source_pt": "Não sei",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 607,
+      "source_pt": "O que significa o verbo separável “aufstehen”?",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 608,
+      "source_pt": "Palavras e frases bem simples",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 609,
+      "source_pt": "planos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 610,
+      "source_pt": "Podcast não encontrado.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 611,
+      "source_pt": "Pratique alemão em contexto",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 612,
+      "source_pt": "Primeira missão concluída",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 613,
+      "source_pt": "Qual frase usa corretamente o Konjunktiv II (frase hipotética)?",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 614,
+      "source_pt": "Qual resposta parece mais natural para uma opinião?",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 615,
+      "source_pt": "Textos e conversas mais complexos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 616,
+      "source_pt": "Torcer por alguém / desejar sorte",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 617,
+      "source_pt": "Mensal",
+      "targets_needed": [
+        "ru"
+      ]
+    }
+  ]
+}

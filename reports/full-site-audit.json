@@ -1,0 +1,179 @@
+{
+  "generated_at": "2026-07-30",
+  "html_pages": 1192,
+  "areas": {
+    "app": 58,
+    "ar": 31,
+    "blog": 736,
+    "en": 31,
+    "es": 31,
+    "fr": 31,
+    "he": 31,
+    "hi": 31,
+    "id": 31,
+    "index.html": 1,
+    "it": 31,
+    "pl": 31,
+    "podcasts": 33,
+    "ru": 31,
+    "simulado": 12,
+    "teste": 11,
+    "tr": 31
+  },
+  "localized_pages": 1033,
+  "portuguese_leaks_by_locale": {},
+  "portuguese_leaks": {},
+  "localized_structure_issues": [],
+  "broken_local_references": [],
+  "seo_missing": [
+    {
+      "page": "app/admin.html",
+      "missing": [
+        "description",
+        "canonical"
+      ]
+    },
+    {
+      "page": "app/amostra.html",
+      "missing": [
+        "description",
+        "canonical"
+      ]
+    },
+    {
+      "page": "app/cadastro.html",
+      "missing": [
+        "description",
+        "canonical"
+      ]
+    },
+    {
+      "page": "app/caderno.html",
+      "missing": [
+        "description",
+        "canonical"
+      ]
+    },
+    {
+      "page": "app/cursos.html",
+      "missing": [
+        "description"
+      ]
+    },
+    {
+      "page": "app/dashboard.html",
+      "missing": [
+        "description",
+        "canonical"
+      ]
+    },
+    {
+      "page": "app/dialogo.html",
+      "missing": [
+        "description",
+        "canonical"
+      ]
+    },
+    {
+      "page": "app/escrita.html",
+      "missing": [
+        "description"
+      ]
+    },
+    {
+      "page": "app/expressoes.html",
+      "missing": [
+        "description"
+      ]
+    },
+    {
+      "page": "app/jogo.html",
+      "missing": [
+        "description"
+      ]
+    },
+    {
+      "page": "app/login.html",
+      "missing": [
+        "description",
+        "canonical"
+      ]
+    },
+    {
+      "page": "app/musica-player.html",
+      "missing": [
+        "description",
+        "canonical"
+      ]
+    },
+    {
+      "page": "app/musica.html",
+      "missing": [
+        "description"
+      ]
+    },
+    {
+      "page": "app/perfil.html",
+      "missing": [
+        "description",
+        "canonical"
+      ]
+    },
+    {
+      "page": "app/podcast.html",
+      "missing": [
+        "description",
+        "canonical"
+      ]
+    },
+    {
+      "page": "app/podcasts.html",
+      "missing": [
+        "description"
+      ]
+    },
+    {
+      "page": "app/profissoes.html",
+      "missing": [
+        "description"
+      ]
+    },
+    {
+      "page": "app/pronuncia.html",
+      "missing": [
+        "description"
+      ]
+    },
+    {
+      "page": "app/quiz.html",
+      "missing": [
+        "description"
+      ]
+    },
+    {
+      "page": "app/simulado.html",
+      "missing": [
+        "description"
+      ]
+    },
+    {
+      "page": "app/suporte.html",
+      "missing": [
+        "description"
+      ]
+    },
+    {
+      "page": "app/verbo.html",
+      "missing": [
+        "description",
+        "canonical"
+      ]
+    },
+    {
+      "page": "app/vocabulario.html",
+      "missing": [
+        "description"
+      ]
+    }
+  ]
+}

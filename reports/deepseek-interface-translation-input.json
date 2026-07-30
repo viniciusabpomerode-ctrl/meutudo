@@ -1,0 +1,2253 @@
+{
+  "task": "Translate only the missing target-language values for DeutschBloom's user interface. Keep German teaching examples unchanged. Preserve numbers, HTML-free plain text, punctuation, placeholders, emojis and the brand DeutschBloom. Return strict JSON only.",
+  "locales": [
+    "en",
+    "es",
+    "fr",
+    "it",
+    "tr",
+    "ar",
+    "he",
+    "hi",
+    "pl",
+    "id",
+    "ru"
+  ],
+  "items": [
+    {
+      "id": 1,
+      "source_pt": "← Voltar para Podcasts",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 2,
+      "source_pt": "▶ Começar o curso",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 3,
+      "source_pt": "⚔️ Ação",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 4,
+      "source_pt": "🌍 Esse simulado completo também está disponível em mais 9 idiomas",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 5,
+      "source_pt": "🎓 Curso Guiado A1",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 6,
+      "source_pt": "🎙️ Gravações",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 7,
+      "source_pt": "🎧 Podcasts",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 8,
+      "source_pt": "🎧 Podcasts em Alemão",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 9,
+      "source_pt": "📰 Blog",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 10,
+      "source_pt": "1.312 verbos",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 11,
+      "source_pt": "23 histórias bilíngues",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 12,
+      "source_pt": "38.802 frases",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 13,
+      "source_pt": "38.802 frases conjugadas",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 14,
+      "source_pt": "4.500 frases profissionais",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 15,
+      "source_pt": "7 dias",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 16,
+      "source_pt": "90 · 4.500 frases",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 17,
+      "source_pt": "Como complemento da biblioteca completa, você pode seguir uma sequência de 30 aulas com diálogo, áudio, explicação e exercícios. É um caminho organizado para quem prefere estudar passo a passo.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 18,
+      "source_pt": "Enquanto você fala, o navegador tenta mostrar o texto ao vivo. Ao parar, a transcrição final do áudio é adicionada à caixa de texto.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 19,
+      "source_pt": "Escrita — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 20,
+      "source_pt": "Histórias bilíngues para ouvir com fone: alemão seguido da tradução, frase por frase.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 21,
+      "source_pt": "Não! Você pode explorar diálogos, verbos, gírias, quiz e muito mais sem cadastro nenhum. O Premium libera a biblioteca inteira (mais de 59.000 itens) quando você quiser ir além.",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 22,
+      "source_pt": "Podcasts — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 23,
+      "source_pt": "Recursos do Curso Guiado A1",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 24,
+      "source_pt": "Vocabulário — DeutschBloom",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 25,
+      "source_pt": "Mês",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 26,
+      "source_pt": "Semana",
+      "targets_needed": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ]
+    },
+    {
+      "id": 27,
+      "source_pt": "Acompanhar",
+      "targets_needed": [
+        "hi",
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 28,
+      "source_pt": ", sem burocracia — cancele quando quiser.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 29,
+      "source_pt": "(R$ 100 mais barato que no cartão) — só pros primeiros 100 assinantes.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 30,
+      "source_pt": "/mês",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 31,
+      "source_pt": "← Voltar",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 32,
+      "source_pt": "← Voltar para categorias",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 33,
+      "source_pt": "← Voltar para Cursos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 34,
+      "source_pt": "← Voltar para Música",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 35,
+      "source_pt": "+1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 36,
+      "source_pt": "▶ Iniciar sessão de estudo",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 37,
+      "source_pt": "☀️ Hoje",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 38,
+      "source_pt": "⚡ Quiz",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 39,
+      "source_pt": "⚡ Quiz Rápido",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 40,
+      "source_pt": "⚡ Sessão rápida",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 41,
+      "source_pt": "🇧🇷 Português",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 42,
+      "source_pt": "✍️ Escrita",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 43,
+      "source_pt": "🎙️ Gravações salvas neste aparelho",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 44,
+      "source_pt": "🎙️ Gravar resposta",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 45,
+      "source_pt": "🎤 Pronúncia",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 46,
+      "source_pt": "🎧 Sua gravação",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 47,
+      "source_pt": "🎧 Sua gravacao:",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 48,
+      "source_pt": "🎮 Caçando Vocabulário",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 49,
+      "source_pt": "🎵 Música",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 50,
+      "source_pt": "🎵 Músicas",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 51,
+      "source_pt": "🐍 Caçando Vocabulário",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 52,
+      "source_pt": "💎 Planos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 53,
+      "source_pt": "💬 Diálogos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 54,
+      "source_pt": "💬 Frases",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 55,
+      "source_pt": "💼 Profissões",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 56,
+      "source_pt": "💼 Profissões em Alemão",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 57,
+      "source_pt": "💾 Salvar",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 58,
+      "source_pt": "💾 Salvar gravação",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 59,
+      "source_pt": "📅 Último ano",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 60,
+      "source_pt": "📆 7 dias",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 61,
+      "source_pt": "📆 Últimos 7 dias",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 62,
+      "source_pt": "📊 Progresso",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 63,
+      "source_pt": "📓 Caderno",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 64,
+      "source_pt": "📖 Gramática",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 65,
+      "source_pt": "📖 Verbos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 66,
+      "source_pt": "📚 Todos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 67,
+      "source_pt": "📚 Vocabulário",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 68,
+      "source_pt": "📚 Vocabulário em Alemão",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 69,
+      "source_pt": "📝 Caderno de Estudos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 70,
+      "source_pt": "📝 Simulado Goethe",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 71,
+      "source_pt": "🔊 Ouvir original",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 72,
+      "source_pt": "🔍 Buscar em todas as categorias...",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 73,
+      "source_pt": "🔍 Buscar em todas as profissões...",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 74,
+      "source_pt": "🔍 Buscar nesta categoria...",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 75,
+      "source_pt": "🔍 Buscar...",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 76,
+      "source_pt": "🔤 Verbos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 77,
+      "source_pt": "🗓️ 30 dias",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 78,
+      "source_pt": "🗓️ Últimos 30 dias",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 79,
+      "source_pt": "🗣️ Expressões & Gírias",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 80,
+      "source_pt": "🗣️ Gírias",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 81,
+      "source_pt": "🧭 Descobrir por onde começar",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 82,
+      "source_pt": "1.225 diálogos + 1.315 verbos conjugados",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 83,
+      "source_pt": "1.509 gírias e 4.500 frases de profissões",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 84,
+      "source_pt": "20 conteúdos de cada categoria",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 85,
+      "source_pt": "25 categorias temáticas",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 86,
+      "source_pt": "3.000 questões de quiz + simulados Goethe",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 87,
+      "source_pt": "30 dias",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 88,
+      "source_pt": "59.000+ conteúdos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 89,
+      "source_pt": "A partir de R$ 14,99/mês",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 90,
+      "source_pt": "Acesso vitalício por R$ 297",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 91,
+      "source_pt": "Administração | DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 92,
+      "source_pt": "Ainda não tem conta?",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 93,
+      "source_pt": "Ajustar plano",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 94,
+      "source_pt": "alemão do dia a dia",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 95,
+      "source_pt": "Analisar resposta",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 96,
+      "source_pt": "Análises disponíveis hoje",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 97,
+      "source_pt": "Antes de começar",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 98,
+      "source_pt": "Aponte a câmera do seu banco pro QR code — já vem com o valor certinho",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 99,
+      "source_pt": "Aprenda alemão com letras traduzidas, linha por linha.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 100,
+      "source_pt": "Aprenda Alemão do A1 ao C2 | DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 101,
+      "source_pt": "Aprender com constância",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 102,
+      "source_pt": "Áudio de alta qualidade",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 103,
+      "source_pt": "Áudio de alta qualidade em todo o conteúdo",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 104,
+      "source_pt": "Avançado",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 105,
+      "source_pt": "Banir / suspender conta",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 106,
+      "source_pt": "Básico",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 107,
+      "source_pt": "Bem-vindo ao DeutschBloom. Aprenda do seu jeito.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 108,
+      "source_pt": "Benefícios Premium",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 109,
+      "source_pt": "Caçando Vocabulário — DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 110,
+      "source_pt": "Caderno — DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 111,
+      "source_pt": "Carregando quizzes...",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 112,
+      "source_pt": "Carregando seu progresso...",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 113,
+      "source_pt": "Clique para revelar",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 114,
+      "source_pt": "Clique para ver traducao",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 115,
+      "source_pt": "com letras traduzidas",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 116,
+      "source_pt": "Começar do zero",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 117,
+      "source_pt": "Comece sem pressão",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 118,
+      "source_pt": "Conceder plano",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 119,
+      "source_pt": "concluídos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 120,
+      "source_pt": "Conhecer os planos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 121,
+      "source_pt": "Consigo estudar mesmo começando do zero?",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 122,
+      "source_pt": "Contas com número muito alto de pedidos num dia podem estar copiando o conteúdo em vez de estudar. Confira antes de agir.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 123,
+      "source_pt": "contato@alemaofacilbrasil.com.br",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 124,
+      "source_pt": "Criar conta grátis",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 125,
+      "source_pt": "DeutschBloom © 2026 — um espaço tranquilo para aprender de verdade.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 126,
+      "source_pt": "Diálogo — DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 127,
+      "source_pt": "Dias por semana",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 128,
+      "source_pt": "dias seguidos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 129,
+      "source_pt": "Direto na página de",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 130,
+      "source_pt": "do A1 ao C2 — por menos que um lanche por mês.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 131,
+      "source_pt": "Do básico A1 ao avançado C2, com uma trilha que acompanha você.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 132,
+      "source_pt": "Do nível A1 ao C2",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 133,
+      "source_pt": "Dúvida, sugestão, problema técnico ou quer conversar sobre parceria? Fala com a gente.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 134,
+      "source_pt": "Encerrar e salvar XP",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 135,
+      "source_pt": "Encontre em alemão:",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 136,
+      "source_pt": "Enquanto o Pix automático não fica pronto, você pode pagar direto e a gente libera seu acesso em até",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 137,
+      "source_pt": "Entrando, seu limite fica protegido.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 138,
+      "source_pt": "Entrar — DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 139,
+      "source_pt": "Entrar com Google",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 140,
+      "source_pt": "equivale a R$ 12,42/mês · pagamento único anual",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 141,
+      "source_pt": "Escolha seu nível",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 142,
+      "source_pt": "Escolha seu nível. A cada rodada você encontra uma frase curta, responde um quiz e revisa um verbo do nosso acervo.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 143,
+      "source_pt": "Escolha um nível para começar.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 144,
+      "source_pt": "Escolha um nível para ver diálogos e verbos.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 145,
+      "source_pt": "Escrita",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 146,
+      "source_pt": "Escuta e pronúncia claras",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 147,
+      "source_pt": "Estudar",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 148,
+      "source_pt": "Estude no seu ritmo",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 149,
+      "source_pt": "Excluir todas",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 150,
+      "source_pt": "Expandir o vocabulário",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 151,
+      "source_pt": "Experiência completa",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 152,
+      "source_pt": "Explore conteúdos gratuitos antes de escolher um plano.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 153,
+      "source_pt": "Expressões — DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 154,
+      "source_pt": "Fale, pense e construa em alemão",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 155,
+      "source_pt": "Filtrar por data específica",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 156,
+      "source_pt": "frases com audio",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 157,
+      "source_pt": "frases disponiveis",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 158,
+      "source_pt": "Histórico de Pix (aprovados e rejeitados)",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 159,
+      "source_pt": "Igual apareceu pra você no pagamento",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 160,
+      "source_pt": "Intermediário",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 161,
+      "source_pt": "Libere a biblioteca completa, simulados Goethe, áudio de alta qualidade e sincronização do seu progresso.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 162,
+      "source_pt": "Mais de",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 163,
+      "source_pt": "Melhorar a pronúncia",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 164,
+      "source_pt": "Mensagem pra gente (opcional — horário do pagamento, etc.)",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 165,
+      "source_pt": "Meu progresso fica salvo?",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 166,
+      "source_pt": "Milhares de frases com áudio nativo, além do que cai na prova:",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 167,
+      "source_pt": "Monte sua jornada",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 168,
+      "source_pt": "Música — DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 169,
+      "source_pt": "Músicas",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 170,
+      "source_pt": "Nenhuma gravacao ainda",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 171,
+      "source_pt": "Nível (A1→C2)",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 172,
+      "source_pt": "Nível atual",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 173,
+      "source_pt": "Nome que aparece no comprovante do Pix",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 174,
+      "source_pt": "O áudio fica só neste aparelho, não é enviado com a análise.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 175,
+      "source_pt": "o conteúdo",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 176,
+      "source_pt": "O Premium libera a biblioteca completa, os simulados Goethe, o áudio de alta qualidade e a sincronização do progresso entre dispositivos.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 177,
+      "source_pt": "O que está incluído no plano Premium?",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 178,
+      "source_pt": "O que você quer estudar hoje?",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 179,
+      "source_pt": "O Vitalício sai por R$ 197 pagando no Pix",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 180,
+      "source_pt": "Ouça, leia, escreva e teste seu conhecimento em um só lugar.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 181,
+      "source_pt": "Outra pergunta",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 182,
+      "source_pt": "Ouvir",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 183,
+      "source_pt": "palavras · mínimo sugerido:",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 184,
+      "source_pt": "para sempre · sem cartão",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 185,
+      "source_pt": "Pesquisar qualquer palavra, verbo, diálogo...",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 186,
+      "source_pt": "Planos para Aprender Alemão | DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 187,
+      "source_pt": "Por que estudar no DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 188,
+      "source_pt": "Pratique alemão de verdade",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 189,
+      "source_pt": "Pratique com questões no estilo do exame oficial — baseado no conteúdo dos cursos.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 190,
+      "source_pt": "Preparação completa",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 191,
+      "source_pt": "Preparando sua missão de hoje...",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 192,
+      "source_pt": "Preparar para o Goethe",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 193,
+      "source_pt": "Profissões — DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 194,
+      "source_pt": "Progresso na nuvem",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 195,
+      "source_pt": "Progresso sincronizado na nuvem",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 196,
+      "source_pt": "Pronúncia — DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 197,
+      "source_pt": "Qual plano você pagou?",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 198,
+      "source_pt": "Quiz",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 199,
+      "source_pt": "Quiz de nivelamento",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 200,
+      "source_pt": "Quiz Rápido — DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 201,
+      "source_pt": "R$ 14,99/mês",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 202,
+      "source_pt": "Rádio lo-fi e Pomodoro",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 203,
+      "source_pt": "Redirecionando para",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 204,
+      "source_pt": "Responda situações reais, pratique sua espontaneidade e descubra como deixar seu alemão mais claro e natural.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 205,
+      "source_pt": "Resposta rápida em horário comercial",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 206,
+      "source_pt": "Salvar minha jornada",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 207,
+      "source_pt": "Sem vencimento",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 208,
+      "source_pt": "Senha",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 209,
+      "source_pt": "Sessão rápida",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 210,
+      "source_pt": "Sessão Rápida de Alemão | DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 211,
+      "source_pt": "Seu plano de jornada",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 212,
+      "source_pt": "Seu primeiro caminho, sem pressão",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 213,
+      "source_pt": "Seus atalhos, anotações e revisões.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 214,
+      "source_pt": "Sim, para contas com login o progresso é sincronizado na nuvem. Sem login, fica salvo só neste navegador.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 215,
+      "source_pt": "Sim. O conteúdo está organizado do A1 ao C2, permitindo começar pelo básico e avançar gradualmente com diálogos, vocabulário, áudio e exercícios.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 216,
+      "source_pt": "Sim. O plano gratuito permite conhecer o ambiente e estudar uma seleção de conteúdos sem informar cartão.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 217,
+      "source_pt": "Sistema de XP e níveis",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 218,
+      "source_pt": "Só para os primeiros 100 assinantes: pague uma vez, use para sempre — incluindo tudo que ainda vamos lançar.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 219,
+      "source_pt": "Solicitações de Pix pendentes",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 220,
+      "source_pt": "Sua resposta em alemão",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 221,
+      "source_pt": "Teste de Criatividade em Alemão | DeutschBloom",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 222,
+      "source_pt": "Teste seus reflexos no alemão — rápido, divertido, viciante.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 223,
+      "source_pt": "Todo o alemão, sem interromper seu ritmo.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 224,
+      "source_pt": "Todos",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 225,
+      "source_pt": "Todos os 59.000 itens liberados",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 226,
+      "source_pt": "Treinar",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 227,
+      "source_pt": "treine redação",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 228,
+      "source_pt": "Último acesso",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 229,
+      "source_pt": "Um espaço completo para aprender alemão",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 230,
+      "source_pt": "Uma prática curta para avançar",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 231,
+      "source_pt": "Usar grátis",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 232,
+      "source_pt": "Use as setas do teclado (ou os botões) para levar a cobra até a palavra em alemão certa.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 233,
+      "source_pt": "Uso do conteúdo hoje (possível download em massa)",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 234,
+      "source_pt": "Usuários cadastrados",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 235,
+      "source_pt": "Velocidade do áudio:",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 236,
+      "source_pt": "Vitalício",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 237,
+      "source_pt": "Vitalício (Fundador) — R$ 197 no Pix",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 238,
+      "source_pt": "Vocabulário útil",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 239,
+      "source_pt": "Você pode mudar quando quiser. Se não escolher, usamos 15 minutos em quatro dias por semana.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 240,
+      "source_pt": "Você também pode responder falando.",
+      "targets_needed": [
+        "id",
+        "ru"
+      ]
+    },
+    {
+      "id": 241,
+      "source_pt": "Carregando...",
+      "targets_needed": [
+        "id"
+      ]
+    },
+    {
+      "id": 242,
+      "source_pt": "Diálogos",
+      "targets_needed": [
+        "id"
+      ]
+    },
+    {
+      "id": 243,
+      "source_pt": "Em dois minutos, descubra seu nível — do A1 ao C2 — e por onde começar.",
+      "targets_needed": [
+        "ru"
+      ]
+    },
+    {
+      "id": 244,
+      "source_pt": "Gírias",
+      "targets_needed": [
+        "id"
+      ]
+    },
+    {
+      "id": 245,
+      "source_pt": "histórias bilíngues gratuitas",
+      "targets_needed": [
+        "ru"
+      ]
+    },
+    {
+      "id": 246,
+      "source_pt": "Idioma",
+      "targets_needed": [
+        "id"
+      ]
+    },
+    {
+      "id": 247,
+      "source_pt": "Música",
+      "targets_needed": [
+        "id"
+      ]
+    },
+    {
+      "id": 248,
+      "source_pt": "O simulado é grátis. O curso completo é Premium.",
+      "targets_needed": [
+        "id"
+      ]
+    },
+    {
+      "id": 249,
+      "source_pt": "Profissões",
+      "targets_needed": [
+        "id"
+      ]
+    },
+    {
+      "id": 250,
+      "source_pt": "Teste de alemão online gratuito",
+      "targets_needed": [
+        "ru"
+      ]
+    },
+    {
+      "id": 251,
+      "source_pt": "Teste de Alemão Online Gratuito — Nível em 2 Minutos | DeutschBloom",
+      "targets_needed": [
+        "ru"
+      ]
+    },
+    {
+      "id": 252,
+      "source_pt": "Vocabulário",
+      "targets_needed": [
+        "id"
+      ]
+    }
+  ]
+}

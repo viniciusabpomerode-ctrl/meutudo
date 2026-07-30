@@ -1,0 +1,2937 @@
+{
+  "generated_at": "2026-07-30T20:43:53.851Z",
+  "scope": {
+    "html_pages": 28,
+    "locales": [
+      "en",
+      "es",
+      "fr",
+      "it",
+      "tr",
+      "ar",
+      "he",
+      "hi",
+      "pl",
+      "id",
+      "ru"
+    ],
+    "interface_source_strings": 298
+  },
+  "map_sizes": {
+    "en": 88707,
+    "es": 88707,
+    "fr": 88707,
+    "it": 88707,
+    "tr": 88707,
+    "ar": 88707,
+    "he": 88707,
+    "hi": 88705,
+    "pl": 88707,
+    "id": 162,
+    "ru": 185
+  },
+  "unresolved_unique_strings": 252,
+  "unresolved_by_locale": {
+    "en": 26,
+    "es": 26,
+    "fr": 26,
+    "it": 26,
+    "tr": 26,
+    "ar": 26,
+    "he": 26,
+    "hi": 27,
+    "pl": 26,
+    "id": 246,
+    "ru": 242
+  },
+  "page_coverage": {
+    "index.html": {
+      "candidates": 99,
+      "unresolved": 91
+    },
+    "app/admin.html": {
+      "candidates": 14,
+      "unresolved": 14
+    },
+    "app/amostra.html": {
+      "candidates": 2,
+      "unresolved": 2
+    },
+    "app/cadastro.html": {
+      "candidates": 9,
+      "unresolved": 0
+    },
+    "app/caderno.html": {
+      "candidates": 19,
+      "unresolved": 19
+    },
+    "app/criatividade.html": {
+      "candidates": 19,
+      "unresolved": 19
+    },
+    "app/cursos.html": {
+      "candidates": 4,
+      "unresolved": 4
+    },
+    "app/dashboard.html": {
+      "candidates": 1,
+      "unresolved": 1
+    },
+    "app/dialogo.html": {
+      "candidates": 3,
+      "unresolved": 3
+    },
+    "app/escrita.html": {
+      "candidates": 6,
+      "unresolved": 6
+    },
+    "app/expressoes.html": {
+      "candidates": 8,
+      "unresolved": 8
+    },
+    "app/jogo.html": {
+      "candidates": 6,
+      "unresolved": 5
+    },
+    "app/login.html": {
+      "candidates": 7,
+      "unresolved": 5
+    },
+    "app/musica-player.html": {
+      "candidates": 3,
+      "unresolved": 3
+    },
+    "app/musica.html": {
+      "candidates": 3,
+      "unresolved": 3
+    },
+    "app/perfil.html": {
+      "candidates": 26,
+      "unresolved": 4
+    },
+    "app/planos.html": {
+      "candidates": 33,
+      "unresolved": 29
+    },
+    "app/podcast.html": {
+      "candidates": 2,
+      "unresolved": 2
+    },
+    "app/podcasts.html": {
+      "candidates": 6,
+      "unresolved": 6
+    },
+    "app/profissoes.html": {
+      "candidates": 8,
+      "unresolved": 7
+    },
+    "app/pronuncia.html": {
+      "candidates": 10,
+      "unresolved": 10
+    },
+    "app/quiz.html": {
+      "candidates": 4,
+      "unresolved": 4
+    },
+    "app/sessao-rapida.html": {
+      "candidates": 6,
+      "unresolved": 6
+    },
+    "app/simulado.html": {
+      "candidates": 16,
+      "unresolved": 15
+    },
+    "app/suporte.html": {
+      "candidates": 10,
+      "unresolved": 9
+    },
+    "app/teste-rapido.html": {
+      "candidates": 4,
+      "unresolved": 4
+    },
+    "app/verbo.html": {
+      "candidates": 2,
+      "unresolved": 2
+    },
+    "app/vocabulario.html": {
+      "candidates": 7,
+      "unresolved": 6
+    }
+  },
+  "missing": [
+    {
+      "source": "← Voltar para Podcasts",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/podcast.html"
+      ]
+    },
+    {
+      "source": "▶ Começar o curso",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "⚔️ Ação",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/podcasts.html"
+      ]
+    },
+    {
+      "source": "🌍 Esse simulado completo também está disponível em mais 9 idiomas",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "🎓 Curso Guiado A1",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "🎙️ Gravações",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "🎧 Podcasts",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html",
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "🎧 Podcasts em Alemão",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/podcasts.html"
+      ]
+    },
+    {
+      "source": "📰 Blog",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "1.312 verbos",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "23 histórias bilíngues",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "38.802 frases",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "38.802 frases conjugadas",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "4.500 frases profissionais",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "7 dias",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/admin.html"
+      ]
+    },
+    {
+      "source": "90 · 4.500 frases",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Como complemento da biblioteca completa, você pode seguir uma sequência de 30 aulas com diálogo, áudio, explicação e exercícios. É um caminho organizado para quem prefere estudar passo a passo.",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Enquanto você fala, o navegador tenta mostrar o texto ao vivo. Ao parar, a transcrição final do áudio é adicionada à caixa de texto.",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "Escrita — DeutschBloom",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/escrita.html"
+      ]
+    },
+    {
+      "source": "Histórias bilíngues para ouvir com fone: alemão seguido da tradução, frase por frase.",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/podcasts.html"
+      ]
+    },
+    {
+      "source": "Não! Você pode explorar diálogos, verbos, gírias, quiz e muito mais sem cadastro nenhum. O Premium libera a biblioteca inteira (mais de 59.000 itens) quando você quiser ir além.",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/suporte.html"
+      ]
+    },
+    {
+      "source": "Podcasts — DeutschBloom",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/podcasts.html"
+      ]
+    },
+    {
+      "source": "Recursos do Curso Guiado A1",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Vocabulário — DeutschBloom",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/vocabulario.html"
+      ]
+    },
+    {
+      "source": "Mês",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ],
+      "pages": [
+        "app/perfil.html"
+      ]
+    },
+    {
+      "source": "Semana",
+      "missing_locales": [
+        "en",
+        "es",
+        "fr",
+        "it",
+        "tr",
+        "ar",
+        "he",
+        "hi",
+        "pl"
+      ],
+      "pages": [
+        "app/perfil.html"
+      ]
+    },
+    {
+      "source": "Acompanhar",
+      "missing_locales": [
+        "hi",
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": ", sem burocracia — cancele quando quiser.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/suporte.html"
+      ]
+    },
+    {
+      "source": "(R$ 100 mais barato que no cartão) — só pros primeiros 100 assinantes.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "/mês",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "← Voltar",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/profissoes.html"
+      ]
+    },
+    {
+      "source": "← Voltar para categorias",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/expressoes.html",
+        "app/profissoes.html",
+        "app/vocabulario.html"
+      ]
+    },
+    {
+      "source": "← Voltar para Cursos",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/dialogo.html",
+        "app/verbo.html"
+      ]
+    },
+    {
+      "source": "← Voltar para Música",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/musica-player.html"
+      ]
+    },
+    {
+      "source": "+1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/expressoes.html"
+      ]
+    },
+    {
+      "source": "▶ Iniciar sessão de estudo",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "☀️ Hoje",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html",
+        "app/pronuncia.html"
+      ]
+    },
+    {
+      "source": "⚡ Quiz",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html",
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "⚡ Quiz Rápido",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/quiz.html"
+      ]
+    },
+    {
+      "source": "⚡ Sessão rápida",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "🇧🇷 Português",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/perfil.html"
+      ]
+    },
+    {
+      "source": "✍️ Escrita",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html",
+        "app/escrita.html"
+      ]
+    },
+    {
+      "source": "🎙️ Gravações salvas neste aparelho",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "🎙️ Gravar resposta",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "🎤 Pronúncia",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "🎧 Sua gravação",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "🎧 Sua gravacao:",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/pronuncia.html"
+      ]
+    },
+    {
+      "source": "🎮 Caçando Vocabulário",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "🎵 Música",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html",
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "🎵 Músicas",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "🐍 Caçando Vocabulário",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/jogo.html"
+      ]
+    },
+    {
+      "source": "💎 Planos",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "💬 Diálogos",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html",
+        "app/caderno.html",
+        "app/cursos.html",
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "💬 Frases",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "💼 Profissões",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html",
+        "app/caderno.html",
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "💼 Profissões em Alemão",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/profissoes.html"
+      ]
+    },
+    {
+      "source": "💾 Salvar",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/pronuncia.html"
+      ]
+    },
+    {
+      "source": "💾 Salvar gravação",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "📅 Último ano",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "📆 7 dias",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/pronuncia.html"
+      ]
+    },
+    {
+      "source": "📆 Últimos 7 dias",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "📊 Progresso",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "📓 Caderno",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "📖 Gramática",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "📖 Verbos",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html",
+        "app/cursos.html",
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "📚 Todos",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "📚 Vocabulário",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html",
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "📚 Vocabulário em Alemão",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/vocabulario.html"
+      ]
+    },
+    {
+      "source": "📝 Caderno de Estudos",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "📝 Simulado Goethe",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "🔊 Ouvir original",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/pronuncia.html"
+      ]
+    },
+    {
+      "source": "🔍 Buscar em todas as categorias...",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/expressoes.html",
+        "app/vocabulario.html"
+      ]
+    },
+    {
+      "source": "🔍 Buscar em todas as profissões...",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/profissoes.html"
+      ]
+    },
+    {
+      "source": "🔍 Buscar nesta categoria...",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/expressoes.html",
+        "app/profissoes.html",
+        "app/vocabulario.html"
+      ]
+    },
+    {
+      "source": "🔍 Buscar...",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "🔤 Verbos",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "🗓️ 30 dias",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/pronuncia.html"
+      ]
+    },
+    {
+      "source": "🗓️ Últimos 30 dias",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "🗣️ Expressões & Gírias",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/expressoes.html"
+      ]
+    },
+    {
+      "source": "🗣️ Gírias",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html",
+        "app/caderno.html",
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "🧭 Descobrir por onde começar",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "1.225 diálogos + 1.315 verbos conjugados",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "1.509 gírias e 4.500 frases de profissões",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "20 conteúdos de cada categoria",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "25 categorias temáticas",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "3.000 questões de quiz + simulados Goethe",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "30 dias",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html",
+        "app/admin.html"
+      ]
+    },
+    {
+      "source": "59.000+ conteúdos",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "A partir de R$ 14,99/mês",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Acesso vitalício por R$ 297",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Administração | DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/admin.html"
+      ]
+    },
+    {
+      "source": "Ainda não tem conta?",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/login.html"
+      ]
+    },
+    {
+      "source": "Ajustar plano",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "alemão do dia a dia",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Analisar resposta",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "Análises disponíveis hoje",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "Antes de começar",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Aponte a câmera do seu banco pro QR code — já vem com o valor certinho",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Aprenda alemão com letras traduzidas, linha por linha.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/musica.html"
+      ]
+    },
+    {
+      "source": "Aprenda Alemão do A1 ao C2 | DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Aprender com constância",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Áudio de alta qualidade",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Áudio de alta qualidade em todo o conteúdo",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Avançado",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "Banir / suspender conta",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/admin.html"
+      ]
+    },
+    {
+      "source": "Básico",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "Bem-vindo ao DeutschBloom. Aprenda do seu jeito.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Benefícios Premium",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Caçando Vocabulário — DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/jogo.html"
+      ]
+    },
+    {
+      "source": "Caderno — DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "Carregando quizzes...",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/quiz.html"
+      ]
+    },
+    {
+      "source": "Carregando seu progresso...",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/dashboard.html"
+      ]
+    },
+    {
+      "source": "Clique para revelar",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/escrita.html"
+      ]
+    },
+    {
+      "source": "Clique para ver traducao",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/escrita.html"
+      ]
+    },
+    {
+      "source": "com letras traduzidas",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Começar do zero",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Comece sem pressão",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Conceder plano",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/admin.html"
+      ]
+    },
+    {
+      "source": "concluídos",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Conhecer os planos",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Consigo estudar mesmo começando do zero?",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Contas com número muito alto de pedidos num dia podem estar copiando o conteúdo em vez de estudar. Confira antes de agir.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/admin.html"
+      ]
+    },
+    {
+      "source": "contato@alemaofacilbrasil.com.br",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/suporte.html"
+      ]
+    },
+    {
+      "source": "Criar conta grátis",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/login.html"
+      ]
+    },
+    {
+      "source": "DeutschBloom © 2026 — um espaço tranquilo para aprender de verdade.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html",
+        "app/suporte.html"
+      ]
+    },
+    {
+      "source": "Diálogo — DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/dialogo.html"
+      ]
+    },
+    {
+      "source": "Dias por semana",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "dias seguidos",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Direto na página de",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/suporte.html"
+      ]
+    },
+    {
+      "source": "do A1 ao C2 — por menos que um lanche por mês.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Do básico A1 ao avançado C2, com uma trilha que acompanha você.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Do nível A1 ao C2",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Dúvida, sugestão, problema técnico ou quer conversar sobre parceria? Fala com a gente.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/suporte.html"
+      ]
+    },
+    {
+      "source": "Encerrar e salvar XP",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/jogo.html"
+      ]
+    },
+    {
+      "source": "Encontre em alemão:",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/jogo.html"
+      ]
+    },
+    {
+      "source": "Enquanto o Pix automático não fica pronto, você pode pagar direto e a gente libera seu acesso em até",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Entrando, seu limite fica protegido.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "Entrar — DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/login.html"
+      ]
+    },
+    {
+      "source": "Entrar com Google",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/login.html"
+      ]
+    },
+    {
+      "source": "equivale a R$ 12,42/mês · pagamento único anual",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Escolha seu nível",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html",
+        "app/sessao-rapida.html"
+      ]
+    },
+    {
+      "source": "Escolha seu nível. A cada rodada você encontra uma frase curta, responde um quiz e revisa um verbo do nosso acervo.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/sessao-rapida.html"
+      ]
+    },
+    {
+      "source": "Escolha um nível para começar.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/sessao-rapida.html"
+      ]
+    },
+    {
+      "source": "Escolha um nível para ver diálogos e verbos.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/cursos.html"
+      ]
+    },
+    {
+      "source": "Escrita",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Escuta e pronúncia claras",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Estudar",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Estude no seu ritmo",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Excluir todas",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "Expandir o vocabulário",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Experiência completa",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Explore conteúdos gratuitos antes de escolher um plano.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Expressões — DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/expressoes.html"
+      ]
+    },
+    {
+      "source": "Fale, pense e construa em alemão",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "Filtrar por data específica",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "frases com audio",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/pronuncia.html"
+      ]
+    },
+    {
+      "source": "frases disponiveis",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/escrita.html"
+      ]
+    },
+    {
+      "source": "Histórico de Pix (aprovados e rejeitados)",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/admin.html"
+      ]
+    },
+    {
+      "source": "Igual apareceu pra você no pagamento",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Intermediário",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "Libere a biblioteca completa, simulados Goethe, áudio de alta qualidade e sincronização do seu progresso.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Mais de",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Melhorar a pronúncia",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Mensagem pra gente (opcional — horário do pagamento, etc.)",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Meu progresso fica salvo?",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/suporte.html"
+      ]
+    },
+    {
+      "source": "Milhares de frases com áudio nativo, além do que cai na prova:",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "Monte sua jornada",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Música — DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/musica-player.html",
+        "app/musica.html"
+      ]
+    },
+    {
+      "source": "Músicas",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Nenhuma gravacao ainda",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/pronuncia.html"
+      ]
+    },
+    {
+      "source": "Nível (A1→C2)",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/expressoes.html"
+      ]
+    },
+    {
+      "source": "Nível atual",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Nome que aparece no comprovante do Pix",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "O áudio fica só neste aparelho, não é enviado com a análise.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "o conteúdo",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/amostra.html"
+      ]
+    },
+    {
+      "source": "O Premium libera a biblioteca completa, os simulados Goethe, o áudio de alta qualidade e a sincronização do progresso entre dispositivos.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "O que está incluído no plano Premium?",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "O que você quer estudar hoje?",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "O Vitalício sai por R$ 197 pagando no Pix",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Ouça, leia, escreva e teste seu conhecimento em um só lugar.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Outra pergunta",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "Ouvir",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/escrita.html"
+      ]
+    },
+    {
+      "source": "palavras · mínimo sugerido:",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "para sempre · sem cartão",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Pesquisar qualquer palavra, verbo, diálogo...",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Planos para Aprender Alemão | DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Por que estudar no DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Pratique alemão de verdade",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Pratique com questões no estilo do exame oficial — baseado no conteúdo dos cursos.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "Preparação completa",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Preparando sua missão de hoje...",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Preparar para o Goethe",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Profissões — DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/profissoes.html"
+      ]
+    },
+    {
+      "source": "Progresso na nuvem",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Progresso sincronizado na nuvem",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Pronúncia — DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/pronuncia.html"
+      ]
+    },
+    {
+      "source": "Qual plano você pagou?",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Quiz",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Quiz de nivelamento",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Quiz Rápido — DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/quiz.html"
+      ]
+    },
+    {
+      "source": "R$ 14,99/mês",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Rádio lo-fi e Pomodoro",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Redirecionando para",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/amostra.html"
+      ]
+    },
+    {
+      "source": "Responda situações reais, pratique sua espontaneidade e descubra como deixar seu alemão mais claro e natural.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "Resposta rápida em horário comercial",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/suporte.html"
+      ]
+    },
+    {
+      "source": "Salvar minha jornada",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Sem vencimento",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/admin.html"
+      ]
+    },
+    {
+      "source": "Senha",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/login.html"
+      ]
+    },
+    {
+      "source": "Sessão rápida",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/sessao-rapida.html"
+      ]
+    },
+    {
+      "source": "Sessão Rápida de Alemão | DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/sessao-rapida.html"
+      ]
+    },
+    {
+      "source": "Seu plano de jornada",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Seu primeiro caminho, sem pressão",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/teste-rapido.html"
+      ]
+    },
+    {
+      "source": "Seus atalhos, anotações e revisões.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/caderno.html"
+      ]
+    },
+    {
+      "source": "Sim, para contas com login o progresso é sincronizado na nuvem. Sem login, fica salvo só neste navegador.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/suporte.html"
+      ]
+    },
+    {
+      "source": "Sim. O conteúdo está organizado do A1 ao C2, permitindo começar pelo básico e avançar gradualmente com diálogos, vocabulário, áudio e exercícios.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Sim. O plano gratuito permite conhecer o ambiente e estudar uma seleção de conteúdos sem informar cartão.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Sistema de XP e níveis",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Só para os primeiros 100 assinantes: pague uma vez, use para sempre — incluindo tudo que ainda vamos lançar.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Solicitações de Pix pendentes",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/admin.html"
+      ]
+    },
+    {
+      "source": "Sua resposta em alemão",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "Teste de Criatividade em Alemão | DeutschBloom",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "Teste seus reflexos no alemão — rápido, divertido, viciante.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/quiz.html"
+      ]
+    },
+    {
+      "source": "Todo o alemão, sem interromper seu ritmo.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Todos",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/podcasts.html",
+        "app/pronuncia.html"
+      ]
+    },
+    {
+      "source": "Todos os 59.000 itens liberados",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Treinar",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "treine redação",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Último acesso",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/admin.html"
+      ]
+    },
+    {
+      "source": "Um espaço completo para aprender alemão",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Uma prática curta para avançar",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/sessao-rapida.html"
+      ]
+    },
+    {
+      "source": "Usar grátis",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Use as setas do teclado (ou os botões) para levar a cobra até a palavra em alemão certa.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/jogo.html"
+      ]
+    },
+    {
+      "source": "Uso do conteúdo hoje (possível download em massa)",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/admin.html"
+      ]
+    },
+    {
+      "source": "Usuários cadastrados",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/admin.html"
+      ]
+    },
+    {
+      "source": "Velocidade do áudio:",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/expressoes.html",
+        "app/profissoes.html",
+        "app/vocabulario.html"
+      ]
+    },
+    {
+      "source": "Vitalício",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/admin.html"
+      ]
+    },
+    {
+      "source": "Vitalício (Fundador) — R$ 197 no Pix",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/planos.html"
+      ]
+    },
+    {
+      "source": "Vocabulário útil",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "Você pode mudar quando quiser. Se não escolher, usamos 15 minutos em quatro dias por semana.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Você também pode responder falando.",
+      "missing_locales": [
+        "id",
+        "ru"
+      ],
+      "pages": [
+        "app/criatividade.html"
+      ]
+    },
+    {
+      "source": "Carregando...",
+      "missing_locales": [
+        "id"
+      ],
+      "pages": [
+        "app/admin.html",
+        "app/caderno.html",
+        "app/cursos.html",
+        "app/dialogo.html",
+        "app/musica-player.html",
+        "app/podcast.html",
+        "app/podcasts.html",
+        "app/verbo.html"
+      ]
+    },
+    {
+      "source": "Diálogos",
+      "missing_locales": [
+        "id"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Em dois minutos, descubra seu nível — do A1 ao C2 — e por onde começar.",
+      "missing_locales": [
+        "ru"
+      ],
+      "pages": [
+        "app/teste-rapido.html"
+      ]
+    },
+    {
+      "source": "Gírias",
+      "missing_locales": [
+        "id"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "histórias bilíngues gratuitas",
+      "missing_locales": [
+        "ru"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Idioma",
+      "missing_locales": [
+        "id"
+      ],
+      "pages": [
+        "app/perfil.html"
+      ]
+    },
+    {
+      "source": "Música",
+      "missing_locales": [
+        "id"
+      ],
+      "pages": [
+        "app/musica.html"
+      ]
+    },
+    {
+      "source": "O simulado é grátis. O curso completo é Premium.",
+      "missing_locales": [
+        "id"
+      ],
+      "pages": [
+        "app/simulado.html"
+      ]
+    },
+    {
+      "source": "Profissões",
+      "missing_locales": [
+        "id"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "Teste de alemão online gratuito",
+      "missing_locales": [
+        "ru"
+      ],
+      "pages": [
+        "app/teste-rapido.html"
+      ]
+    },
+    {
+      "source": "Teste de Alemão Online Gratuito — Nível em 2 Minutos | DeutschBloom",
+      "missing_locales": [
+        "ru"
+      ],
+      "pages": [
+        "app/teste-rapido.html"
+      ]
+    },
+    {
+      "source": "Vocabulário",
+      "missing_locales": [
+        "id"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+# Auditoria de tradução da interface
+
+- Páginas HTML verificadas: 28
+- Idiomas: 11
+- Textos de interface identificados: 298
+- Textos sem cobertura completa: 252
+
+## Pendências por idioma
+
+- en: 26
+- es: 26
+- fr: 26
+- it: 26
+- tr: 26
+- ar: 26
+- he: 26
+- hi: 27
+- pl: 26
+- id: 246
+- ru: 242
+
+## Páginas com mais pendências
+
+- index.html: 91/99
+- app/planos.html: 29/33
+- app/caderno.html: 19/19
+- app/criatividade.html: 19/19
+- app/simulado.html: 15/16
+- app/admin.html: 14/14
+- app/pronuncia.html: 10/10
+- app/suporte.html: 9/10
+- app/expressoes.html: 8/8
+- app/profissoes.html: 7/8
+- app/escrita.html: 6/6
+- app/podcasts.html: 6/6
+- app/sessao-rapida.html: 6/6
+- app/vocabulario.html: 6/7
+- app/jogo.html: 5/6
+- app/login.html: 5/7
+- app/cursos.html: 4/4
+- app/perfil.html: 4/26
+- app/quiz.html: 4/4
+- app/teste-rapido.html: 4/4
+
+## Primeiras pendências
+
+- ← Voltar para Podcasts — en, es, fr, it, tr, ar, he, hi, pl, id, ru — app/podcast.html
+- ▶ Começar o curso — en, es, fr, it, tr, ar, he, hi, pl, id, ru — index.html
+- ⚔️ Ação — en, es, fr, it, tr, ar, he, hi, pl, id, ru — app/podcasts.html
+- 🌍 Esse simulado completo também está disponível em mais 9 idiomas — en, es, fr, it, tr, ar, he, hi, pl, id, ru — app/simulado.html
+- 🎓 Curso Guiado A1 — en, es, fr, it, tr, ar, he, hi, pl, id, ru — index.html
+- 🎙️ Gravações — en, es, fr, it, tr, ar, he, hi, pl, id, ru — app/caderno.html
+- 🎧 Podcasts — en, es, fr, it, tr, ar, he, hi, pl, id, ru — index.html, app/simulado.html
+- 🎧 Podcasts em Alemão — en, es, fr, it, tr, ar, he, hi, pl, id, ru — app/podcasts.html
+- 📰 Blog — en, es, fr, it, tr, ar, he, hi, pl, id, ru — index.html
+- 1.312 verbos — en, es, fr, it, tr, ar, he, hi, pl, id, ru — index.html
+- 23 histórias bilíngues — en, es, fr, it, tr, ar, he, hi, pl, id, ru — index.html
+- 38.802 frases — en, es, fr, it, tr, ar, he, hi, pl, id, ru — index.html
+- 38.802 frases conjugadas — en, es, fr, it, tr, ar, he, hi, pl, id, ru — index.html
+- 4.500 frases profissionais — en, es, fr, it, tr, ar, he, hi, pl, id, ru — index.html
+- 7 dias — en, es, fr, it, tr, ar, he, hi, pl, id, ru — app/admin.html
+- 90 · 4.500 frases — en, es, fr, it, tr, ar, he, hi, pl, id, ru — index.html
+- Como complemento da biblioteca completa, você pode seguir uma sequência de 30 aulas com diálogo, áudio, explicação e exercícios. É um caminho organizado para quem prefere estudar passo a passo. — en, es, fr, it, tr, ar, he, hi, pl, id, ru — index.html
+- Enquanto você fala, o navegador tenta mostrar o texto ao vivo. Ao parar, a transcrição final do áudio é adicionada à caixa de texto. — en, es, fr, it, tr, ar, he, hi, pl, id, ru — app/criatividade.html
+- Escrita — DeutschBloom — en, es, fr, it, tr, ar, he, hi, pl, id, ru — app/escrita.html
+- Histórias bilíngues para ouvir com fone: alemão seguido da tradução, frase por frase. — en, es, fr, it, tr, ar, he, hi, pl, id, ru — app/podcasts.html
+- Não! Você pode explorar diálogos, verbos, gírias, quiz e muito mais sem cadastro nenhum. O Premium libera a biblioteca inteira (mais de 59.000 itens) quando você quiser ir além. — en, es, fr, it, tr, ar, he, hi, pl, id, ru — app/suporte.html
+- Podcasts — DeutschBloom — en, es, fr, it, tr, ar, he, hi, pl, id, ru — app/podcasts.html
+- Recursos do Curso Guiado A1 — en, es, fr, it, tr, ar, he, hi, pl, id, ru — index.html
+- Vocabulário — DeutschBloom — en, es, fr, it, tr, ar, he, hi, pl, id, ru — app/vocabulario.html
+- Mês — en, es, fr, it, tr, ar, he, hi, pl — app/perfil.html
+- Semana — en, es, fr, it, tr, ar, he, hi, pl — app/perfil.html
+- Acompanhar — hi, id, ru — index.html
+- , sem burocracia — cancele quando quiser. — id, ru — app/suporte.html
+- (R$ 100 mais barato que no cartão) — só pros primeiros 100 assinantes. — id, ru — app/planos.html
+- /mês — id, ru — app/planos.html
+- ← Voltar — id, ru — app/profissoes.html
+- ← Voltar para categorias — id, ru — app/expressoes.html, app/profissoes.html, app/vocabulario.html
+- ← Voltar para Cursos — id, ru — app/dialogo.html, app/verbo.html
+- ← Voltar para Música — id, ru — app/musica-player.html
+- +1.500 expressões coloquiais do alemão real — de gírias de rua a expressões idiomáticas. — id, ru — app/expressoes.html
+- ▶ Iniciar sessão de estudo — id, ru — index.html
+- ☀️ Hoje — id, ru — app/caderno.html, app/pronuncia.html
+- ⚡ Quiz — id, ru — index.html, app/simulado.html
+- ⚡ Quiz Rápido — id, ru — app/quiz.html
+- ⚡ Sessão rápida — id, ru — index.html
+- 🇧🇷 Português — id, ru — app/perfil.html
+- ✍️ Escrita — id, ru — index.html, app/escrita.html
+- 🎙️ Gravações salvas neste aparelho — id, ru — app/criatividade.html
+- 🎙️ Gravar resposta — id, ru — app/criatividade.html
+- 🎤 Pronúncia — id, ru — index.html
+- 🎧 Sua gravação — id, ru — app/criatividade.html
+- 🎧 Sua gravacao: — id, ru — app/pronuncia.html
+- 🎮 Caçando Vocabulário — id, ru — index.html
+- 🎵 Música — id, ru — index.html, app/simulado.html
+- 🎵 Músicas — id, ru — app/caderno.html
+- 🐍 Caçando Vocabulário — id, ru — app/jogo.html
+- 💎 Planos — id, ru — index.html
+- 💬 Diálogos — id, ru — index.html, app/caderno.html, app/cursos.html, app/simulado.html
+- 💬 Frases — id, ru — app/caderno.html
+- 💼 Profissões — id, ru — index.html, app/caderno.html, app/simulado.html
+- 💼 Profissões em Alemão — id, ru — app/profissoes.html
+- 💾 Salvar — id, ru — app/pronuncia.html
+- 💾 Salvar gravação — id, ru — app/criatividade.html
+- 📅 Último ano — id, ru — app/caderno.html
+- 📆 7 dias — id, ru — app/pronuncia.html
+- 📆 Últimos 7 dias — id, ru — app/caderno.html
+- 📊 Progresso — id, ru — index.html
+- 📓 Caderno — id, ru — index.html
+- 📖 Gramática — id, ru — app/caderno.html
+- 📖 Verbos — id, ru — index.html, app/cursos.html, app/simulado.html
+- 📚 Todos — id, ru — app/caderno.html
+- 📚 Vocabulário — id, ru — index.html, app/simulado.html
+- 📚 Vocabulário em Alemão — id, ru — app/vocabulario.html
+- 📝 Caderno de Estudos — id, ru — app/caderno.html
+- 📝 Simulado Goethe — id, ru — index.html
+- 🔊 Ouvir original — id, ru — app/pronuncia.html
+- 🔍 Buscar em todas as categorias... — id, ru — app/expressoes.html, app/vocabulario.html
+- 🔍 Buscar em todas as profissões... — id, ru — app/profissoes.html
+- 🔍 Buscar nesta categoria... — id, ru — app/expressoes.html, app/profissoes.html, app/vocabulario.html
+- 🔍 Buscar... — id, ru — app/caderno.html
+- 🔤 Verbos — id, ru — app/caderno.html
+- 🗓️ 30 dias — id, ru — app/pronuncia.html
+- 🗓️ Últimos 30 dias — id, ru — app/caderno.html
+- 🗣️ Expressões & Gírias — id, ru — app/expressoes.html
+- 🗣️ Gírias — id, ru — index.html, app/caderno.html, app/simulado.html
+- 🧭 Descobrir por onde começar — id, ru — index.html
+- 1.225 diálogos + 1.315 verbos conjugados — id, ru — app/planos.html
+- 1.509 gírias e 4.500 frases de profissões — id, ru — app/planos.html
+- 20 conteúdos de cada categoria — id, ru — app/planos.html
+- 25 categorias temáticas — id, ru — index.html
+- 3.000 questões de quiz + simulados Goethe — id, ru — app/planos.html
+- 30 dias — id, ru — index.html, app/admin.html
+- 59.000+ conteúdos — id, ru — index.html
+- A partir de R$ 14,99/mês — id, ru — index.html
+- Acesso vitalício por R$ 297 — id, ru — app/planos.html
+- Administração | DeutschBloom — id, ru — app/admin.html
+- Ainda não tem conta? — id, ru — app/login.html
+- Ajustar plano — id, ru — index.html
+- alemão do dia a dia — id, ru — index.html
+- Analisar resposta — id, ru — app/criatividade.html
+- Análises disponíveis hoje — id, ru — app/criatividade.html
+- Antes de começar — id, ru — index.html
+- Aponte a câmera do seu banco pro QR code — já vem com o valor certinho — id, ru — app/planos.html
+- Aprenda alemão com letras traduzidas, linha por linha. — id, ru — app/musica.html
+- Aprenda Alemão do A1 ao C2 | DeutschBloom — id, ru — index.html

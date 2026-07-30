@@ -1,0 +1,4 @@
+{
+  "task": "Translate the Portuguese leftovers into the target locale. Preserve DeutschBloom, German examples, URLs, numbers, prices, placeholders, emojis and punctuation. Return strict JSON keyed by locale and source text.",
+  "items": {}
+}
