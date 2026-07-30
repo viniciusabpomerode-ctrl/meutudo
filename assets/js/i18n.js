@@ -9,6 +9,43 @@
   document.head.appendChild(style);
 })();
 
+// Curso Guiado A1: o app (app/curso-a1*.html) só existe em português; as versoes
+// traduzidas ficam em /<idioma>/german-a1-course/. A troca de idioma leva o
+// visitante para a mesma aula no idioma escolhido (mesma ideia do blog). Quem
+// chega direto numa pagina localizada, sem ter escolhido idioma, fica onde esta.
+(function() {
+  try {
+    const LANGS = /^(en|es|fr|it|tr|ar|he|hi|pl|id|ru)$/;
+    const param = new URLSearchParams(location.search).get("lang");
+    // persiste a escolha antes de redirecionar, senao a regra abaixo quica
+    // de volta usando o idioma antigo do localStorage.
+    if (param && (param === "pt" || LANGS.test(param))) {
+      try { localStorage.setItem("afb_language", param); } catch (e) {}
+    }
+    const chosen = param || localStorage.getItem("afb_language");
+    const path = location.pathname;
+    // pagina PT do app -> versao localizada, quando o idioma escolhido != pt
+    const a = path.match(/curso-a1(?:-aula-(\d{2}))?\.html$/);
+    if (a && chosen && chosen !== "pt" && LANGS.test(chosen)) {
+      location.replace(a[1] ? `/${chosen}/german-a1-course/lesson-${a[1]}.html`
+                            : `/${chosen}/german-a1-course/index.html`);
+      return;
+    }
+    // pagina localizada -> outra lingua (ou volta ao app PT) quando o idioma muda
+    const b = path.match(/\/([a-z]{2})\/german-a1-course\/(?:index|lesson-(\d{2}))\.html$/);
+    if (b) {
+      const pathLang = b[1], lesson = b[2];
+      if (!chosen || chosen === pathLang) return;            // sem escolha ou ja correto: fica
+      if (chosen === "pt") {
+        location.replace(lesson ? `/app/curso-a1-aula-${lesson}.html` : `/app/curso-a1.html`);
+      } else if (LANGS.test(chosen)) {
+        location.replace(lesson ? `/${chosen}/german-a1-course/lesson-${lesson}.html`
+                                : `/${chosen}/german-a1-course/index.html`);
+      }
+    }
+  } catch (e) {}
+})();
+
 const AppLanguage = {
   pt: { code: "pt", name: "Português", flag: "🇧🇷" },
   en: { code: "en", name: "English", flag: "🇺🇸" },
