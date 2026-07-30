@@ -2,6 +2,10 @@
 // This file intentionally contains UI only; teaching content stays in R2.
 window.AFB_ID_RU_PRIORITY = {
   id: {
+    "min por dia": "min per hari",
+    "dias por semana": "hari per minggu",
+    "nível ": "level ",
+    "da sua meta pessoal — sem comparar com toda a biblioteca.": "dari target pribadi Anda — tanpa membandingkan dengan seluruh perpustakaan.",
     "Início": "Beranda", "Conteúdo": "Konten", "Conteúdo ▾": "Konten ▾",
     "Cursos": "Kursus", "Planos": "Paket", "Entrar": "Masuk", "Sair": "Keluar",
     "Perfil": "Profil", "Meu perfil": "Profil saya", "Idioma": "Bahasa",
@@ -72,6 +76,10 @@ window.AFB_ID_RU_PRIORITY = {
     "📚 Vocabulário em Alemão": "📚 Kosakata bahasa Jerman"
   },
   ru: {
+    "min por dia": "мин в день",
+    "dias por semana": "дней в неделю",
+    "nível ": "уровень ",
+    "da sua meta pessoal — sem comparar com toda a biblioteca.": "вашей личной цели — без сравнения со всей библиотекой.",
     "Início": "Главная", "Conteúdo": "Материалы", "Conteúdo ▾": "Материалы ▾",
     "Cursos": "Курсы", "Planos": "Тарифы", "Entrar": "Войти", "Sair": "Выйти",
     "Perfil": "Профиль", "Meu perfil": "Мой профиль", "Idioma": "Язык",
