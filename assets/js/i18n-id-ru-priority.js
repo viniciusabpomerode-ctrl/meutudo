@@ -2,6 +2,12 @@
 // This file intentionally contains UI only; teaching content stays in R2.
 window.AFB_ID_RU_PRIORITY = {
   id: {
+    "itens de estudo": "item studi",
+    "itens": "item",
+    "/ano": "/tahun",
+    "questões": "soal",
+    "Finalizar Prova": "Selesaikan Ujian",
+    "gírias e expressões": "slang dan ungkapan",
     "min por dia": "min per hari",
     "dias por semana": "hari per minggu",
     "nível ": "level ",
@@ -76,6 +82,12 @@ window.AFB_ID_RU_PRIORITY = {
     "📚 Vocabulário em Alemão": "📚 Kosakata bahasa Jerman"
   },
   ru: {
+    "itens de estudo": "материалов для изучения",
+    "itens": "материалов",
+    "/ano": "/год",
+    "questões": "вопросов",
+    "Finalizar Prova": "Завершить тест",
+    "gírias e expressões": "сленг и выражения",
     "min por dia": "мин в день",
     "dias por semana": "дней в неделю",
     "nível ": "уровень ",
