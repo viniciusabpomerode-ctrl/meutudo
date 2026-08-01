@@ -39,45 +39,55 @@ function _renderNavNow(active) {
   const user = Auth.currentUser();
   const isContentPage = AFB_CONTENT_PAGES.some((l) => l.key === active);
   const navLang = localStorage.getItem("afb_language") || "pt";
+  // A nav usa links relativos pensados pra rodar dentro de /app/. Quando ela
+  // e injetada em paginas fora de /app/ (ex.: /en/german-a1-course/*.html),
+  // esses relativos quebram (../index.html vira /en/index.html, perfil.html
+  // vira /en/german-a1-course/perfil.html, etc.). Fora de /app/ usamos
+  // caminhos absolutos apontando pros arquivos reais.
+  const inApp = window.location.pathname.includes("/app/");
+  const appPrefix = inApp ? "" : "/app/";
+  const homeHref = inApp ? "../index.html" : "/";
+  const blogPrefix = inApp ? "../blog" : "/blog";
   const navCopy = {
-    pt:{home:"Início",content:"Conteúdo",plans:"Planos",support:"Suporte",profile:"Perfil",logout:"Sair",login:"Entrar",create:"Criar conta",free:"Grátis"},
-    en:{home:"Home",content:"Content",plans:"Plans",support:"Support",profile:"Profile",logout:"Log out",login:"Sign in",create:"Create account",free:"Free"},
-    es:{home:"Inicio",content:"Contenido",plans:"Planes",support:"Soporte",profile:"Perfil",logout:"Salir",login:"Entrar",create:"Crear cuenta",free:"Gratis"},
-    fr:{home:"Accueil",content:"Contenu",plans:"Forfaits",support:"Assistance",profile:"Profil",logout:"Déconnexion",login:"Connexion",create:"Créer un compte",free:"Gratuit"},
-    it:{home:"Home",content:"Contenuti",plans:"Piani",support:"Assistenza",profile:"Profilo",logout:"Esci",login:"Accedi",create:"Crea account",free:"Gratis"},
-    tr:{home:"Ana Sayfa",content:"İçerik",plans:"Planlar",support:"Destek",profile:"Profil",logout:"Çıkış",login:"Giriş",create:"Hesap oluştur",free:"Ücretsiz"},
-    ar:{home:"الرئيسية",content:"المحتوى",plans:"الخطط",support:"الدعم",profile:"الملف الشخصي",logout:"تسجيل الخروج",login:"تسجيل الدخول",create:"إنشاء حساب",free:"مجاني"},
-    he:{home:"דף הבית",content:"תוכן",plans:"תוכניות",support:"תמיכה",profile:"פרופיל",logout:"התנתקות",login:"כניסה",create:"יצירת חשבון",free:"חינם"},
-    hi:{home:"होम",content:"सामग्री",plans:"योजनाएँ",support:"सहायता",profile:"प्रोफ़ाइल",logout:"लॉग आउट",login:"साइन इन",create:"खाता बनाएँ",free:"मुफ़्त"},
-    pl:{home:"Strona główna",content:"Materiały",plans:"Plany",support:"Pomoc",profile:"Profil",logout:"Wyloguj",login:"Zaloguj",create:"Utwórz konto",free:"Bezpłatnie"},
-    id:{home:"Beranda",content:"Konten",plans:"Paket",support:"Dukungan",profile:"Profil",logout:"Keluar",login:"Masuk",create:"Buat akun",free:"Gratis"},
-    ru:{home:"Главная",content:"Материалы",plans:"Тарифы",support:"Поддержка",profile:"Профиль",logout:"Выйти",login:"Войти",create:"Создать аккаунт",free:"Бесплатно"}
-  }[navLang] || {home:"Início",content:"Conteúdo",plans:"Planos",support:"Suporte",profile:"Perfil",logout:"Sair",login:"Entrar",create:"Criar conta",free:"Grátis"};
+    pt:{home:"Início",content:"Conteúdo",plans:"Planos",support:"Suporte",profile:"Perfil",logout:"Sair",login:"Entrar",create:"Criar conta",refer:"Indique e ganhe",free:"Grátis"},
+    en:{home:"Home",content:"Content",plans:"Plans",support:"Support",profile:"Profile",logout:"Log out",login:"Sign in",create:"Create account",refer:"Refer and earn",free:"Free"},
+    es:{home:"Inicio",content:"Contenido",plans:"Planes",support:"Soporte",profile:"Perfil",logout:"Salir",login:"Entrar",create:"Crear cuenta",refer:"Invita y gana",free:"Gratis"},
+    fr:{home:"Accueil",content:"Contenu",plans:"Forfaits",support:"Assistance",profile:"Profil",logout:"Déconnexion",login:"Connexion",create:"Créer un compte",refer:"Parrainez et gagnez",free:"Gratuit"},
+    it:{home:"Home",content:"Contenuti",plans:"Piani",support:"Assistenza",profile:"Profilo",logout:"Esci",login:"Accedi",create:"Crea account",refer:"Invita e guadagna",free:"Gratis"},
+    tr:{home:"Ana Sayfa",content:"İçerik",plans:"Planlar",support:"Destek",profile:"Profil",logout:"Çıkış",login:"Giriş",create:"Hesap oluştur",refer:"Davet et, kazan",free:"Ücretsiz"},
+    ar:{home:"الرئيسية",content:"المحتوى",plans:"الخطط",support:"الدعم",profile:"الملف الشخصي",logout:"تسجيل الخروج",login:"تسجيل الدخول",create:"إنشاء حساب",refer:"ادعُ واربح",free:"مجاني"},
+    he:{home:"דף הבית",content:"תוכן",plans:"תוכניות",support:"תמיכה",profile:"פרופיל",logout:"התנתקות",login:"כניסה",create:"יצירת חשבון",refer:"הזמינו והרוויחו",free:"חינם"},
+    hi:{home:"होम",content:"सामग्री",plans:"योजनाएँ",support:"सहायता",profile:"प्रोफ़ाइल",logout:"लॉग आउट",login:"साइन इन",create:"खाता बनाएँ",refer:"आमंत्रित करें और कमाएँ",free:"मुफ़्त"},
+    pl:{home:"Strona główna",content:"Materiały",plans:"Plany",support:"Pomoc",profile:"Profil",logout:"Wyloguj",login:"Zaloguj",create:"Utwórz konto",refer:"Poleć i zyskaj",free:"Bezpłatnie"},
+    id:{home:"Beranda",content:"Konten",plans:"Paket",support:"Dukungan",profile:"Profil",logout:"Keluar",login:"Masuk",create:"Buat akun",refer:"Ajak dan dapatkan",free:"Gratis"},
+    ru:{home:"Главная",content:"Материалы",plans:"Тарифы",support:"Поддержка",profile:"Профиль",logout:"Выйти",login:"Войти",create:"Создать аккаунт",refer:"Пригласить и получить",free:"Бесплатно"}
+  }[navLang] || {home:"Início",content:"Conteúdo",plans:"Planos",support:"Suporte",profile:"Perfil",logout:"Sair",login:"Entrar",create:"Criar conta",refer:"Indique e ganhe",free:"Grátis"};
 
   const dropdownItems = AFB_CONTENT_PAGES
-    .map((l) => { const href = l.key === "blog" ? afbLocalizedBlogHref("../blog") : l.href; return `<a href="${href}" class="nav-dd-item ${l.key === active ? "active" : ""}"><span>${l.label}</span>${l.free ? `<small class="nav-free-label">${navCopy.free}</small>` : ""}</a>`; })
+    .map((l) => { const href = l.key === "blog" ? afbLocalizedBlogHref(blogPrefix) : appPrefix + l.href; return `<a href="${href}" class="nav-dd-item ${l.key === active ? "active" : ""}"><span>${l.label}</span>${l.free ? `<small class="nav-free-label">${navCopy.free}</small>` : ""}</a>`; })
     .join("");
 
   const linksHtml = `
-    <a href="../index.html" class="${active === "dashboard" ? "active" : ""}">${navCopy.home}</a>
+    <a href="${homeHref}" class="${active === "dashboard" ? "active" : ""}">${navCopy.home}</a>
     <div class="nav-dropdown">
-      <a href="cursos.html" class="nav-dd-trigger ${isContentPage ? "active" : ""}">${navCopy.content} ▾</a>
+      <a href="${appPrefix}cursos.html" class="nav-dd-trigger ${isContentPage ? "active" : ""}">${navCopy.content} ▾</a>
       <div class="nav-dd-menu">${dropdownItems}</div>
     </div>
-    <a href="planos.html" class="${active === "planos" ? "active" : ""}">${navCopy.plans}</a>
-    <a href="suporte.html" class="${active === "suporte" ? "active" : ""}">${navCopy.support}</a>
+    <a href="${appPrefix}planos.html" class="${active === "planos" ? "active" : ""}">${navCopy.plans}</a>
+    <a href="${appPrefix}suporte.html" class="${active === "suporte" ? "active" : ""}">${navCopy.support}</a>
   `;
 
   const el = document.getElementById("app-nav");
   if (!el) return;
   const navRight = user
-    ? `<a class="btn btn-ghost btn-sm" href="perfil.html">${navCopy.profile}</a>
+    ? `<a class="btn btn-ghost btn-sm" href="${appPrefix}perfil.html#referral-card">${navCopy.refer}</a>
+       <a class="btn btn-ghost btn-sm" href="${appPrefix}perfil.html">${navCopy.profile}</a>
        <button class="btn btn-ghost btn-sm" onclick="Auth.logout()">${navCopy.logout}</button>`
-    : `<a class="btn btn-ghost btn-sm" href="login.html">${navCopy.login}</a>
-       <a class="btn btn-primary btn-sm" href="cadastro.html">${navCopy.create}</a>`;
+    : `<a class="btn btn-ghost btn-sm" href="${appPrefix}login.html">${navCopy.login}</a>
+       <a class="btn btn-primary btn-sm" href="${appPrefix}cadastro.html">${navCopy.create}</a>`;
   el.outerHTML = `
     <header class="navbar" id="app-nav">
-      <a class="brand" href="../index.html">
+      <a class="brand" href="${homeHref}">
         <span>${Theme.meta().icon}</span> DeutschBloom
       </a>
       <nav>${linksHtml}</nav>
@@ -278,4 +288,4 @@ if(initialMusic.playing)setTimeout(lofiPlay,300);
 })();
 
 // Mede tempo de estudo nas páginas internas e sincroniza o Plano de Jornada.
-(function(){if(document.querySelector('script[src*="study-plan.js"]'))return;const s=document.createElement("script");s.src="../assets/js/study-plan.js?v=20260714-time3";s.onload=()=>StudyPlan.init();document.head.appendChild(s)})();
+(function(){if(document.querySelector('script[src*="study-plan.js"]'))return;const s=document.createElement("script");s.src="/assets/js/study-plan.js?v=20260714-time3";s.onload=()=>StudyPlan.init();document.head.appendChild(s)})();

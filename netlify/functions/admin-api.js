@@ -17,6 +17,7 @@ exports.handler=async event=>{if(event.httpMethod==='OPTIONS')return{statusCode:
    if(action==='pix_history')return out(200,{requests:await rest('pix_requests?status=neq.pending&select=id,email,name,payer_name,plan,message,status,created_at,resolved_at&order=resolved_at.desc&limit=100')});
    if(action==='content_reports'){const listed=await s3.listObjectsV2({Bucket:'edicao',Prefix:'content_reports/open/',MaxKeys:200}).promise(),tickets=await Promise.all((listed.Contents||[]).map(async o=>{try{return JSON.parse((await s3.getObject({Bucket:'edicao',Key:o.Key}).promise()).Body.toString())}catch{return null}}));return out(200,{tickets:tickets.filter(Boolean).sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)))})}
    if(action==='paid_promotion')return out(200,{promotion:await PaidPromotion.read()});
+   if(action==='referral_reward_config'){const rows=await rest('referral_reward_config?singleton=eq.true&select=mode,referrer_days,referred_days,campaign_ends_at,updated_at');return out(200,{config:rows[0]||{mode:'credit',referrer_days:10,referred_days:10}});}
    if(action==='promo_links'){
     const [links,redemptions]=await Promise.all([
      rest('promo_links?select=id,code,label,trial_days,max_redemptions,ip_limit,expires_at,active,created_at&order=created_at.desc'),
@@ -29,6 +30,14 @@ exports.handler=async event=>{if(event.httpMethod==='OPTIONS')return{statusCode:
    return out(200,{admins:admins.length,plans:plans.length,activePlans:plans.filter(x=>x.active).length,creditsCents:credits.filter(x=>!x.reversed_at).reduce((s,x)=>s+x.amount_cents,0),referrals:refs.length});
   }
   if(event.httpMethod!=='POST')return out(405,{error:'method_not_allowed'});const b=JSON.parse(event.body||'{}');
+  if(action==='set_referral_reward_config'){
+   const mode=b.mode==='days'?'days':'credit',referrerDays=Math.trunc(Number(b.referrer_days)),referredDays=Math.trunc(Number(b.referred_days));
+   if(referrerDays<1||referrerDays>365||referredDays<1||referredDays>365)return out(400,{error:'invalid_referral_days'});
+   const campaign=b.campaign_ends_at?new Date(b.campaign_ends_at):null;if(mode==='days'&&(!campaign||Number.isNaN(campaign.getTime())))return out(400,{error:'invalid_campaign_end'});
+   const config={singleton:true,mode,referrer_days:referrerDays,referred_days:referredDays,campaign_ends_at:campaign?campaign.toISOString():null,updated_at:new Date().toISOString(),updated_by:adm.user.id};
+   await rest('referral_reward_config?on_conflict=singleton',{method:'POST',headers:{Prefer:'resolution=merge-duplicates'},body:JSON.stringify(config)});
+   await audit(adm,action,null,config);return out(200,{ok:true,config});
+  }
   if(action==='set_paid_promotion'){
    const current=await PaidPromotion.read();
    const config=await PaidPromotion.write({
@@ -88,4 +97,3 @@ exports.handler=async event=>{if(event.httpMethod==='OPTIONS')return{statusCode:
   if(action==='resolve_content_report'){const id=String(b.id||'').replace(/[^a-zA-Z0-9-]/g,'');if(!id)return out(400,{error:'invalid_id'});const from=`content_reports/open/${id}.json`,to=`content_reports/resolved/${id}.json`,obj=await s3.getObject({Bucket:'edicao',Key:from}).promise(),ticket=JSON.parse(obj.Body.toString());ticket.status='resolved';ticket.resolved_at=new Date().toISOString();ticket.resolved_by=adm.user.id;await s3.putObject({Bucket:'edicao',Key:to,Body:JSON.stringify(ticket),ContentType:'application/json'}).promise();await s3.deleteObject({Bucket:'edicao',Key:from}).promise();await audit(adm,action,ticket.user_id,{id,item:ticket.item});return out(200,{ok:true})}
   return out(400,{error:'invalid_action'});
  }catch(e){return out(500,{error:'admin_operation_failed',detail:e.message.slice(0,300)})}};
-

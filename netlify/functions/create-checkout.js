@@ -108,6 +108,7 @@ exports.handler = async (event) => {
   params.append("metadata[promotion]", plan.endsWith("_promocao") ? "paid" : "none");
   params.append("metadata[email]", email);
   params.append("metadata[user_id]", user.id);
+  if (MODE_BY_PLAN[plan] === "subscription") params.append("subscription_data[metadata][user_id]", user.id);
   params.append("metadata[currency]", currency);
 
   try {

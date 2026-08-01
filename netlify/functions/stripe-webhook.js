@@ -47,7 +47,7 @@ async function awardReferral(session) {
   const userId=session.metadata?.user_id,amount=Math.floor((Number(session.amount_total)||0)*.20);
   if(!userId||!amount)return;
   const headers={apikey:process.env.SUPABASE_SERVICE_ROLE_KEY,Authorization:`Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,"Content-Type":"application/json"};
-  const rr=await fetch(`${SUPABASE_URL}/rest/v1/referrals?referred_user_id=eq.${userId}&status=eq.registered&select=referrer_user_id`,{headers});
+  const rr=await fetch(`${SUPABASE_URL}/rest/v1/referrals?referred_user_id=eq.${userId}&status=eq.registered&or=(reward_mode.eq.credit,reward_mode.is.null)&select=referrer_user_id,reward_mode`,{headers});
   const rows=await rr.json();if(!rows[0])return;
   await fetch(`${SUPABASE_URL}/rest/v1/credit_ledger?on_conflict=reference_id`,{method:"POST",headers:{...headers,Prefer:"resolution=ignore-duplicates"},body:JSON.stringify({user_id:rows[0].referrer_user_id,amount_cents:amount,kind:"referral_reward",description:"20% em créditos por indicação confirmada",reference_id:`stripe:${session.id}`,available_at:new Date(Date.now()+7*86400000).toISOString()})});
   await fetch(`${SUPABASE_URL}/rest/v1/referrals?referred_user_id=eq.${userId}`,{method:"PATCH",headers,body:JSON.stringify({status:"paid",paid_at:new Date().toISOString()})});
@@ -79,6 +79,13 @@ exports.handler = async (event) => {
       await awardReferral(session);
     }
 
+    if (stripeEvent.type === "charge.refunded") {
+      const charge=stripeEvent.data.object;
+      if(charge.payment_intent){const sr=await fetch("https://api.stripe.com/v1/checkout/sessions?payment_intent="+encodeURIComponent(charge.payment_intent),{headers:{Authorization:"Bearer "+process.env.STRIPE_SECRET_KEY}}),sessions=await sr.json(),sessionId=sessions.data&&sessions.data[0]&&sessions.data[0].id;
+        if(sessionId)await fetch(SUPABASE_URL+"/rest/v1/credit_ledger?reference_id=eq.stripe:"+sessionId+"&reversed_at=is.null",{method:"PATCH",headers:{apikey:process.env.SUPABASE_SERVICE_ROLE_KEY,Authorization:"Bearer "+process.env.SUPABASE_SERVICE_ROLE_KEY,"Content-Type":"application/json"},body:JSON.stringify({reversed_at:new Date().toISOString()})});
+      }
+    }
+
     if (stripeEvent.type === "customer.subscription.deleted") {
       const sub = stripeEvent.data.object;
       // Busca o e-mail do customer pra desativar o premium dele
@@ -87,6 +94,12 @@ exports.handler = async (event) => {
       });
       const cust = await custRes.json();
       if (cust.email) await upsertPremium(cust.email, "cancelado", false);
+      const referredId=sub.metadata&&sub.metadata.user_id;
+      if(referredId){
+        const headers={apikey:process.env.SUPABASE_SERVICE_ROLE_KEY,Authorization:"Bearer "+process.env.SUPABASE_SERVICE_ROLE_KEY,"Content-Type":"application/json"};
+        const refRows=await fetch(SUPABASE_URL+"/rest/v1/referrals?referred_user_id=eq."+referredId+"&or=(reward_mode.eq.credit,reward_mode.is.null)&select=referrer_user_id",{headers}).then(r=>r.json());
+        if(refRows[0])await fetch(SUPABASE_URL+"/rest/v1/credit_ledger?user_id=eq."+refRows[0].referrer_user_id+"&kind=eq.referral_reward&available_at=gt."+encodeURIComponent(new Date().toISOString())+"&reversed_at=is.null",{method:"PATCH",headers,body:JSON.stringify({reversed_at:new Date().toISOString()})});
+      }
     }
   } catch (e) {
     // Nunca retorna erro pro Stripe por falha nossa (ele fica reenviando);

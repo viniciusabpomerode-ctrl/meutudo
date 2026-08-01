@@ -71,19 +71,19 @@
           <span class="eyebrow">Indique e ganhe</span>
           <b style="display:block;font-size:1.05rem;margin-top:2px;">Chame seus amigos pra aprender alemão 🇩🇪</b>
         </div>
-        <div style="text-align:right;">
+        <div id="referral-balance-box" style="text-align:right;">
           <b id="credit-balance" style="font-size:1.3rem;">R$ 0,00</b>
           <p class="muted" style="margin:2px 0 0;font-size:.75rem;">seu saldo em créditos</p>
         </div>
       </div>
-      <div style="display:flex;gap:14px;margin:14px 0;flex-wrap:wrap;font-size:.85rem;color:var(--text-secondary);">
+      <div id="referral-steps" style="display:flex;gap:14px;margin:14px 0;flex-wrap:wrap;font-size:.85rem;color:var(--text-secondary);">
         <div style="flex:1;min-width:150px;">① Manda seu link</div>
         <div style="flex:1;min-width:150px;">② Seu amigo assina um plano</div>
         <div style="flex:1;min-width:150px;">③ Você ganha 20% em créditos, direto na sua carteira</div>
       </div>
       <div style="display:flex;gap:8px;margin-top:12px"><input id="referral-link" readonly aria-label="Seu link de indicação" value="Carregando..."><button class="btn btn-outline" id="copy-referral" disabled>Copiar</button></div>
       <small class="muted" id="referral-count"></small>
-      <p class="muted" style="font-size:.78rem;margin:10px 0 0;">O crédito cai na sua carteira 7 dias depois que seu amigo pagar (é a garantia de reembolso dele, se ele desistir dentro desse prazo o crédito não é gerado). Pra usar seu saldo, é só chamar no <a href="suporte.html" style="color:var(--color-primary-dark)">Suporte</a>.</p>
+      <p class="muted" id="referral-explainer" style="font-size:.78rem;margin:10px 0 0;">O crédito cai na sua carteira 7 dias depois que seu amigo pagar (é a garantia de reembolso dele, se ele desistir dentro desse prazo o crédito não é gerado). Pra usar seu saldo, é só chamar no <a href="suporte.html" style="color:var(--color-primary-dark)">Suporte</a>.</p>
     </div>
     <div class="card">
       <button class="btn btn-ghost" id="logout-btn">Sair da conta</button>
@@ -207,6 +207,12 @@
         document.getElementById('referral-link').value=link;
         document.getElementById('copy-referral').disabled=false;
         document.getElementById('credit-balance').textContent=(ref.balance_cents/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+        const cfg=ref.reward_config||{mode:'credit'};
+        if(cfg.mode==='days'){
+          const lang=localStorage.getItem('afb_language')||'pt',copies={
+           pt:['① Envie seu link','② Seu amigo cria uma conta','③ Os dois recebem dias Premium','Você ganha {a} dias e seu convidado ganha {b} dias. Os dias são cumulativos. Campanha válida até {end}.'],en:['① Send your link','② Your friend creates an account','③ You both get Premium days','You get {a} days and your guest gets {b} days. Days are cumulative. Campaign valid until {end}.'],es:['① Envía tu enlace','② Tu amigo crea una cuenta','③ Ambos reciben días Premium','Tú recibes {a} días y tu invitado {b}. Los días son acumulables. Campaña válida hasta {end}.'],fr:['① Envoyez votre lien','② Votre ami crée un compte','③ Vous recevez des jours Premium','Vous recevez {a} jours et votre invité {b}. Les jours sont cumulables. Campagne valable jusqu’au {end}.'],it:['① Invia il link','② Il tuo amico crea un account','③ Entrambi ricevete giorni Premium','Tu ricevi {a} giorni e il tuo invitato {b}. I giorni sono cumulabili. Campagna valida fino al {end}.'],tr:['① Bağlantını gönder','② Arkadaşın hesap oluştursun','③ İkiniz de Premium gün kazanın','Sen {a}, davetlin {b} gün kazanır. Günler birikir. Bitiş: {end}.'],ar:['① أرسل رابطك','② ينشئ صديقك حسابًا','③ تحصلان على أيام Premium','تحصل على {a} أيام وضيفك على {b}. الأيام تراكمية. حتى {end}.'],he:['① שלחו את הקישור','② החבר יוצר חשבון','③ שניכם מקבלים ימי Premium','אתם מקבלים {a} ימים והמוזמן {b}. הימים מצטברים. עד {end}.'],hi:['① लिंक भेजें','② मित्र खाता बनाए','③ दोनों को Premium दिन मिलें','आपको {a} दिन और अतिथि को {b} दिन। दिन जुड़ते हैं। {end} तक।'],pl:['① Wyślij link','② Znajomy tworzy konto','③ Oboje dostajecie dni Premium','Otrzymujesz {a} dni, a gość {b}. Dni się sumują. Do {end}.'],id:['① Kirim tautan','② Teman membuat akun','③ Kalian mendapat hari Premium','Kamu mendapat {a} hari dan tamu {b}. Hari terakumulasi. Hingga {end}.'],ru:['① Отправьте ссылку','② Друг создаёт аккаунт','③ Вы оба получаете дни Premium','Вы получаете {a} дней, гость — {b}. Дни суммируются. До {end}.']};
+          const x=copies[lang]||copies.pt,end=cfg.campaign_ends_at?new Date(cfg.campaign_ends_at).toLocaleString():'-';document.getElementById('referral-balance-box').style.display='none';document.getElementById('referral-steps').innerHTML=x.slice(0,3).map(t=>'<div style="flex:1;min-width:150px">'+t+'</div>').join('');document.getElementById('referral-explainer').textContent=x[3].replace('{a}',cfg.referrer_days).replace('{b}',cfg.referred_days).replace('{end}',end);
+        }
         document.getElementById('referral-count').textContent=`${ref.referrals.length} indicação(ões)`;
         document.getElementById('copy-referral').onclick=async()=>{await navigator.clipboard.writeText(link);document.getElementById('copy-referral').textContent='Copiado!'};
       } else {
@@ -219,7 +225,7 @@
     }
 
     // ── Assinatura ──
-    const PLAN_LABEL = { mensal: "Premium Mensal", anual: "Premium Anual", fundador: "Premium Vitalício (Fundador)", promocional: "Teste promocional" };
+    const PLAN_LABEL = { mensal: "Premium Mensal", anual: "Premium Anual", fundador: "Premium Vitalício (Fundador)", promocional: "Teste promocional", referral_days: "Premium por indicação" };
     const checkoutStatus = new URLSearchParams(location.search).get("checkout");
     if (checkoutStatus === "sucesso") {
       history.replaceState(null, "", location.pathname);

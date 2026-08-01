@@ -7,16 +7,11 @@ const SUPABASE_URL = "https://zqrdpmrwnprtelgloawb.supabase.co";
 const SUPABASE_KEY = "sb_publishable_CVFm1nLMf9GCPr-RKKU6Rw_AFixWd5z";
 const AFB_BASE = location.pathname.includes("/alemao-facil-brasil/") || location.pathname.startsWith("/alemao-facil-brasil") ? "/alemao-facil-brasil" : "";
 
-// Guarda o codigo mesmo se a pessoa navegar, usar login Google ou precisar
-// confirmar o e-mail antes de receber o teste promocional.
-(function capturePromoCode(){
-  try{
-    var code=new URLSearchParams(location.search).get("promo");
-    code=String(code||"").trim().toUpperCase();
-    if(/^[A-Z0-9_-]{3,40}$/.test(code))localStorage.setItem("afb_pending_promo",code);
-  }catch(e){}
-})();
-
+const AFB_REF_COOKIE_TTL=86400;
+function afbSetReferenceCookie(name,code){if(afbGetReferenceCookie(name))return;code=String(code||'').trim().toUpperCase();if(!/^[A-Z0-9_-]{3,40}$/.test(code))return;document.cookie=name+'='+encodeURIComponent(code)+'; Max-Age='+AFB_REF_COOKIE_TTL+'; Path=/; SameSite=Lax'+(location.protocol==='https:'?'; Secure':'')}
+function afbGetReferenceCookie(name){const found=document.cookie.split('; ').find(x=>x.startsWith(name+'='));return found?decodeURIComponent(found.slice(name.length+1)):''}
+function afbClearReferenceCookie(name){document.cookie=name+'=; Max-Age=0; Path=/; SameSite=Lax'}
+(function captureReferenceCode(){try{const q=new URLSearchParams(location.search);afbSetReferenceCookie('afb_bonus_ref',q.get('bonus')||q.get('promo'));afbSetReferenceCookie('afb_student_ref',q.get('ref'))}catch(e){}})();
 // Carrega Supabase JS dinamicamente
 (function(){
   var s=document.createElement("script");
@@ -33,7 +28,7 @@ function getSupabase(){
 
 var _afbSessionCache = null;
 var _afbAuthReadyPromise = null;
-async function syncPendingReferral(session){const code=localStorage.getItem('afb_pending_referral');if(!code||!session?.access_token)return;try{const r=await fetch('/.netlify/functions/referrals',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({code})});if(r.ok)localStorage.removeItem('afb_pending_referral')}catch(e){}}
+async function syncPendingReferral(session){const code=afbGetReferenceCookie('afb_student_ref');if(!code||!session?.access_token)return;try{const r=await fetch('/.netlify/functions/referrals',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({code})});if(r.ok||[400,409].includes(r.status))afbClearReferenceCookie('afb_student_ref')}catch(e){}}
 function showPromoActivated(days){
   const lang=localStorage.getItem('afb_language')||'pt';
   const messages={
@@ -46,23 +41,25 @@ function showPromoActivated(days){
     ar:`تم تفعيل تجربتك لمدة ${days} أيام. استمتع بالمكتبة الكاملة!`,
     he:`תקופת הניסיון שלך ל-${days} ימים הופעלה. כל הספרייה פתוחה עבורך!`,
     hi:`आपका ${days} दिन का ट्रायल सक्रिय हो गया है। पूरी लाइब्रेरी का आनंद लें!`,
-    pl:`Twój ${days}-dniowy okres próbny jest aktywny. Korzystaj z całej biblioteki!`
+    pl:`Twój ${days}-dniowy okres próbny jest aktywny. Korzystaj z całej biblioteki!`,
+    id:`Uji coba ${days} hari Anda aktif. Nikmati seluruh perpustakaan!`,
+    ru:`Ваш пробный период на ${days} дн. активирован. Вся библиотека открыта!`
   };
   const render=()=>{if(document.getElementById('afb-promo-notice'))return;const el=document.createElement('div');el.id='afb-promo-notice';el.setAttribute('role','status');el.textContent=messages[lang]||messages.pt;el.style.cssText='position:fixed;z-index:100000;left:50%;top:18px;transform:translateX(-50%);max-width:min(92vw,560px);padding:13px 18px;border-radius:12px;background:#216e4e;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.25);font-weight:700;text-align:center';document.body.appendChild(el);setTimeout(()=>el.remove(),7000)};
   if(document.body)render();else document.addEventListener('DOMContentLoaded',render,{once:true});
 }
 async function syncPendingPromo(session){
-  const code=localStorage.getItem('afb_pending_promo');
+  const code=afbGetReferenceCookie('afb_bonus_ref');
   if(!code||!session?.access_token)return;
   try{
     const r=await fetch('/.netlify/functions/promo-links',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({code})});
     const data=await r.json().catch(()=>({}));
     if(r.ok){
-      localStorage.removeItem('afb_pending_promo');
+      afbClearReferenceCookie('afb_bonus_ref');
       localStorage.setItem('afb_promo_result',JSON.stringify({ok:true,days:data.trial_days,expires_at:data.expires_at,at:Date.now()}));
       showPromoActivated(data.trial_days||3);
     }else if(r.status===404||r.status===409){
-      localStorage.removeItem('afb_pending_promo');
+      afbClearReferenceCookie('afb_bonus_ref');
       localStorage.setItem('afb_promo_result',JSON.stringify({ok:false,reason:data.reason||data.error,at:Date.now()}));
     }
   }catch(e){}
