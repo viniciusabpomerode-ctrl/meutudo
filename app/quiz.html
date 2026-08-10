@@ -113,6 +113,13 @@
           if (!r || !r.ok) r = await fetch(`../data/quiz_${lv.toLowerCase()}.json`);
           const data = await r.json();
           quizData[lv] = data.questoes || [];
+          // Perguntas e alternativas chegam em portugues e sao inseridas
+          // depois da traducao inicial da pagina. Traduz os dados antes de
+          // renderizar; campos alemaes como contexto_de ficam preservados
+          // pela propria regra de translateData().
+          if (typeof I18n !== "undefined" && I18n.getCurrent && I18n.getCurrent() !== "pt" && I18n.translateData) {
+            quizData[lv] = await I18n.translateData(quizData[lv]);
+          }
           // Visitante: so A1 liberado, limitado as primeiras questoes
           if (isGuest) {
             if (lv === "A1") quizData[lv] = quizData[lv].slice(0, AFB_FREE_LIMIT);

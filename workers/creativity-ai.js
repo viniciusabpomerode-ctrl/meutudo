@@ -28,17 +28,34 @@ async function checkIpRateLimit(env,request,scope,limit,windowSeconds){
   return saved.count<=limit;
 }
 async function gradeWriting(env,{pergunta,contexto,resposta,nivel}){
-  const system=`Voce corrige uma questao de escrita (Schreiben) de um simulado Goethe-Zertifikat de alemao, nivel ${nivel||"B1"}. Avalie se a resposta do aluno atende ao que foi pedido: tamanho e estrutura razoaveis, faz sentido pro contexto, e o alemao esta compreensivel pro nivel (nao precisa ser perfeito). Responda SOMENTE em JSON valido: {"ok": true|false, "feedback": "..."}. "feedback" deve ser uma frase curta em portugues, encorajadora mesmo quando ok=false, apontando o que ajustar.`;
+  const system=`Voce corrige uma questao de escrita (Schreiben) de um simulado Goethe-Zertifikat de alemao, nivel ${nivel||"B1"}. Avalie se a resposta do aluno atende ao que foi pedido: tamanho e estrutura razoaveis, faz sentido pro contexto, e o alemao esta compreensivel pro nivel (nao precisa ser perfeito). Responda SOMENTE em JSON valido. O campo ok deve ser o booleano true ou false, por exemplo: {"ok": true, "feedback": "Muito bem."}. "feedback" deve ser uma frase curta em portugues, encorajadora mesmo quando ok=false, apontando o que ajustar.`;
   const userMsg=`PERGUNTA: ${pergunta}\nCONTEXTO: ${contexto}\nRESPOSTA DO ALUNO: ${resposta}`;
-  const r=await fetch("https://api.deepseek.com/chat/completions",{
-    method:"POST",
-    headers:{"Content-Type":"application/json",Authorization:`Bearer ${env.DEEPSEEK_API_KEY}`},
-    body:JSON.stringify({model:"deepseek-chat",messages:[{role:"system",content:system},{role:"user",content:userMsg}],max_tokens:220,temperature:.3,response_format:{type:"json_object"}}),
-  });
-  if(!r.ok)throw new Error("DEEPSEEK_ERROR");
-  const data=await r.json();
-  const parsed=JSON.parse(data.choices[0].message.content);
-  return{ok:!!parsed.ok,feedback:clean(parsed.feedback,300)};
+  let parsed=null,provider="";
+  if(env.OPENROUTER_API_KEY){
+    try{
+      const r=await fetch("https://openrouter.ai/api/v1/chat/completions",{
+        method:"POST",
+        headers:{"Content-Type":"application/json",Authorization:`Bearer ${env.OPENROUTER_API_KEY}`,"HTTP-Referer":"https://deutschbloom.com","X-Title":"DeutschBloom"},
+        body:JSON.stringify({model:"openrouter/free",messages:[{role:"system",content:system},{role:"user",content:userMsg}],max_tokens:220,temperature:.3,response_format:{type:"json_object"}}),
+      });
+      if(r.ok){
+        const data=await r.json();
+        const content=String(data?.choices?.[0]?.message?.content||"");
+        const match=content.match(/\{[\s\S]*\}/);
+        if(match){parsed=JSON.parse(match[0]);provider="openrouter/free";}
+      }
+    }catch(e){}
+  }
+  if(!parsed&&env.AI){
+    try{
+      const output=await env.AI.run(MODEL,{messages:[{role:"system",content:system},{role:"user",content:userMsg}],max_tokens:220,temperature:.3});
+      const content=String(typeof output==="string"?output:(output&&output.response)||"");
+      const match=content.match(/\{[\s\S]*\}/);
+      if(match){parsed=JSON.parse(match[0]);provider=MODEL;}else if(content){parsed={ok:!/(?:incorre|erro|falsch|false)/i.test(content),feedback:clean(content,300)};provider=MODEL;}
+    }catch(e){}
+  }
+  if(!parsed)throw new Error("AI_PROVIDER_UNAVAILABLE");
+  return{ok:!!parsed.ok,feedback:clean(parsed.feedback,300),provider};
 }
 
 export default {async fetch(request,env){
@@ -50,7 +67,7 @@ export default {async fetch(request,env){
     // por rate limit de IP (ver checkIpRateLimit acima).
     const okRate=await checkIpRateLimit(env,request,"grade-writing",30,3600).catch(()=>true);
     if(!okRate)return json({error:"Muitas correções em pouco tempo. Aguarde um pouco."},429,origin);
-    if(!env.DEEPSEEK_API_KEY)return json({error:"Correção por IA não configurada"},503,origin);
+    if(!env.OPENROUTER_API_KEY&&!env.AI)return json({error:"Correcao por IA nao configurada"},503,origin);
     const body=await request.json().catch(()=>({}));
     const resposta=clean(body.resposta,2500);
     if(!resposta||resposta.split(/\s+/).filter(Boolean).length<2)return json({error:"Resposta muito curta para corrigir."},400,origin);
