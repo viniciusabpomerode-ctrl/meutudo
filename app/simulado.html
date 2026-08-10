@@ -251,6 +251,13 @@
     function answerMatches(given, expected) {
       return normalizeAnswer(given) === normalizeAnswer(expected);
     }
+    function modelAnswer(q) {
+      if (q && q.opcoes && q.opcoes.length) {
+        const index = Math.max(0, String(q.resposta || "A").toUpperCase().charCodeAt(0) - 65);
+        return String(q.opcoes[index] || "").replace(/^[A-Z]\)\s*/, "");
+      }
+      return q ? String(q.resposta || "") : "";
+    }
 
     function render() {
       const answered = Object.keys(respostas).length;
@@ -278,7 +285,7 @@
         const answered = r !== undefined;
         const revealed = reveladas[q.id] || finalizado;
         const cat = getCat(q.categoria);
-        const hasOpcoes = q.opcoes && q.opcoes.length;
+        const hasOpcoes = cat !== "schreiben" && cat !== "sprechen" && q.opcoes && q.opcoes.length;
         // Estado do card: multipla escolha compara letra; Sprechen sem
         // opcoes (nao existe hoje, mas fica pronto) compara com o texto-
         // modelo tolerando variacao; Schreiben sem opcoes (C2) nao tem
@@ -321,7 +328,7 @@
         // tambem Schreiben/Sprechen quando o JSON tem "opcoes" (a maioria
         // das questoes dessas categorias e assim; ver normalizeAnswer/
         // answerMatches so entra em jogo pros poucos casos sem opcoes).
-        if (q.opcoes && q.opcoes.length) {
+        if (cat !== "schreiben" && cat !== "sprechen" && q.opcoes && q.opcoes.length) {
           html += `<div class="q-options">`;
           q.opcoes.forEach((opt, oi) => {
             const l = String.fromCharCode(65+oi);
@@ -365,7 +372,7 @@
           } else {
             html += `<div style="padding:8px;border-radius:6px;background:var(--bg-secondary);">🗣️ Você disse: "${r}"</div>`;
             if (revealed && q.resposta) {
-              html += `<div style="padding:8px;border-radius:6px;background:color-mix(in srgb, var(--success) 18%, var(--card-bg));color:var(--text-primary);margin-top:4px;"><strong>📝 Modelo:</strong> ${q.resposta}</div>`;
+              html += `<div style="padding:8px;border-radius:6px;background:color-mix(in srgb, var(--success) 18%, var(--card-bg));color:var(--text-primary);margin-top:4px;"><strong>📝 Modelo:</strong> ${modelAnswer(q)}</div>`;
             }
           }
         }
@@ -421,14 +428,14 @@
       const cat = getCat(q.categoria);
       // Schreiben sem opcoes e sem gabarito (hoje so o C2) -- nao tem string
       // pra comparar, manda pra correcao por IA em vez de marcar certo/errado.
-      if (!(q.opcoes && q.opcoes.length) && cat === "schreiben" && !q.resposta) {
+      if (cat === "schreiben") {
         const btn = document.getElementById(`reveal-btn-${qid}`);
         if (btn) { btn.disabled = true; btn.textContent = "Corrigindo com IA..."; }
         gradeWriting(q);
         return;
       }
       reveladas[qid] = true;
-      const ok = (q.opcoes && q.opcoes.length) ? String(respostas[qid]) === String(q.resposta) : answerMatches(respostas[qid], q.resposta);
+      const ok = cat === "sprechen" ? answerMatches(respostas[qid], modelAnswer(q)) : ((q.opcoes && q.opcoes.length) ? String(respostas[qid]) === String(q.resposta) : answerMatches(respostas[qid], q.resposta));
       if (typeof SFX !== 'undefined') ok ? SFX.correct() : SFX.wrong();
       render();
     }
@@ -438,7 +445,7 @@
         const r = await fetch(AFB_CREATIVITY_API + "/grade-writing", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pergunta: q.pergunta_pt, contexto: q.contexto_de, resposta: respostas[qid], nivel: (nivelAtual || "").toUpperCase() }),
+          body: JSON.stringify({ pergunta: q.pergunta_pt, contexto: q.contexto_de, modelo: modelAnswer(q), resposta: respostas[qid], nivel: (nivelAtual || "").toUpperCase() }),
         });
         const d = await r.json().catch(() => ({}));
         if (!r.ok) throw new Error(d.error || "Falha na correção.");
@@ -460,7 +467,7 @@
       // como erradas no relatorio sem nunca terem sido avaliadas de fato.
       const pendentes = questoes.filter(q => {
         const cat = getCat(q.categoria);
-        return respostas[q.id] !== undefined && !(q.opcoes && q.opcoes.length) && cat === "schreiben" && !q.resposta && !aiGrades[q.id];
+        return respostas[q.id] !== undefined && cat === "schreiben" && !aiGrades[q.id];
       });
       if (pendentes.length) await Promise.all(pendentes.map(q => gradeWriting(q)));
       finalizado = true; render();
@@ -595,7 +602,18 @@
       spSetStatus(qid, "Transcrevendo sua resposta em alemão...");
       try {
         const token = (typeof Auth !== "undefined" && Auth.accessToken) ? await Auth.accessToken() : null;
-        if (!token) { spSetStatus(qid, "Entre na conta para transcrever sua fala."); return; }
+        if (!token) {
+          const localText = String(spRecognitionBase || "").trim();
+          if (localText) {
+            respostas[qid] = localText;
+            render();
+            if (typeof SFX !== "undefined") SFX.click();
+          } else {
+            spSetStatus(qid, "N\u00e3o foi poss\u00edvel transcrever neste navegador. Use o Chrome ou entre na conta e tente novamente.");
+            spSetControls(qid, `<button class="q-speech-btn" onclick="startSpeechRecording(${qid})">\u{1F3A4} Tentar de novo</button>`);
+          }
+          return;
+        }
         const r = await fetch(AFB_CREATIVITY_API + "/transcribe", {
           method: "POST",
           headers: { Authorization: `Bearer ${token}`, "Content-Type": blob.type || "audio/webm" },
@@ -627,8 +645,9 @@
         const cat = getCat(q.categoria);
         let ok = false;
         if (r !== undefined) {
-          if (q.opcoes && q.opcoes.length) ok = String(r) === String(q.resposta);
-          else if (cat === "schreiben") ok = aiGrades[q.id] && aiGrades[q.id].ok === true;
+          if (cat === "schreiben") ok = aiGrades[q.id] && aiGrades[q.id].ok === true;
+          else if (cat === "sprechen") ok = answerMatches(r, modelAnswer(q));
+          else if (q.opcoes && q.opcoes.length) ok = String(r) === String(q.resposta);
           else ok = answerMatches(r, q.resposta);
         }
         if (ok) { corretas++; cats[c].ok++; }
